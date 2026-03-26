@@ -11,11 +11,7 @@ const privacy = () => {
       <div className={styles.wrapper}>
         <div>
           <h2>Privacy Policy</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-            vehicula felis id turpis dictum, non placerat lacus volutpat.
-            Curabitur ut magna id turpis tempor hendrerit at nec lacus.
-          </p>
+         
         </div>
         {privacyPolicy.slice(0, privacyPolicy.length - 2).map((item, index) => (
           <div className={styles.item} key={index}>

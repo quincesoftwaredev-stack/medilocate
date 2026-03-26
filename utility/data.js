@@ -137,130 +137,141 @@ const termsAndConditions = [
     section: 1,
     title: 'General Terms',
     content:
-      'By accessing and using MediLocate, you agree to comply with these Terms and Conditions. We reserve the right to update or modify these terms at any time without prior notice. Continued use of our services constitutes acceptance of the revised terms.'
+      'By accessing and using mediLocate.health, you agree to comply with these Terms and Conditions. mediLocate.health is a platform that connects patients with licensed doctors for home visit appointments. We may update these terms at any time, and continued use of our services indicates your acceptance of any changes.'
   },
   {
     section: 2,
+    title: 'Service Description',
+    content:
+      'mediLocate.health facilitates communication between patients and doctors. Appointment time, location, and consultation details are agreed upon directly between the patient and the doctor through the platform. mediLocate.health does not guarantee instant availability of doctors.'
+  },
+  {
+    section: 3,
     title: 'Medical Disclaimer',
     content:
-      'MediLocate provides information and connects users with healthcare services. However, we do not offer medical advice, diagnosis, or treatment. Users should consult a qualified healthcare professional for medical concerns. We are not responsible for any decisions made based on the information provided on our platform.'
+      'mediLocate.health does not provide medical advice, diagnosis, or treatment. All medical services are provided independently by licensed doctors. Patients are responsible for discussing their conditions directly with the doctor and making informed decisions.'
   },
   {
-    section: 3,
+    section: 4,
     title: 'User Accounts',
     content:
-      'To access certain features, you may need to create an account. You are responsible for maintaining the confidentiality of your account information. We reserve the right to suspend or terminate accounts that violate our terms or policies.'
-  },
-  {
-    section: 4,
-    title: 'Payments and Services',
-    content:
-      'Some services on MediLocate may require payment. By making a payment, you agree to provide accurate billing information. Payments are processed securely, and refunds are subject to our Refund Policy.'
+      'You may need to create an account to use certain features. You are responsible for maintaining the confidentiality of your account credentials. mediLocate.health reserves the right to suspend or terminate accounts that violate our policies.'
   },
   {
     section: 5,
+    title: 'Appointments & Responsibilities',
+    content:
+      'Patients and doctors are responsible for agreeing on a suitable time and location for home visits. Users must provide accurate information. mediLocate.health is not responsible for missed appointments, delays, or cancellations made by either party.'
+  },
+  {
+    section: 6,
+    title: 'Payments',
+    content:
+      'Payments for doctor services may be processed through the platform or handled directly between patient and doctor, depending on the service type. Users agree to provide accurate billing information. Refunds, if applicable, depend on individual cases and policies.'
+  },
+  {
+    section: 7,
     title: 'Privacy and Data Protection',
     content:
-      'Your privacy is important to us. Personal data collected by MediLocate is used in accordance with our Privacy Policy. By using our services, you consent to data processing as described in our policy.'
+      'We value your privacy. Personal data is collected and used in accordance with our Privacy Policy. By using mediLocate.health, you consent to the collection and use of your information for service delivery.'
   },
   {
-    section: 6,
+    section: 8,
     title: 'Prohibited Activities',
     content:
-      'Users must not engage in fraudulent, abusive, or illegal activities on our platform. This includes misinformation, impersonation, spamming, or attempting to gain unauthorized access to other users’ accounts or our systems.'
-  },
-  {
-    section: 7,
-    title: 'Third-Party Services',
-    content:
-      'MediLocate may include links to third-party healthcare providers or services. We do not endorse or take responsibility for the quality, reliability, or accuracy of third-party services. Any transactions or interactions with third parties are at your own risk.'
-  },
-  {
-    section: 8,
-    title: 'Amendments to Terms',
-    content:
-      'MediLocate reserves the right to modify these terms at any time. Changes will be effective immediately upon posting on our website. It is your responsibility to review these terms regularly.'
+      'Users must not engage in fraudulent activities, impersonation, harassment, or misuse of the platform. Any attempt to exploit doctors or patients, or to bypass the system unfairly, may result in account suspension.'
   },
   {
     section: 9,
+    title: 'Third-Party Responsibility',
+    content:
+      'Doctors on mediLocate.health are independent professionals. mediLocate.health does not control or guarantee the quality, outcome, or effectiveness of medical services provided.'
+  },
+  {
+    section: 10,
     title: 'Limitation of Liability',
     content:
-      'MediLocate is not liable for any damages, losses, or issues resulting from the use of our platform or third-party services. Our services are provided "as is" without warranties of any kind.'
-  },
-  {
-    section: 10,
-    title: 'Contact Us',
-    content:
-      'If you have any questions regarding these Terms and Conditions, please contact us at support@medilocate.com.'
-  }
-];
-
-const privacyPolicy = [
-  {
-    section: 1,
-    title: 'Introduction',
-    content:
-      'MediLocate is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your personal data when you use our services. By accessing our platform, you agree to the terms outlined in this policy.'
-  },
-  {
-    section: 2,
-    title: 'Information We Collect',
-    content:
-      'We collect personal data, including but not limited to your name, email, phone number, medical preferences, and location. Additionally, we may collect non-personal data such as device information, cookies, and usage analytics to enhance our services.'
-  },
-  {
-    section: 3,
-    title: 'How We Use Your Information',
-    content:
-      'Your information is used to provide and improve our services, including appointment scheduling, connecting you with healthcare providers, processing payments, sending notifications, and ensuring platform security.'
-  },
-  {
-    section: 4,
-    title: 'Data Sharing and Third Parties',
-    content:
-      'MediLocate does not sell your personal data. However, we may share your information with healthcare providers, payment processors, or legal authorities when required by law. All third-party partners adhere to strict confidentiality agreements.'
-  },
-  {
-    section: 5,
-    title: 'Data Security',
-    content:
-      'We implement industry-standard security measures to protect your data from unauthorized access, breaches, or misuse. However, no system is completely secure, and we encourage users to take precautions when sharing sensitive information online.'
-  },
-  {
-    section: 6,
-    title: 'Cookies and Tracking Technologies',
-    content:
-      'We use cookies and tracking technologies to enhance user experience, analyze website traffic, and provide personalized content. You can manage cookie preferences through your browser settings.'
-  },
-  {
-    section: 7,
-    title: 'Your Rights and Choices',
-    content:
-      'You have the right to access, update, or delete your personal data. If you wish to modify your information or opt out of communications, please contact us at privacy@medilocate.com.'
-  },
-  {
-    section: 8,
-    title: 'Data Retention',
-    content:
-      'We retain personal data for as long as necessary to provide our services and comply with legal obligations. After this period, data is securely deleted or anonymized.'
-  },
-  {
-    section: 9,
-    title: 'Children’s Privacy',
-    content:
-      'MediLocate does not knowingly collect personal information from individuals under 18 years old. If we become aware of such data collection, we will take immediate steps to delete it.'
-  },
-  {
-    section: 10,
-    title: 'Changes to This Policy',
-    content:
-      'We may update this Privacy Policy periodically. Changes will be posted on this page, and significant updates will be communicated through email or platform notifications.'
+      'mediLocate.health is not liable for any direct or indirect damages, including medical outcomes, delays, or disputes between users. The platform is provided on an "as is" basis without warranties.'
   },
   {
     section: 11,
     title: 'Contact Us',
     content:
-      'If you have any questions or concerns about this Privacy Policy, please contact us at privacy@medilocate.com.'
+      'For any questions regarding these Terms and Conditions, please contact us at support@medilocate.health.'
+  }
+];
+const privacyPolicy = [
+  {
+    section: 1,
+    title: 'Introduction',
+    content:
+      'mediLocate.health is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and protect your personal information when you use our platform to connect with doctors for home visits.'
+  },
+  {
+    section: 2,
+    title: 'Information We Collect',
+    content:
+      'We collect personal information such as your name, phone number, email, location, and basic health-related details required to connect you with doctors. We may also collect device and usage data to improve our services.'
+  },
+  {
+    section: 3,
+    title: 'How We Use Your Information',
+    content:
+      'Your data is used to connect you with doctors, facilitate appointment scheduling, enable communication, process payments, and improve user experience. We may also send notifications related to your bookings.'
+  },
+  {
+    section: 4,
+    title: 'Sharing of Information',
+    content:
+      'Your information may be shared with doctors to facilitate consultations and home visits. We do not sell your personal data. Data may also be shared with trusted service providers such as payment processors or when required by law.'
+  },
+  {
+    section: 5,
+    title: 'Doctor-Patient Communication',
+    content:
+      'Information shared during chat or communication with doctors may be stored to improve service quality and resolve disputes. However, sensitive medical discussions remain private between patient and doctor.'
+  },
+  {
+    section: 6,
+    title: 'Data Security',
+    content:
+      'We implement appropriate security measures to protect your data. However, no system is completely secure, and users should take precautions when sharing sensitive information.'
+  },
+  {
+    section: 7,
+    title: 'Cookies and Tracking',
+    content:
+      'We use cookies and similar technologies to enhance user experience, analyze usage, and personalize content. You can control cookies through your browser settings.'
+  },
+  {
+    section: 8,
+    title: 'User Rights',
+    content:
+      'You have the right to access, update, or request deletion of your personal data. You may also opt out of non-essential communications.'
+  },
+  {
+    section: 9,
+    title: 'Data Retention',
+    content:
+      'We retain your information only as long as necessary to provide services and comply with legal obligations. Afterward, data is securely deleted or anonymized.'
+  },
+  {
+    section: 10,
+    title: 'Children’s Privacy',
+    content:
+      'mediLocate.health does not knowingly collect data from individuals under 18. If such data is identified, it will be removed promptly.'
+  },
+  {
+    section: 11,
+    title: 'Updates to Policy',
+    content:
+      'We may update this Privacy Policy from time to time. Changes will be posted on this page, and continued use of the platform indicates acceptance.'
+  },
+  {
+    section: 12,
+    title: 'Contact Us',
+    content:
+      'If you have any questions about this Privacy Policy, contact us at privacy@medilocate.health.'
   }
 ];
 

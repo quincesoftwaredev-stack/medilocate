@@ -3,6 +3,7 @@ import styles from '@/styles/TermsAndCondition.module.css'
 import { termsAndConditions } from '@/utility/data'
 import { NextSeo } from 'next-seo'
 import { TermsAndConditionSeoData } from '@/utility/const'
+import Link from 'next/link'
 
 const termAndCondition = () => {
   return (
@@ -13,13 +14,13 @@ const termAndCondition = () => {
         <div>
           <h2>Terms and Conditions</h2>
           <p>
-            Welcome to [Your Company Name]! These terms and conditions outline
+            Welcome to Medilocate.Health! These terms and conditions outline
             the rules and regulations for the use of [Your Company Name]'s
-            Website, located at [Website URL].
+            Website, located at <Link href="https://medilocate.health" >https://medilocate.health</Link>.
           </p>
           <p>
             By accessing this website, we assume you accept these terms and
-            conditions. Do not continue to use [Website Name] if you do not
+            conditions. Do not continue to use Medilocate.health if you do not
             agree to take all of the terms and conditions stated on this page.
           </p>
         </div>

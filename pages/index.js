@@ -64,22 +64,22 @@ export default function Home({ contents, departments, symptoms }) {
   return (
     <>
       <NextSeo
-        title="MediLocate – Find Nearby Doctors, Hospitals & Clinics"
-        description="MediLocate helps you quickly find nearby doctors, hospitals, clinics, and healthcare services based on your live location."
+        title="mediLocate.health – Book a Doctor at Home সহজে"
+        description="Connect with licensed doctors and schedule home visits at your convenience. Chat with doctors, agree on a time, and get medical care at your doorstep with mediLocate.health."
         openGraph={{
-          title: "MediLocate – Smart Healthcare Locator",
+          title: "mediLocate.health – Doctor at Your Door",
           description:
-            "Discover nearby doctors, hospitals, and clinics instantly with MediLocate’s real-time location-based healthcare search.",
+            "Skip the hospital. Chat with trusted doctors and schedule a home visit at a time that works for you. সহজে ডাক্তার বাসায় আনুন with mediLocate.health.",
           url: BASE_URL,
-          site_name: "MediLocate",
+          site_name: "mediLocate.health",
           images: [
             {
               url:
                 contents?.find(i => i.position === "header")?.image ||
-                `${BASE_URL}/images/medilocate.jpg`, // fallback image
+                `${BASE_URL}/images/medilocate.jpg`,
               width: 1200,
               height: 630,
-              alt: "MediLocate – Find Nearby Healthcare Services",
+              alt: "mediLocate.health – Doctor Home Visit Service",
             },
           ],
           type: "website",
@@ -90,6 +90,7 @@ export default function Home({ contents, departments, symptoms }) {
           cardType: "summary_large_image",
         }}
       />
+
 
 
 
