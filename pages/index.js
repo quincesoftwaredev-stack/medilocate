@@ -76,7 +76,7 @@ export default function Home({ contents, departments, symptoms }) {
             {
               url:
                 contents?.find(i => i.position === "header")?.image ||
-                `${BASE_URL}/images/medilocate.jpg`,
+                `${BASE_URL}/images/medilocate.png`,
               width: 1200,
               height: 630,
               alt: "mediLocate.health – Doctor Home Visit Service",
