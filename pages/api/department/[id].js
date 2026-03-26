@@ -12,9 +12,7 @@ handler.get(async (req, res) => {
   try {
     const { id } = req.query
     await db.connect()
-    const category = await Department.findById(id).populate({
-      path: 'children'
-    })
+    const category = await Department.findById(id)
     if (!category) {
       return res.status(404).json({ message: 'Department not found' })
     }
@@ -43,10 +41,7 @@ handler.put(async (req, res) => {
     if (!updatedDepartment) {
       return res.status(404).json({ message: 'Department not found' })
     }
-    const category = await Department.findById(id).populate({
-      path: 'children'
-    })
-    
+    const category = await Department.findById(id)    
     await db.disconnect()
 
     res.status(200).json(category)

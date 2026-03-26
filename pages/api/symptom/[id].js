@@ -41,9 +41,7 @@ handler.put(async (req, res) => {
     if (!updatedSymptom) {
       return res.status(404).json({ message: 'Symptom not found' })
     }
-    const category = await Symptom.findById(id).populate({
-      path: 'children'
-    })
+    const category = await Symptom.findById(id)
     
     await db.disconnect()
 

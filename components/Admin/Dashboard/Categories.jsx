@@ -82,7 +82,7 @@ const Categories = ({
               </span>
             </div>
             <div className={styles.right}>
-              <button onClick={() => router.push('/admin/category/create')}>
+              <button onClick={() => router.push('/admin/department/create')}>
                 <span className={styles.plus__btn}>Add One</span>
                 <span className={styles.plus__icon}>+</span>
               </button>{' '}
@@ -111,13 +111,14 @@ const Categories = ({
                     {c.image && (
                       <Image src={c.image} width='50' height='50' alt='' />
                     )}
+                   
                   </td>
 
                   <td className={styles.action}>
                     <span onDoubleClick={() => remove(c._id)}>Delete</span>
                     <span
                       onClick={() =>
-                        router.push(`/admin/category/create?id=${c._id}`)
+                        router.push(`/admin/department/create?id=${c._id}`)
                       }
                     >
                       View

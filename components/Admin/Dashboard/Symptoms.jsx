@@ -109,6 +109,7 @@ const Categories = ({
                     {c.image && (
                       <Image src={c.image} width='50' height='50' alt='' />
                     )}
+                 
                   </td>
 
                   <td className={styles.action}>

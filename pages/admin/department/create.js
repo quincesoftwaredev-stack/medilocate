@@ -43,7 +43,7 @@ const Create = ({ category: data }) => {
     try {
       dispatch(startLoading())
       const { data } = await axios.post(
-        '/api/category',
+        '/api/department',
         {
           ...category
         },
@@ -107,7 +107,7 @@ const Create = ({ category: data }) => {
     try {
       dispatch(startLoading())
       const { data } = await axios.put(
-        `/api/category/${router.query.id}`,
+        `/api/department/${router.query.id}`,
         {
           ...category
         },
@@ -266,13 +266,13 @@ export async function getServerSideProps ({ query }) {
   const { id } = query
 
   const fetchCategory = async () => {
-    const { data } = await axios.get(`${BASE_URL}/api/category/${id}`)
+    const { data } = await axios.get(`${BASE_URL}/api/department/${id}`)
     return data
   }
 
   const fetchCategories = async () => {
-    const { data } = await axios.get(`${BASE_URL}/api/category`)
-    return data.categories
+    const { data } = await axios.get(`${BASE_URL}/api/department`)
+    return data.departments
   }
 
   // const categories = await fetchCategories()

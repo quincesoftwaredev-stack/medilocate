@@ -99,6 +99,7 @@ const Basic = ({ profile }) => {
                 <div className={styles.pic}>
                     <Image src={profile.image} width={200} height={260} alt="" unoptimized />
                 </div>
+                {/* {profile.image} */}
             </div>
             <div className={styles.right}>
                 {(userInfo?.id == profile._id) || (userInfo?.role == "admin") && <div className={styles.profile__completion}>
