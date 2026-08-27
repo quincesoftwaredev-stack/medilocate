@@ -16,8 +16,7 @@ import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 import LocalPharmacyOutlinedIcon from "@mui/icons-material/LocalPharmacyOutlined";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 
-import Navbar from "@/components/home/Navbar";
-import Footer from "@/components/home/Footer";
+
 
 import styles from "@/styles/Admin/Medicines/MedicineForm.module.css";
 
@@ -358,9 +357,9 @@ export default function CreateMedicinePage() {
             );
 
 
-            // router.push(
-            //     "/admin/medicines"
-            // );
+            router.push(
+                "/admin/medicines"
+            );
 
 
         } catch (
@@ -403,7 +402,6 @@ export default function CreateMedicinePage() {
             </Head>
 
 
-            <Navbar />
 
 
             <main
@@ -1351,7 +1349,6 @@ export default function CreateMedicinePage() {
             </main>
 
 
-            <Footer />
 
         </>
     );

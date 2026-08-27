@@ -269,7 +269,6 @@ const userInfo =
                 </main>
 
 
-                <Footer />
 
             </>
         );

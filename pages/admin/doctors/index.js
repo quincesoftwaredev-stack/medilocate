@@ -18,7 +18,6 @@ import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
 
 
-import AdminBottomNav from "@/components/admin/AdminBottomNav";
 
 import styles from "@/styles/Admin/Doctors/Doctors.module.css";
 import BASE_URL from "@/config";
@@ -1272,7 +1271,6 @@ export default function DoctorsPage({
             </main>
 
 
-            <AdminBottomNav />
 
 
         </>

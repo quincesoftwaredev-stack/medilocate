@@ -22,8 +22,7 @@ import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
-import Navbar from "@/components/home/Navbar";
-import Footer from "@/components/home/Footer";
+
 
 import styles from "@/styles/Admin/Medicines/Medicines.module.css";
 
@@ -584,7 +583,6 @@ export default function AdminMedicinesPage(
             </Head>
 
 
-            <Navbar />
 
 
             <main
@@ -1953,7 +1951,6 @@ export default function AdminMedicinesPage(
             </main>
 
 
-            <Footer />
 
 
             {/* =====================================================
