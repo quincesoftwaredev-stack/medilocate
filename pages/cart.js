@@ -20,7 +20,7 @@ import {
     removeFromCart,
 } from "@/redux/cartSlice";
 
-import styles from "@/styles/cart/Cart.module.css";
+import styles from "@/styles/Cart/Cart.module.css";
 
 
 export default function CartPage() {

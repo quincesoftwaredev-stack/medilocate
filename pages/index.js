@@ -1,6 +1,5 @@
 import Head from "next/head";
 
-import Navbar from "../components/home/Navbar";
 import Hero from "../components/home/Hero";
 import Services from "../components/home/Services";
 import HowItWorks from "../components/home/HowItWorks";
@@ -9,7 +8,6 @@ import MedicineSection from "../components/home/MedicineSection";
 import PrescriptionSection from "../components/home/PrescriptionSection";
 import WhyMedilocate from "../components/home/WhyMedilocate";
 import FinalCTA from "../components/home/FinalCTA";
-import Footer from "../components/home/Footer";
 
 export default function Home() {
     return (

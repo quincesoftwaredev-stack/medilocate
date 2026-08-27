@@ -3,8 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 
-import Navbar from "../../components/home/Navbar";
-import Footer from "../../components/home/Footer";
+
 
 import DoctorSearch from "../../components/Doctors/DoctorSearch";
 import DoctorCard from "../../components/Doctors/DoctorCard";
