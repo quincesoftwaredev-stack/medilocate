@@ -1,0 +1,1289 @@
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page {
+    min-height: 100vh;
+
+    padding: 34px 0 75px;
+
+    background: var(--ml-gray-50);
+}
+
+
+.container {
+    width: min(1120px, calc(100% - 40px));
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.pageHeader {
+    margin-bottom: 25px;
+}
+
+
+.eyebrow {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: var(--ml-teal);
+
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-bold);
+
+    letter-spacing: 0.08em;
+}
+
+
+.pageHeader h1 {
+    margin: 0;
+
+    color: var(--ml-navy);
+
+    font-size: var(--ml-heading-md);
+    font-weight: var(--ml-weight-bold);
+
+    line-height: 1.15;
+}
+
+
+.pageHeader h1 span {
+    color: var(--ml-teal);
+}
+
+
+.pageHeader p {
+    margin: 9px 0 0;
+
+    color: var(--ml-gray-600);
+
+    font-size: var(--ml-font-base);
+}
+
+
+/* =========================================================
+   PROFILE CARD
+========================================================= */
+
+.profileCard {
+    padding: 22px;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-lg);
+
+    background: var(--ml-white);
+
+    box-shadow: var(--ml-shadow-sm);
+}
+
+
+.profileMain {
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
+
+.avatar {
+    width: 85px;
+    height: 85px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    overflow: hidden;
+
+    border-radius: 22px;
+
+    color: var(--ml-teal);
+
+    background: var(--ml-teal-light);
+
+    font-size: 32px;
+    font-weight: var(--ml-weight-bold);
+}
+
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+/* =========================================================
+   PROFILE INFO
+========================================================= */
+
+.profileInfo {
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.profileNameRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+
+.profileNameRow h2 {
+    margin: 0;
+
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-2xl);
+    font-weight: var(--ml-weight-bold);
+}
+
+
+.profileNameRow span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--ml-teal);
+
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-semibold);
+}
+
+
+.editButton {
+    min-height: 37px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    flex-shrink: 0;
+
+    padding: 0 11px;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: 8px;
+
+    color: var(--ml-gray-600);
+
+    background: var(--ml-white);
+
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-semibold);
+
+    text-decoration: none;
+}
+
+
+.editButton:hover {
+    color: var(--ml-teal);
+
+    border-color: var(--ml-teal);
+
+    background: var(--ml-teal-light);
+}
+
+
+.editButton svg {
+    width: 16px;
+}
+
+
+/* =========================================================
+   PROFILE META
+========================================================= */
+
+.profileMeta {
+    display: flex;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 10px 20px;
+
+    margin-top: 15px;
+}
+
+
+.profileMeta > div {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    color: var(--ml-gray-600);
+
+    font-size: var(--ml-font-xs);
+}
+
+
+.profileMeta svg {
+    width: 17px;
+
+    color: var(--ml-gray-500);
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.statsGrid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 12px;
+
+    margin: 18px 0;
+}
+
+
+.statCard {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    min-width: 0;
+
+    padding: 16px;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-md);
+
+    color: inherit;
+
+    background: var(--ml-white);
+
+    box-shadow: var(--ml-shadow-sm);
+
+    text-decoration: none;
+
+    transition: var(--ml-transition);
+}
+
+
+.statCard:hover {
+    border-color: rgba(15, 157, 138, 0.25);
+
+    box-shadow: var(--ml-shadow-md);
+
+    transform: translateY(-2px);
+}
+
+
+.statIcon {
+    width: 41px;
+    height: 41px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    color: var(--ml-teal);
+
+    background: var(--ml-teal-light);
+}
+
+
+.statIcon svg {
+    width: 21px;
+}
+
+
+.activeIcon {
+    color: #3176a5;
+
+    background: #eaf3fb;
+}
+
+
+.prescriptionIcon {
+    color: #675ca5;
+
+    background: #efedff;
+}
+
+
+.addressIcon {
+    color: #7a638f;
+
+    background: #f3edf8;
+}
+
+
+.statCard > div:nth-child(2) {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+.statCard span {
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-xs);
+
+    line-height: 1.3;
+}
+
+
+.statCard strong {
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-xl);
+}
+
+
+.statCard > svg:last-child {
+    width: 17px;
+
+    margin-left: auto;
+
+    flex-shrink: 0;
+
+    color: var(--ml-gray-300);
+}
+
+
+/* =========================================================
+   CONTENT GRID
+========================================================= */
+
+.contentGrid {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        350px;
+
+    align-items: start;
+
+    gap: 18px;
+}
+
+
+.mainColumn,
+.sidebar {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 16px;
+}
+
+
+/* =========================================================
+   COMMON CARD
+========================================================= */
+
+.card {
+    overflow: hidden;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-md);
+
+    background: var(--ml-white);
+
+    box-shadow: var(--ml-shadow-sm);
+}
+
+
+.cardHeader {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 18px;
+
+    border-bottom: 1px solid var(--ml-gray-200);
+}
+
+
+.cardHeader > div:first-child {
+    min-width: 0;
+}
+
+
+.cardHeader span {
+    display: block;
+
+    color: var(--ml-teal);
+
+    font-size: 9px;
+    font-weight: var(--ml-weight-bold);
+
+    letter-spacing: 0.08em;
+}
+
+
+.cardHeader h2 {
+    margin: 4px 0 0;
+
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-lg);
+}
+
+
+/* =========================================================
+   VIEW ALL
+========================================================= */
+
+.viewAll {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 4px;
+
+    flex-shrink: 0;
+
+    color: var(--ml-teal);
+
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-semibold);
+
+    text-decoration: none;
+}
+
+
+.viewAll:hover {
+    color: var(--ml-teal-dark);
+}
+
+
+.viewAll svg {
+    width: 16px;
+}
+
+
+/* =========================================================
+   ORDER LIST
+========================================================= */
+
+.orderList {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.orderItem {
+    display: grid;
+
+    grid-template-columns:
+        42px
+        minmax(0, 1fr)
+        auto
+        18px;
+
+    align-items: center;
+
+    gap: 11px;
+
+    padding: 14px 18px;
+
+    border-bottom: 1px solid var(--ml-gray-100);
+
+    text-decoration: none;
+
+    transition: var(--ml-transition);
+}
+
+
+.orderItem:last-child {
+    border-bottom: none;
+}
+
+
+.orderItem:hover {
+    background: var(--ml-teal-light);
+}
+
+
+.orderIcon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    color: var(--ml-teal);
+
+    background: var(--ml-gray-50);
+}
+
+
+.orderIcon svg {
+    width: 21px;
+}
+
+
+.orderInfo {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.orderInfo strong {
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-sm);
+}
+
+
+.orderInfo span {
+    overflow: hidden;
+
+    color: var(--ml-gray-500);
+
+    font-size: 10px;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.orderAmount {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    gap: 4px;
+}
+
+
+.orderAmount > strong {
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-sm);
+}
+
+
+.orderStatus {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 3px;
+
+    min-height: 24px;
+
+    padding: 0 6px;
+
+    border-radius: 6px;
+
+    font-size: 9px;
+    font-weight: var(--ml-weight-semibold);
+
+    white-space: nowrap;
+}
+
+
+.orderStatus svg {
+    width: 13px;
+}
+
+
+.outForDelivery {
+    color: #2b709b;
+
+    background: #e8f3fb;
+}
+
+
+.delivered {
+    color: #23734f;
+
+    background: #e9f8f1;
+}
+
+
+.pending {
+    color: #8d6916;
+
+    background: #fff5da;
+}
+
+
+.orderArrow {
+    width: 17px;
+
+    color: var(--ml-gray-300);
+}
+
+
+/* =========================================================
+   PRESCRIPTION CARD
+========================================================= */
+
+.prescriptionCard {
+    display: flex;
+
+    gap: 16px;
+
+    padding: 21px;
+
+    border-radius: var(--ml-radius-md);
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--ml-navy),
+            var(--ml-navy-light)
+        );
+
+    box-shadow: var(--ml-shadow-md);
+}
+
+
+.prescriptionVisual {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 12px;
+
+    color: var(--ml-teal);
+
+    background: rgba(255, 255, 255, 0.1);
+}
+
+
+.prescriptionVisual svg {
+    width: 25px;
+}
+
+
+.prescriptionContent {
+    min-width: 0;
+}
+
+
+.prescriptionContent > span {
+    color: var(--ml-teal-light);
+
+    font-size: 9px;
+    font-weight: var(--ml-weight-bold);
+
+    letter-spacing: 0.08em;
+}
+
+
+.prescriptionContent h2 {
+    margin: 5px 0 5px;
+
+    color: var(--ml-white);
+
+    font-size: var(--ml-font-xl);
+}
+
+
+.prescriptionContent p {
+    max-width: 520px;
+
+    margin: 0;
+
+    color: rgba(255, 255, 255, 0.68);
+
+    font-size: var(--ml-font-xs);
+
+    line-height: 1.6;
+}
+
+
+.prescriptionButton {
+    min-height: 40px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    margin-top: 15px;
+
+    padding: 0 12px;
+
+    border-radius: 8px;
+
+    color: var(--ml-navy);
+
+    background: var(--ml-white);
+
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-semibold);
+
+    text-decoration: none;
+}
+
+
+.prescriptionButton:hover {
+    color: var(--ml-teal-dark);
+
+    background: var(--ml-teal-light);
+}
+
+
+.prescriptionButton svg {
+    width: 16px;
+}
+
+
+/* =========================================================
+   PERSONAL INFO
+========================================================= */
+
+.personalInfo {
+    display: flex;
+    flex-direction: column;
+
+    gap: 13px;
+
+    padding: 18px;
+}
+
+
+.personalInfo > div {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.personalInfo span {
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-xs);
+}
+
+
+.personalInfo strong {
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-sm);
+
+    line-height: 1.4;
+}
+
+
+.iconEdit {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: 8px;
+
+    color: var(--ml-gray-500);
+
+    background: var(--ml-white);
+}
+
+
+.iconEdit:hover {
+    color: var(--ml-teal);
+
+    border-color: var(--ml-teal);
+
+    background: var(--ml-teal-light);
+}
+
+
+.iconEdit svg {
+    width: 17px;
+}
+
+
+/* =========================================================
+   ACCOUNT MENU
+========================================================= */
+
+.accountMenu {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.accountMenu > a {
+    display: grid;
+
+    grid-template-columns:
+        38px
+        minmax(0, 1fr)
+        17px;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 13px 18px;
+
+    border-bottom: 1px solid var(--ml-gray-100);
+
+    color: inherit;
+
+    text-decoration: none;
+
+    transition: var(--ml-transition);
+}
+
+
+.accountMenu > a:last-child {
+    border-bottom: none;
+}
+
+
+.accountMenu > a:hover {
+    background: var(--ml-teal-light);
+}
+
+
+.menuIcon {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    color: var(--ml-teal);
+
+    background: var(--ml-gray-50);
+}
+
+
+.menuIcon svg {
+    width: 20px;
+}
+
+
+.accountMenu > a > div:nth-child(2) {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.accountMenu strong {
+    overflow: hidden;
+
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-sm);
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.accountMenu span {
+    color: var(--ml-gray-500);
+
+    font-size: 10px;
+
+    line-height: 1.4;
+}
+
+
+.accountMenu > a > svg {
+    width: 17px;
+
+    color: var(--ml-gray-300);
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+.logoutButton {
+    width: 100%;
+
+    min-height: 43px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    border: 1px solid #edcccc;
+    border-radius: 9px;
+
+    color: #a24343;
+
+    background: var(--ml-white);
+
+    font-family: inherit;
+
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-semibold);
+
+    cursor: pointer;
+}
+
+
+.logoutButton:hover {
+    background: #fceeee;
+}
+
+
+.logoutButton svg {
+    width: 18px;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .statsGrid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    .contentGrid {
+        grid-template-columns:
+            minmax(0, 1fr)
+            300px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .container {
+        width: calc(100% - 28px);
+    }
+
+
+    .page {
+        padding: 24px 0 60px;
+    }
+
+
+    .pageHeader {
+        margin-bottom: 18px;
+    }
+
+
+    .pageHeader h1 {
+        font-size: var(--ml-heading-sm);
+    }
+
+
+    .pageHeader p {
+        font-size: var(--ml-font-sm);
+    }
+
+
+    .profileCard {
+        padding: 17px;
+    }
+
+
+    .profileMain {
+        align-items: flex-start;
+    }
+
+
+    .avatar {
+        width: 67px;
+        height: 67px;
+
+        border-radius: 17px;
+
+        font-size: 25px;
+    }
+
+
+    .profileNameRow {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 9px;
+    }
+
+
+    .profileNameRow h2 {
+        font-size: var(--ml-font-xl);
+    }
+
+
+    .profileMeta {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 7px;
+
+        margin-top: 11px;
+    }
+
+
+    .editButton {
+        min-height: 34px;
+    }
+
+
+    .statsGrid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 8px;
+
+        margin: 12px 0;
+    }
+
+
+    .statCard {
+        padding: 12px;
+    }
+
+
+    .statIcon {
+        width: 35px;
+        height: 35px;
+    }
+
+
+    .statIcon svg {
+        width: 18px;
+    }
+
+
+    .statCard span {
+        font-size: 9px;
+    }
+
+
+    .statCard strong {
+        font-size: var(--ml-font-lg);
+    }
+
+
+    .contentGrid {
+        display: flex;
+        flex-direction: column;
+
+        gap: 13px;
+    }
+
+
+    .mainColumn,
+    .sidebar {
+        width: 100%;
+    }
+
+
+    .orderItem {
+        grid-template-columns:
+            38px
+            minmax(0, 1fr)
+            auto
+            15px;
+
+        gap: 9px;
+
+        padding: 13px 15px;
+    }
+
+
+    .orderIcon {
+        width: 38px;
+        height: 38px;
+    }
+
+
+    .orderIcon svg {
+        width: 19px;
+    }
+
+
+    .orderInfo strong {
+        font-size: var(--ml-font-xs);
+    }
+
+
+    .orderInfo span {
+        font-size: 9px;
+    }
+
+
+    .orderAmount > strong {
+        font-size: var(--ml-font-xs);
+    }
+
+
+    .orderStatus {
+        font-size: 8px;
+    }
+
+
+    .prescriptionCard {
+        padding: 17px;
+    }
+
+
+    .prescriptionVisual {
+        width: 42px;
+        height: 42px;
+    }
+
+
+    .prescriptionContent h2 {
+        font-size: var(--ml-font-lg);
+    }
+
+
+    .prescriptionContent p {
+        font-size: 10px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .container {
+        width: calc(100% - 22px);
+    }
+
+
+    .profileMain {
+        gap: 12px;
+    }
+
+
+    .avatar {
+        width: 58px;
+        height: 58px;
+
+        border-radius: 14px;
+
+        font-size: 22px;
+    }
+
+
+    .profileNameRow h2 {
+        font-size: var(--ml-font-lg);
+    }
+
+
+    .profileNameRow span {
+        font-size: 10px;
+    }
+
+
+    .profileMeta > div {
+        font-size: 9px;
+    }
+
+
+    .statCard {
+        padding: 10px;
+
+        gap: 7px;
+    }
+
+
+    .statIcon {
+        width: 31px;
+        height: 31px;
+    }
+
+
+    .statIcon svg {
+        width: 16px;
+    }
+
+
+    .statCard > svg:last-child {
+        display: none;
+    }
+
+
+    .cardHeader {
+        padding: 15px;
+    }
+
+
+    .viewAll {
+        font-size: 9px;
+    }
+
+
+    .prescriptionCard {
+        gap: 10px;
+    }
+
+}

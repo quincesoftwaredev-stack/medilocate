@@ -1,0 +1,343 @@
+/* =========================================================
+   SECTION
+========================================================= */
+
+.section {
+    padding: 90px 0;
+
+    background: #f7fbfa;
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.container {
+    width: min(1180px, calc(100% - 40px));
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+.heading {
+    max-width: 650px;
+
+    margin: 0 auto 55px;
+
+    text-align: center;
+}
+
+.label {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #167c80;
+
+    font-size: 11px;
+    font-weight: 750;
+
+    letter-spacing: 1.3px;
+}
+
+.heading h2 {
+    margin: 0;
+
+    color: #173436;
+
+    font-size: clamp(30px, 4vw, 42px);
+    line-height: 1.15;
+
+    letter-spacing: -1.4px;
+}
+
+.heading h2 span {
+    color: #167c80;
+}
+
+.heading p {
+    max-width: 570px;
+
+    margin: 15px auto 0;
+
+    color: #687a7b;
+
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   STEPS
+========================================================= */
+
+.steps {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 0;
+}
+
+.stepWrapper {
+    position: relative;
+
+    display: flex;
+    align-items: flex-start;
+}
+
+
+/* =========================================================
+   STEP
+========================================================= */
+
+.step {
+    position: relative;
+    z-index: 2;
+
+    width: 100%;
+
+    padding: 0 22px;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   NUMBER
+========================================================= */
+
+.number {
+    position: absolute;
+
+    top: -4px;
+    left: 14px;
+
+    color: #d9e9e7;
+
+    font-size: 12px;
+    font-weight: 750;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* =========================================================
+   ICON
+========================================================= */
+
+.icon {
+    width: 62px;
+    height: 62px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 20px;
+
+    border: 1px solid #d8e9e7;
+    border-radius: 15px;
+
+    color: #167c80;
+    background: #ffffff;
+
+    box-shadow:
+        0 8px 22px rgba(20, 70, 72, 0.06);
+}
+
+.icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.step h3 {
+    margin: 0 0 9px;
+
+    color: #173436;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    letter-spacing: -0.3px;
+}
+
+.step p {
+    max-width: 220px;
+
+    margin: 0 auto;
+
+    color: #748485;
+
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   CONNECTOR
+========================================================= */
+
+.connector {
+    position: absolute;
+
+    z-index: 1;
+
+    top: 31px;
+    right: -10px;
+
+    width: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #a7c7c4;
+}
+
+.connector::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    height: 1px;
+
+    background: #d2e5e3;
+}
+
+.connector svg {
+    position: relative;
+
+    width: 17px;
+    height: 17px;
+
+    padding: 2px;
+
+    color: #8eb8b4;
+    background: #f7fbfa;
+}
+
+
+/* =========================================================
+   HOVER
+========================================================= */
+
+.stepWrapper:hover .icon {
+    color: #ffffff;
+    background: #167c80;
+
+    border-color: #167c80;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 12px 25px rgba(22, 124, 128, 0.16);
+}
+
+.icon {
+    transition:
+        transform 0.2s ease,
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .section {
+        padding: 75px 0;
+    }
+
+    .steps {
+        grid-template-columns: repeat(2, 1fr);
+
+        row-gap: 55px;
+    }
+
+    .stepWrapper:nth-child(2) .connector {
+        display: none;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .section {
+        padding: 60px 0;
+    }
+
+    .container {
+        width: calc(100% - 28px);
+    }
+
+    .heading {
+        margin-bottom: 40px;
+    }
+
+    .heading h2 {
+        font-size: 29px;
+    }
+
+    .heading p {
+        font-size: 13px;
+    }
+
+    .steps {
+        grid-template-columns: 1fr;
+
+        gap: 38px;
+    }
+
+    .step {
+        padding: 0 30px;
+    }
+
+    .connector {
+        display: none;
+    }
+
+    .number {
+        left: 20px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .step {
+        padding: 0 15px;
+    }
+
+    .number {
+        left: 8px;
+    }
+
+}

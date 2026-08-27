@@ -1,0 +1,488 @@
+.wrapper {
+    width: 100%;
+}
+
+
+/* =========================================================
+   DROPZONE
+========================================================= */
+
+.dropzone {
+    position: relative;
+    padding: 42px 24px;
+    border: 1.5px dashed var(--ml-gray-300);
+    border-radius: var(--ml-radius-md);
+    background: var(--ml-gray-50);
+    text-align: center;
+    transition: var(--ml-transition);
+}
+
+.dropzone:hover {
+    border-color: var(--ml-teal);
+    background: var(--ml-mint);
+}
+
+.dragActive {
+    border-color: var(--ml-teal);
+    background: var(--ml-teal-light);
+}
+
+
+/* =========================================================
+   UPLOAD ICON
+========================================================= */
+
+.uploadIcon {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--ml-teal-light);
+    color: var(--ml-teal);
+}
+
+.uploadIcon svg {
+    font-size: 30px;
+}
+
+
+/* =========================================================
+   DROPZONE CONTENT
+========================================================= */
+
+.dropzone h3 {
+    margin: 0 0 7px;
+
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-xl);
+    font-weight: var(--ml-weight-semibold);
+    line-height: var(--ml-line-snug);
+}
+
+.dropzone p {
+    margin: 0;
+
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-md);
+    font-weight: var(--ml-weight-regular);
+    line-height: var(--ml-line-normal);
+}
+
+
+/* =========================================================
+   UPLOAD ACTIONS
+========================================================= */
+
+.uploadActions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-top: 22px;
+}
+
+.chooseButton,
+.cameraButton {
+    min-height: 42px;
+
+    padding: 0 17px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    border-radius: var(--ml-radius-sm);
+
+    font-size: var(--ml-font-md);
+    font-weight: var(--ml-weight-semibold);
+
+    cursor: pointer;
+
+    transition: var(--ml-transition);
+}
+
+.chooseButton svg,
+.cameraButton svg {
+    font-size: 20px;
+}
+
+
+/* =========================================================
+   PRIMARY BUTTON
+========================================================= */
+
+.chooseButton {
+    border: 1px solid var(--ml-teal);
+    background: var(--ml-teal);
+    color: var(--ml-white);
+}
+
+.chooseButton:hover {
+    background: var(--ml-teal-dark);
+    border-color: var(--ml-teal-dark);
+}
+
+
+/* =========================================================
+   SECONDARY BUTTON
+========================================================= */
+
+.cameraButton {
+    border: 1px solid var(--ml-gray-200);
+    background: var(--ml-white);
+    color: var(--ml-navy);
+}
+
+.cameraButton:hover {
+    border-color: var(--ml-teal);
+    color: var(--ml-teal);
+    background: var(--ml-teal-light);
+}
+
+
+/* =========================================================
+   FILE HINT
+========================================================= */
+
+.fileHint {
+    display: block;
+
+    margin-top: 14px;
+
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-xs);
+    line-height: var(--ml-line-normal);
+}
+
+
+/* =========================================================
+   UPLOAD PROGRESS
+========================================================= */
+
+.progressBox {
+    width: min(100%, 420px);
+
+    margin: 12px auto;
+
+    text-align: left;
+}
+
+.progressHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-md);
+    line-height: var(--ml-line-normal);
+}
+
+.progressHeader span {
+    font-weight: var(--ml-weight-medium);
+}
+
+.progressHeader strong {
+    color: var(--ml-teal);
+
+    font-weight: var(--ml-weight-semibold);
+}
+
+.progressBar {
+    width: 100%;
+    height: 7px;
+
+    overflow: hidden;
+
+    border-radius: 20px;
+
+    background: var(--ml-gray-200);
+}
+
+.progress {
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: var(--ml-teal);
+
+    transition: width 0.15s ease;
+}
+
+
+/* =========================================================
+   FILE LIST
+========================================================= */
+
+.fileList {
+    margin-top: 20px;
+}
+
+.fileListHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-md);
+    font-weight: var(--ml-weight-semibold);
+}
+
+.fileListHeader > div {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.fileListHeader strong {
+    min-width: 25px;
+    height: 25px;
+
+    padding: 0 7px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--ml-teal-light);
+    color: var(--ml-teal);
+
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-bold);
+}
+
+
+/* =========================================================
+   REMOVE ALL
+========================================================= */
+
+.removeAll {
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-medium);
+
+    cursor: pointer;
+
+    transition: var(--ml-transition);
+}
+
+.removeAll:hover {
+    color: var(--ml-teal);
+}
+
+
+/* =========================================================
+   FILE ITEM
+========================================================= */
+
+.fileItem {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 11px;
+
+    margin-bottom: 8px;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-sm);
+
+    background: var(--ml-white);
+
+    box-shadow: var(--ml-shadow-sm);
+
+    transition: var(--ml-transition);
+}
+
+.fileItem:hover {
+    border-color: var(--ml-gray-300);
+    box-shadow: var(--ml-shadow-md);
+}
+
+
+/* =========================================================
+   FILE PREVIEW
+========================================================= */
+
+.filePreview {
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: var(--ml-radius-sm);
+
+    background: var(--ml-gray-100);
+
+    color: var(--ml-gray-500);
+}
+
+.filePreview img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+.filePreview svg {
+    font-size: 24px;
+}
+
+
+/* =========================================================
+   FILE INFORMATION
+========================================================= */
+
+.fileInfo {
+    min-width: 0;
+
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+.fileInfo strong {
+    overflow: hidden;
+
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-semibold);
+
+    line-height: var(--ml-line-snug);
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.fileInfo span {
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-regular);
+
+    line-height: var(--ml-line-normal);
+}
+
+
+/* =========================================================
+   SUCCESS ICON
+========================================================= */
+
+.fileCheck {
+    flex-shrink: 0;
+
+    color: var(--ml-teal);
+
+    font-size: 20px;
+}
+
+
+/* =========================================================
+   DELETE BUTTON
+========================================================= */
+
+.fileDelete {
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 0;
+    border-radius: var(--ml-radius-sm);
+
+    background: transparent;
+
+    color: var(--ml-gray-500);
+
+    cursor: pointer;
+
+    transition: var(--ml-transition);
+}
+
+.fileDelete:hover {
+    background: var(--ml-gray-100);
+    color: var(--ml-navy);
+}
+
+.fileDelete svg {
+    font-size: 20px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .dropzone {
+        padding: 32px 18px;
+    }
+
+    .uploadActions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .chooseButton,
+    .cameraButton {
+        width: 100%;
+    }
+
+    .fileItem {
+        gap: 9px;
+    }
+
+    .filePreview {
+        width: 44px;
+        height: 44px;
+    }
+
+}

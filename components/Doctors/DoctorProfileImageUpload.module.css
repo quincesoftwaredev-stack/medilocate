@@ -1,0 +1,241 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    padding: 18px;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-md);
+
+    background: var(--ml-gray-50);
+}
+
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+.preview {
+    position: relative;
+
+    width: 92px;
+    height: 92px;
+
+    flex-shrink: 0;
+
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 3px solid var(--ml-white);
+    border-radius: 50%;
+
+    background: var(--ml-teal-light);
+
+    box-shadow:
+        0 0 0 1px var(--ml-gray-200),
+        var(--ml-shadow-sm);
+}
+
+.preview img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+.preview > svg {
+    font-size: 42px;
+
+    color: var(--ml-teal);
+}
+
+
+/* =========================================================
+   UPLOAD OVERLAY
+========================================================= */
+
+.uploadOverlay {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        rgba(
+            18,
+            48,
+            74,
+            0.72
+        );
+
+    color: var(--ml-white);
+}
+
+.uploadOverlay strong {
+    font-size: var(--ml-font-md);
+}
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+.controls {
+    min-width: 0;
+
+    flex: 1;
+}
+
+.controls > div:first-child {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+.controls strong {
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-md);
+    font-weight: var(--ml-weight-semibold);
+}
+
+.controls span {
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-xs);
+}
+
+
+.buttons {
+    margin-top: 10px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    flex-wrap: wrap;
+}
+
+.buttons button {
+    min-height: 35px;
+
+    padding: 0 10px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-sm);
+
+    background: var(--ml-white);
+
+    color: var(--ml-navy);
+
+    font-family: inherit;
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-semibold);
+
+    cursor: pointer;
+
+    transition: var(--ml-transition);
+}
+
+.buttons button:hover:not(:disabled) {
+    border-color: var(--ml-teal);
+
+    background: var(--ml-teal-light);
+
+    color: var(--ml-teal-dark);
+}
+
+.buttons button:disabled {
+    opacity: .6;
+
+    cursor: not-allowed;
+}
+
+.buttons svg {
+    font-size: 17px;
+}
+
+.cameraButton {
+    color: var(--ml-teal) !important;
+}
+
+.deleteButton {
+    color: #b42318 !important;
+}
+
+.deleteButton:hover:not(:disabled) {
+    border-color: #efb5b1 !important;
+    background: #fff0ef !important;
+}
+
+
+/* =========================================================
+   UPLOADED
+========================================================= */
+
+.uploaded {
+    position: absolute;
+
+    margin-top: 96px;
+
+    margin-left: 110px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    color: var(--ml-teal-dark);
+
+    font-size: 10px;
+    font-weight: var(--ml-weight-semibold);
+}
+
+.uploaded svg {
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .wrapper {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .preview {
+        width: 82px;
+        height: 82px;
+    }
+
+    .uploaded {
+        position: static;
+
+        margin:
+            0
+            0
+            0
+            100px;
+    }
+
+}

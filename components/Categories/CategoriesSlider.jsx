@@ -44,6 +44,9 @@ const CategoriesSlider = ({ setOpen }) => {
                   <div className={styles.category}>
                     <FindNearMe text={"Find Doctor"} />
                   </div>
+                  <div className={styles.category}>
+                    <button>Order Medicine</button>
+                  </div>
                 </>
               )}
 

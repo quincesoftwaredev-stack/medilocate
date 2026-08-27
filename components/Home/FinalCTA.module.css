@@ -1,0 +1,331 @@
+/* =========================================================
+   SECTION
+========================================================= */
+
+.section {
+    padding: 70px 0 90px;
+
+    background: #f7fbfa;
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.container {
+    width: min(1180px, calc(100% - 40px));
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.card {
+    position: relative;
+
+    overflow: hidden;
+
+    min-height: 350px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 55px 30px;
+
+    border-radius: 18px;
+
+    background: #167c80;
+}
+
+
+/* =========================================================
+   DECORATIVE CIRCLES
+========================================================= */
+
+.circleOne {
+    position: absolute;
+
+    width: 400px;
+    height: 400px;
+
+    top: -240px;
+    left: -150px;
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 50%;
+}
+
+.circleTwo {
+    position: absolute;
+
+    width: 330px;
+    height: 330px;
+
+    right: -120px;
+    bottom: -220px;
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 50%;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.content {
+    position: relative;
+    z-index: 2;
+
+    max-width: 700px;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   ICON
+========================================================= */
+
+.icon {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 17px;
+
+    border-radius: 11px;
+
+    color: #167c80;
+    background: #ffffff;
+}
+
+.icon svg {
+    width: 22px;
+}
+
+
+/* =========================================================
+   LABEL
+========================================================= */
+
+.label {
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: rgba(255, 255, 255, 0.65);
+
+    font-size: 10px;
+    font-weight: 750;
+
+    letter-spacing: 1.3px;
+}
+
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+.content h2 {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: clamp(31px, 4vw, 43px);
+    line-height: 1.12;
+
+    letter-spacing: -1.6px;
+}
+
+.content h2 span {
+    color: #b9e7e1;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.content p {
+    max-width: 530px;
+
+    margin: 15px auto 0;
+
+    color: rgba(255, 255, 255, 0.75);
+
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-top: 26px;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.primaryButton,
+.secondaryButton {
+    min-height: 43px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 0 15px;
+
+    border-radius: 8px;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.primaryButton svg:first-child,
+.secondaryButton svg:first-child {
+    width: 17px;
+}
+
+.primaryButton svg:last-child,
+.secondaryButton svg:last-child {
+    width: 15px;
+
+    transition: transform 0.2s ease;
+}
+
+
+/* =========================================================
+   PRIMARY
+========================================================= */
+
+.primaryButton {
+    color: #167c80;
+    background: #ffffff;
+}
+
+.primaryButton:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.13);
+}
+
+.primaryButton:hover svg:last-child {
+    transform: translateX(3px);
+}
+
+
+/* =========================================================
+   SECONDARY
+========================================================= */
+
+.secondaryButton {
+    color: #ffffff;
+
+    border: 1px solid rgba(255, 255, 255, 0.28);
+
+    background: rgba(255, 255, 255, 0.09);
+}
+
+.secondaryButton:hover {
+    background: rgba(255, 255, 255, 0.16);
+
+    transform: translateY(-2px);
+}
+
+.secondaryButton:hover svg:last-child {
+    transform: translateX(3px);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .section {
+        padding: 55px 0 70px;
+    }
+
+    .container {
+        width: calc(100% - 28px);
+    }
+
+    .card {
+        min-height: 380px;
+
+        padding: 45px 20px;
+
+        border-radius: 15px;
+    }
+
+    .content h2 {
+        font-size: 30px;
+    }
+
+    .content p {
+        font-size: 12px;
+    }
+
+    .actions {
+        flex-direction: column;
+
+        width: 100%;
+    }
+
+    .primaryButton,
+    .secondaryButton {
+        width: 100%;
+
+        max-width: 270px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .content h2 {
+        font-size: 27px;
+    }
+
+    .content p {
+        font-size: 11px;
+    }
+
+}

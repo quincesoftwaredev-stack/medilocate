@@ -1,0 +1,330 @@
+/* =========================================================
+   SERVICES
+========================================================= */
+
+.services {
+    padding: 85px 0;
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.container {
+    width: min(1180px, calc(100% - 40px));
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   SECTION HEADING
+========================================================= */
+
+.sectionHeading {
+    max-width: 650px;
+
+    margin: 0 auto 48px;
+
+    text-align: center;
+}
+
+.sectionLabel {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #167c80;
+
+    font-size: 11px;
+    font-weight: 750;
+
+    letter-spacing: 1.3px;
+}
+
+.sectionHeading h2 {
+    margin: 0;
+
+    color: #173436;
+
+    font-size: clamp(29px, 4vw, 40px);
+    line-height: 1.15;
+
+    letter-spacing: -1.3px;
+}
+
+.sectionHeading h2 span {
+    color: #167c80;
+}
+
+.sectionHeading p {
+    margin: 14px 0 0;
+
+    color: #647779;
+
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   SERVICE GRID
+========================================================= */
+
+.serviceGrid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px;
+}
+
+
+/* =========================================================
+   SERVICE CARD
+========================================================= */
+
+.serviceCard {
+    position: relative;
+
+    display: flex;
+
+    min-height: 235px;
+
+    padding: 30px;
+
+    overflow: hidden;
+
+    border: 1px solid #e4eeee;
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+
+/* Decorative circle */
+
+.serviceCard::after {
+    content: "";
+
+    position: absolute;
+
+    width: 190px;
+    height: 190px;
+
+    right: -80px;
+    bottom: -100px;
+
+    border-radius: 50%;
+
+    background: #e9f7f6;
+
+    transition: transform 0.3s ease;
+}
+
+.serviceCard:hover::after {
+    transform: scale(1.15);
+}
+
+.serviceCard:hover {
+    transform: translateY(-4px);
+
+    border-color: #cde4e2;
+
+    box-shadow:
+        0 12px 35px rgba(20, 70, 72, 0.1);
+}
+
+
+/* =========================================================
+   ICON
+========================================================= */
+
+.serviceIcon {
+    position: relative;
+    z-index: 2;
+
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 13px;
+
+    color: #167c80;
+    background: #e9f7f6;
+}
+
+.serviceIcon svg {
+    width: 28px;
+    height: 28px;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.serviceContent {
+    position: relative;
+    z-index: 2;
+
+    padding-left: 20px;
+}
+
+.serviceLabel {
+    color: #829293;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+.serviceContent h3 {
+    margin: 8px 0;
+
+    color: #173436;
+
+    font-size: 22px;
+    font-weight: 700;
+
+    letter-spacing: -0.5px;
+}
+
+.serviceContent p {
+    max-width: 410px;
+
+    margin: 0;
+
+    color: #647779;
+
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   LINK
+========================================================= */
+
+.serviceLink {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 18px;
+
+    color: #167c80;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.serviceLink svg {
+    width: 16px;
+    height: 16px;
+
+    transition: transform 0.2s ease;
+}
+
+.serviceCard:hover .serviceLink svg {
+    transform: translateX(3px);
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 800px) {
+
+    .services {
+        padding: 70px 0;
+    }
+
+    .serviceGrid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .services {
+        padding: 60px 0;
+    }
+
+    .container {
+        width: calc(100% - 28px);
+    }
+
+    .sectionHeading {
+        margin-bottom: 35px;
+    }
+
+    .sectionHeading h2 {
+        font-size: 29px;
+    }
+
+    .serviceCard {
+        min-height: 0;
+
+        padding: 22px;
+    }
+
+    .serviceContent {
+        padding-left: 16px;
+    }
+
+    .serviceContent h3 {
+        font-size: 20px;
+    }
+
+    .serviceContent p {
+        font-size: 12px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 430px) {
+
+    .serviceCard {
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+    .serviceContent {
+        padding-left: 0;
+    }
+
+    .serviceIcon {
+        width: 48px;
+        height: 48px;
+    }
+
+}

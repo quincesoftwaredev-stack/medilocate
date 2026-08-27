@@ -1,98 +1,673 @@
-.wrapper {
-    padding: 25px;
-    min-height: 90vh;
+.page {
+    min-height: 100vh;
+
+    position: relative;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
+    padding: 40px 20px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--ml-mint) 0%,
+            var(--ml-gray-50) 55%,
+            var(--ml-white) 100%
+        );
+}
+
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+.backgroundShape {
+    position: absolute;
+
+    width: 420px;
+    height: 420px;
+
+    top: -180px;
+    right: -130px;
+
+    border-radius: 50%;
+
+    background: var(--ml-teal-light);
+
+    opacity: 0.7;
+}
+
+.backgroundShapeTwo {
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    bottom: -140px;
+    left: -100px;
+
+    border-radius: 50%;
+
+    background: var(--ml-teal-light);
+
+    opacity: 0.55;
+}
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+.authLayout {
+    position: relative;
+    z-index: 2;
+
+    width: min(100%, 940px);
+
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+
+    background: var(--ml-white);
+
+    border: 1px solid var(--ml-gray-200);
+
+    border-radius: var(--ml-radius-lg);
+
+    overflow: hidden;
+
+    box-shadow: var(--ml-shadow-lg);
+}
+
+
+/* =========================================================
+   BRAND PANEL
+========================================================= */
+
+.brandPanel {
+    position: relative;
+
+    padding: 42px 38px;
+
+    display: flex;
     flex-direction: column;
+
+    background:
+        linear-gradient(
+            160deg,
+            var(--ml-navy) 0%,
+            var(--ml-navy-light) 100%
+        );
+
+    color: var(--ml-white);
 }
 
-.wrapper .form__container {
-    background: var(--cardBg);
-    padding: 15px;
-    border-radius: 0;
-    text-align: center;
-    /* min-width: 280px; */
+.brandLogo {
+    display: inline-flex;
+
+    width: fit-content;
+
+    padding: 8px 12px;
+
+    border-radius: var(--ml-radius-sm);
+
+    background: rgba(
+        255,
+        255,
+        255,
+        0.95
+    );
 }
 
-.wrapper .logo {
+.brandLogo :global(img) {
+    max-width: 135px;
+}
+
+.brandContent {
+    margin-top: auto;
+    margin-bottom: auto;
+
+    padding: 50px 0;
+}
+
+.brandEyebrow {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #8ee0d4;
+
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-semibold);
+
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.brandContent h1 {
+    margin: 0;
+
+    color: var(--ml-white);
+
+    font-size: 39px;
+    font-weight: var(--ml-weight-bold);
+
+    line-height: var(--ml-line-tight);
+}
+
+.brandContent p {
+    max-width: 370px;
+
+    margin: 18px 0 0;
+
+    color: rgba(
+        255,
+        255,
+        255,
+        0.72
+    );
+
+    font-size: var(--ml-font-base);
+
+    line-height: var(--ml-line-relaxed);
+}
+
+.brandFeature {
+    padding-top: 20px;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 12px;
+
+    border-top: 1px solid rgba(
+        255,
+        255,
+        255,
+        0.12
+    );
+}
+
+.brandFeature > svg {
+    color: #8ee0d4;
+
+    font-size: 23px;
+}
+
+.brandFeature strong {
+    display: block;
+
+    color: var(--ml-white);
+
+    font-size: var(--ml-font-md);
+    font-weight: var(--ml-weight-semibold);
+}
+
+.brandFeature span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: rgba(
+        255,
+        255,
+        255,
+        0.56
+    );
+
+    font-size: var(--ml-font-sm);
+}
+
+
+/* =========================================================
+   FORM PANEL
+========================================================= */
+
+.formPanel {
+    padding: 42px 46px;
+
+    background: var(--ml-white);
+}
+
+.formHeader {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 14px;
+
+    margin-bottom: 30px;
+}
+
+.formIcon {
+    width: 46px;
+    height: 46px;
+
+    flex-shrink: 0;
+
+    display: flex;
     align-items: center;
     justify-content: center;
-    display: inline;
-    display: flex;
 
+    border-radius: var(--ml-radius-sm);
 
+    background: var(--ml-teal-light);
+    color: var(--ml-teal);
+}
 
+.formIcon svg {
+    font-size: 24px;
+}
 
+.formEyebrow {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: var(--ml-teal);
+
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-bold);
+
+    letter-spacing: 0.07em;
+}
+
+.formHeader h2 {
+    margin: 0;
+
+    color: var(--ml-navy);
+
+    font-size: var(--ml-heading-xs);
+    font-weight: var(--ml-weight-bold);
+
+    line-height: var(--ml-line-tight);
+}
+
+.formHeader p {
+    margin: 7px 0 0;
+
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-sm);
+    line-height: var(--ml-line-normal);
 }
 
 
+/* =========================================================
+   FORM
+========================================================= */
 
-.wrapper .form__container .title {
-    font-size: 120%;
-    font-weight: bold;
-}
-
-.wrapper form {
+.form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+
+    gap: 19px;
 }
 
-.wrapper form input,
-.wrapper form .btn {
-    padding: 10px;
-    ;
-    border-radius: 0;
-    border: none;
-    /* border: 1px solid var(--borderColor); */
-    background-color: aliceblue;
+.formGroup {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
 }
 
-.wrapper form .btn {
+.formGroup label {
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-semibold);
+}
+
+.labelRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+.forgotLink {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 4px;
+
+    color: var(--ml-teal);
+
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-semibold);
+
+    text-decoration: none;
+}
+
+.forgotLink:hover {
+    color: var(--ml-teal-dark);
+}
+
+.forgotLink svg {
+    font-size: 15px;
+}
+
+.inputWrapper {
+    min-height: 48px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 0 13px;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-sm);
+
+    background: var(--ml-gray-50);
+
+    transition: var(--ml-transition);
+}
+
+.inputWrapper:focus-within {
+    border-color: var(--ml-teal);
+
+    background: var(--ml-white);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            15,
+            157,
+            138,
+            0.09
+        );
+}
+
+.inputWrapper > svg {
+    flex-shrink: 0;
+
+    color: var(--ml-gray-500);
+
+    font-size: 20px;
+}
+
+.inputWrapper input {
+    width: 100%;
+
+    min-width: 0;
+
+    padding: 0;
+
+    border: 0;
+    outline: 0;
+
+    background: transparent;
+
+    color: var(--ml-black);
+
+    font-family: inherit;
+
+    font-size: var(--ml-font-md);
+}
+
+.inputWrapper input::placeholder {
+    color: var(--ml-gray-500);
+}
+
+.passwordToggle {
+    width: 30px;
+    height: 30px;
+
+    flex-shrink: 0;
+
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--ml-gray-500);
+
+    cursor: pointer;
+}
+
+.passwordToggle:hover {
+    color: var(--ml-teal);
+}
+
+.passwordToggle svg {
+    font-size: 19px;
+}
+
+
+/* =========================================================
+   SUBMIT
+========================================================= */
+
+.submitButton {
+    width: 100%;
+
+    min-height: 49px;
+
+    margin-top: 4px;
+
+    padding: 0 17px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border: 1px solid var(--ml-teal);
+    border-radius: var(--ml-radius-sm);
+
+    background: var(--ml-teal);
+    color: var(--ml-white);
+
+    font-family: inherit;
+
+    font-size: var(--ml-font-md);
+    font-weight: var(--ml-weight-semibold);
+
+    cursor: pointer;
+
+    transition: var(--ml-transition);
+}
+
+.submitButton:hover {
+    border-color: var(--ml-teal-dark);
+
+    background: var(--ml-teal-dark);
+
+    transform: translateY(-1px);
+}
+
+.submitButton svg {
+    font-size: 20px;
+}
+
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.divider {
+    margin: 27px 0 21px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.divider span {
+    flex: 1;
+
+    height: 1px;
+
+    background: var(--ml-gray-200);
+}
+
+.divider small {
+    color: var(--ml-gray-500);
+
+    font-size: 10px;
+    font-weight: var(--ml-weight-semibold);
+}
+
+
+/* =========================================================
+   REGISTER
+========================================================= */
+
+.registerBox {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    padding: 12px;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-sm);
+
+    background: var(--ml-gray-50);
+
+    text-decoration: none;
+}
+
+.registerIcon {
+    width: 37px;
+    height: 37px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: var(--ml-teal-light);
+    color: var(--ml-teal);
+}
+
+.registerIcon svg {
+    font-size: 19px;
+}
+
+.registerBox > div:nth-child(2) {
+    min-width: 0;
+
+    flex: 1;
+}
+
+.registerBox span {
+    display: block;
+
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-xs);
+}
+
+.registerBox a {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-semibold);
+
+    text-decoration: none;
+}
+
+.registerBox a:hover {
+    color: var(--ml-teal);
+}
+
+.registerBox > svg {
+    color: var(--ml-gray-500);
+
+    font-size: 19px;
+}
+
+
+/* =========================================================
+   SECURITY
+========================================================= */
+
+.securityText {
+    margin: 18px 0 0;
+
+    color: var(--ml-gray-500);
+
+    font-size: 11px;
+
+    line-height: var(--ml-line-normal);
+
     text-align: center;
-    padding: 8px;
-    background: var(--buttonBg);
-    color: var(--buttonC);
-    /* text-transform: capitalize; */
-    cursor: pointer;
 }
 
-.wrapper .route {
-    display: flex;
-    align-items: left;
 
-}
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
-.route .cooldown {
-    margin-left: 5px;
-    color: skyblue;
-    display: flex;
-    gap: 5px;
+@media (max-width: 780px) {
 
-}
-
-.field {
-    text-align: left;
-}
-
-.field .flex {
-    display: flex;
-    gap:10px;
-    justify-content: flex-start;
-    margin-top: 10px;
-}
-
-.field .flex span {
-    border:1px solid var(--borderColor);
-    padding: 3px;
-    border-radius: 5px;
-    cursor: pointer;
-    text-transform: capitalize;
-}
-
-@media (max-width:410px) {
-    .wrapper {
-        padding: 10px
+    .page {
+        padding: 24px 15px;
     }
+
+    .authLayout {
+        grid-template-columns: 1fr;
+
+        max-width: 520px;
+    }
+
+    .brandPanel {
+        display: none;
+    }
+
+    .formPanel {
+        padding: 34px 27px;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .page {
+        padding: 15px 10px;
+    }
+
+    .authLayout {
+        border-radius: var(--ml-radius-md);
+    }
+
+    .formPanel {
+        padding: 28px 18px;
+    }
+
+    .formHeader {
+        margin-bottom: 24px;
+    }
+
+    .formHeader h2 {
+        font-size: var(--ml-font-xl);
+    }
+
+    .labelRow {
+        align-items: flex-start;
+    }
+
+    .forgotLink {
+        font-size: 10px;
+    }
+
 }

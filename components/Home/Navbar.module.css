@@ -1,0 +1,272 @@
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar {
+    position: relative;
+    z-index: 50;
+
+    width: 100%;
+    height: 72px;
+
+    background: rgba(255, 255, 255, 0.97);
+
+    border-bottom: 1px solid #e4eeee;
+}
+
+.container {
+    width: min(1180px, calc(100% - 40px));
+
+    height: 100%;
+
+    margin: 0 auto;
+}
+
+.navbarInner {
+    height: 72px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 30px;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 10px;
+
+    flex-shrink: 0;
+
+    text-decoration: none;
+}
+
+.logoIcon {
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    color: #ffffff;
+    background: #167c80;
+
+    font-size: 25px;
+    font-weight: 500;
+
+    line-height: 1;
+}
+
+.logoText {
+    color: #173436;
+
+    font-size: 21px;
+    font-weight: 750;
+
+    letter-spacing: -0.4px;
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.navLinks {
+    display: flex;
+    align-items: center;
+
+    gap: 30px;
+
+    margin-left: auto;
+}
+
+.navLinks a {
+    color: #52696b;
+
+    font-size: 14px;
+    font-weight: 550;
+
+    text-decoration: none;
+
+    transition: color 0.2s ease;
+}
+
+.navLinks a:hover {
+    color: #167c80;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.navActions {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.loginButton {
+    padding: 9px 15px;
+
+    color: #506668;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition: color 0.2s ease;
+}
+
+.loginButton:hover {
+    color: #167c80;
+}
+
+.navCta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 40px;
+
+    padding: 0 17px;
+
+    border-radius: 8px;
+
+    color: #ffffff;
+    background: #167c80;
+
+    font-size: 14px;
+    font-weight: 650;
+
+    text-decoration: none;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.navCta:hover {
+    background: #106568;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 6px 15px rgba(22, 124, 128, 0.18);
+}
+
+
+/* =========================================================
+   MOBILE MENU
+========================================================= */
+
+.mobileMenu {
+    display: none;
+
+    width: 40px;
+    height: 40px;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-left: auto;
+
+    padding: 0;
+
+    border: none;
+    border-radius: 8px;
+
+    color: #173436;
+    background: transparent;
+
+    cursor: pointer;
+}
+
+.mobileMenu svg {
+    width: 25px;
+    height: 25px;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .navLinks {
+        gap: 18px;
+    }
+
+    .navLinks a {
+        font-size: 13px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .navbar {
+        height: 64px;
+    }
+
+    .container {
+        width: calc(100% - 28px);
+    }
+
+    .navbarInner {
+        height: 64px;
+    }
+
+    .navLinks,
+    .navActions {
+        display: none;
+    }
+
+    .mobileMenu {
+        display: flex;
+    }
+
+    .logoIcon {
+        width: 32px;
+        height: 32px;
+
+        border-radius: 8px;
+
+        font-size: 22px;
+    }
+
+    .logoText {
+        font-size: 19px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .logoText {
+        font-size: 18px;
+    }
+
+}

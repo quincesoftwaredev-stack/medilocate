@@ -1,0 +1,519 @@
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page {
+    min-height: 100vh;
+
+    background: var(--ml-gray-50);
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.container {
+    width: min(1180px, calc(100% - 40px));
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header {
+    padding: 65px 0 55px;
+
+    background: var(--ml-white);
+
+    border-bottom: 1px solid var(--ml-gray-200);
+}
+
+.label {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: var(--ml-teal);
+
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-bold);
+
+    letter-spacing: 1.2px;
+}
+
+
+.header h1 {
+    max-width: 700px;
+
+    margin: 0;
+
+    color: var(--ml-navy);
+
+    font-size: var(--ml-heading-lg);
+    font-weight: var(--ml-weight-bold);
+
+    line-height: var(--ml-line-tight);
+
+    letter-spacing: -1.2px;
+}
+
+.header h1 span {
+    color: var(--ml-teal);
+}
+
+
+.header p {
+    max-width: 600px;
+
+    margin: 15px 0 0;
+
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-base);
+
+    line-height: var(--ml-line-relaxed);
+}
+
+
+/* =========================================================
+   SEARCH SECTION
+========================================================= */
+
+.searchSection {
+    padding: 25px 0;
+
+    background: var(--ml-white);
+
+    border-bottom: 1px solid var(--ml-gray-200);
+}
+
+
+/* =========================================================
+   RESULTS
+========================================================= */
+
+.results {
+    padding: 45px 0 80px;
+}
+
+
+.resultsHeader {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    margin-bottom: 25px;
+}
+
+
+.resultsHeader > div:first-child > span {
+    color: var(--ml-teal);
+
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-bold);
+
+    letter-spacing: 1px;
+}
+
+
+.resultsHeader h2 {
+    margin: 5px 0 0;
+
+    color: var(--ml-navy);
+
+    font-size: var(--ml-heading-sm);
+    font-weight: var(--ml-weight-bold);
+}
+
+
+.resultCount {
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-sm);
+}
+
+
+/* =========================================================
+   DOCTOR GRID
+========================================================= */
+
+.doctorGrid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 20px;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 280px;
+
+    padding: 40px;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-md);
+
+    background: var(--ml-white);
+
+    text-align: center;
+}
+
+
+.empty h3 {
+    margin: 0;
+
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-xl);
+}
+
+
+.empty p {
+    margin: 8px 0 0;
+
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-md);
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 950px) {
+
+    .doctorGrid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .container {
+        width: calc(100% - 28px);
+    }
+
+
+    .header {
+        padding: 45px 0 40px;
+    }
+
+
+    .header h1 {
+        font-size: var(--ml-heading-md);
+    }
+
+
+    .header p {
+        font-size: var(--ml-font-md);
+    }
+
+
+    .results {
+        padding: 35px 0 60px;
+    }
+
+
+    .resultsHeader {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 8px;
+    }
+
+
+    .resultsHeader h2 {
+        font-size: var(--ml-heading-sm);
+    }
+
+
+    .doctorGrid {
+        grid-template-columns: 1fr;
+
+        gap: 15px;
+    }
+
+}/* =========================================================
+   PAGE
+========================================================= */
+
+.page {
+    min-height: 100vh;
+
+    background: var(--ml-gray-50);
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.container {
+    width: min(1180px, calc(100% - 40px));
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header {
+    padding: 65px 0 55px;
+
+    background: var(--ml-white);
+
+    border-bottom: 1px solid var(--ml-gray-200);
+}
+
+.label {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: var(--ml-teal);
+
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-bold);
+
+    letter-spacing: 1.2px;
+}
+
+
+.header h1 {
+    max-width: 700px;
+
+    margin: 0;
+
+    color: var(--ml-navy);
+
+    font-size: var(--ml-heading-lg);
+    font-weight: var(--ml-weight-bold);
+
+    line-height: var(--ml-line-tight);
+
+    letter-spacing: -1.2px;
+}
+
+.header h1 span {
+    color: var(--ml-teal);
+}
+
+
+.header p {
+    max-width: 600px;
+
+    margin: 15px 0 0;
+
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-base);
+
+    line-height: var(--ml-line-relaxed);
+}
+
+
+/* =========================================================
+   SEARCH SECTION
+========================================================= */
+
+.searchSection {
+    padding: 25px 0;
+
+    background: var(--ml-white);
+
+    border-bottom: 1px solid var(--ml-gray-200);
+}
+
+
+/* =========================================================
+   RESULTS
+========================================================= */
+
+.results {
+    padding: 45px 0 80px;
+}
+
+
+.resultsHeader {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    margin-bottom: 25px;
+}
+
+
+.resultsHeader > div:first-child > span {
+    color: var(--ml-teal);
+
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-bold);
+
+    letter-spacing: 1px;
+}
+
+
+.resultsHeader h2 {
+    margin: 5px 0 0;
+
+    color: var(--ml-navy);
+
+    font-size: var(--ml-heading-sm);
+    font-weight: var(--ml-weight-bold);
+}
+
+
+.resultCount {
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-sm);
+}
+
+
+/* =========================================================
+   DOCTOR GRID
+========================================================= */
+
+.doctorGrid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 20px;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 280px;
+
+    padding: 40px;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-md);
+
+    background: var(--ml-white);
+
+    text-align: center;
+}
+
+
+.empty h3 {
+    margin: 0;
+
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-xl);
+}
+
+
+.empty p {
+    margin: 8px 0 0;
+
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-md);
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 950px) {
+
+    .doctorGrid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .container {
+        width: calc(100% - 28px);
+    }
+
+
+    .header {
+        padding: 45px 0 40px;
+    }
+
+
+    .header h1 {
+        font-size: var(--ml-heading-md);
+    }
+
+
+    .header p {
+        font-size: var(--ml-font-md);
+    }
+
+
+    .results {
+        padding: 35px 0 60px;
+    }
+
+
+    .resultsHeader {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 8px;
+    }
+
+
+    .resultsHeader h2 {
+        font-size: var(--ml-heading-sm);
+    }
+
+
+    .doctorGrid {
+        grid-template-columns: 1fr;
+
+        gap: 15px;
+    }
+
+}

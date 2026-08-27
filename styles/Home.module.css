@@ -1,68 +1,2300 @@
-.wrapper .productsInColumn {
+/* =========================================================
+   BASE
+========================================================= */
+
+.home {
+    --primary: #167c80;
+    --primary-dark: #106568;
+    --primary-light: #e9f7f6;
+
+    --secondary: #0f5f63;
+
+    --text: #173436;
+    --text-light: #647779;
+    --muted: #8a999a;
+
+    --background: #ffffff;
+    --background-soft: #f6faf9;
+    --border: #e4eeee;
+
+    --shadow-sm: 0 4px 18px rgba(20, 70, 72, 0.06);
+    --shadow-md: 0 12px 35px rgba(20, 70, 72, 0.1);
+    --shadow-lg: 0 22px 55px rgba(20, 70, 72, 0.14);
+
+    color: var(--text);
+    background: var(--background);
+
+    min-height: 100vh;
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+.home *,
+.home *::before,
+.home *::after {
+    box-sizing: border-box;
+}
+
+.home a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.container {
+    width: min(1180px, calc(100% - 40px));
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar {
+    position: relative;
+    z-index: 50;
+
+    height: 72px;
+
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid var(--border);
+}
+
+.navbarInner {
+    height: 72px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 30px;
+}
+
+
+/* LOGO */
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 21px;
+    font-weight: 750;
+    letter-spacing: -0.4px;
+}
+
+.logoIcon {
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    color: white;
+    background: var(--primary);
+
+    font-size: 25px;
+    font-weight: 500;
+
+    line-height: 1;
+}
+
+.logoText {
+    color: var(--text);
+}
+
+.navLinks {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+
+    margin-left: auto;
+}
+
+.navLinks a {
+    color: #52696b;
+
+    font-size: 14px;
+    font-weight: 550;
+
+    transition: 0.2s ease;
+}
+
+.navLinks a:hover {
+    color: var(--primary);
+}
+
+.navActions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.loginButton {
+    padding: 9px 15px;
+
+    color: #506668;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.loginButton:hover {
+    color: var(--primary);
+}
+
+.navCta {
+    padding: 10px 17px;
+
+    border-radius: 8px;
+
+    color: white;
+    background: var(--primary);
+
+    font-size: 14px;
+    font-weight: 650;
+
+    transition: 0.2s ease;
+}
+
+.navCta:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+}
+
+.mobileMenu {
+    display: none;
+
+    width: 40px;
+    height: 40px;
+
+    border: 0;
+    background: transparent;
+
+    cursor: pointer;
+}
+
+.mobileMenu span {
+    display: block;
+
+    width: 21px;
+    height: 2px;
+
+    margin: 4px auto;
+
+    background: var(--text);
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            110deg,
+            #f6fbfa 0%,
+            #ffffff 52%,
+            #edf8f7 100%
+        );
+
+    padding: 72px 0 80px;
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 400px;
+    height: 400px;
+
+    right: -180px;
+    top: -170px;
+
+    border-radius: 50%;
+
+    background: rgba(22, 124, 128, 0.06);
+}
+
+.heroGrid {
+    position: relative;
+    z-index: 2;
+
     display: grid;
+
+    grid-template-columns: 1.05fr 0.95fr;
+
+    align-items: center;
+
+    gap: 70px;
+}
+
+.heroContent {
+    max-width: 620px;
+}
+
+.heroBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 7px 12px;
+
+    margin-bottom: 20px;
+
+    border: 1px solid #d5e9e7;
+    border-radius: 50px;
+
+    color: var(--primary-dark);
+    background: #ffffff;
+
+    font-size: 12px;
+    font-weight: 650;
+}
+
+.heroBadge span {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #2eaa83;
+}
+
+.hero h1 {
+    margin: 0;
+
+    max-width: 650px;
+
+    font-size: clamp(42px, 5vw, 66px);
+    line-height: 1.05;
+
+    letter-spacing: -2.8px;
+    font-weight: 760;
+
+    color: #173a3c;
+}
+
+.hero h1 span {
+    display: block;
+
+    color: var(--primary);
+}
+
+.heroDescription {
+    max-width: 560px;
+
+    margin: 24px 0 28px;
+
+    color: var(--text-light);
+
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+.heroActions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin-bottom: 24px;
+}
+
+.primaryButton,
+.secondaryButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    min-height: 46px;
+
+    padding: 0 17px;
+
+    border-radius: 9px;
+
+    font-size: 14px;
+    font-weight: 650;
+
+    transition: 0.2s ease;
+}
+
+.primaryButton {
+    color: white;
+    background: var(--primary);
+}
+
+.primaryButton:hover {
+    background: var(--primary-dark);
+
+    transform: translateY(-2px);
+
+    box-shadow: var(--shadow-md);
+}
+
+.primaryButton svg:last-child {
+    width: 18px;
+}
+
+.secondaryButton {
+    color: var(--primary-dark);
+
+    background: white;
+
+    border: 1px solid #d8e8e7;
+}
+
+.secondaryButton:hover {
+    border-color: var(--primary);
+
+    transform: translateY(-2px);
+
+    box-shadow: var(--shadow-sm);
+}
+
+
+/* HERO SEARCH */
+
+.heroSearch {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    max-width: 600px;
+
+    height: 52px;
+
+    padding-left: 15px;
+
+    background: white;
+
+    border: 1px solid #dce9e8;
+    border-radius: 10px;
+
+    box-shadow: var(--shadow-sm);
+}
+
+.heroSearch > svg {
+    color: #839596;
+
+    width: 21px;
+}
+
+.heroSearch input {
+    flex: 1;
+
+    min-width: 0;
+
+    height: 100%;
+
+    padding: 0 12px;
+
+    outline: none;
+    border: none;
+
+    color: var(--text);
+
+    background: transparent;
+
+    font-size: 14px;
+}
+
+.heroSearch input::placeholder {
+    color: #9aa8a9;
+}
+
+.heroSearch button {
+    height: 40px;
+
+    margin-right: 6px;
+    padding: 0 16px;
+
+    border: 0;
+    border-radius: 7px;
+
+    color: white;
+    background: var(--primary);
+
+    font-size: 13px;
+    font-weight: 650;
+
+    cursor: pointer;
+}
+
+.heroStats {
+    display: flex;
+    align-items: center;
+
+    gap: 20px;
+
+    margin-top: 27px;
+}
+
+.heroStats > div:not(.statDivider) {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.heroStats strong {
+    font-size: 18px;
+    font-weight: 750;
+}
+
+.heroStats span {
+    color: #7c8d8e;
+
+    font-size: 11px;
+}
+
+.statDivider {
+    width: 1px;
+    height: 28px;
+
+    background: #dce8e7;
+}
+
+
+/* =========================================================
+   HERO VISUAL
+========================================================= */
+
+.heroVisual {
+    position: relative;
+
+    min-height: 440px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.heroBackgroundCircle {
+    position: absolute;
+
+    width: 390px;
+    height: 390px;
+
+    border-radius: 50%;
+
+    background: #dff2f0;
+}
+
+.heroCenterIcon {
+    position: absolute;
+    z-index: 2;
+
+    width: 125px;
+    height: 125px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: var(--primary);
+    background: white;
+
+    box-shadow: var(--shadow-lg);
+}
+
+.heroCenterIcon svg {
+    width: 60px;
+    height: 60px;
+}
+
+.heroMedicalCard,
+.heroMedicineCard {
+    position: absolute;
+    z-index: 4;
+
+    display: flex;
+    align-items: center;
+
+    background: white;
+
+    border: 1px solid #e0eceb;
+
+    box-shadow: var(--shadow-lg);
+}
+
+.heroMedicalCard {
+    top: 40px;
+    left: 10px;
+
+    width: 245px;
+
+    padding: 17px;
+
+    flex-direction: column;
+    align-items: stretch;
+
+    border-radius: 14px;
+}
+
+.medicalCardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    color: #819192;
+
+    font-size: 10px;
+    font-weight: 650;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+.medicalCardHeader svg {
+    width: 18px;
+
+    color: #2caa82;
+}
+
+.medicalCardBody {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    margin-top: 17px;
+}
+
+.doctorAvatar {
+    width: 47px;
+    height: 47px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    color: var(--primary);
+    background: var(--primary-light);
+}
+
+.doctorAvatar svg {
+    width: 26px;
+}
+
+.medicalCardBody div:last-child {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+.medicalCardBody strong {
+    font-size: 14px;
+}
+
+.medicalCardBody span {
+    color: #8b9b9c;
+
+    font-size: 11px;
+}
+
+.cardLocation {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    margin-top: 15px;
+    padding-top: 12px;
+
+    border-top: 1px solid #edf2f2;
+
+    color: var(--primary);
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.cardLocation svg {
+    width: 16px;
+}
+
+
+/* MEDICINE CARD */
+
+.heroMedicineCard {
+    right: 0;
+    bottom: 75px;
+
+    width: 260px;
+
+    padding: 15px;
+
+    border-radius: 13px;
+
+    gap: 12px;
+}
+
+.medicineIcon {
+    width: 43px;
+    height: 43px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    color: var(--primary);
+    background: var(--primary-light);
+}
+
+.medicineIcon svg {
+    width: 24px;
+}
+
+.heroMedicineCard > div:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+.heroMedicineCard strong {
+    font-size: 13px;
+}
+
+.heroMedicineCard span {
+    color: #8a999a;
+
+    font-size: 10px;
+}
+
+.deliveryCheck {
+    margin-left: auto;
+
+    color: #2caa82;
+}
+
+.deliveryCheck svg {
+    width: 20px;
+}
+
+.heroFloatingBadge {
+    position: absolute;
+    z-index: 5;
+
+    right: 25px;
+    top: 75px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 9px 12px;
+
+    border-radius: 8px;
+
+    color: #39736f;
+    background: white;
+
+    box-shadow: var(--shadow-md);
+
+    font-size: 10px;
+    font-weight: 650;
+}
+
+.heroFloatingBadge svg {
+    width: 16px;
+
+    color: #2da681;
+}
+
+
+/* =========================================================
+   COMMON SECTION
+========================================================= */
+
+.services,
+.doctorsSection,
+.whySection {
+    padding: 85px 0;
+}
+
+.howItWorks,
+.medicineSection {
+    padding: 85px 0;
+
+    background: var(--background-soft);
+}
+
+.sectionHeadingCenter {
+    max-width: 650px;
+
+    margin: 0 auto 48px;
+
+    text-align: center;
+}
+
+.sectionLabel {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: var(--primary);
+
+    font-size: 11px;
+    font-weight: 750;
+
+    letter-spacing: 1.3px;
+}
+
+.sectionHeadingCenter h2,
+.sectionHeading h2 {
+    margin: 0;
+
+    color: var(--text);
+
+    font-size: clamp(29px, 4vw, 40px);
+    line-height: 1.15;
+
+    letter-spacing: -1.3px;
+}
+
+.sectionHeadingCenter h2 span,
+.sectionHeading h2 span {
+    color: var(--primary);
+}
+
+.sectionHeadingCenter p,
+.sectionHeading p {
+    margin: 14px 0 0;
+
+    color: var(--text-light);
+
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   SERVICES
+========================================================= */
+
+.serviceGrid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px;
+}
+
+.serviceCard {
+    position: relative;
+
+    display: flex;
+
+    min-height: 235px;
+
+    padding: 30px;
+
+    overflow: hidden;
+
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    background: white;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.serviceCard::after {
+    content: "";
+
+    position: absolute;
+
+    width: 190px;
+    height: 190px;
+
+    right: -80px;
+    bottom: -100px;
+
+    border-radius: 50%;
+
+    background: var(--primary-light);
+}
+
+.serviceCard:hover {
+    transform: translateY(-4px);
+
+    border-color: #cde4e2;
+
+    box-shadow: var(--shadow-md);
+}
+
+.serviceIcon {
+    position: relative;
+    z-index: 2;
+
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 13px;
+
+    color: var(--primary);
+    background: var(--primary-light);
+}
+
+.serviceIcon svg {
+    width: 28px;
+}
+
+.serviceContent {
+    position: relative;
+    z-index: 2;
+
+    padding-left: 20px;
+}
+
+.serviceLabel {
+    color: #829293;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+.serviceContent h3 {
+    margin: 8px 0;
+
+    font-size: 22px;
+    letter-spacing: -0.5px;
+}
+
+.serviceContent p {
+    max-width: 410px;
+
+    margin: 0;
+
+    color: var(--text-light);
+
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+.serviceLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    margin-top: 18px;
+
+    color: var(--primary);
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.serviceLink svg {
+    width: 16px;
+
+    transition: 0.2s ease;
+}
+
+.serviceCard:hover .serviceLink svg {
+    transform: translateX(3px);
+}
+
+
+/* =========================================================
+   HOW IT WORKS
+========================================================= */
+
+.steps {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.step {
+    position: relative;
+
+    width: 210px;
+
+    text-align: center;
+}
+
+.stepNumber {
+    position: absolute;
+
+    top: -3px;
+    right: 16px;
+
+    color: #c9d9d8;
+
+    font-size: 11px;
+    font-weight: 750;
+}
+
+.stepIcon {
+    width: 62px;
+    height: 62px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 18px;
+
+    border-radius: 15px;
+
+    color: var(--primary);
+    background: white;
+
+    border: 1px solid #dcebea;
+
+    box-shadow: var(--shadow-sm);
+}
+
+.stepIcon svg {
+    width: 27px;
+}
+
+.step h3 {
+    margin: 0 0 7px;
+
+    font-size: 16px;
+}
+
+.step p {
+    margin: 0;
+
+    color: var(--text-light);
+
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.stepLine {
+    flex: 1;
+
+    height: 1px;
+
+    margin: 31px 15px 0;
+
+    border-top: 1px dashed #cbdcda;
+}
+
+
+/* =========================================================
+   SECTION TOP
+========================================================= */
+
+.sectionTop {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 30px;
+
+    margin-bottom: 38px;
+}
+
+.sectionHeading {
+    max-width: 650px;
+}
+
+.outlineButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    flex-shrink: 0;
+
+    padding: 10px 15px;
+
+    border: 1px solid #d4e4e3;
+    border-radius: 8px;
+
+    color: var(--primary-dark);
+    background: white;
+
+    font-size: 12px;
+    font-weight: 650;
+
+    transition: 0.2s ease;
+}
+
+.outlineButton:hover {
+    border-color: var(--primary);
+
+    transform: translateY(-1px);
+}
+
+.outlineButton svg {
+    width: 17px;
+}
+
+
+/* =========================================================
+   DOCTORS
+========================================================= */
+
+.doctorGrid {
+    display: grid;
+
     grid-template-columns: repeat(3, 1fr);
-    grid-column-gap: 15px;
-    grid-row-gap: 0px;
-    padding: 25px;
 
-
+    gap: 18px;
 }
 
-.wrapper .off,
-.wrapper .features,
-.wrapper .productsInColumn,
-.wrapper .categoriesInRow {
-    padding: 25px;
+.doctorCard {
+    position: relative;
+
+    overflow: hidden;
+
+    border: 1px solid var(--border);
+    border-radius: 14px;
+
+    background: white;
+
+    transition: 0.25s ease;
 }
 
-.wrapper .categoriesInRow .top {
-    margin-bottom: 35px;
+.doctorCard:hover {
+    transform: translateY(-4px);
+
+    box-shadow: var(--shadow-md);
+
+    border-color: #cce1df;
 }
 
-@media (min-width:1024px) {
+.doctorImage {
+    position: relative;
 
-    .wrapper .productsInColumn,
-    .wrapper .off,
-    .wrapper .features,
-    .wrapper .categoriesInRow {
-        padding: 15px var(--percent);
+    height: 190px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #edf7f6;
+}
+
+.doctorPlaceholder {
+    width: 100px;
+    height: 100px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: var(--primary);
+
+    background: #d7efed;
+}
+
+.doctorPlaceholder svg {
+    width: 47px;
+}
+
+.verifiedBadge {
+    position: absolute;
+
+    right: 13px;
+    top: 13px;
+
+    width: 27px;
+    height: 27px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    background: #2ca781;
+}
+
+.verifiedBadge svg {
+    width: 16px;
+}
+
+.doctorInfo {
+    position: relative;
+
+    padding: 18px 18px 20px;
+}
+
+.doctorInfo > span {
+    color: var(--primary);
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+.doctorInfo h3 {
+    margin: 6px 0 3px;
+
+    font-size: 17px;
+    letter-spacing: -0.3px;
+}
+
+.doctorInfo p {
+    margin: 0;
+
+    color: #7c8d8e;
+
+    font-size: 11px;
+}
+
+.doctorMeta {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    margin-top: 16px;
+}
+
+.doctorMeta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    color: #7b8d8e;
+
+    font-size: 10px;
+}
+
+.doctorMeta svg {
+    width: 15px;
+
+    color: var(--primary);
+}
+
+.doctorArrow {
+    position: absolute;
+
+    right: 18px;
+    bottom: 18px;
+
+    width: 17px;
+
+    color: #8fa1a2;
+
+    transition: 0.2s ease;
+}
+
+.doctorCard:hover .doctorArrow {
+    color: var(--primary);
+
+    transform: translateX(3px);
+}
+
+
+/* =========================================================
+   MEDICINE SECTION
+========================================================= */
+
+.medicineSearch {
+    display: flex;
+    align-items: center;
+
+    height: 52px;
+
+    max-width: 720px;
+
+    margin: 0 auto 35px;
+
+    padding-left: 15px;
+
+    border: 1px solid #dce8e7;
+    border-radius: 10px;
+
+    background: white;
+
+    box-shadow: var(--shadow-sm);
+}
+
+.medicineSearch > svg {
+    width: 20px;
+
+    color: #829596;
+}
+
+.medicineSearch input {
+    flex: 1;
+
+    height: 100%;
+
+    min-width: 0;
+
+    padding: 0 12px;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    font-size: 13px;
+}
+
+.medicineSearch button {
+    height: 40px;
+
+    margin-right: 6px;
+    padding: 0 17px;
+
+    border: 0;
+    border-radius: 7px;
+
+    color: white;
+    background: var(--primary);
+
+    font-size: 12px;
+    font-weight: 650;
+
+    cursor: pointer;
+}
+
+.categoryGrid {
+    display: grid;
+
+    grid-template-columns: repeat(6, 1fr);
+
+    gap: 12px;
+
+    margin-bottom: 28px;
+}
+
+.categoryCard {
+    padding: 16px 12px;
+
+    border: 1px solid var(--border);
+    border-radius: 11px;
+
+    background: white;
+
+    text-align: center;
+
+    transition: 0.2s ease;
+}
+
+.categoryCard:hover {
+    border-color: #c8dfdd;
+
+    transform: translateY(-3px);
+
+    box-shadow: var(--shadow-sm);
+}
+
+.categoryIcon {
+    width: 43px;
+    height: 43px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 10px;
+
+    border-radius: 11px;
+
+    color: var(--primary);
+
+    background: var(--primary-light);
+}
+
+.categoryIcon svg {
+    width: 22px;
+}
+
+.categoryCard strong {
+    display: block;
+
+    font-size: 11px;
+    line-height: 1.3;
+}
+
+.categoryCard > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+
+    margin-top: 8px;
+
+    color: var(--primary);
+
+    font-size: 9px;
+    font-weight: 650;
+}
+
+.categoryCard > span svg {
+    width: 12px;
+}
+
+
+/* PRODUCTS */
+
+.productGrid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 14px;
+}
+
+.productCard {
+    display: flex;
+
+    flex-direction: column;
+
+    overflow: hidden;
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    background: white;
+
+    transition: 0.2s ease;
+}
+
+.productCard:hover {
+    transform: translateY(-3px);
+
+    box-shadow: var(--shadow-md);
+}
+
+.productImage {
+    height: 130px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--primary);
+
+    background: #eef8f7;
+}
+
+.productImage svg {
+    width: 45px;
+    height: 45px;
+}
+
+.productInfo {
+    padding: 14px;
+}
+
+.productInfo h3 {
+    margin: 0 0 4px;
+
+    font-size: 14px;
+}
+
+.productInfo p {
+    margin: 0;
+
+    color: #839293;
+
+    font-size: 10px;
+}
+
+.productBottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 14px;
+}
+
+.productBottom strong {
+    color: var(--primary-dark);
+
+    font-size: 14px;
+}
+
+.productBottom span {
+    width: 26px;
+    height: 26px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 7px;
+
+    color: var(--primary);
+
+    background: var(--primary-light);
+}
+
+.productBottom svg {
+    width: 14px;
+}
+
+
+/* =========================================================
+   PRESCRIPTION
+========================================================= */
+
+.prescriptionSection {
+    padding: 85px 0;
+}
+
+.prescriptionBox {
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns: 1.15fr 0.85fr;
+
+    min-height: 350px;
+
+    overflow: hidden;
+
+    border-radius: 20px;
+
+    background: var(--primary);
+
+    box-shadow: var(--shadow-lg);
+}
+
+.prescriptionBox::after {
+    content: "";
+
+    position: absolute;
+
+    width: 400px;
+    height: 400px;
+
+    right: -170px;
+    top: -170px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.prescriptionContent {
+    position: relative;
+    z-index: 2;
+
+    padding: 55px;
+}
+
+.prescriptionContent .sectionLabel {
+    color: #b8e3df;
+}
+
+.prescriptionContent h2 {
+    max-width: 580px;
+
+    margin: 0;
+
+    color: white;
+
+    font-size: clamp(27px, 4vw, 40px);
+    line-height: 1.16;
+
+    letter-spacing: -1.3px;
+}
+
+.prescriptionContent h2 span {
+    color: #b9e9e5;
+}
+
+.prescriptionContent p {
+    max-width: 530px;
+
+    margin: 17px 0 25px;
+
+    color: #d4efed;
+
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.whiteButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 11px 16px;
+
+    border-radius: 8px;
+
+    color: var(--primary-dark);
+    background: white;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    transition: 0.2s ease;
+}
+
+.whiteButton:hover {
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.whiteButton svg {
+    width: 17px;
+}
+
+.prescriptionVisual {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.prescriptionPaper {
+    position: relative;
+
+    width: 225px;
+    height: 280px;
+
+    padding: 22px;
+
+    transform: rotate(4deg);
+
+    border-radius: 5px;
+
+    background: white;
+
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+}
+
+.paperTop {
+    display: flex;
+    justify-content: space-between;
+
+    color: var(--primary-dark);
+
+    font-size: 12px;
+}
+
+.paperTop span {
+    font-family: Georgia, serif;
+
+    font-size: 22px;
+    font-style: italic;
+}
+
+.paperLine,
+.paperLineShort,
+.paperLineMedium {
+    height: 4px;
+
+    margin-top: 20px;
+
+    border-radius: 4px;
+
+    background: #e5eeee;
+}
+
+.paperLineShort {
+    width: 65%;
+
+    margin-top: 8px;
+}
+
+.paperLineMedium {
+    width: 80%;
+}
+
+.rxSection {
+    display: flex;
+
+    gap: 13px;
+
+    margin-top: 25px;
+}
+
+.rxSection > strong {
+    color: var(--primary);
+
+    font-family: Georgia, serif;
+
+    font-size: 20px;
+    font-style: italic;
+}
+
+.rxSection > div {
+    flex: 1;
+}
+
+.rxSection .paperLine {
+    margin-top: 7px;
+}
+
+.uploadedBadge {
+    position: absolute;
+
+    right: 22px;
+    bottom: 55px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 9px 12px;
+
+    border-radius: 8px;
+
+    color: #39716e;
+    background: white;
+
+    box-shadow: var(--shadow-md);
+
+    font-size: 10px;
+    font-weight: 650;
+}
+
+.uploadedBadge svg {
+    width: 17px;
+
+    color: #2da681;
+}
+
+
+/* =========================================================
+   WHY SECTION
+========================================================= */
+
+.benefitsGrid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 15px;
+}
+
+.benefitCard {
+    padding: 24px 20px;
+
+    border: 1px solid var(--border);
+    border-radius: 13px;
+
+    background: white;
+
+    transition: 0.2s ease;
+}
+
+.benefitCard:hover {
+    transform: translateY(-3px);
+
+    box-shadow: var(--shadow-sm);
+}
+
+.benefitIcon {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 18px;
+
+    border-radius: 10px;
+
+    color: var(--primary);
+
+    background: var(--primary-light);
+}
+
+.benefitIcon svg {
+    width: 23px;
+}
+
+.benefitCard h3 {
+    margin: 0 0 7px;
+
+    font-size: 15px;
+}
+
+.benefitCard p {
+    margin: 0;
+
+    color: var(--text-light);
+
+    font-size: 11px;
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   FINAL CTA
+========================================================= */
+
+.finalCta {
+    padding: 0 0 80px;
+}
+
+.finalCtaBox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 40px;
+
+    padding: 48px 55px;
+
+    border-radius: 17px;
+
+    background: #153d3f;
+}
+
+.finalLabel {
+    color: #8dc9c5;
+
+    font-size: 10px;
+    font-weight: 750;
+
+    letter-spacing: 1.2px;
+}
+
+.finalCta h2 {
+    margin: 9px 0 9px;
+
+    color: white;
+
+    font-size: clamp(30px, 4vw, 43px);
+    line-height: 1.08;
+
+    letter-spacing: -1.5px;
+}
+
+.finalCta h2 span {
+    color: #8ed2cd;
+}
+
+.finalCta p {
+    margin: 0;
+
+    color: #b9cdcc;
+
+    font-size: 13px;
+}
+
+.finalActions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    flex-shrink: 0;
+}
+
+.ghostButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 11px 15px;
+
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 8px;
+
+    color: white;
+
+    font-size: 12px;
+    font-weight: 650;
+}
+
+.ghostButton:hover {
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.ghostButton svg {
+    width: 16px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+    padding: 55px 0 20px;
+
+    color: #aabebe;
+
+    background: #102f31;
+}
+
+.footerGrid {
+    display: grid;
+
+    grid-template-columns: 1.6fr repeat(3, 1fr);
+
+    gap: 45px;
+
+    padding-bottom: 45px;
+}
+
+.footerLogoText {
+    color: white;
+}
+
+.footerBrand p {
+    max-width: 300px;
+
+    margin: 16px 0 0;
+
+    color: #8da5a5;
+
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.footerColumn {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 11px;
+}
+
+.footerColumn h4 {
+    margin: 0 0 5px;
+
+    color: white;
+
+    font-size: 12px;
+}
+
+.footerColumn a {
+    color: #8fa7a7;
+
+    font-size: 11px;
+
+    transition: 0.2s ease;
+}
+
+.footerColumn a:hover {
+    color: #bce5e2;
+}
+
+.footerBottom {
+    display: flex;
+    justify-content: space-between;
+
+    padding-top: 18px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+    color: #789191;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   RESPONSIVE — TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .container {
+        width: min(100% - 32px, 900px);
     }
-}
 
-
-@media (max-width:1024px) {
-    .categories {
-        display: none;
+    .navLinks {
+        gap: 18px;
     }
 
-}
+    .heroGrid {
+        grid-template-columns: 1fr;
 
-@media (max-width:920px) {
-    .wrapper .productsInColumn {
+        gap: 35px;
+    }
+
+    .heroContent {
+        max-width: 700px;
+    }
+
+    .heroVisual {
+        min-height: 400px;
+
+        max-width: 600px;
+
+        margin: 0 auto;
+
+        width: 100%;
+    }
+
+    .categoryGrid {
         grid-template-columns: repeat(3, 1fr);
     }
 
-}
-
-@media (max-width:720px) {
-    .wrapper .productsInColumn {
-        grid-template-columns: repeat(1, 1fr);
+    .benefitsGrid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
-    .wrapper .off,
-    .wrapper .features,
-    .wrapper .productsInColumn,
-    .wrapper .categoriesInRow {
-        padding: 15px;
+    .footerGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .prescriptionBox {
+        grid-template-columns: 1fr;
+    }
+
+    .prescriptionVisual {
+        display: none;
     }
 }
 
-@media (max-width:410px) {
 
-    .wrapper .off,
-    .wrapper .features,
-    .wrapper .productsInColumn,
-    .wrapper .categoriesInRow {
-        padding: 10px;
+/* =========================================================
+   RESPONSIVE — MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .container {
+        width: calc(100% - 28px);
+    }
+
+    .navbar,
+    .navbarInner {
+        height: 64px;
+    }
+
+    .navLinks,
+    .navActions {
+        display: none;
+    }
+
+    .mobileMenu {
+        display: block;
+    }
+
+    .logo {
+        font-size: 19px;
+    }
+
+    .logoIcon {
+        width: 32px;
+        height: 32px;
+
+        border-radius: 8px;
+
+        font-size: 22px;
+    }
+
+
+    /* HERO */
+
+    .hero {
+        padding: 50px 0 55px;
+    }
+
+    .heroGrid {
+        gap: 20px;
+    }
+
+    .hero h1 {
+        font-size: 43px;
+
+        letter-spacing: -2px;
+    }
+
+    .heroDescription {
+        margin: 19px 0 23px;
+
+        font-size: 14px;
+    }
+
+    .heroActions {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .primaryButton,
+    .secondaryButton {
+        width: 100%;
+    }
+
+    .heroSearch {
+        height: 48px;
+    }
+
+    .heroSearch button {
+        padding: 0 12px;
+    }
+
+    .heroStats {
+        gap: 12px;
+    }
+
+    .heroStats strong {
+        font-size: 16px;
+    }
+
+    .heroVisual {
+        min-height: 350px;
+    }
+
+    .heroBackgroundCircle {
+        width: 300px;
+        height: 300px;
+    }
+
+    .heroCenterIcon {
+        width: 100px;
+        height: 100px;
+    }
+
+    .heroCenterIcon svg {
+        width: 48px;
+        height: 48px;
+    }
+
+    .heroMedicalCard {
+        top: 25px;
+        left: 0;
+
+        width: 205px;
+    }
+
+    .heroMedicineCard {
+        right: 0;
+        bottom: 30px;
+
+        width: 220px;
+    }
+
+    .heroFloatingBadge {
+        right: 0;
+        top: 52px;
+    }
+
+
+    /* COMMON */
+
+    .services,
+    .doctorsSection,
+    .whySection,
+    .howItWorks,
+    .medicineSection,
+    .prescriptionSection {
+        padding: 60px 0;
+    }
+
+    .sectionHeadingCenter {
+        margin-bottom: 35px;
+    }
+
+    .sectionHeadingCenter h2,
+    .sectionHeading h2 {
+        font-size: 29px;
+    }
+
+
+    /* SERVICES */
+
+    .serviceGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .serviceCard {
+        padding: 22px;
+    }
+
+
+    /* STEPS */
+
+    .steps {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 25px;
+    }
+
+    .step {
+        width: 100%;
+    }
+
+    .stepLine {
+        display: none;
+    }
+
+
+    /* DOCTORS */
+
+    .sectionTop {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        margin-bottom: 28px;
+    }
+
+    .doctorGrid {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* MEDICINES */
+
+    .medicineSearch {
+        height: 48px;
+    }
+
+    .categoryGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .productGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+
+    /* PRESCRIPTION */
+
+    .prescriptionContent {
+        padding: 35px 25px;
+    }
+
+    .prescriptionContent h2 {
+        font-size: 29px;
+    }
+
+
+    /* BENEFITS */
+
+    .benefitsGrid {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* CTA */
+
+    .finalCta {
+        padding-bottom: 60px;
+    }
+
+    .finalCtaBox {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        padding: 35px 25px;
+    }
+
+    .finalActions {
+        width: 100%;
+
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .finalActions .whiteButton,
+    .finalActions .ghostButton {
+        justify-content: center;
+    }
+
+
+    /* FOOTER */
+
+    .footer {
+        padding-top: 45px;
+    }
+
+    .footerGrid {
+        grid-template-columns: 1fr 1fr;
+
+        gap: 35px 20px;
+    }
+
+    .footerBrand {
+        grid-column: 1 / -1;
+    }
+
+    .footerBottom {
+        flex-direction: column;
+
+        gap: 7px;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .hero h1 {
+        font-size: 38px;
+    }
+
+    .heroVisual {
+        transform: scale(0.92);
+
+        transform-origin: center;
+    }
+
+    .heroSearch button {
+        font-size: 11px;
+    }
+
+    .categoryGrid {
+        gap: 8px;
+    }
+
+    .categoryCard {
+        padding: 13px 8px;
+    }
+
+    .productGrid {
+        gap: 9px;
+    }
+
+    .productInfo {
+        padding: 11px;
+    }
+
+    .productImage {
+        height: 110px;
     }
 }

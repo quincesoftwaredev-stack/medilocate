@@ -1,0 +1,904 @@
+/* =========================================================
+   SECTION
+========================================================= */
+
+.section {
+    padding: 95px 0;
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.container {
+    width: min(1180px, calc(100% - 40px));
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   MAIN GRID
+========================================================= */
+
+.grid {
+    display: grid;
+
+    grid-template-columns: 1fr 0.9fr;
+
+    align-items: center;
+
+    gap: 80px;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.content {
+    max-width: 570px;
+}
+
+.label {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #167c80;
+
+    font-size: 11px;
+    font-weight: 750;
+
+    letter-spacing: 1.3px;
+}
+
+.content h2 {
+    margin: 0;
+
+    color: #173436;
+
+    font-size: clamp(32px, 4vw, 45px);
+    line-height: 1.1;
+
+    letter-spacing: -1.7px;
+}
+
+.content h2 span {
+    color: #167c80;
+}
+
+.description {
+    max-width: 540px;
+
+    margin: 20px 0 25px;
+
+    color: #697b7c;
+
+    font-size: 14px;
+    line-height: 1.75;
+}
+
+
+/* =========================================================
+   BENEFITS
+========================================================= */
+
+.benefits {
+    display: flex;
+    flex-direction: column;
+
+    gap: 14px;
+}
+
+.benefit {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 11px;
+}
+
+.benefitIcon {
+    width: 22px;
+    height: 22px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 1px;
+
+    color: #2ca57e;
+}
+
+.benefitIcon svg {
+    width: 20px;
+}
+
+.benefit > div:last-child {
+    display: flex;
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+.benefit strong {
+    color: #304b4d;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.benefit span {
+    color: #849394;
+
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   ACTION
+========================================================= */
+
+.actions {
+    margin-top: 26px;
+}
+
+.primaryButton {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 8px;
+
+    min-height: 45px;
+
+    padding: 0 16px;
+
+    border-radius: 8px;
+
+    color: #ffffff;
+    background: #167c80;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.primaryButton svg:first-child {
+    width: 19px;
+}
+
+.primaryButton svg:last-child {
+    width: 17px;
+}
+
+.primaryButton:hover {
+    background: #106568;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(22, 124, 128, 0.18);
+}
+
+
+/* =========================================================
+   SECURITY
+========================================================= */
+
+.security {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 18px;
+
+    color: #8b9b9c;
+
+    font-size: 9px;
+}
+
+.security svg {
+    width: 16px;
+
+    color: #7ca5a2;
+}
+
+
+/* =========================================================
+   VISUAL
+========================================================= */
+
+.visual {
+    position: relative;
+
+    min-height: 440px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.visualCircle {
+    position: absolute;
+
+    width: 380px;
+    height: 380px;
+
+    border-radius: 50%;
+
+    background: #e6f5f3;
+}
+
+
+/* =========================================================
+   DOCUMENT
+========================================================= */
+
+.prescriptionDocument {
+    position: relative;
+    z-index: 2;
+
+    width: 255px;
+    min-height: 325px;
+
+    padding: 22px;
+
+    border: 1px solid #e0eaea;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 25px 60px rgba(20, 70, 72, 0.15);
+
+    transform: rotate(-3deg);
+}
+
+
+/* =========================================================
+   DOCUMENT HEADER
+========================================================= */
+
+.documentHeader {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    padding-bottom: 15px;
+
+    border-bottom: 1px solid #edf2f2;
+}
+
+.documentLogo {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 7px;
+
+    color: #ffffff;
+    background: #167c80;
+
+    font-size: 15px;
+    font-weight: 750;
+}
+
+.documentHeader > div:last-child {
+    display: flex;
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+.documentHeader strong {
+    color: #304b4d;
+
+    font-size: 12px;
+}
+
+.documentHeader span {
+    color: #9aa8a9;
+
+    font-size: 8px;
+}
+
+
+/* =========================================================
+   DOCTOR LINE
+========================================================= */
+
+.doctorLine {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 15px 0 11px;
+
+    color: #7c8c8d;
+
+    font-size: 7px;
+}
+
+
+/* =========================================================
+   DOCUMENT LINES
+========================================================= */
+
+.documentLines {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.documentLines span {
+    display: block;
+
+    height: 4px;
+
+    border-radius: 5px;
+
+    background: #edf2f2;
+}
+
+.documentLines span:nth-child(1) {
+    width: 90%;
+}
+
+.documentLines span:nth-child(2) {
+    width: 75%;
+}
+
+.documentLines span:nth-child(3) {
+    width: 85%;
+}
+
+.documentLines span:nth-child(4) {
+    width: 62%;
+}
+
+.documentLines span:nth-child(5) {
+    width: 78%;
+}
+
+
+/* =========================================================
+   MEDICINE ROWS
+========================================================= */
+
+.medicineRows {
+    display: flex;
+    flex-direction: column;
+
+    gap: 11px;
+
+    margin-top: 22px;
+}
+
+.medicineRows > div {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+}
+
+.medicineRows > div > span:first-child {
+    width: 22px;
+    height: 22px;
+
+    flex-shrink: 0;
+
+    border-radius: 5px;
+
+    background: #e8f6f5;
+}
+
+.medicineRows > div > span:last-child {
+    width: 70%;
+    height: 5px;
+
+    border-radius: 5px;
+
+    background: #edf2f2;
+}
+
+
+/* =========================================================
+   SIGNATURE
+========================================================= */
+
+.signature {
+    display: flex;
+    justify-content: flex-end;
+
+    margin-top: 30px;
+}
+
+.signature span {
+    width: 65px;
+    height: 20px;
+
+    border-bottom: 1px solid #aac4c2;
+
+    transform: rotate(-4deg);
+}
+
+
+/* =========================================================
+   UPLOAD BADGE
+========================================================= */
+
+.uploadBadge {
+    position: absolute;
+    z-index: 5;
+
+    top: 70px;
+    right: 15px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 9px 11px;
+
+    border: 1px solid #e0eceb;
+    border-radius: 8px;
+
+    color: #4a6566;
+    background: #ffffff;
+
+    box-shadow:
+        0 12px 30px rgba(20, 70, 72, 0.11);
+
+    font-size: 9px;
+    font-weight: 650;
+}
+
+.uploadBadge > div {
+    width: 25px;
+    height: 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 6px;
+
+    color: #167c80;
+    background: #e8f6f5;
+}
+
+.uploadBadge > div svg {
+    width: 15px;
+}
+
+.uploadBadge > svg {
+    width: 15px;
+
+    color: #2ca57e;
+}
+
+
+/* =========================================================
+   DELIVERY BADGE
+========================================================= */
+
+.deliveryBadge {
+    position: absolute;
+    z-index: 5;
+
+    left: 5px;
+    bottom: 60px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 11px 13px;
+
+    border: 1px solid #e0eceb;
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 14px 35px rgba(20, 70, 72, 0.12);
+}
+
+.deliveryBadgeIcon {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    color: #167c80;
+    background: #e8f6f5;
+}
+
+.deliveryBadgeIcon svg {
+    width: 19px;
+}
+
+.deliveryBadge > div:last-child {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+.deliveryBadge strong {
+    color: #304b4d;
+
+    font-size: 10px;
+}
+
+.deliveryBadge span {
+    color: #8c9a9b;
+
+    font-size: 8px;
+}
+
+
+/* =========================================================
+   SECURE BADGE
+========================================================= */
+
+.secureBadge {
+    position: absolute;
+    z-index: 5;
+
+    right: 35px;
+    bottom: 20px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 7px 10px;
+
+    border-radius: 7px;
+
+    color: #39736f;
+    background: rgba(255, 255, 255, 0.9);
+
+    font-size: 8px;
+    font-weight: 700;
+
+    box-shadow:
+        0 8px 20px rgba(20, 70, 72, 0.08);
+}
+
+.secureBadge svg {
+    width: 14px;
+}
+
+
+/* =========================================================
+   PROCESS
+========================================================= */
+
+.process {
+    margin-top: 85px;
+
+    padding-top: 55px;
+
+    border-top: 1px solid #e7eeee;
+}
+
+.processHeader {
+    margin-bottom: 35px;
+
+    text-align: center;
+}
+
+.processHeader span {
+    color: #167c80;
+
+    font-size: 10px;
+    font-weight: 750;
+
+    letter-spacing: 1.2px;
+}
+
+.processHeader h3 {
+    margin: 7px 0 0;
+
+    color: #173436;
+
+    font-size: 25px;
+    font-weight: 700;
+
+    letter-spacing: -0.7px;
+}
+
+
+/* =========================================================
+   PROCESS GRID
+========================================================= */
+
+.processGrid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 0;
+}
+
+.processStep {
+    position: relative;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 12px;
+
+    padding: 0 22px;
+}
+
+.processStep:first-child {
+    padding-left: 0;
+}
+
+.processStep:last-child {
+    padding-right: 0;
+}
+
+
+/* =========================================================
+   PROCESS ICON
+========================================================= */
+
+.processIcon {
+    width: 43px;
+    height: 43px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #dcebea;
+    border-radius: 10px;
+
+    color: #167c80;
+    background: #f1f9f8;
+}
+
+.processIcon svg {
+    width: 21px;
+}
+
+
+/* =========================================================
+   PROCESS NUMBER
+========================================================= */
+
+.processNumber {
+    position: absolute;
+
+    left: 11px;
+    top: -7px;
+
+    color: #d5e7e5;
+
+    font-size: 8px;
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   PROCESS CONTENT
+========================================================= */
+
+.processContent {
+    padding-top: 2px;
+}
+
+.processContent h4 {
+    margin: 0 0 5px;
+
+    color: #304b4d;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.processContent p {
+    margin: 0;
+
+    color: #879596;
+
+    font-size: 9px;
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   PROCESS ARROW
+========================================================= */
+
+.processArrow {
+    position: absolute;
+
+    right: -10px;
+    top: 15px;
+
+    color: #aac5c2;
+}
+
+.processArrow svg {
+    width: 17px;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 950px) {
+
+    .grid {
+        grid-template-columns: 1fr;
+
+        gap: 50px;
+    }
+
+    .content {
+        max-width: 700px;
+    }
+
+    .visual {
+        max-width: 600px;
+
+        width: 100%;
+
+        margin: 0 auto;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .section {
+        padding: 65px 0;
+    }
+
+    .container {
+        width: calc(100% - 28px);
+    }
+
+    .content h2 {
+        font-size: 31px;
+    }
+
+    .description {
+        font-size: 12px;
+    }
+
+    .visual {
+        min-height: 380px;
+    }
+
+    .visualCircle {
+        width: 320px;
+        height: 320px;
+    }
+
+    .prescriptionDocument {
+        width: 220px;
+        min-height: 285px;
+
+        padding: 18px;
+    }
+
+    .uploadBadge {
+        right: 0;
+        top: 55px;
+    }
+
+    .deliveryBadge {
+        left: 0;
+        bottom: 45px;
+    }
+
+    .secureBadge {
+        right: 5px;
+        bottom: 10px;
+    }
+
+    .process {
+        margin-top: 60px;
+        padding-top: 45px;
+    }
+
+    .processGrid {
+        grid-template-columns: 1fr 1fr;
+
+        row-gap: 30px;
+    }
+
+    .processStep {
+        padding: 0 10px;
+    }
+
+    .processStep:first-child {
+        padding-left: 10px;
+    }
+
+    .processStep:last-child {
+        padding-right: 10px;
+    }
+
+    .processArrow {
+        display: none;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 430px) {
+
+    .content h2 {
+        font-size: 28px;
+    }
+
+    .primaryButton {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .visual {
+        transform: scale(0.92);
+
+        transform-origin: center;
+    }
+
+    .processGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .processStep {
+        padding: 0;
+    }
+
+    .processStep:first-child,
+    .processStep:last-child {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+}

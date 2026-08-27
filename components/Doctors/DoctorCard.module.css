@@ -1,0 +1,436 @@
+/* =========================================================
+   CARD
+========================================================= */
+
+.card {
+    display: flex;
+    flex-direction: column;
+
+    padding: 20px;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-md);
+
+    background: var(--ml-white);
+
+    box-shadow: var(--ml-shadow-sm);
+
+    transition:
+        transform var(--ml-transition),
+        box-shadow var(--ml-transition),
+        border-color var(--ml-transition);
+}
+
+
+.card:hover {
+    border-color: rgba(15, 157, 138, 0.28);
+
+    box-shadow: var(--ml-shadow-md);
+
+    transform: translateY(-3px);
+}
+
+
+/* =========================================================
+   TOP
+========================================================= */
+
+.top {
+    display: flex;
+
+    gap: 13px;
+}
+
+
+.imageWrapper {
+    position: relative;
+
+    width: 72px;
+    height: 72px;
+
+    flex-shrink: 0;
+}
+
+
+.image,
+.placeholder {
+    width: 100%;
+    height: 100%;
+
+    border-radius: 12px;
+}
+
+
+.image {
+    display: block;
+
+    object-fit: cover;
+}
+
+
+.placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--ml-teal);
+
+    background: var(--ml-teal-light);
+
+    font-size: 24px;
+    font-weight: var(--ml-weight-bold);
+}
+
+
+.onlineDot {
+    position: absolute;
+
+    right: -2px;
+    bottom: -2px;
+
+    width: 14px;
+    height: 14px;
+
+    border: 3px solid var(--ml-white);
+    border-radius: 50%;
+
+    background: #22c55e;
+}
+
+
+/* =========================================================
+   INFO
+========================================================= */
+
+.info {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+}
+
+
+.nameRow {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+}
+
+
+.nameRow h3 {
+    margin: 0;
+
+    overflow: hidden;
+
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-xl);
+    font-weight: var(--ml-weight-bold);
+
+    line-height: 1.3;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.availableBadge {
+    flex-shrink: 0;
+
+    padding: 3px 6px;
+
+    border-radius: 5px;
+
+    color: #16805f;
+    background: #e8f8f1;
+
+    font-size: 10px;
+    font-weight: var(--ml-weight-semibold);
+}
+
+
+.specialty {
+    margin-top: 4px;
+
+    color: var(--ml-teal);
+
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-semibold);
+}
+
+
+.qualification {
+    margin-top: 3px;
+
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-xs);
+}
+
+
+/* =========================================================
+   RATING
+========================================================= */
+
+.ratingRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 18px;
+    padding-bottom: 14px;
+
+    border-bottom: 1px solid var(--ml-gray-100);
+}
+
+
+.rating {
+    display: flex;
+    align-items: center;
+
+    gap: 4px;
+
+    color: var(--ml-gray-600);
+
+    font-size: var(--ml-font-xs);
+}
+
+
+.rating svg {
+    width: 17px;
+
+    color: #f59e0b;
+}
+
+
+.rating strong {
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-sm);
+}
+
+
+.rating span {
+    color: var(--ml-gray-500);
+}
+
+
+.experience {
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-xs);
+}
+
+
+/* =========================================================
+   DETAILS
+========================================================= */
+
+.details {
+    display: flex;
+    flex-direction: column;
+
+    gap: 9px;
+
+    padding: 15px 0;
+}
+
+
+.details > div {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    color: var(--ml-gray-600);
+
+    font-size: var(--ml-font-sm);
+}
+
+
+.details svg {
+    width: 17px;
+
+    flex-shrink: 0;
+
+    color: var(--ml-gray-500);
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding-top: 14px;
+
+    border-top: 1px solid var(--ml-gray-100);
+}
+
+
+.fee {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.fee span {
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-xs);
+}
+
+
+.fee strong {
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-lg);
+    font-weight: var(--ml-weight-bold);
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.actions {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+}
+
+
+.callButton {
+    width: 39px;
+    height: 39px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: 8px;
+
+    color: var(--ml-teal);
+
+    background: var(--ml-white);
+
+    text-decoration: none;
+
+    transition: var(--ml-transition);
+}
+
+
+.callButton svg {
+    width: 18px;
+}
+
+
+.callButton:hover {
+    color: var(--ml-white);
+
+    border-color: var(--ml-teal);
+
+    background: var(--ml-teal);
+}
+
+
+.profileButton {
+    min-height: 39px;
+
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 0 11px;
+
+    border-radius: 8px;
+
+    color: var(--ml-white);
+    background: var(--ml-teal);
+
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-semibold);
+
+    text-decoration: none;
+
+    transition: var(--ml-transition);
+}
+
+
+.profileButton svg {
+    width: 15px;
+
+    transition: transform var(--ml-transition);
+}
+
+
+.profileButton:hover {
+    background: var(--ml-teal-dark);
+}
+
+
+.profileButton:hover svg {
+    transform: translateX(3px);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 430px) {
+
+    .card {
+        padding: 16px;
+    }
+
+
+    .imageWrapper {
+        width: 62px;
+        height: 62px;
+    }
+
+
+    .nameRow h3 {
+        font-size: var(--ml-font-lg);
+    }
+
+
+    .footer {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+
+    .actions {
+        width: 100%;
+    }
+
+
+    .callButton {
+        width: 44px;
+    }
+
+
+    .profileButton {
+        flex: 1;
+
+        justify-content: center;
+    }
+
+}

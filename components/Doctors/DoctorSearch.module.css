@@ -1,0 +1,331 @@
+/* =========================================================
+   WRAPPER
+========================================================= */
+
+.wrapper {
+    width: 100%;
+
+    padding: 18px;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-md);
+
+    background: var(--ml-white);
+
+    box-shadow: var(--ml-shadow-sm);
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.form {
+    display: grid;
+
+    grid-template-columns:
+        minmax(240px, 1.7fr)
+        minmax(130px, 0.8fr)
+        minmax(150px, 1fr)
+        minmax(120px, 0.8fr)
+        auto
+        auto;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+/* =========================================================
+   SEARCH BOX
+========================================================= */
+
+.searchBox,
+.locationBox {
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 0 13px;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-sm);
+
+    background: var(--ml-gray-50);
+}
+
+
+.searchBox svg,
+.locationBox svg {
+    width: 19px;
+
+    flex-shrink: 0;
+
+    color: var(--ml-gray-500);
+}
+
+
+.searchBox input {
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    color: var(--ml-navy);
+
+    background: transparent;
+
+    font-family: inherit;
+    font-size: var(--ml-font-md);
+}
+
+
+.searchBox input::placeholder {
+    color: var(--ml-gray-500);
+}
+
+
+/* =========================================================
+   LOCATION
+========================================================= */
+
+.locationBox {
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-md);
+    font-weight: var(--ml-weight-medium);
+}
+
+
+/* =========================================================
+   SELECT
+========================================================= */
+
+.form select {
+    width: 100%;
+    height: 46px;
+
+    padding: 0 10px;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-sm);
+
+    outline: none;
+
+    color: var(--ml-navy);
+
+    background: var(--ml-gray-50);
+
+    font-family: inherit;
+    font-size: var(--ml-font-sm);
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   AVAILABLE
+========================================================= */
+
+.available {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    white-space: nowrap;
+
+    color: var(--ml-gray-600);
+
+    font-size: var(--ml-font-sm);
+
+    cursor: pointer;
+}
+
+
+.available input {
+    width: 16px;
+    height: 16px;
+
+    accent-color: var(--ml-teal);
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   SEARCH BUTTON
+========================================================= */
+
+.searchButton {
+    height: 46px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    padding: 0 17px;
+
+    border: none;
+    border-radius: var(--ml-radius-sm);
+
+    color: var(--ml-white);
+    background: var(--ml-teal);
+
+    font-family: inherit;
+    font-size: var(--ml-font-md);
+    font-weight: var(--ml-weight-semibold);
+
+    cursor: pointer;
+
+    transition: var(--ml-transition);
+}
+
+
+.searchButton svg {
+    width: 18px;
+}
+
+
+.searchButton:hover {
+    background: var(--ml-teal-dark);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   FILTER FOOTER
+========================================================= */
+
+.filterFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 13px;
+    padding-top: 13px;
+
+    border-top: 1px solid var(--ml-gray-100);
+}
+
+
+.filterFooter > div {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-xs);
+}
+
+
+.filterFooter svg {
+    width: 15px;
+}
+
+
+.filterFooter button {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 4px;
+
+    padding: 0;
+
+    border: none;
+
+    color: var(--ml-teal);
+
+    background: transparent;
+
+    font-family: inherit;
+    font-size: var(--ml-font-xs);
+
+    cursor: pointer;
+}
+
+
+.filterFooter button svg {
+    width: 14px;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1050px) {
+
+    .form {
+        grid-template-columns:
+            1.5fr
+            1fr
+            1fr;
+
+    }
+
+    .searchBox {
+        grid-column: span 2;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .wrapper {
+        padding: 12px;
+    }
+
+
+    .form {
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+
+    .searchBox,
+    .locationBox,
+    .form select,
+    .searchButton {
+        width: 100%;
+
+        height: 48px;
+    }
+
+
+    .available {
+        padding: 5px 2px;
+    }
+
+
+    .searchButton {
+        margin-top: 3px;
+    }
+
+
+    .filterFooter {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 10px;
+    }
+
+}

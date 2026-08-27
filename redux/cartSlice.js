@@ -1,86 +1,384 @@
-// cartSlice.js
+import { createSlice } from "@reduxjs/toolkit";
 
-import { createSlice } from '@reduxjs/toolkit'
-import Cookies from 'js-cookie'
 
-export const cartSlice = createSlice({
-  name: 'cart',
-  initialState: {
-    items: Cookies.get('cartItems') ? JSON.parse(Cookies.get('cartItems')) : [], // Array to store cart items
-    buyNow: Cookies.get('buyNow') ? JSON.parse(Cookies.get('buyNow')) : [], // Array to store cart items
-    coupon: Cookies.get('coupon') ? JSON.parse(Cookies.get('coupon')) : null // Array to store cart items
-  },
+/*
+|--------------------------------------------------------------------------
+| LOCAL STORAGE KEY
+|--------------------------------------------------------------------------
+*/
 
-  reducers: {
-    addItem: (state, action) => {
-      let { product, quantity, size, image } = action.payload;
+const CART_STORAGE_KEY =
+    "medilocate-cart";
 
-      const existingItemIndex = state.items.findIndex(
-        item => item.image.uid === image.uid
-      );
 
-      if (existingItemIndex !== -1) {
-        // Update the existing item
-        const existingItem = state.items[existingItemIndex];
-        state.items[existingItemIndex] = {
-          ...existingItem,
-          quantity: quantity,
-          size: size,
+/*
+|--------------------------------------------------------------------------
+| LOAD CART FROM LOCAL STORAGE
+|--------------------------------------------------------------------------
+*/
+
+const getInitialCart = () => {
+
+    if (
+        typeof window ===
+        "undefined"
+    ) {
+
+        return {
+
+            items: [],
+
+            prescription: null,
+
         };
-      } else {
-        // Add the new item
-        const { metaTitle, description, metaDescription, images, thumbnail, categories, thumbnailColors, attributes, placeholder, featured, sizes, color, colors, updatedAt, createdAt, sold, ...productWithoutDetails } = product;
-        state.items.push({ product: productWithoutDetails, size, image, quantity });
-      }
 
-      try {
-        Cookies.set('cartItems', JSON.stringify(state.items), { expires: 7 });
-        console.log('Cart saved successfully.');
-      } catch (error) {
-        console.error('Error saving cart to cookies:', error);
-      }
-    },
-
-    removeItem: (state, action) => {
-      const { product, quantity, size, image } = action.payload
-      state.items = state.items.filter(item => item.image.uid != image.uid)
-      // Update cart data in cookies
-      Cookies.set('cartItems', JSON.stringify(state.items), { expires: 7 })
-    },
-    clearCart: state => {
-      state.items = [] // Clear cart items array
-      // Clear cart data in cookies
-      Cookies.remove('cartItems')
-    },
-    addToBuyNow: (state, action) => {
-      state.buyNow = [action.payload]
-      Cookies.set('buyNow', JSON.stringify(state.buyNow), { expires: 7 })
-    },
-
-    setCoupon: (state, action) => {
-      state.coupon = action.payload
-
-      // Calculate the expiration date 10 minutes from now
-      const expires = new Date()
-      expires.setMinutes(expires.getMinutes() + 10)
-
-      Cookies.set('coupon', JSON.stringify(state.coupon), {
-        expires: expires
-      })
-    },
-    clearCoupon: (state, action) => {
-      state.coupon = null
-      Cookies.remove('coupon')
     }
-  }
-})
+
+
+    try {
+
+        const savedCart =
+            localStorage.getItem(
+                CART_STORAGE_KEY
+            );
+
+
+        if (savedCart) {
+
+            return JSON.parse(
+                savedCart
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Failed to load cart:",
+            error
+        );
+
+    }
+
+
+    return {
+
+        items: [],
+
+        prescription: null,
+
+    };
+
+};
+
+
+/*
+|--------------------------------------------------------------------------
+| SAVE CART
+|--------------------------------------------------------------------------
+*/
+
+const saveCart = (cart) => {
+
+    if (
+        typeof window ===
+        "undefined"
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        localStorage.setItem(
+
+            CART_STORAGE_KEY,
+
+            JSON.stringify(cart)
+
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Failed to save cart:",
+            error
+        );
+
+    }
+
+};
+
+
+/*
+|--------------------------------------------------------------------------
+| INITIAL STATE
+|--------------------------------------------------------------------------
+*/
+
+const initialState =
+    getInitialCart();
+
+
+/*
+|--------------------------------------------------------------------------
+| CART SLICE
+|--------------------------------------------------------------------------
+*/
+
+const cartSlice = createSlice({
+
+    name: "cart",
+
+    initialState,
+
+    reducers: {
+
+        /*
+        |--------------------------------------------------------------------------
+        | ADD ITEM
+        |--------------------------------------------------------------------------
+        */
+
+        addToCart: (
+            state,
+            action
+        ) => {
+
+            const medicine =
+                action.payload;
+
+
+            const existingItem =
+                state.items.find(
+                    (item) =>
+                        item.id ===
+                        medicine.id
+                );
+
+
+            if (existingItem) {
+
+                existingItem.quantity +=
+                    medicine.quantity || 1;
+
+            } else {
+
+                state.items.push({
+
+                    ...medicine,
+
+                    quantity:
+                        medicine.quantity || 1,
+
+                });
+
+            }
+
+
+            saveCart(state);
+
+        },
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | REMOVE ITEM
+        |--------------------------------------------------------------------------
+        */
+
+        removeFromCart: (
+            state,
+            action
+        ) => {
+
+            state.items =
+                state.items.filter(
+                    (item) =>
+                        item.id !==
+                        action.payload
+                );
+
+
+            saveCart(state);
+
+        },
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | INCREASE QUANTITY
+        |--------------------------------------------------------------------------
+        */
+
+        increaseQuantity: (
+            state,
+            action
+        ) => {
+
+            const item =
+                state.items.find(
+                    (item) =>
+                        item.id ===
+                        action.payload
+                );
+
+
+            if (item) {
+
+                item.quantity += 1;
+
+            }
+
+
+            saveCart(state);
+
+        },
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | DECREASE QUANTITY
+        |--------------------------------------------------------------------------
+        */
+
+        decreaseQuantity: (
+            state,
+            action
+        ) => {
+
+            const item =
+                state.items.find(
+                    (item) =>
+                        item.id ===
+                        action.payload
+                );
+
+
+            if (!item) {
+
+                return;
+
+            }
+
+
+            if (item.quantity > 1) {
+
+                item.quantity -= 1;
+
+            } else {
+
+                state.items =
+                    state.items.filter(
+                        (cartItem) =>
+                            cartItem.id !==
+                            action.payload
+                    );
+
+            }
+
+
+            saveCart(state);
+
+        },
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | CLEAR CART
+        |--------------------------------------------------------------------------
+        */
+
+        clearCart: (
+            state
+        ) => {
+
+            state.items = [];
+
+            state.prescription = null;
+
+
+            /*
+             * Completely remove
+             * cart from localStorage.
+             */
+
+            if (
+                typeof window !==
+                "undefined"
+            ) {
+
+                localStorage.removeItem(
+                    CART_STORAGE_KEY
+                );
+
+            }
+
+        },
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SET PRESCRIPTION
+        |--------------------------------------------------------------------------
+        */
+
+        setPrescription: (
+            state,
+            action
+        ) => {
+
+            state.prescription =
+                action.payload;
+
+
+            saveCart(state);
+
+        },
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | REMOVE PRESCRIPTION
+        |--------------------------------------------------------------------------
+        */
+
+        removePrescription: (
+            state
+        ) => {
+
+            state.prescription =
+                null;
+
+
+            saveCart(state);
+
+        },
+
+    },
+
+});
+
 
 export const {
-  addItem,
-  removeItem,
-  clearCart,
-  addToBuyNow,
-  setCoupon,
-  clearCoupon
-} = cartSlice.actions
-export default cartSlice.reducer
+
+    addToCart,
+
+    removeFromCart,
+
+    increaseQuantity,
+
+    decreaseQuantity,
+
+    clearCart,
+
+    setPrescription,
+
+    removePrescription,
+
+} = cartSlice.actions;
+
+
+export default cartSlice.reducer;

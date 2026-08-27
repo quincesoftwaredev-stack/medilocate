@@ -1,0 +1,665 @@
+/* =========================================================
+   SECTION
+========================================================= */
+
+.section {
+    padding: 90px 0;
+
+    background: #f7fbfa;
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.container {
+    width: min(1180px, calc(100% - 40px));
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 30px;
+
+    margin-bottom: 32px;
+}
+
+.label {
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: #167c80;
+
+    font-size: 11px;
+    font-weight: 750;
+
+    letter-spacing: 1.3px;
+}
+
+.header h2 {
+    margin: 0;
+
+    color: #173436;
+
+    font-size: clamp(30px, 4vw, 40px);
+    line-height: 1.15;
+
+    letter-spacing: -1.4px;
+}
+
+.header h2 span {
+    color: #167c80;
+}
+
+.header p {
+    max-width: 600px;
+
+    margin: 13px 0 0;
+
+    color: #718182;
+
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   VIEW ALL
+========================================================= */
+
+.viewAll {
+    display: inline-flex;
+    align-items: center;
+
+    flex-shrink: 0;
+
+    gap: 6px;
+
+    color: #167c80;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+.viewAll svg {
+    width: 17px;
+
+    transition: transform 0.2s ease;
+}
+
+.viewAll:hover svg {
+    transform: translateX(3px);
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.searchBox {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    height: 58px;
+
+    padding: 6px;
+
+    margin-bottom: 25px;
+
+    border: 1px solid #dcebea;
+    border-radius: 11px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 5px 20px rgba(20, 70, 72, 0.05);
+}
+
+.searchInput {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+
+    height: 100%;
+
+    padding-left: 13px;
+
+    gap: 9px;
+}
+
+.searchInput svg {
+    width: 21px;
+
+    flex-shrink: 0;
+
+    color: #8da0a1;
+}
+
+.searchInput input {
+    width: 100%;
+    height: 100%;
+
+    padding: 0;
+
+    border: none;
+    outline: none;
+
+    color: #173436;
+    background: transparent;
+
+    font-size: 13px;
+}
+
+.searchInput input::placeholder {
+    color: #9aa9aa;
+}
+
+.searchButton {
+    height: 46px;
+
+    padding: 0 21px;
+
+    border: none;
+    border-radius: 8px;
+
+    color: #ffffff;
+    background: #167c80;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease;
+}
+
+.searchButton:hover {
+    background: #106568;
+}
+
+
+/* =========================================================
+   CONTENT GRID
+========================================================= */
+
+.contentGrid {
+    display: grid;
+
+    grid-template-columns: 1.45fr 0.75fr;
+
+    gap: 20px;
+}
+
+
+/* =========================================================
+   MEDICINE AREA
+========================================================= */
+
+.medicineArea {
+    padding: 22px;
+
+    border: 1px solid #e1eceb;
+    border-radius: 14px;
+
+    background: #ffffff;
+}
+
+.areaHeader {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+}
+
+.areaHeader span {
+    color: #8a999a;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 0.9px;
+}
+
+.areaHeader h3 {
+    margin: 5px 0 0;
+
+    color: #173436;
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.areaHeader a {
+    color: #167c80;
+
+    font-size: 11px;
+    font-weight: 650;
+
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   MEDICINE GRID
+========================================================= */
+
+.medicineGrid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 10px;
+}
+
+
+/* =========================================================
+   MEDICINE CARD
+========================================================= */
+
+.medicineCard {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    min-width: 0;
+
+    padding: 13px;
+
+    border: 1px solid #e6eeee;
+    border-radius: 9px;
+
+    background: #fbfdfd;
+
+    transition:
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.medicineCard:hover {
+    border-color: #bddbd8;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   MEDICINE ICON
+========================================================= */
+
+.medicineIcon {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 8px;
+
+    color: #167c80;
+    background: #e8f6f5;
+}
+
+.medicineIcon svg {
+    width: 21px;
+}
+
+
+/* =========================================================
+   MEDICINE INFO
+========================================================= */
+
+.medicineInfo {
+    min-width: 0;
+
+    flex: 1;
+}
+
+.medicineInfo h4 {
+    overflow: hidden;
+
+    margin: 0;
+
+    color: #304b4d;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.medicineInfo span {
+    display: block;
+
+    margin-top: 3px;
+
+    overflow: hidden;
+
+    color: #8c9a9b;
+
+    font-size: 9px;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   CART BUTTON
+========================================================= */
+
+.cartButton {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    padding: 0;
+
+    border: 1px solid #d8e9e7;
+    border-radius: 7px;
+
+    color: #167c80;
+    background: #ffffff;
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.cartButton svg {
+    width: 16px;
+}
+
+.cartButton:hover {
+    color: #ffffff;
+    background: #167c80;
+    border-color: #167c80;
+}
+
+
+/* =========================================================
+   PRESCRIPTION CARD
+========================================================= */
+
+.prescriptionCard {
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 25px;
+
+    border-radius: 14px;
+
+    background: #167c80;
+}
+
+.prescriptionCard::after {
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    right: -90px;
+    bottom: -100px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.prescriptionIcon {
+    position: relative;
+    z-index: 2;
+
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 19px;
+
+    border-radius: 10px;
+
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.prescriptionIcon svg {
+    width: 24px;
+}
+
+
+/* =========================================================
+   PRESCRIPTION CONTENT
+========================================================= */
+
+.prescriptionLabel {
+    position: relative;
+    z-index: 2;
+
+    color: rgba(255, 255, 255, 0.65);
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+.prescriptionCard h3 {
+    position: relative;
+    z-index: 2;
+
+    margin: 7px 0 9px;
+
+    color: #ffffff;
+
+    font-size: 21px;
+    font-weight: 700;
+
+    letter-spacing: -0.4px;
+}
+
+.prescriptionCard p {
+    position: relative;
+    z-index: 2;
+
+    margin: 0;
+
+    color: rgba(255, 255, 255, 0.78);
+
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   UPLOAD BUTTON
+========================================================= */
+
+.uploadButton {
+    position: relative;
+    z-index: 2;
+
+    display: inline-flex;
+    align-items: center;
+
+    gap: 6px;
+
+    min-height: 38px;
+
+    padding: 0 13px;
+
+    margin-top: 19px;
+
+    border-radius: 7px;
+
+    color: #167c80;
+    background: #ffffff;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.uploadButton svg {
+    width: 15px;
+}
+
+.uploadButton:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================================
+   DELIVERY INFO
+========================================================= */
+
+.deliveryInfo {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 20px;
+    padding-top: 13px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+
+    color: rgba(255, 255, 255, 0.7);
+
+    font-size: 9px;
+}
+
+.deliveryInfo svg {
+    width: 16px;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 950px) {
+
+    .contentGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .prescriptionCard {
+        min-height: 250px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .section {
+        padding: 60px 0;
+    }
+
+    .container {
+        width: calc(100% - 28px);
+    }
+
+    .header {
+        display: block;
+
+        margin-bottom: 25px;
+    }
+
+    .header h2 {
+        font-size: 29px;
+    }
+
+    .header p {
+        font-size: 12px;
+    }
+
+    .viewAll {
+        margin-top: 14px;
+    }
+
+    .searchBox {
+        height: 52px;
+    }
+
+    .searchButton {
+        height: 40px;
+
+        padding: 0 13px;
+    }
+
+    .medicineGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .medicineArea {
+        padding: 17px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .searchInput input {
+        font-size: 11px;
+    }
+
+    .searchButton {
+        font-size: 10px;
+    }
+
+}

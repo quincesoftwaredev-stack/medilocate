@@ -18,6 +18,7 @@ import styles from '@/styles/Layout.module.css'
 import GoogleMapsProvider from './Utility/GoogleMapsProvider'
 import Navbar3 from './Navs/Navbar3'
 import WhatsAppButton from './Utility/WhatsAppButton'
+import AdminBottomNav from './Admin/AdminBottomNav'
 
 const Layout = ({ children }) => {
   const loading = useSelector(state => state.state.loading)
@@ -25,7 +26,7 @@ const Layout = ({ children }) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   const notistack = useSelector(state => state.notistack.notistack)
   const fetchAgain = useSelector(state => state.category.fetchAgain)
-
+  const userInfo = useSelector(state => state.user.userInfo)
   const dispatch = useDispatch()
   const fetchCategory = async () => {
     try {
@@ -64,11 +65,14 @@ const Layout = ({ children }) => {
       enqueueSnackbar(notistack.message, notistack.option || 'default')
     }
   }, [notistack])
+
+
+
   return (
     <GoogleMapsProvider>
       <div>
         {loading && <Loading />}
-        {!containsAdmin(router.asPath) ? (
+        {/* {!containsAdmin(router.asPath) ? (
           <>
             {' '}
             <div className={styles.nav1}>
@@ -83,11 +87,12 @@ const Layout = ({ children }) => {
           </>
         ) : (
           <AdminNavbar />
-        )}
+        )} */}
         {children}
-        <Footer />
+        {/* <Footer /> */}
         {/* <BottomFooter /> */}
-        {!containsAdmin(router.asPath) && <WhatsAppButton includeLocation={true} />
+        {!containsAdmin(router.asPath) && <WhatsAppButton includeLocation={true} style={{}} />}
+        {userInfo?.role == "admin" && <AdminBottomNav />
         }
         {loading && <Loading />}
       </div>

@@ -1,0 +1,692 @@
+.page {
+    min-height: 100vh;
+
+    padding: 55px 0 80px;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            var(--ml-teal-light),
+            transparent 38%
+        ),
+        var(--ml-gray-50);
+}
+
+
+.container {
+    width: min(820px, calc(100% - 40px));
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   SUCCESS CARD
+========================================================= */
+
+.successCard {
+    padding: 45px;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-lg);
+
+    background: var(--ml-white);
+
+    box-shadow: var(--ml-shadow-md);
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   SUCCESS ICON
+========================================================= */
+
+.successIcon {
+    width: 70px;
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 18px;
+
+    border-radius: 50%;
+
+    color: var(--ml-teal);
+
+    background: var(--ml-teal-light);
+}
+
+
+.successIcon svg {
+    width: 48px;
+    height: 48px;
+}
+
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+.label {
+    display: block;
+
+    color: var(--ml-teal);
+
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-bold);
+
+    letter-spacing: 0.08em;
+}
+
+
+.successCard h1 {
+    max-width: 650px;
+
+    margin: 9px auto 0;
+
+    color: var(--ml-navy);
+
+    font-size: var(--ml-heading-md);
+    font-weight: var(--ml-weight-bold);
+
+    line-height: 1.15;
+
+    letter-spacing: -0.8px;
+}
+
+
+.successCard h1 span {
+    color: var(--ml-teal);
+}
+
+
+.description {
+    max-width: 600px;
+
+    margin: 14px auto 0;
+
+    color: var(--ml-gray-600);
+
+    font-size: var(--ml-font-base);
+
+    line-height: var(--ml-line-relaxed);
+}
+
+
+/* =========================================================
+   REQUEST ID
+========================================================= */
+
+.requestId {
+    width: fit-content;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin: 24px auto 0;
+
+    padding: 9px 13px;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: 9px;
+
+    background: var(--ml-gray-50);
+}
+
+
+.requestId span {
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-xs);
+}
+
+
+.requestId strong {
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-sm);
+
+    letter-spacing: 0.3px;
+}
+
+
+/* =========================================================
+   STATUS CARD
+========================================================= */
+
+.statusCard {
+    margin-top: 30px;
+
+    padding: 22px;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-md);
+
+    background: var(--ml-gray-50);
+
+    text-align: left;
+}
+
+
+.statusHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding-bottom: 18px;
+
+    border-bottom: 1px solid var(--ml-gray-200);
+}
+
+
+.statusHeader span:first-child {
+    color: var(--ml-teal);
+
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-bold);
+
+    letter-spacing: 0.08em;
+}
+
+
+.statusHeader h2 {
+    margin: 4px 0 0;
+
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-lg);
+}
+
+
+.pendingBadge {
+    padding: 6px 9px;
+
+    flex-shrink: 0;
+
+    border-radius: 7px;
+
+    color: #896719;
+
+    background: #fff5d9;
+
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-semibold);
+}
+
+
+/* =========================================================
+   TIMELINE
+========================================================= */
+
+.timeline {
+    padding-top: 20px;
+}
+
+
+.timelineItem {
+    position: relative;
+
+    display: flex;
+
+    gap: 12px;
+
+    padding-bottom: 22px;
+}
+
+
+.timelineItem:last-child {
+    padding-bottom: 0;
+}
+
+
+.timelineItem:not(:last-child)::after {
+    content: "";
+
+    position: absolute;
+
+    left: 16px;
+    top: 34px;
+
+    width: 1px;
+    height: calc(100% - 10px);
+
+    background: var(--ml-gray-200);
+}
+
+
+.timelineIcon {
+    position: relative;
+    z-index: 2;
+
+    width: 33px;
+    height: 33px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: 50%;
+
+    color: var(--ml-gray-500);
+
+    background: var(--ml-white);
+}
+
+
+.timelineIcon svg {
+    width: 18px;
+}
+
+
+.timelineContent {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+
+    padding-top: 2px;
+}
+
+
+.timelineContent strong {
+    color: var(--ml-navy);
+
+    font-size: var(--ml-font-sm);
+}
+
+
+.timelineContent span {
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-xs);
+
+    line-height: 1.5;
+}
+
+
+/* COMPLETED */
+
+.timelineItem.completed .timelineIcon {
+    border-color: var(--ml-teal);
+
+    color: var(--ml-white);
+
+    background: var(--ml-teal);
+}
+
+
+.timelineItem.completed:not(:last-child)::after {
+    background: var(--ml-teal);
+}
+
+
+/* CURRENT */
+
+.timelineItem.current .timelineIcon {
+    border-color: rgba(15, 157, 138, 0.3);
+
+    color: var(--ml-teal);
+
+    background: var(--ml-teal-light);
+}
+
+
+.timelineItem.current .timelineContent strong {
+    color: var(--ml-teal-dark);
+}
+
+
+/* =========================================================
+   NOTE
+========================================================= */
+
+.note {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 9px;
+
+    margin-top: 20px;
+
+    padding: 13px;
+
+    border: 1px solid rgba(15, 157, 138, 0.16);
+    border-radius: 9px;
+
+    color: var(--ml-gray-600);
+
+    background: var(--ml-teal-light);
+
+    text-align: left;
+}
+
+
+.note svg {
+    width: 19px;
+    height: 19px;
+
+    flex-shrink: 0;
+
+    color: var(--ml-teal);
+}
+
+
+.note p {
+    margin: 0;
+
+    font-size: var(--ml-font-xs);
+
+    line-height: 1.55;
+}
+
+
+.note strong {
+    color: var(--ml-navy);
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.actions {
+    display: flex;
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-top: 27px;
+}
+
+
+.primaryButton,
+.secondaryButton {
+    min-height: 45px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 0 16px;
+
+    border-radius: var(--ml-radius-sm);
+
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-semibold);
+
+    text-decoration: none;
+
+    transition: var(--ml-transition);
+}
+
+
+.primaryButton {
+    color: var(--ml-white);
+
+    background: var(--ml-teal);
+}
+
+
+.primaryButton:hover {
+    background: var(--ml-teal-dark);
+
+    transform: translateY(-1px);
+}
+
+
+.secondaryButton {
+    border: 1px solid var(--ml-gray-200);
+
+    color: var(--ml-navy);
+
+    background: var(--ml-white);
+}
+
+
+.secondaryButton:hover {
+    border-color: var(--ml-teal);
+
+    color: var(--ml-teal);
+
+    transform: translateY(-1px);
+}
+
+
+.primaryButton svg,
+.secondaryButton svg {
+    width: 18px;
+}
+
+
+/* =========================================================
+   TRACK LINK
+========================================================= */
+
+.trackLink {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    margin-top: 21px;
+
+    color: var(--ml-teal);
+
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-semibold);
+
+    text-decoration: none;
+}
+
+
+.trackLink svg {
+    width: 16px;
+
+    transition: transform var(--ml-transition);
+}
+
+
+.trackLink:hover svg {
+    transform: translateX(3px);
+}
+
+
+/* =========================================================
+   HELP
+========================================================= */
+
+.help {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    margin-top: 18px;
+
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-xs);
+}
+
+
+.help svg {
+    width: 16px;
+
+    color: var(--ml-teal);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .page {
+        padding: 30px 0 60px;
+    }
+
+
+    .container {
+        width: calc(100% - 28px);
+    }
+
+
+    .successCard {
+        padding: 30px 18px;
+
+        border-radius: var(--ml-radius-md);
+    }
+
+
+    .successIcon {
+        width: 62px;
+        height: 62px;
+    }
+
+
+    .successIcon svg {
+        width: 42px;
+        height: 42px;
+    }
+
+
+    .successCard h1 {
+        font-size: var(--ml-heading-sm);
+
+        letter-spacing: -0.5px;
+    }
+
+
+    .description {
+        font-size: var(--ml-font-sm);
+    }
+
+
+    .requestId {
+        width: 100%;
+
+        justify-content: space-between;
+
+        margin-top: 20px;
+    }
+
+
+    .statusCard {
+        padding: 16px;
+    }
+
+
+    .statusHeader {
+        flex-direction: column;
+
+        gap: 9px;
+    }
+
+
+    .pendingBadge {
+        align-self: flex-start;
+    }
+
+
+    .timelineItem {
+        padding-bottom: 20px;
+    }
+
+
+    .actions {
+        flex-direction: column;
+    }
+
+
+    .primaryButton,
+    .secondaryButton {
+        width: 100%;
+    }
+
+
+    .trackLink {
+        margin-top: 18px;
+    }
+
+
+    .help {
+        align-items: flex-start;
+
+        padding: 0 10px;
+
+        text-align: center;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .container {
+        width: calc(100% - 22px);
+    }
+
+
+    .successCard {
+        padding: 27px 14px;
+    }
+
+
+    .successCard h1 {
+        font-size: var(--ml-heading-sm);
+    }
+
+
+    .description {
+        font-size: var(--ml-font-xs);
+    }
+
+
+    .requestId {
+        padding: 8px 10px;
+    }
+
+
+    .statusCard {
+        padding: 13px;
+    }
+
+
+    .timelineContent strong {
+        font-size: var(--ml-font-xs);
+    }
+
+
+    .timelineContent span {
+        font-size: 10px;
+    }
+
+
+    .note {
+        padding: 11px;
+    }
+
+
+    .actions {
+        gap: 8px;
+    }
+
+}
