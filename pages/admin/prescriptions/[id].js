@@ -25,8 +25,6 @@ import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 
-import Navbar from "@/components/home/Navbar";
-import Footer from "@/components/home/Footer";
 
 import styles from "@/styles/Admin/Prescriptions/PrescriptionReview.module.css";
 
@@ -675,7 +673,6 @@ export default function PrescriptionReviewPage({
                 </main>
 
 
-                <Footer />
 
             </>
         );
@@ -702,7 +699,6 @@ export default function PrescriptionReviewPage({
             </Head>
 
 
-            <Navbar />
 
 
             <main className={styles.page}>

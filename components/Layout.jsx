@@ -17,113 +17,113 @@ import { setPixel } from "@/redux/pixelSlice";
 import { PIXEL_ID } from "@/config";
 
 const Layout = ({ children }) => {
-    const router = useRouter();
-    const dispatch = useDispatch();
-    const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
-    const loading = useSelector(state => state.state.loading);
-    const notistack = useSelector(state => state.notistack.notistack);
-    const fetchAgain = useSelector(state => state.category.fetchAgain);
-    const userInfo = useSelector(state => state.user.userInfo);
+  const loading = useSelector(state => state.state.loading);
+  const notistack = useSelector(state => state.notistack.notistack);
+  const fetchAgain = useSelector(state => state.category.fetchAgain);
+  const userInfo = useSelector(state => state.user.userInfo);
 
-    const fetchCategory = async () => {
-        try {
-            const { data } = await axios.get("/api/department/view");
-            dispatch(setCategories(data));
-        } catch (error) {
-            console.error("Failed to fetch departments:", error);
+  const fetchCategory = async () => {
+    try {
+      const { data } = await axios.get("/api/department/view");
+      dispatch(setCategories(data));
+    } catch (error) {
+      console.error("Failed to fetch departments:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategory();
+  }, [fetchAgain]);
+
+  useEffect(() => {
+    let ReactPixel;
+
+    const initializePixel = async () => {
+      try {
+        if (!PIXEL_ID) {
+          console.warn("Facebook Pixel ID is missing.");
+          return;
         }
+
+        const pixelModule = await import("react-facebook-pixel");
+        ReactPixel = pixelModule.default;
+
+        ReactPixel.init(
+          PIXEL_ID,
+          {},
+          {
+            autoConfig: false,
+            debug: false,
+          }
+        );
+
+        dispatch(setPixel(ReactPixel));
+        ReactPixel.pageView();
+
+      } catch (error) {
+        console.error(
+          "Facebook Pixel initialization failed:",
+          error
+        );
+      }
     };
 
-    useEffect(() => {
-        fetchCategory();
-    }, [fetchAgain]);
+    initializePixel();
 
-    useEffect(() => {
-        let ReactPixel;
+    const handleRouteChange = () => {
+      ReactPixel?.pageView();
+    };
 
-        const initializePixel = async () => {
-            try {
-                if (!PIXEL_ID) {
-                    console.warn("Facebook Pixel ID is missing.");
-                    return;
-                }
-
-                const pixelModule = await import("react-facebook-pixel");
-                ReactPixel = pixelModule.default;
-
-                ReactPixel.init(
-                    PIXEL_ID,
-                    {},
-                    {
-                        autoConfig: false,
-                        debug: false,
-                    }
-                );
-
-                dispatch(setPixel(ReactPixel));
-                ReactPixel.pageView();
-
-            } catch (error) {
-                console.error(
-                    "Facebook Pixel initialization failed:",
-                    error
-                );
-            }
-        };
-
-        initializePixel();
-
-        const handleRouteChange = () => {
-            ReactPixel?.pageView();
-        };
-
-        router.events.on(
-            "routeChangeComplete",
-            handleRouteChange
-        );
-
-        return () => {
-            router.events.off(
-                "routeChangeComplete",
-                handleRouteChange
-            );
-        };
-
-    }, [router.events, dispatch]);
-
-    useEffect(() => {
-        if (!notistack?.message) return;
-
-        enqueueSnackbar(
-            notistack.message,
-            notistack.option || {}
-        );
-    }, [notistack, enqueueSnackbar]);
-
-    const isAdminPage = containsAdmin(router.asPath);
-
-    return (
-        <GoogleMapsProvider>
-            <div>
-                {loading && <Loading />}
-
-                {!isAdminPage && <Navbar />}
-
-                {children}
-
-                {!isAdminPage && <Footer />}
-
-                {!isAdminPage && (
-                    <WhatsAppButton includeLocation={true} />
-                )}
-
-                {userInfo?.role === "admin" && (
-                    <AdminBottomNav />
-                )}
-            </div>
-        </GoogleMapsProvider>
+    router.events.on(
+      "routeChangeComplete",
+      handleRouteChange
     );
+
+    return () => {
+      router.events.off(
+        "routeChangeComplete",
+        handleRouteChange
+      );
+    };
+
+  }, [router.events, dispatch]);
+
+  useEffect(() => {
+    if (!notistack?.message) return;
+
+    enqueueSnackbar(
+      notistack.message,
+      notistack.option || {}
+    );
+  }, [notistack, enqueueSnackbar]);
+
+  const isAdminPage = containsAdmin(router.asPath);
+
+  return (
+    <GoogleMapsProvider>
+      <div>
+        {loading && <Loading />}
+
+        <Navbar />
+
+        {children}
+
+        {!isAdminPage && <Footer />}
+
+        {!isAdminPage && (
+          <WhatsAppButton includeLocation={true} />
+        )}
+
+        {userInfo?.role === "admin" && (
+          <AdminBottomNav />
+        )}
+      </div>
+    </GoogleMapsProvider>
+  );
 };
 
 export default Layout;

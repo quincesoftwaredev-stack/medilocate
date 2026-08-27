@@ -20,8 +20,6 @@ import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
 import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
-import Navbar from "@/components/home/Navbar";
-import Footer from "@/components/home/Footer";
 
 import styles from "@/styles/Admin/Medicines/MedicineForm.module.css";
 
@@ -238,7 +236,6 @@ const userInfo =
                 </Head>
 
 
-                <Navbar />
 
 
                 <main
@@ -901,7 +898,6 @@ const userInfo =
             </Head>
 
 
-            <Navbar />
 
 
             <main
@@ -2409,7 +2405,6 @@ const userInfo =
             )}
 
 
-            <Footer />
 
         </>
     );

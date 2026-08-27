@@ -25,8 +25,6 @@ import NavigationOutlinedIcon from "@mui/icons-material/NavigationOutlined";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
 
-import Navbar from "@/components/home/Navbar";
-import Footer from "@/components/home/Footer";
 
 import styles from "@/styles/Admin/Orders/OrderDetails.module.css";
 import BASE_URL from "@/config";
@@ -445,7 +443,6 @@ export default function OrderDetailsPage({
                 </Head>
 
 
-                <Navbar />
 
 
                 <main className={styles.notFound}>
@@ -2743,7 +2740,6 @@ export default function OrderDetailsPage({
             )}
 
 
-            <Footer />
 
         </>
 

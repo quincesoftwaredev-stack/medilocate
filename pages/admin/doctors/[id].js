@@ -28,8 +28,6 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 
-import Navbar from "@/components/home/Navbar";
-import Footer from "@/components/home/Footer";
 
 import styles from "@/styles/Admin/Doctors/DoctorDetails.module.css";
 
@@ -300,7 +298,6 @@ export default function DoctorDetailsPage() {
 
                 </Head>
 
-                <Navbar />
 
                 <main className={styles.notFound}>
 
@@ -325,7 +322,6 @@ export default function DoctorDetailsPage() {
 
                 </main>
 
-                <Footer />
             </>
         );
 

@@ -22,9 +22,6 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import PaymentsOutlinedIcon from "@mui/icons-material/PaymentsOutlined";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 
-import Navbar from "@/components/home/Navbar";
-import Footer from "@/components/home/Footer";
-
 import styles from "@/styles/Admin/Orders/Orders.module.css";
 import BASE_URL from "@/config";
 
@@ -738,7 +735,6 @@ export default function OrdersPage({
             </Head>
 
 
-            <Navbar />
 
 
             <main className={styles.page}>
@@ -1829,8 +1825,7 @@ export default function OrdersPage({
             </main>
 
 
-            <Footer />
-
+\
         </>
     );
 

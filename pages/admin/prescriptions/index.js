@@ -20,8 +20,6 @@ import PendingOutlinedIcon from "@mui/icons-material/PendingOutlined";
 import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 
-import Navbar from "@/components/home/Navbar";
-import Footer from "@/components/home/Footer";
 
 import styles from "@/styles/Admin/Prescriptions/Prescriptions.module.css";
 import BASE_URL from "@/config";
@@ -340,7 +338,6 @@ export default function PrescriptionRequestsPage(
             </Head>
 
 
-            <Navbar />
 
 
             <main className={styles.page}>
@@ -1309,7 +1306,6 @@ export default function PrescriptionRequestsPage(
             </main>
 
 
-            <Footer />
 
         </>
     );

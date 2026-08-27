@@ -17,8 +17,7 @@ import PendingOutlinedIcon from "@mui/icons-material/PendingOutlined";
 import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
 
-import Navbar from "@/components/home/Navbar";
-import Footer from "@/components/home/Footer";
+
 import AdminBottomNav from "@/components/admin/AdminBottomNav";
 
 import styles from "@/styles/Admin/Doctors/Doctors.module.css";
@@ -298,7 +297,6 @@ export default function DoctorsPage({
             </Head>
 
 
-            <Navbar />
 
 
             <main className={styles.page}>
@@ -1276,7 +1274,6 @@ export default function DoctorsPage({
 
             <AdminBottomNav />
 
-            <Footer />
 
         </>
     );
