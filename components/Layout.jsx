@@ -4,8 +4,8 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
-import Navbar from "@/components/Home/Navbar";
-import Footer from "@/components/Home/Footer";
+import Navbar from "@/components/home/Navbar";
+import Footer from "@/components/home/Footer";
 import Loading from "@/components/Utility/Loading";
 import GoogleMapsProvider from "@/components/Utility/GoogleMapsProvider";
 import WhatsAppButton from "@/components/Utility/WhatsAppButton";

@@ -1,6 +1,6 @@
 import db from "@/database/connection";
 import Prescription from "@/database/model/Prescription";
-import Order from "@/database/model/Order";
+import Order from "@/database/model/Orders";
 import Medicine from "@/database/model/Medicine";
 import nextConnect from "next-connect";
 

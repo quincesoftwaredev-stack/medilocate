@@ -1,6 +1,6 @@
 import SSLCommerzPayment from 'sslcommerz-lts'
 import db from '@/database/connection'
-import Order from '@/database/model/Order'
+import Order from '@/database/model/Orders'
 import Product from '@/database/model/Product'
 import nc from 'next-connect'
 import { isAuth } from '@/utility'
