@@ -13,8 +13,7 @@ import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 import MedicalServicesOutlinedIcon from "@mui/icons-material/MedicalServicesOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 
-import Navbar from "../../../components/home/Navbar";
-import Footer from "../../../components/home/Footer";
+
 
 import styles from "@/styles/Doctor/Profile.module.css";
 
@@ -260,7 +259,6 @@ export default function DoctorProfilePage({
 
                 </Head>
 
-                <Navbar />
 
                 <main
                     className={
@@ -296,7 +294,6 @@ export default function DoctorProfilePage({
 
                 </main>
 
-                <Footer />
             </>
         );
 
@@ -330,7 +327,6 @@ export default function DoctorProfilePage({
             </Head>
 
 
-            <Navbar />
 
 
             <main className={styles.page}>
@@ -1418,7 +1414,7 @@ export default function DoctorProfilePage({
             )}
 
 
-            <Footer />
+            
 
         </>
     );

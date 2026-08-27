@@ -16,7 +16,7 @@ import path from 'path'
 
 const handler = nextConnect()
 
-
+handler.use(isAuth, isAdmin)
 
 /*
 |--------------------------------------------------------------------------

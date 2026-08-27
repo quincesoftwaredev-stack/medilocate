@@ -26,7 +26,6 @@ export default function Home() {
             </Head>
 
             <main>
-                <Navbar />
 
                 <Hero />
 
@@ -44,7 +43,6 @@ export default function Home() {
 
                 <FinalCTA />
 
-                <Footer />
             </main>
         </>
     );

@@ -1,89 +1,63 @@
 import db from "@/database/connection";
 import Prescription from "@/database/model/Prescription";
 import nextConnect from "next-connect";
-
+import Orders from "@/database/model/Orders";
 const handler = nextConnect();
 
 handler.get(async (req, res) => {
-
     try {
-
         await db.connect();
-
 
         const {
             id,
+            requestCode,
         } = req.query;
 
+        const value =
+            id ||
+            requestCode;
 
-        if (!id) {
-
+        if (!value) {
             return res.status(400).json({
-
                 success: false,
-
                 message:
-                    "Prescription ID is required.",
-
+                    "Prescription ID or request code is required.",
             });
-
         }
-
 
         /*
         |--------------------------------------------------------------------------
-        | FIND PRESCRIPTION
+        | FIND PRESCRIPTION BY ID OR REQUEST CODE
         |--------------------------------------------------------------------------
         */
-
-        let prescription;
-
 
         const isMongoId =
-            /^[0-9a-fA-F]{24}$/.test(id);
+            /^[0-9a-fA-F]{24}$/.test(
+                value
+            );
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | FIND BY MONGODB ID
-        |--------------------------------------------------------------------------
-        */
+        const query = {
+            $or: [
+                {
+                    requestCode: value,
+                },
+            ],
+        };
 
         if (isMongoId) {
-
-            prescription =
-                await Prescription
-                    .findById(id)
-                    .populate(
-                        "order",
-                        "trackingNumber status deliveryFee total"
-                    )
-                    .lean();
-
+            query.$or.push({
+                _id: value,
+            });
         }
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | FIND BY REQUEST CODE
-        |--------------------------------------------------------------------------
-        */
-
-        if (!prescription) {
-
-            prescription =
-                await Prescription
-                    .findOne({
-                        requestCode: id,
-                    })
-                    .populate(
-                        "order",
-                        "trackingNumber status deliveryFee total"
-                    )
-                    .lean();
-
-        }
-
+        const prescription =
+            await Prescription
+                .findOne(query)
+                .populate(
+                    "order",
+                    "trackingNumber status deliveryFee total"
+                )
+                .lean();
 
         /*
         |--------------------------------------------------------------------------
@@ -92,18 +66,12 @@ handler.get(async (req, res) => {
         */
 
         if (!prescription) {
-
             return res.status(404).json({
-
                 success: false,
-
                 message:
                     "Prescription request not found.",
-
             });
-
         }
-
 
         /*
         |--------------------------------------------------------------------------
@@ -112,33 +80,22 @@ handler.get(async (req, res) => {
         */
 
         return res.status(200).json({
-
             success: true,
-
             prescription,
-
         });
 
     } catch (error) {
-
         console.error(
             "Get prescription error:",
             error
         );
 
-
         return res.status(500).json({
-
             success: false,
-
             message:
                 "Failed to fetch prescription.",
-
         });
-
     }
-
 });
-
 
 export default handler;

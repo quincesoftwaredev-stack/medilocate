@@ -263,7 +263,6 @@ export default function DoctorsPage({
             </Head>
 
 
-            <Navbar />
 
 
             <main className={styles.page}>
@@ -504,7 +503,6 @@ export default function DoctorsPage({
             </main>
 
 
-            <Footer />
 
         </>
     );

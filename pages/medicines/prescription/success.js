@@ -10,8 +10,7 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 
-import Navbar from "@/components/home/Navbar";
-import Footer from "@/components/home/Footer";
+
 
 import styles from "@/styles/Medicines/PrescriptionSuccess.module.css";
 
@@ -50,7 +49,6 @@ export default function PrescriptionSuccessPage() {
             </Head>
 
 
-            <Navbar />
 
 
             <main className={styles.page}>
@@ -383,7 +381,6 @@ export default function PrescriptionSuccessPage() {
             </main>
 
 
-            <Footer />
 
         </>
     );

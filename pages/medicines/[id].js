@@ -30,11 +30,6 @@ import DescriptionOutlinedIcon
 import InfoOutlinedIcon
     from "@mui/icons-material/InfoOutlined";
 
-import Navbar
-    from "@/components/home/Navbar";
-
-import Footer
-    from "@/components/home/Footer";
 
 import styles
     from "@/styles/Medicines/MedicineDetails.module.css";
@@ -330,7 +325,6 @@ export default function MedicineDetailsPage({
             </Head>
 
 
-            <Navbar />
 
 
             <main
@@ -1112,7 +1106,6 @@ export default function MedicineDetailsPage({
             </main>
 
 
-            <Footer />
 
         </>
     );

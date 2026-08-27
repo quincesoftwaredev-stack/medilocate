@@ -15,8 +15,6 @@ import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 
-import Navbar from "@/components/home/Navbar";
-import Footer from "@/components/home/Footer";
 
 import styles from "@/styles/Medicines/PrescriptionTracking.module.css";
 
@@ -197,7 +195,6 @@ export default function PrescriptionTrackingPage({
                 </Head>
 
 
-                <Navbar />
 
 
                 <main className={styles.page}>
@@ -273,7 +270,6 @@ export default function PrescriptionTrackingPage({
                 </main>
 
 
-                <Footer />
             </>
         );
 
@@ -323,7 +319,6 @@ export default function PrescriptionTrackingPage({
             </Head>
 
 
-            <Navbar />
 
 
             <main className={styles.page}>
@@ -1102,7 +1097,6 @@ export default function PrescriptionTrackingPage({
             </main>
 
 
-            <Footer />
 
         </>
     );

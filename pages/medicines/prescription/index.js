@@ -13,8 +13,7 @@ import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 
-import Navbar from "@/components/home/Navbar";
-import Footer from "@/components/home/Footer";
+
 import PrescriptionUpload from "@/components/common/PrescriptionUpload";
 
 import styles from "@/styles/Medicines/Prescription.module.css";
@@ -237,7 +236,6 @@ export default function PrescriptionPage() {
             </Head>
 
 
-            <Navbar />
 
 
             <main className={styles.page}>
@@ -877,7 +875,6 @@ export default function PrescriptionPage() {
             </main>
 
 
-            <Footer />
 
         </>
     );

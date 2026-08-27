@@ -16,8 +16,9 @@ import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 import PaginationComponent from "../../components/common/Pagination";
-import Navbar from "../../components/home/Navbar";
-import Footer from "../../components/home/Footer";
+
+
+
 
 import styles from "../../styles/Medicines/Medicines.module.css";
 
@@ -553,8 +554,6 @@ export default function MedicinesPage({
 
             </Head>
 
-
-            <Navbar />
 
 
             <main
@@ -1396,7 +1395,6 @@ export default function MedicinesPage({
             )}
 
 
-            <Footer />
 
         </>
 

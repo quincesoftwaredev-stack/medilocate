@@ -19,8 +19,7 @@ import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 
-import Navbar from "@/components/home/Navbar";
-import Footer from "@/components/home/Footer";
+
 
 import DoctorProfileImageUpload from "@/components/Doctors/DoctorProfileImageUpload";
 
@@ -468,7 +467,6 @@ export default function DoctorProfileEditPage({
             </Head>
 
 
-            <Navbar />
 
 
             <main className={styles.page}>
@@ -1161,7 +1159,6 @@ export default function DoctorProfileEditPage({
             </main>
 
 
-            <Footer />
 
         </>
     );
