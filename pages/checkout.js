@@ -20,8 +20,7 @@ import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
-import Navbar from "@/components/home/Navbar";
-import Footer from "@/components/home/Footer";
+
 
 import styles from "@/styles/Checkout.module.css";
 
@@ -731,7 +730,6 @@ export default function CheckoutPage() {
                 </Head>
 
 
-                <Navbar />
 
 
                 <main
@@ -784,7 +782,6 @@ export default function CheckoutPage() {
                 </main>
 
 
-                <Footer />
 
             </>
 

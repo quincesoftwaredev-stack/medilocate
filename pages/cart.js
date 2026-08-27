@@ -13,8 +13,6 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 
-import Navbar from "@/components/home/Navbar";
-import Footer from "@/components/home/Footer";
 
 import {
     increaseQuantity,
@@ -109,7 +107,6 @@ export default function CartPage() {
                 </Head>
 
 
-                <Navbar />
 
 
                 <main className={styles.page}>
@@ -783,7 +780,6 @@ export default function CartPage() {
             </main>
 
 
-            <Footer />
 
         </>
     );
