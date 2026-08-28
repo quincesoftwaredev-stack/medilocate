@@ -1,7 +1,11 @@
 import Head from "next/head";
 import Link from "next/link";
 
-import { useEffect, useState } from "react";
+import {
+    useEffect,
+    useMemo,
+    useState,
+} from "react";
 
 import axios from "axios";
 
@@ -15,14 +19,19 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
-import PaginationComponent from "../../components/common/Pagination";
+import PaginationComponent from "@/components/common/Pagination";
 
-
-
+import MedicineHero from "../../components/medicines/MedicineHero";
+import MedicineCategories from "../../components/medicines/MedicineCategories";
+import MedicineGrid from "../../components/medicines/MedicineGrid";
+import MobileCartBar from "../../components/medicines/MobileCartBar";
 
 import styles from "../../styles/Medicines/Medicines.module.css";
 
-import { useDispatch, useSelector } from "react-redux";
+import {
+    useDispatch,
+    useSelector,
+} from "react-redux";
 
 import {
     addToCart,
@@ -33,30 +42,31 @@ import {
 
 /*
 |--------------------------------------------------------------------------
-| API PATH
+| API
 |--------------------------------------------------------------------------
 */
 
-const API_PATH =
-    "/api/medicines";
+const API_PATH = "/api/medicines";
+
+const ITEMS_PER_PAGE = 20;
 
 
 /*
 |--------------------------------------------------------------------------
-| MEDICINES PAGE
+| PAGE
 |--------------------------------------------------------------------------
 */
 
 export default function MedicinesPage({
-
-    initialMedicines,
-
-    initialPagination,
-
-    initialCategories
-
+    initialMedicines = [],
+    initialPagination = {
+        page: 1,
+        limit: ITEMS_PER_PAGE,
+        total: 0,
+        pages: 0,
+    },
+    initialCategories = [],
 }) {
-
 
     /*
     |--------------------------------------------------------------------------
@@ -64,15 +74,12 @@ export default function MedicinesPage({
     |--------------------------------------------------------------------------
     */
 
-    const dispatch =
-        useDispatch();
+    const dispatch = useDispatch();
 
-
-    const cartItems =
-        useSelector(
-            (state) =>
-                state.cart.items
-        );
+    const cartItems = useSelector(
+        (state) =>
+            state.cart.items || []
+    );
 
 
     /*
@@ -85,7 +92,7 @@ export default function MedicinesPage({
         medicines,
         setMedicines
     ] = useState(
-        initialMedicines || []
+        initialMedicines
     );
 
 
@@ -99,52 +106,7 @@ export default function MedicinesPage({
         pagination,
         setPagination
     ] = useState(
-
-        initialPagination || {
-
-            page: 1,
-
-            limit: 24,
-
-            total: 0,
-
-            pages: 0
-
-        }
-
-    );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | CATEGORIES
-    |--------------------------------------------------------------------------
-    */
-
-    const [
-        categories,
-        setCategories
-    ] = useState(
-
-        [
-            "All Medicines",
-            ...(initialCategories || [])
-        ]
-
-    );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | SELECTED CATEGORY
-    |--------------------------------------------------------------------------
-    */
-
-    const [
-        selectedCategory,
-        setSelectedCategory
-    ] = useState(
-        "All Medicines"
+        initialPagination
     );
 
 
@@ -162,6 +124,20 @@ export default function MedicinesPage({
 
     /*
     |--------------------------------------------------------------------------
+    | CATEGORY
+    |--------------------------------------------------------------------------
+    */
+
+    const [
+        selectedCategory,
+        setSelectedCategory
+    ] = useState(
+        "All Medicines"
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
     | LOADING
     |--------------------------------------------------------------------------
     */
@@ -174,24 +150,47 @@ export default function MedicinesPage({
 
     /*
     |--------------------------------------------------------------------------
-    | FIND CART ITEM
+    | CATEGORIES
     |--------------------------------------------------------------------------
     */
 
-    const getCartQuantity = (
-        medicineId
-    ) => {
+    const categories = useMemo(() => {
 
-        const item =
-            cartItems.find(
-                (item) =>
-                    item.id === medicineId
-            );
+        const values = (
+            initialCategories || []
+        )
+            .map((category) => {
+
+                if (
+                    typeof category === "object" &&
+                    category !== null
+                ) {
+
+                    return (
+                        category.name ||
+                        category.title ||
+                        ""
+                    );
+
+                }
+
+                return String(category);
+
+            })
+            .map((category) =>
+                category.trim()
+            )
+            .filter(Boolean);
 
 
-        return item?.quantity || 0;
+        return [
+            "All Medicines",
+            ...new Set(values)
+        ];
 
-    };
+    }, [
+        initialCategories
+    ]);
 
 
     /*
@@ -201,13 +200,9 @@ export default function MedicinesPage({
     */
 
     const fetchMedicines = async ({
-
+        page = 1,
         searchValue = search,
-
         categoryValue = selectedCategory,
-
-        page = 1
-
     } = {}) => {
 
         try {
@@ -215,47 +210,30 @@ export default function MedicinesPage({
             setLoading(true);
 
 
-            const params = {
-
-                page,
-
-                limit: 24,
-
-                search:
-                    searchValue.trim(),
-
-                status:
-                    "active",
-
-                category:
-
-                    categoryValue ===
-                        "All Medicines"
-
-                        ? "all"
-
-                        : categoryValue,
-
-                prescription:
-                    "all",
-
-                stock:
-                    "all"
-
-            };
+            const response =
+                await axios.get(
+                    API_PATH,
+                    {
+                        params: {
+                            page,
+                            limit: ITEMS_PER_PAGE,
+                            search:
+                                searchValue.trim(),
+                            status: "active",
+                            category:
+                                categoryValue ===
+                                    "All Medicines"
+                                    ? "all"
+                                    : categoryValue,
+                            prescription: "all",
+                            stock: "all",
+                        },
+                    }
+                );
 
 
-            const {
-                data
-            } = await axios.get(
-
-                API_PATH,
-
-                {
-                    params
-                }
-
-            );
+            const data =
+                response.data || {};
 
 
             setMedicines(
@@ -264,30 +242,33 @@ export default function MedicinesPage({
 
 
             setPagination(
-
                 data.pagination || {
-
-                    page: 1,
-
-                    limit: 24,
-
+                    page,
+                    limit:
+                        ITEMS_PER_PAGE,
                     total: 0,
-
-                    pages: 0
-
+                    pages: 0,
                 }
-
             );
 
         } catch (error) {
 
             console.error(
                 "Failed to fetch medicines:",
-                error
+                error.response?.data ||
+                error.message
             );
 
 
             setMedicines([]);
+
+            setPagination({
+                page: 1,
+                limit:
+                    ITEMS_PER_PAGE,
+                total: 0,
+                pages: 0,
+            });
 
         } finally {
 
@@ -300,7 +281,7 @@ export default function MedicinesPage({
 
     /*
     |--------------------------------------------------------------------------
-    | SEARCH / CATEGORY EFFECT
+    | SEARCH / CATEGORY
     |--------------------------------------------------------------------------
     */
 
@@ -309,33 +290,128 @@ export default function MedicinesPage({
         const timer =
             setTimeout(() => {
 
+                /*
+                |--------------------------------------------------------------------------
+                | Do not fetch again for the initial
+                | empty/default state.
+                |--------------------------------------------------------------------------
+                */
+
+                if (
+                    search.trim() === "" &&
+                    selectedCategory ===
+                        "All Medicines"
+                ) {
+
+                    return;
+
+                }
+
+
                 fetchMedicines({
-
-                    searchValue:
-                        search,
-
+                    page: 1,
+                    searchValue: search,
                     categoryValue:
                         selectedCategory,
-
-                    page: 1
-
                 });
 
             }, 400);
 
 
         return () => {
-
-            clearTimeout(
-                timer
-            );
-
+            clearTimeout(timer);
         };
 
     }, [
         search,
         selectedCategory
     ]);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | CART QUANTITY
+    |--------------------------------------------------------------------------
+    */
+
+    const getCartQuantity = (
+        medicineId
+    ) => {
+
+        const item =
+            cartItems.find(
+                (item) =>
+                    String(item.id) ===
+                    String(medicineId)
+            );
+
+
+        return (
+            item?.quantity || 0
+        );
+
+    };
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SEARCH
+    |--------------------------------------------------------------------------
+    */
+
+    const handleSearchChange = (
+        event
+    ) => {
+
+        setSearch(
+            event.target.value
+        );
+
+        if (
+            event.target.value.trim() === "" &&
+            selectedCategory ===
+                "All Medicines"
+        ) {
+
+            setMedicines(
+                initialMedicines
+            );
+
+            setPagination(
+                initialPagination
+            );
+
+        }
+
+    };
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | CLEAR SEARCH
+    |--------------------------------------------------------------------------
+    */
+
+    const handleClearSearch = () => {
+
+        setSearch("");
+
+        if (
+            selectedCategory ===
+                "All Medicines"
+        ) {
+
+            setMedicines(
+                initialMedicines
+            );
+
+            setPagination(
+                initialPagination
+            );
+
+        }
+
+    };
 
 
     /*
@@ -350,6 +426,73 @@ export default function MedicinesPage({
 
         setSelectedCategory(
             category
+        );
+
+    };
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PAGE
+    |--------------------------------------------------------------------------
+    */
+
+    const handlePageChange = (
+        page
+    ) => {
+
+        if (
+            page < 1 ||
+            page > pagination.pages
+        ) {
+            return;
+        }
+
+
+        fetchMedicines({
+
+            page,
+
+            searchValue:
+                search,
+
+            categoryValue:
+                selectedCategory,
+
+        });
+
+
+        window.scrollTo({
+
+            top: 0,
+
+            behavior: "smooth",
+
+        });
+
+    };
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | CLEAR FILTERS
+    |--------------------------------------------------------------------------
+    */
+
+    const handleClearFilters = () => {
+
+        setSearch("");
+
+        setSelectedCategory(
+            "All Medicines"
+        );
+
+        setMedicines(
+            initialMedicines
+        );
+
+        setPagination(
+            initialPagination
         );
 
     };
@@ -394,7 +537,8 @@ export default function MedicinesPage({
                     medicine.packSize,
 
                 image:
-                    medicine.image?.url || "",
+                    medicine.image?.url ||
+                    "",
 
                 prescriptionRequired:
                     medicine.prescriptionRequired,
@@ -408,7 +552,7 @@ export default function MedicinesPage({
 
     /*
     |--------------------------------------------------------------------------
-    | INCREASE CART QUANTITY
+    | INCREASE
     |--------------------------------------------------------------------------
     */
 
@@ -417,11 +561,9 @@ export default function MedicinesPage({
     ) => {
 
         dispatch(
-
             increaseQuantity(
                 medicine._id
             )
-
         );
 
     };
@@ -429,7 +571,7 @@ export default function MedicinesPage({
 
     /*
     |--------------------------------------------------------------------------
-    | DECREASE CART QUANTITY
+    | DECREASE
     |--------------------------------------------------------------------------
     */
 
@@ -438,11 +580,9 @@ export default function MedicinesPage({
     ) => {
 
         dispatch(
-
             decreaseQuantity(
                 medicine._id
             )
-
         );
 
     };
@@ -456,7 +596,6 @@ export default function MedicinesPage({
 
     const cartCount =
         cartItems.reduce(
-
             (
                 total,
                 item
@@ -464,77 +603,23 @@ export default function MedicinesPage({
 
                 return (
                     total +
-                    (item.quantity || 0)
+                    (
+                        Number(
+                            item.quantity
+                        ) || 0
+                    )
                 );
 
             },
-
             0
-
         );
 
 
     /*
     |--------------------------------------------------------------------------
-    | PAGINATION
+    | RENDER
     |--------------------------------------------------------------------------
     */
-
-    const handlePageChange = (
-        page
-    ) => {
-
-        if (
-            page < 1 ||
-            page >
-            pagination.pages
-        ) {
-
-            return;
-
-        }
-
-
-        fetchMedicines({
-
-            searchValue:
-                search,
-
-            categoryValue:
-                selectedCategory,
-
-            page
-
-        });
-
-
-        window.scrollTo({
-
-            top: 0,
-
-            behavior: "smooth"
-
-        });
-
-    };
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | CLEAR FILTERS
-    |--------------------------------------------------------------------------
-    */
-
-    const clearFilters = () => {
-
-        setSearch("");
-
-        setSelectedCategory(
-            "All Medicines"
-        );
-
-    };
-
 
     return (
 
@@ -546,14 +631,12 @@ export default function MedicinesPage({
                     Order Medicine Online | MediLocate
                 </title>
 
-
                 <meta
                     name="description"
                     content="Order medicines online with MediLocate. Browse medicines, upload prescriptions and get fast local medicine delivery."
                 />
 
             </Head>
-
 
 
             <main
@@ -567,236 +650,21 @@ export default function MedicinesPage({
                     HERO
                 ====================================================== */}
 
-                <section
-                    className={
-                        styles.hero
+                <MedicineHero
+
+                    search={
+                        search
                     }
-                >
 
-                    <div
-                        className={
-                            styles.container
-                        }
-                    >
+                    onSearchChange={
+                        handleSearchChange
+                    }
 
-                        <div
-                            className={
-                                styles.heroContent
-                            }
-                        >
+                    onClearSearch={
+                        handleClearSearch
+                    }
 
-                            <div
-                                className={
-                                    styles.heroText
-                                }
-                            >
-
-                                <span
-                                    className={
-                                        styles.eyebrow
-                                    }
-                                >
-
-                                    MEDICINE DELIVERY
-
-                                </span>
-
-
-                                <h1>
-
-                                    Get your medicines
-
-                                    <span>
-                                        delivered fast.
-                                    </span>
-
-                                </h1>
-
-
-                                <p>
-
-                                    Search for medicines,
-                                    add them to your cart
-                                    or simply upload your
-                                    prescription.
-
-                                </p>
-
-                            </div>
-
-
-                            {/* SEARCH */}
-
-                            <div
-                                className={
-                                    styles.searchBox
-                                }
-                            >
-
-                                <SearchIcon />
-
-
-                                <input
-
-                                    type="text"
-
-                                    value={
-                                        search
-                                    }
-
-                                    onChange={event =>
-                                        setSearch(
-                                            event.target.value
-                                        )
-                                    }
-
-                                    placeholder="Search medicine, generic name or brand..."
-
-                                />
-
-
-                                {search && (
-
-                                    <button
-
-                                        type="button"
-
-                                        onClick={() =>
-                                            setSearch("")
-                                        }
-
-                                        className={
-                                            styles.clearSearch
-                                        }
-
-                                        aria-label="Clear search"
-                                    >
-
-                                        <CloseRoundedIcon />
-
-                                    </button>
-
-                                )}
-
-                            </div>
-
-
-                            {/* DELIVERY FEATURES */}
-
-                            <div
-                                className={
-                                    styles.heroFeatures
-                                }
-                            >
-
-                                <div>
-
-                                    <LocalShippingOutlinedIcon />
-
-                                    <span>
-                                        Fast local delivery
-                                    </span>
-
-                                </div>
-
-
-                                <div>
-
-                                    <VerifiedOutlinedIcon />
-
-                                    <span>
-                                        Genuine medicines
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        {/* PRESCRIPTION */}
-
-                        <div
-                            className={
-                                styles.prescriptionCard
-                            }
-                        >
-
-                            <div
-                                className={
-                                    styles.prescriptionIcon
-                                }
-                            >
-
-                                <CloudUploadOutlinedIcon />
-
-                            </div>
-
-
-                            <div
-                                className={
-                                    styles.prescriptionContent
-                                }
-                            >
-
-                                <span
-                                    className={
-                                        styles.prescriptionLabel
-                                    }
-                                >
-
-                                    HAVE A PRESCRIPTION?
-
-                                </span>
-
-
-                                <h2>
-
-                                    Upload it.
-
-                                    <br />
-
-                                    We'll handle the rest.
-
-                                </h2>
-
-
-                                <p>
-
-                                    Don't want to search
-                                    for each medicine?
-                                    Upload your complete
-                                    prescription and we'll
-                                    help prepare your order.
-
-                                </p>
-
-
-                                <Link
-
-                                    href="/medicines/prescription"
-
-                                    className={
-                                        styles.uploadButton
-                                    }
-                                >
-
-                                    <CloudUploadOutlinedIcon />
-
-                                    Upload Prescription
-
-                                    <ArrowForwardRoundedIcon />
-
-                                </Link>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </section>
+                />
 
 
                 {/* =====================================================
@@ -830,7 +698,6 @@ export default function MedicinesPage({
                                     MEDICINES
                                 </span>
 
-
                                 <h2>
                                     Browse medicines
                                 </h2>
@@ -841,9 +708,7 @@ export default function MedicinesPage({
                             {cartCount > 0 && (
 
                                 <Link
-
                                     href="/cart"
-
                                     className={
                                         styles.cartButton
                                     }
@@ -868,86 +733,49 @@ export default function MedicinesPage({
 
                         {/* CATEGORIES */}
 
-                        {categories.length > 0 && (
+                        <MedicineCategories
 
-                            <div
-                                className={
-                                    styles.categoriesWrapper
+                            categories={
+                                categories
+                            }
+
+                            selectedCategory={
+                                selectedCategory
+                            }
+
+                            onCategoryChange={
+                                handleCategoryChange
+                            }
+
+                        />
+
+
+                        {/* RESULTS */}
+
+                        <div
+                            className={
+                                styles.resultsInfo
+                            }
+                        >
+
+                            <span>
+
+                                {pagination.total || 0}
+
+                                {" "}
+
+                                {
+                                    pagination.total === 1
+                                        ? "medicine"
+                                        : "medicines"
                                 }
-                            >
 
-                                <div
-                                    className={
-                                        styles.categories
-                                    }
-                                >
+                                {" "}
+                                found
 
-                                    {categories.map(
-                                        category => (
+                            </span>
 
-                                            <button
-
-                                                key={
-                                                    category
-                                                }
-
-                                                type="button"
-
-                                                onClick={() =>
-                                                    handleCategoryChange(
-                                                        category
-                                                    )
-                                                }
-
-                                                className={
-
-                                                    selectedCategory ===
-                                                        category
-
-                                                        ? styles.categoryActive
-
-                                                        : styles.category
-
-                                                }
-                                            >
-
-                                                {category}
-
-                                            </button>
-
-                                        )
-                                    )}
-
-                                </div>
-
-                            </div>
-
-                        )}
-
-
-                        {/* RESULTS COUNT */}
-
-                        {!loading && (
-
-                            <div
-                                className={
-                                    styles.resultsInfo
-                                }
-                            >
-
-                                <span>
-
-                                    {pagination.total || 0}
-
-                                    {" "}
-
-                                    medicines found
-
-                                </span>
-
-                            </div>
-
-                        )}
+                        </div>
 
 
                         {/* LOADING */}
@@ -966,375 +794,62 @@ export default function MedicinesPage({
 
                             </div>
 
-                        ) : medicines.length > 0 ? (
-
-
-                            /* GRID */
-
-                            <div
-                                className={
-                                    styles.medicineGrid
-                                }
-                            >
-
-                                {medicines.map(
-                                    medicine => {
-
-                                        const quantity =
-                                            getCartQuantity(
-                                                medicine._id
-                                            );
-
-
-                                        return (
-
-                                            <article
-
-                                                key={
-                                                    medicine._id
-                                                }
-
-                                                className={
-                                                    styles.medicineCard
-                                                }
-                                            >
-
-
-                                                {/* IMAGE */}
-
-                                                <Link
-
-                                                    href={`/medicines/${medicine._id}`}
-
-                                                    className={
-                                                        styles.medicineImage
-                                                    }
-                                                >
-
-                                                    {medicine.image?.url ? (
-
-                                                        <img
-
-                                                            src={
-                                                                medicine.image.url
-                                                            }
-
-                                                            alt={
-                                                                medicine.name
-                                                            }
-
-                                                        />
-
-                                                    ) : (
-
-                                                        <div
-                                                            className={
-                                                                styles.imagePlaceholder
-                                                            }
-                                                        >
-
-                                                            {medicine.name
-                                                                ?.charAt(0)
-                                                                ?.toUpperCase()}
-
-                                                        </div>
-
-                                                    )}
-
-                                                </Link>
-
-
-                                                {/* PRESCRIPTION */}
-
-                                                {medicine.prescriptionRequired && (
-
-                                                    <span
-                                                        className={
-                                                            styles.prescriptionBadge
-                                                        }
-                                                    >
-
-                                                        Prescription
-                                                        required
-
-                                                    </span>
-
-                                                )}
-
-
-                                                {/* INFORMATION */}
-
-                                                <div
-                                                    className={
-                                                        styles.medicineInfo
-                                                    }
-                                                >
-
-                                                    <Link
-
-                                                        href={`/medicines/${medicine._id}`}
-
-                                                        className={
-                                                            styles.medicineName
-                                                        }
-                                                    >
-
-                                                        {
-                                                            medicine.name
-                                                        }
-
-                                                    </Link>
-
-
-                                                    <span
-                                                        className={
-                                                            styles.genericName
-                                                        }
-                                                    >
-
-                                                        {
-                                                            medicine.genericName
-                                                        }
-
-                                                    </span>
-
-
-                                                    {medicine.strength && (
-
-                                                        <span
-                                                            className={
-                                                                styles.strength
-                                                            }
-                                                        >
-
-                                                            {
-                                                                medicine.strength
-                                                            }
-
-                                                        </span>
-
-                                                    )}
-
-
-                                                    {medicine.packSize && (
-
-                                                        <span
-                                                            className={
-                                                                styles.strength
-                                                            }
-                                                        >
-
-                                                            {
-                                                                medicine.packSize
-                                                            }
-
-                                                        </span>
-
-                                                    )}
-
-
-                                                    {medicine.manufacturer && (
-
-                                                        <span
-                                                            className={
-                                                                styles.manufacturer
-                                                            }
-                                                        >
-
-                                                            {
-                                                                medicine.manufacturer
-                                                            }
-
-                                                        </span>
-
-                                                    )}
-
-
-                                                    {/* PRICE */}
-
-                                                    <div
-                                                        className={
-                                                            styles.priceRow
-                                                        }
-                                                    >
-
-                                                        <div>
-
-                                                            <strong>
-
-                                                                ৳
-                                                                {Number(
-                                                                    medicine.price ||
-                                                                    0
-                                                                ).toFixed(
-                                                                    2
-                                                                )}
-
-                                                            </strong>
-
-                                                        </div>
-
-
-                                                        {/* CART */}
-
-                                                        {quantity === 0 ? (
-
-                                                            <button
-
-                                                                type="button"
-
-                                                                onClick={() =>
-                                                                    handleAddToCart(
-                                                                        medicine
-                                                                    )
-                                                                }
-
-                                                                className={
-                                                                    styles.addButton
-                                                                }
-                                                            >
-
-                                                                <AddRoundedIcon />
-
-                                                                Add
-
-                                                            </button>
-
-                                                        ) : (
-
-                                                            <div
-                                                                className={
-                                                                    styles.quantityControl
-                                                                }
-                                                            >
-
-                                                                <button
-
-                                                                    type="button"
-
-                                                                    onClick={() =>
-                                                                        handleDecreaseQuantity(
-                                                                            medicine
-                                                                        )
-                                                                    }
-
-                                                                    aria-label="Decrease quantity"
-                                                                >
-
-                                                                    <RemoveRoundedIcon />
-
-                                                                </button>
-
-
-                                                                <strong>
-                                                                    {quantity}
-                                                                </strong>
-
-
-                                                                <button
-
-                                                                    type="button"
-
-                                                                    onClick={() =>
-                                                                        handleIncreaseQuantity(
-                                                                            medicine
-                                                                        )
-                                                                    }
-
-                                                                    aria-label="Increase quantity"
-                                                                >
-
-                                                                    <AddRoundedIcon />
-
-                                                                </button>
-
-                                                            </div>
-
-                                                        )}
-
-                                                    </div>
-
-                                                </div>
-
-                                            </article>
-
-                                        );
-
-                                    }
-                                )}
-
-                            </div>
-
-
                         ) : (
 
+                            <MedicineGrid
 
-                            /* NO RESULTS */
-
-                            <div
-                                className={
-                                    styles.noResults
-                                }
-                            >
-
-                                <SearchIcon />
-
-
-                                <h3>
-                                    No medicines found
-                                </h3>
-
-
-                                <p>
-
-                                    Try searching with
-                                    another medicine or
-                                    generic name.
-
-                                </p>
-
-
-                                <button
-
-                                    type="button"
-
-                                    onClick={
-                                        clearFilters
-                                    }
-                                >
-
-                                    Clear filters
-
-                                </button>
-
-                            </div>
-
-                        )}
-
-
-                        {/* =================================================
-                            PAGINATION
-                        ================================================== */}
-
-                        {pagination.pages > 1 && (
-
-                            <PaginationComponent
-
-                                page={
-                                    pagination.page
+                                medicines={
+                                    medicines
                                 }
 
-                                pages={
-                                    pagination.pages
+                                getCartQuantity={
+                                    getCartQuantity
                                 }
 
-                                onChange={
-                                    handlePageChange
+                                onAdd={
+                                    handleAddToCart
+                                }
+
+                                onIncrease={
+                                    handleIncreaseQuantity
+                                }
+
+                                onDecrease={
+                                    handleDecreaseQuantity
+                                }
+
+                                onClearFilters={
+                                    handleClearFilters
                                 }
 
                             />
 
                         )}
+
+
+                        {/* PAGINATION */}
+
+                        {!loading &&
+                            pagination.pages >
+                                1 && (
+
+                                <PaginationComponent
+
+                                    page={
+                                        pagination.page
+                                    }
+
+                                    pages={
+                                        pagination.pages
+                                    }
+
+                                    onChange={
+                                        handlePageChange
+                                    }
+
+                                />
+
+                            )}
 
                     </div>
 
@@ -1343,58 +858,13 @@ export default function MedicinesPage({
             </main>
 
 
-            {/* =====================================================
-                MOBILE CART
-            ====================================================== */}
+            {/* MOBILE CART */}
 
-            {cartCount > 0 && (
-
-                <div
-                    className={
-                        styles.mobileCartBar
-                    }
-                >
-
-                    <div>
-
-                        <span>
-
-                            {cartCount}
-
-                            {" "}
-
-                            item
-                            {cartCount > 1
-                                ? "s"
-                                : ""}
-
-                        </span>
-
-
-                        <strong>
-                            Ready in your cart
-                        </strong>
-
-                    </div>
-
-
-                    <Link
-                        href="/cart"
-                    >
-
-                        <ShoppingCartOutlinedIcon />
-
-                        View Cart
-
-                        <ArrowForwardRoundedIcon />
-
-                    </Link>
-
-                </div>
-
-            )}
-
-
+            <MobileCartBar
+                cartCount={
+                    cartCount
+                }
+            />
 
         </>
 
@@ -1421,7 +891,9 @@ export async function getServerSideProps(
 
 
         const protocol =
-            req.headers["x-forwarded-proto"] ||
+            req.headers[
+                "x-forwarded-proto"
+            ] ||
             (
                 process.env.NODE_ENV ===
                     "production"
@@ -1438,52 +910,63 @@ export async function getServerSideProps(
             `${protocol}://${host}`;
 
 
-        const {
-            data
-        } = await axios.get(
+        /*
+        |--------------------------------------------------------------------------
+        | ONLY INITIAL DATA FETCH
+        |--------------------------------------------------------------------------
+        */
 
-            `${baseUrl}${API_PATH}`,
+        const response =
+            await axios.get(
 
-            {
+                `${baseUrl}${API_PATH}`,
 
-                params: {
+                {
 
-                    page: 1,
+                    params: {
 
-                    limit: 24,
+                        page: 1,
 
-                    search: "",
+                        limit:
+                            ITEMS_PER_PAGE,
 
-                    status:
-                        "active",
+                        search: "",
 
-                    category:
-                        "all",
+                        status:
+                            "active",
 
-                    prescription:
-                        "all",
+                        category:
+                            "all",
 
-                    stock:
-                        "all"
+                        prescription:
+                            "all",
 
-                },
+                        stock:
+                            "all",
 
-                headers: {
+                    },
 
-                    Cookie:
-                        req.headers.cookie ||
-                        ""
+                    headers: {
+
+                        Cookie:
+                            req.headers.cookie ||
+                            "",
+
+                    },
 
                 }
 
-            }
+            );
 
+
+        const data =
+            response.data || {};
+
+
+        console.log(
+            "SSR medicines:",
+            data.medicines?.length || 0
         );
-
-
-        const categories =
-            data.categories ||
-            [];
 
 
         return {
@@ -1495,28 +978,25 @@ export async function getServerSideProps(
 
                 initialPagination:
                     data.pagination || {
-
                         page: 1,
-
-                        limit: 24,
-
+                        limit:
+                            ITEMS_PER_PAGE,
                         total: 0,
-
-                        pages: 0
-
+                        pages: 0,
                     },
 
                 initialCategories:
-                    categories
+                    data.categories || [],
 
-            }
+            },
 
         };
 
     } catch (error) {
 
         console.error(
-            "Medicines getServerSideProps error:",
+            "Medicines SSR error:",
+            error.response?.data ||
             error.message
         );
 
@@ -1525,25 +1005,19 @@ export async function getServerSideProps(
 
             props: {
 
-                initialMedicines:
-                    [],
+                initialMedicines: [],
 
                 initialPagination: {
-
                     page: 1,
-
-                    limit: 24,
-
+                    limit:
+                        ITEMS_PER_PAGE,
                     total: 0,
-
-                    pages: 0
-
+                    pages: 0,
                 },
 
-                initialCategories:
-                    []
+                initialCategories: [],
 
-            }
+            },
 
         };
 

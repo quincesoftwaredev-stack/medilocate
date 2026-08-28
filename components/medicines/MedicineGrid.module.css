@@ -1,0 +1,130 @@
+/* =========================================================
+   GRID
+========================================================= */
+
+.grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty {
+    width: 100%;
+    min-height: 280px;
+    padding: 40px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-sizing: border-box;
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-md);
+    background: var(--ml-white);
+    text-align: center;
+}
+
+.emptyIcon {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--ml-teal);
+    background: var(--ml-teal-light);
+}
+
+.emptyIcon svg {
+    width: 27px;
+    height: 27px;
+}
+
+.empty h3 {
+    margin: 15px 0 6px;
+    color: var(--ml-navy);
+    font-size: var(--ml-font-xl);
+    font-weight: var(--ml-weight-bold);
+}
+
+.empty p {
+    max-width: 400px;
+    margin: 0;
+    color: var(--ml-gray-500);
+    font-size: var(--ml-font-sm);
+    line-height: var(--ml-line-relaxed);
+}
+
+.empty button {
+    min-height: 40px;
+    margin-top: 18px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: var(--ml-radius-sm);
+    color: var(--ml-white);
+    background: var(--ml-teal);
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-semibold);
+    cursor: pointer;
+    transition: var(--ml-transition);
+}
+
+.empty button:hover {
+    background: var(--ml-teal-dark);
+}
+
+
+/* =========================================================
+   LARGE TABLET
+========================================================= */
+
+@media (max-width: 1050px) {
+
+    .grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 800px) {
+
+    .grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 520px) {
+
+    .grid {
+        grid-template-columns:
+            minmax(0, 1fr);
+        gap: 14px;
+    }
+
+    .empty {
+        min-height: 240px;
+        padding: 30px 16px;
+    }
+
+}

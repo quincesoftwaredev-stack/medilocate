@@ -1,0 +1,114 @@
+/* =========================================================
+   BAR
+========================================================= */
+
+.bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 950;
+    width: 100%;
+    min-height: 68px;
+    padding: 10px 16px;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    box-sizing: border-box;
+    border-top: 1px solid var(--ml-gray-200);
+    background: rgba(255, 255, 255, 0.97);
+    box-shadow: var(--ml-shadow-md);
+    backdrop-filter: blur(12px);
+}
+
+
+/* =========================================================
+   INFO
+========================================================= */
+
+.info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.info span {
+    color: var(--ml-gray-600);
+    font-size: var(--ml-font-xs);
+}
+
+.info strong {
+    overflow: hidden;
+    color: var(--ml-navy);
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-semibold);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   VIEW CART
+========================================================= */
+
+.viewCart {
+    min-height: 44px;
+    flex-shrink: 0;
+    padding: 0 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    box-sizing: border-box;
+    border-radius: var(--ml-radius-sm);
+    color: var(--ml-white);
+    background: var(--ml-teal);
+    text-decoration: none;
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-semibold);
+    white-space: nowrap;
+}
+
+.viewCart svg {
+    width: 18px;
+    height: 18px;
+}
+
+.viewCart svg:last-child {
+    width: 16px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .bar {
+        display: flex;
+    }
+
+}
+
+
+@media (max-width: 400px) {
+
+    .bar {
+        min-height: 64px;
+        padding: 8px 10px;
+    }
+
+    .info strong {
+        font-size: var(--ml-font-xs);
+    }
+
+    .viewCart {
+        min-height: 40px;
+        padding: 0 10px;
+        font-size: var(--ml-font-xs);
+    }
+
+}

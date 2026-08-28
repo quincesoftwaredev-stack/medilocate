@@ -1,0 +1,98 @@
+/* =========================================================
+   WRAPPER
+========================================================= */
+
+.wrapper {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 18px;
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   CATEGORIES
+========================================================= */
+
+.categories {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 2px 2px 8px;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+}
+
+.categories::-webkit-scrollbar {
+    height: 4px;
+}
+
+.categories::-webkit-scrollbar-thumb {
+    background: var(--ml-gray-300);
+    border-radius: 999px;
+}
+
+
+/* =========================================================
+   CATEGORY
+========================================================= */
+
+.category,
+.active {
+    min-height: 38px;
+    flex: 0 0 auto;
+    padding: 0 14px;
+    border-radius: 999px;
+    box-sizing: border-box;
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-medium);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: var(--ml-transition);
+}
+
+.category {
+    border: 1px solid var(--ml-gray-200);
+    color: var(--ml-gray-600);
+    background: var(--ml-white);
+}
+
+.category:hover {
+    border-color: var(--ml-teal);
+    color: var(--ml-teal-dark);
+    background: var(--ml-teal-light);
+}
+
+.active {
+    border: 1px solid var(--ml-teal);
+    color: var(--ml-white);
+    background: var(--ml-teal);
+    font-weight: var(--ml-weight-semibold);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 520px) {
+
+    .wrapper {
+        margin-bottom: 15px;
+    }
+
+    .categories {
+        gap: 6px;
+    }
+
+    .category,
+    .active {
+        min-height: 36px;
+        padding: 0 12px;
+        font-size: var(--ml-font-xs);
+    }
+
+}

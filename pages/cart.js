@@ -181,7 +181,6 @@ export default function CartPage() {
             </Head>
 
 
-            <Navbar />
 
 
             <main className={styles.page}>
