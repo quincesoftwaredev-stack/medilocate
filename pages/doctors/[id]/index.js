@@ -14,8 +14,9 @@ import MedicalServicesOutlinedIcon from "@mui/icons-material/MedicalServicesOutl
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 
 
-
+import axios from "axios";
 import styles from "@/styles/Doctor/Profile.module.css";
+import BASE_URL from "@/config";
 
 
 /*
@@ -67,11 +68,10 @@ const formatExperience = (value) => {
         return "Experience not specified";
     }
 
-    return `${years} ${
-        years === 1
+    return `${years} ${years === 1
             ? "Year"
             : "Years"
-    } Experience`;
+        } Experience`;
 
 };
 
@@ -193,15 +193,15 @@ const normalizeDoctor = (
         education:
             doctor.education
                 ? [
-                      doctor.education,
-                  ]
+                    doctor.education,
+                ]
                 : [],
 
         experienceDetails:
             doctor.experienceDetails
                 ? [
-                      doctor.experienceDetails,
-                  ]
+                    doctor.experienceDetails,
+                ]
                 : [],
 
         specializations:
@@ -819,7 +819,7 @@ export default function DoctorProfilePage({
                                     >
 
                                         {doctor.education.length >
-                                        0 ? (
+                                            0 ? (
 
                                             doctor.education.map(
                                                 (
@@ -1285,7 +1285,7 @@ export default function DoctorProfilePage({
 
                                         {
                                             doctor.status ===
-                                            "active"
+                                                "active"
                                                 ? "Active"
                                                 : doctor.status
                                         }
@@ -1414,7 +1414,7 @@ export default function DoctorProfilePage({
             )}
 
 
-            
+
 
         </>
     );
@@ -1426,7 +1426,6 @@ export default function DoctorProfilePage({
 | SERVER SIDE DATA
 |--------------------------------------------------------------------------
 */
-
 export async function getServerSideProps(
     context
 ) {
@@ -1453,99 +1452,30 @@ export async function getServerSideProps(
 
         /*
         |--------------------------------------------------------------------------
-        | DATABASE
+        | FETCH DOCTOR FROM API
         |--------------------------------------------------------------------------
         */
 
-        const db =
-            (
-                await import(
-                    "@/database/connection"
-                )
-            ).default;
-
-
-        const Doctor =
-            (
-                await import(
-                    "@/database/model/Doctor"
-                )
-            ).default;
-
-
-        await db.connect();
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | FIND DOCTOR
-        |--------------------------------------------------------------------------
-        |
-        | Supports either:
-        |
-        | /doctors/<doctor _id>
-        |
-        | /doctors/<user _id>
-        |
-        */
-
-        let doctor;
-
-
-        const isMongoId =
-            /^[0-9a-fA-F]{24}$/.test(
-                identifier
+        const response =
+            await axios.get(
+                `${BASE_URL}/api/doctors/${identifier}`
             );
 
 
-        if (isMongoId) {
-
-            doctor =
-                await Doctor
-                    .findById(
-                        identifier
-                    )
-                    .populate(
-                        "user",
-                        "fullName firstName lastName email phone phoneNumber image gender location"
-                    )
-                    .populate(
-                        "departments",
-                        "name"
-                    )
-                    .lean();
-
-        }
+        const data =
+            response.data;
 
 
         /*
         |--------------------------------------------------------------------------
-        | FIND BY USER ID
+        | API RESPONSE CHECK
         |--------------------------------------------------------------------------
         */
 
-        if (!doctor && isMongoId) {
-
-            doctor =
-                await Doctor
-                    .findOne({
-                        user:
-                            identifier,
-                    })
-                    .populate(
-                        "user",
-                        "fullName firstName lastName email phone phoneNumber image gender location"
-                    )
-                    .populate(
-                        "departments",
-                        "name"
-                    )
-                    .lean();
-
-        }
-
-
-        if (!doctor) {
+        if (
+            !data?.success ||
+            !data?.doctor
+        ) {
 
             return {
                 notFound: true,
@@ -1556,19 +1486,196 @@ export async function getServerSideProps(
 
         /*
         |--------------------------------------------------------------------------
-        | NORMALIZE
+        | DOCTOR DATA
         |--------------------------------------------------------------------------
         */
 
-        const normalizedDoctor =
-            normalizeDoctor(
-                doctor
-            );
+        const doctor =
+            data.doctor;
+
+        const user =
+            doctor.user || {};
 
 
         /*
         |--------------------------------------------------------------------------
-        | SERIALIZE
+        | NORMALIZED DATA
+        |--------------------------------------------------------------------------
+        */
+
+        const normalizedDoctor = {
+
+            id:
+                doctor._id?.toString() ||
+                identifier,
+
+
+            name:
+                user.fullName?.trim() ||
+                [
+                    user.firstName,
+                    user.lastName,
+                ]
+                    .filter(Boolean)
+                    .join(" ")
+                    .trim() ||
+                "Doctor",
+
+
+            specialty:
+                doctor.speciality ||
+                "Medical Practitioner",
+
+
+            qualification:
+                doctor.education ||
+                "Qualification not specified",
+
+
+            experience:
+                doctor.totalExperience
+                    ? `${doctor.totalExperience} ${
+                        Number(
+                            doctor.totalExperience
+                        ) === 1
+                            ? "Year"
+                            : "Years"
+                    } Experience`
+                    : "Experience not specified",
+
+
+            location:
+                doctor.workingIn ||
+                "Location not specified",
+
+
+            chamber:
+                doctor.workingIn ||
+                "Chamber information not available",
+
+
+            address:
+                doctor.workingIn ||
+                "Address not available",
+
+
+            fee:
+                doctor.consultationFee !==
+                undefined &&
+                doctor.consultationFee !==
+                null
+                    ? `৳${doctor.consultationFee}`
+                    : "Contact for fee",
+
+
+            followUpFee:
+                doctor.followUpFee !==
+                    undefined &&
+                doctor.followUpFee !==
+                    null
+                    ? `৳${doctor.followUpFee}`
+                    : "",
+
+
+            gender:
+                user.gender ||
+                "",
+
+
+            rating:
+                doctor.rating ??
+                null,
+
+
+            reviews:
+                doctor.reviews ??
+                0,
+
+
+            available:
+                doctor.availableForHomeVisit ===
+                true,
+
+
+            image:
+                user.image ||
+                "",
+
+
+            phone:
+                user.phone ||
+                user.phoneNumber ||
+                "",
+
+
+            email:
+                user.email ||
+                "",
+
+
+            about:
+                doctor.about ||
+                "Doctor information has not been added yet.",
+
+
+            education:
+                doctor.education
+                    ? [doctor.education]
+                    : [],
+
+
+            experienceDetails:
+                doctor.experienceDetails
+                    ? [doctor.experienceDetails]
+                    : [],
+
+
+            specializations:
+                [],
+
+
+            visitingDays:
+                [],
+
+
+            bmdcNumber:
+                doctor.bmdcNumber ||
+                "",
+
+
+            departments:
+                Array.isArray(
+                    doctor.departments
+                )
+                    ? doctor.departments
+                    : [],
+
+
+            coordinates:
+                user.location?.coordinates ||
+                [],
+
+
+            createdAt:
+                doctor.createdAt ||
+                null,
+
+
+            verificationStatus:
+                doctor.verificationStatus ||
+                "pending",
+
+
+            status:
+                doctor.status ||
+                "inactive",
+
+        };
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RETURN
         |--------------------------------------------------------------------------
         */
 
@@ -1591,7 +1698,8 @@ export async function getServerSideProps(
 
         console.error(
             "Doctor profile SSR error:",
-            error
+            error.response?.data ||
+            error.message
         );
 
 
