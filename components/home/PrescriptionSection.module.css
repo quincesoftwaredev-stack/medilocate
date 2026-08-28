@@ -3,9 +3,10 @@
 ========================================================= */
 
 .section {
+    width: 100%;
     padding: 95px 0;
-
-    background: #ffffff;
+    background: var(--ml-white);
+    overflow: hidden;
 }
 
 
@@ -15,7 +16,6 @@
 
 .container {
     width: min(1180px, calc(100% - 40px));
-
     margin: 0 auto;
 }
 
@@ -26,12 +26,9 @@
 
 .grid {
     display: grid;
-
-    grid-template-columns: 1fr 0.9fr;
-
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
     align-items: center;
-
-    gap: 80px;
+    gap: 70px;
 }
 
 
@@ -40,46 +37,42 @@
 ========================================================= */
 
 .content {
+    width: 100%;
     max-width: 570px;
 }
 
 .label {
     display: block;
-
     margin-bottom: 10px;
-
-    color: #167c80;
-
-    font-size: 11px;
-    font-weight: 750;
-
+    color: var(--ml-teal);
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-bold);
     letter-spacing: 1.3px;
+    text-transform: uppercase;
 }
 
 .content h2 {
     margin: 0;
-
-    color: #173436;
-
-    font-size: clamp(32px, 4vw, 45px);
-    line-height: 1.1;
-
+    color: var(--ml-navy);
+    font-size: clamp(
+        var(--ml-heading-sm),
+        4vw,
+        45px
+    );
+    line-height: var(--ml-line-tight);
     letter-spacing: -1.7px;
 }
 
 .content h2 span {
-    color: #167c80;
+    color: var(--ml-teal);
 }
 
 .description {
     max-width: 540px;
-
     margin: 20px 0 25px;
-
-    color: #697b7c;
-
-    font-size: 14px;
-    line-height: 1.75;
+    color: var(--ml-gray-600);
+    font-size: var(--ml-font-md);
+    line-height: var(--ml-line-relaxed);
 }
 
 
@@ -90,30 +83,24 @@
 .benefits {
     display: flex;
     flex-direction: column;
-
     gap: 14px;
 }
 
 .benefit {
     display: flex;
     align-items: flex-start;
-
     gap: 11px;
 }
 
 .benefitIcon {
     width: 22px;
     height: 22px;
-
     flex-shrink: 0;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     margin-top: 1px;
-
-    color: #2ca57e;
+    color: var(--ml-teal);
 }
 
 .benefitIcon svg {
@@ -123,77 +110,66 @@
 .benefit > div:last-child {
     display: flex;
     flex-direction: column;
-
     gap: 2px;
 }
 
 .benefit strong {
-    color: #304b4d;
-
-    font-size: 12px;
-    font-weight: 700;
+    color: var(--ml-navy-light);
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-bold);
 }
 
 .benefit span {
-    color: #849394;
-
-    font-size: 10px;
-    line-height: 1.5;
+    color: var(--ml-gray-500);
+    font-size: var(--ml-font-xs);
+    line-height: var(--ml-line-normal);
 }
 
 
 /* =========================================================
    ACTION
 ========================================================= */
-
 .actions {
+    width: 100%;
+    max-width: 100%;
     margin-top: 26px;
+    box-sizing: border-box;
 }
 
 .primaryButton {
+    width: auto;
+    max-width: 100%;
+    min-height: 45px;
+    padding: 0 16px;
     display: inline-flex;
     align-items: center;
-
+    justify-content: center;
     gap: 8px;
-
-    min-height: 45px;
-
-    padding: 0 16px;
-
-    border-radius: 8px;
-
-    color: #ffffff;
-    background: #167c80;
-
-    font-size: 12px;
-    font-weight: 700;
-
+    box-sizing: border-box;
+    border-radius: var(--ml-radius-sm);
+    color: var(--ml-white);
+    background: var(--ml-teal);
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-bold);
     text-decoration: none;
-
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: var(--ml-transition);
 }
 
 .primaryButton svg:first-child {
     width: 19px;
+    flex-shrink: 0;
 }
 
 .primaryButton svg:last-child {
     width: 17px;
+    flex-shrink: 0;
 }
 
 .primaryButton:hover {
-    background: #106568;
-
+    background: var(--ml-teal-dark);
     transform: translateY(-2px);
-
-    box-shadow:
-        0 10px 25px rgba(22, 124, 128, 0.18);
+    box-shadow: var(--ml-shadow-sm);
 }
-
-
 /* =========================================================
    SECURITY
 ========================================================= */
@@ -201,20 +177,15 @@
 .security {
     display: flex;
     align-items: center;
-
     gap: 6px;
-
     margin-top: 18px;
-
-    color: #8b9b9c;
-
-    font-size: 9px;
+    color: var(--ml-gray-500);
+    font-size: var(--ml-font-xs);
 }
 
 .security svg {
     width: 16px;
-
-    color: #7ca5a2;
+    color: var(--ml-teal);
 }
 
 
@@ -224,23 +195,20 @@
 
 .visual {
     position: relative;
-
+    width: 100%;
     min-height: 440px;
-
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: visible;
 }
 
 .visualCircle {
     position: absolute;
-
     width: 380px;
     height: 380px;
-
     border-radius: 50%;
-
-    background: #e6f5f3;
+    background: var(--ml-teal-light);
 }
 
 
@@ -251,20 +219,14 @@
 .prescriptionDocument {
     position: relative;
     z-index: 2;
-
     width: 255px;
     min-height: 325px;
-
     padding: 22px;
-
-    border: 1px solid #e0eaea;
-    border-radius: 8px;
-
-    background: #ffffff;
-
-    box-shadow:
-        0 25px 60px rgba(20, 70, 72, 0.15);
-
+    box-sizing: border-box;
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-sm);
+    background: var(--ml-white);
+    box-shadow: var(--ml-shadow-lg);
     transform: rotate(-3deg);
 }
 
@@ -276,47 +238,38 @@
 .documentHeader {
     display: flex;
     align-items: center;
-
     gap: 9px;
-
     padding-bottom: 15px;
-
-    border-bottom: 1px solid #edf2f2;
+    border-bottom: 1px solid var(--ml-gray-100);
 }
 
 .documentLogo {
     width: 32px;
     height: 32px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
+    flex-shrink: 0;
     border-radius: 7px;
-
-    color: #ffffff;
-    background: #167c80;
-
-    font-size: 15px;
-    font-weight: 750;
+    color: var(--ml-white);
+    background: var(--ml-teal);
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-bold);
 }
 
 .documentHeader > div:last-child {
     display: flex;
     flex-direction: column;
-
     gap: 2px;
 }
 
 .documentHeader strong {
-    color: #304b4d;
-
-    font-size: 12px;
+    color: var(--ml-navy-light);
+    font-size: var(--ml-font-sm);
 }
 
 .documentHeader span {
-    color: #9aa8a9;
-
+    color: var(--ml-gray-500);
     font-size: 8px;
 }
 
@@ -328,11 +281,8 @@
 .doctorLine {
     display: flex;
     justify-content: space-between;
-
     padding: 15px 0 11px;
-
-    color: #7c8c8d;
-
+    color: var(--ml-gray-500);
     font-size: 7px;
 }
 
@@ -344,18 +294,14 @@
 .documentLines {
     display: flex;
     flex-direction: column;
-
     gap: 7px;
 }
 
 .documentLines span {
     display: block;
-
     height: 4px;
-
     border-radius: 5px;
-
-    background: #edf2f2;
+    background: var(--ml-gray-100);
 }
 
 .documentLines span:nth-child(1) {
@@ -386,37 +332,29 @@
 .medicineRows {
     display: flex;
     flex-direction: column;
-
     gap: 11px;
-
     margin-top: 22px;
 }
 
 .medicineRows > div {
     display: flex;
     align-items: center;
-
     gap: 8px;
 }
 
 .medicineRows > div > span:first-child {
     width: 22px;
     height: 22px;
-
     flex-shrink: 0;
-
     border-radius: 5px;
-
-    background: #e8f6f5;
+    background: var(--ml-teal-light);
 }
 
 .medicineRows > div > span:last-child {
     width: 70%;
     height: 5px;
-
     border-radius: 5px;
-
-    background: #edf2f2;
+    background: var(--ml-gray-100);
 }
 
 
@@ -427,16 +365,13 @@
 .signature {
     display: flex;
     justify-content: flex-end;
-
     margin-top: 30px;
 }
 
 .signature span {
     width: 65px;
     height: 20px;
-
-    border-bottom: 1px solid #aac4c2;
-
+    border-bottom: 1px solid var(--ml-gray-300);
     transform: rotate(-4deg);
 }
 
@@ -448,42 +383,32 @@
 .uploadBadge {
     position: absolute;
     z-index: 5;
-
     top: 70px;
-    right: 15px;
-
+    right: 10px;
     display: flex;
     align-items: center;
-
     gap: 7px;
-
     padding: 9px 11px;
-
-    border: 1px solid #e0eceb;
-    border-radius: 8px;
-
-    color: #4a6566;
-    background: #ffffff;
-
-    box-shadow:
-        0 12px 30px rgba(20, 70, 72, 0.11);
-
-    font-size: 9px;
-    font-weight: 650;
+    box-sizing: border-box;
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-sm);
+    color: var(--ml-navy-light);
+    background: var(--ml-white);
+    box-shadow: var(--ml-shadow-md);
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-semibold);
 }
 
 .uploadBadge > div {
     width: 25px;
     height: 25px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
+    flex-shrink: 0;
     border-radius: 6px;
-
-    color: #167c80;
-    background: #e8f6f5;
+    color: var(--ml-teal);
+    background: var(--ml-teal-light);
 }
 
 .uploadBadge > div svg {
@@ -492,8 +417,8 @@
 
 .uploadBadge > svg {
     width: 15px;
-
-    color: #2ca57e;
+    flex-shrink: 0;
+    color: var(--ml-teal);
 }
 
 
@@ -504,38 +429,29 @@
 .deliveryBadge {
     position: absolute;
     z-index: 5;
-
     left: 5px;
     bottom: 60px;
-
     display: flex;
     align-items: center;
-
     gap: 9px;
-
     padding: 11px 13px;
-
-    border: 1px solid #e0eceb;
-    border-radius: 9px;
-
-    background: #ffffff;
-
-    box-shadow:
-        0 14px 35px rgba(20, 70, 72, 0.12);
+    box-sizing: border-box;
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-sm);
+    background: var(--ml-white);
+    box-shadow: var(--ml-shadow-md);
 }
 
 .deliveryBadgeIcon {
     width: 34px;
     height: 34px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
+    flex-shrink: 0;
     border-radius: 8px;
-
-    color: #167c80;
-    background: #e8f6f5;
+    color: var(--ml-teal);
+    background: var(--ml-teal-light);
 }
 
 .deliveryBadgeIcon svg {
@@ -545,19 +461,16 @@
 .deliveryBadge > div:last-child {
     display: flex;
     flex-direction: column;
-
     gap: 3px;
 }
 
 .deliveryBadge strong {
-    color: #304b4d;
-
-    font-size: 10px;
+    color: var(--ml-navy-light);
+    font-size: var(--ml-font-xs);
 }
 
 .deliveryBadge span {
-    color: #8c9a9b;
-
+    color: var(--ml-gray-500);
     font-size: 8px;
 }
 
@@ -569,27 +482,20 @@
 .secureBadge {
     position: absolute;
     z-index: 5;
-
     right: 35px;
     bottom: 20px;
-
     display: flex;
     align-items: center;
-
     gap: 5px;
-
     padding: 7px 10px;
-
+    box-sizing: border-box;
+    border: 1px solid var(--ml-gray-200);
     border-radius: 7px;
-
-    color: #39736f;
-    background: rgba(255, 255, 255, 0.9);
-
+    color: var(--ml-teal-dark);
+    background: rgba(255, 255, 255, 0.92);
     font-size: 8px;
-    font-weight: 700;
-
-    box-shadow:
-        0 8px 20px rgba(20, 70, 72, 0.08);
+    font-weight: var(--ml-weight-bold);
+    box-shadow: var(--ml-shadow-sm);
 }
 
 .secureBadge svg {
@@ -603,35 +509,29 @@
 
 .process {
     margin-top: 85px;
-
     padding-top: 55px;
-
-    border-top: 1px solid #e7eeee;
+    border-top: 1px solid var(--ml-gray-200);
 }
 
 .processHeader {
     margin-bottom: 35px;
-
     text-align: center;
 }
 
 .processHeader span {
-    color: #167c80;
-
-    font-size: 10px;
-    font-weight: 750;
-
+    color: var(--ml-teal);
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-bold);
     letter-spacing: 1.2px;
+    text-transform: uppercase;
 }
 
 .processHeader h3 {
     margin: 7px 0 0;
-
-    color: #173436;
-
+    color: var(--ml-navy);
     font-size: 25px;
-    font-weight: 700;
-
+    font-weight: var(--ml-weight-bold);
+    line-height: var(--ml-line-snug);
     letter-spacing: -0.7px;
 }
 
@@ -642,20 +542,16 @@
 
 .processGrid {
     display: grid;
-
-    grid-template-columns: repeat(4, 1fr);
-
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 0;
 }
 
 .processStep {
     position: relative;
-
+    min-width: 0;
     display: flex;
     align-items: flex-start;
-
     gap: 12px;
-
     padding: 0 22px;
 }
 
@@ -675,18 +571,14 @@
 .processIcon {
     width: 43px;
     height: 43px;
-
     flex-shrink: 0;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
-    border: 1px solid #dcebea;
-    border-radius: 10px;
-
-    color: #167c80;
-    background: #f1f9f8;
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-sm);
+    color: var(--ml-teal);
+    background: var(--ml-mint);
 }
 
 .processIcon svg {
@@ -700,14 +592,11 @@
 
 .processNumber {
     position: absolute;
-
     left: 11px;
     top: -7px;
-
-    color: #d5e7e5;
-
+    color: var(--ml-gray-300);
     font-size: 8px;
-    font-weight: 750;
+    font-weight: var(--ml-weight-bold);
 }
 
 
@@ -716,24 +605,21 @@
 ========================================================= */
 
 .processContent {
+    min-width: 0;
     padding-top: 2px;
 }
 
 .processContent h4 {
     margin: 0 0 5px;
-
-    color: #304b4d;
-
-    font-size: 12px;
-    font-weight: 700;
+    color: var(--ml-navy-light);
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-bold);
 }
 
 .processContent p {
     margin: 0;
-
-    color: #879596;
-
-    font-size: 9px;
+    color: var(--ml-gray-500);
+    font-size: var(--ml-font-xs);
     line-height: 1.55;
 }
 
@@ -744,15 +630,36 @@
 
 .processArrow {
     position: absolute;
-
     right: -10px;
     top: 15px;
-
-    color: #aac5c2;
+    color: var(--ml-gray-300);
 }
 
 .processArrow svg {
     width: 17px;
+}
+
+
+/* =========================================================
+   LARGE TABLET
+========================================================= */
+
+@media (max-width: 1050px) {
+
+    .grid {
+        gap: 45px;
+    }
+
+    .visualCircle {
+        width: 330px;
+        height: 330px;
+    }
+
+    .prescriptionDocument {
+        width: 235px;
+        min-height: 305px;
+    }
+
 }
 
 
@@ -763,8 +670,7 @@
 @media (max-width: 950px) {
 
     .grid {
-        grid-template-columns: 1fr;
-
+        grid-template-columns: minmax(0, 1fr);
         gap: 50px;
     }
 
@@ -773,11 +679,34 @@
     }
 
     .visual {
-        max-width: 600px;
-
         width: 100%;
-
+        max-width: 600px;
         margin: 0 auto;
+    }
+
+    .processGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        row-gap: 35px;
+    }
+
+    .processStep {
+        padding: 0 15px;
+    }
+
+    .processStep:first-child {
+        padding-left: 15px;
+    }
+
+    .processStep:last-child {
+        padding-right: 15px;
+    }
+
+    .processStep:nth-child(odd) {
+        padding-left: 0;
+    }
+
+    .processArrow {
+        display: none;
     }
 
 }
@@ -794,7 +723,7 @@
     }
 
     .container {
-        width: calc(100% - 28px);
+        width: min(100% - 28px, 600px);
     }
 
     .content h2 {
@@ -802,38 +731,38 @@
     }
 
     .description {
-        font-size: 12px;
+        font-size: var(--ml-font-sm);
     }
 
     .visual {
-        min-height: 380px;
+        min-height: 370px;
+        max-width: 520px;
     }
 
     .visualCircle {
-        width: 320px;
-        height: 320px;
+        width: 310px;
+        height: 310px;
     }
 
     .prescriptionDocument {
         width: 220px;
         min-height: 285px;
-
         padding: 18px;
     }
 
     .uploadBadge {
+        top: 50px;
         right: 0;
-        top: 55px;
     }
 
     .deliveryBadge {
         left: 0;
-        bottom: 45px;
+        bottom: 42px;
     }
 
     .secureBadge {
         right: 5px;
-        bottom: 10px;
+        bottom: 8px;
     }
 
     .process {
@@ -842,25 +771,14 @@
     }
 
     .processGrid {
-        grid-template-columns: 1fr 1fr;
-
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         row-gap: 30px;
     }
 
-    .processStep {
-        padding: 0 10px;
-    }
-
-    .processStep:first-child {
-        padding-left: 10px;
-    }
-
-    .processStep:last-child {
+    .processStep,
+    .processStep:nth-child(odd) {
+        padding-left: 0;
         padding-right: 10px;
-    }
-
-    .processArrow {
-        display: none;
     }
 
 }
@@ -870,10 +788,32 @@
    SMALL MOBILE
 ========================================================= */
 
-@media (max-width: 430px) {
+@media (max-width: 480px) {
+
+    .section {
+        padding: 55px 0;
+    }
+
+    .container {
+        width: calc(100% - 24px);
+    }
 
     .content h2 {
         font-size: 28px;
+        letter-spacing: -1.2px;
+    }
+
+    .description {
+        font-size: var(--ml-font-sm);
+        line-height: var(--ml-line-relaxed);
+    }
+
+    .benefit {
+        gap: 9px;
+    }
+
+    .actions {
+        margin-top: 22px;
     }
 
     .primaryButton {
@@ -882,23 +822,78 @@
     }
 
     .visual {
-        transform: scale(0.92);
+        min-height: 345px;
+    }
 
-        transform-origin: center;
+    .visualCircle {
+        width: 280px;
+        height: 280px;
+    }
+
+    .prescriptionDocument {
+        width: 200px;
+        min-height: 265px;
+        padding: 16px;
+    }
+
+    .uploadBadge {
+        top: 38px;
+        right: -2px;
+        padding: 7px 9px;
+        font-size: 8px;
+    }
+
+    .deliveryBadge {
+        left: -2px;
+        bottom: 35px;
+        padding: 9px 10px;
+    }
+
+    .deliveryBadgeIcon {
+        width: 30px;
+        height: 30px;
+    }
+
+    .secureBadge {
+        right: 0;
+        bottom: 3px;
     }
 
     .processGrid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
+        row-gap: 25px;
     }
 
-    .processStep {
+    .processStep,
+    .processStep:nth-child(odd) {
         padding: 0;
     }
 
-    .processStep:first-child,
-    .processStep:last-child {
-        padding-left: 0;
-        padding-right: 0;
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .container {
+        width: calc(100% - 20px);
+    }
+
+    .content h2 {
+        font-size: 26px;
+    }
+
+    .visual {
+        min-height: 315px;
+        transform: scale(0.92);
+        transform-origin: center;
+    }
+
+    .processHeader h3 {
+        font-size: 22px;
     }
 
 }

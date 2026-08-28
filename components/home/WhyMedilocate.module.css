@@ -3,9 +3,11 @@
 ========================================================= */
 
 .section {
+    width: 100%;
     padding: 85px 0;
-
-    background: #f7fbfa;
+    background: var(--ml-mint);
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 
@@ -15,8 +17,8 @@
 
 .container {
     width: min(1180px, calc(100% - 40px));
-
     margin: 0 auto;
+    box-sizing: border-box;
 }
 
 
@@ -25,50 +27,45 @@
 ========================================================= */
 
 .header {
+    width: 100%;
     max-width: 650px;
-
     margin: 0 auto 45px;
-
     text-align: center;
+    box-sizing: border-box;
 }
 
 .label {
     display: block;
-
     margin-bottom: 10px;
-
-    color: #167c80;
-
-    font-size: 11px;
-    font-weight: 750;
-
+    color: var(--ml-teal);
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-bold);
     letter-spacing: 1.3px;
+    text-transform: uppercase;
 }
 
 .header h2 {
     margin: 0;
-
-    color: #173436;
-
-    font-size: clamp(30px, 4vw, 40px);
-    line-height: 1.15;
-
+    color: var(--ml-navy);
+    font-size: clamp(
+        var(--ml-heading-sm),
+        4vw,
+        40px
+    );
+    line-height: var(--ml-line-snug);
     letter-spacing: -1.4px;
 }
 
 .header h2 span {
-    color: #167c80;
+    color: var(--ml-teal);
 }
 
 .header p {
     max-width: 570px;
-
     margin: 14px auto 0;
-
-    color: #718182;
-
-    font-size: 13px;
-    line-height: 1.7;
+    color: var(--ml-gray-600);
+    font-size: var(--ml-font-md);
+    line-height: var(--ml-line-relaxed);
 }
 
 
@@ -77,16 +74,15 @@
 ========================================================= */
 
 .featureGrid {
+    width: 100%;
     display: grid;
-
-    grid-template-columns: repeat(4, 1fr);
-
-    border: 1px solid #deebea;
-    border-radius: 14px;
-
-    background: #ffffff;
-
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-md);
+    background: var(--ml-white);
     overflow: hidden;
+    box-sizing: border-box;
 }
 
 
@@ -96,17 +92,16 @@
 
 .feature {
     position: relative;
-
+    min-width: 0;
+    min-height: 200px;
     display: flex;
     flex-direction: column;
-
-    padding: 28px 24px;
-
-    min-height: 190px;
+    padding: 30px 25px;
+    box-sizing: border-box;
 }
 
 .feature + .feature {
-    border-left: 1px solid #e6eeee;
+    border-left: 1px solid var(--ml-gray-200);
 }
 
 
@@ -115,28 +110,22 @@
 ========================================================= */
 
 .icon {
-    width: 45px;
-    height: 45px;
-
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    margin-bottom: 18px;
-
-    border-radius: 10px;
-
-    color: #167c80;
-    background: #e9f7f6;
-
-    transition:
-        color 0.2s ease,
-        background 0.2s ease,
-        transform 0.2s ease;
+    margin-bottom: 19px;
+    border-radius: var(--ml-radius-sm);
+    color: var(--ml-teal);
+    background: var(--ml-teal-light);
+    transition: var(--ml-transition);
 }
 
 .icon svg {
     width: 23px;
+    height: 23px;
 }
 
 
@@ -144,22 +133,23 @@
    CONTENT
 ========================================================= */
 
+.featureContent {
+    min-width: 0;
+}
+
 .featureContent h3 {
     margin: 0 0 8px;
-
-    color: #304b4d;
-
-    font-size: 14px;
-    font-weight: 700;
+    color: var(--ml-navy-light);
+    font-size: var(--ml-font-lg);
+    font-weight: var(--ml-weight-bold);
+    line-height: var(--ml-line-snug);
 }
 
 .featureContent p {
     margin: 0;
-
-    color: #7b8b8c;
-
-    font-size: 11px;
-    line-height: 1.7;
+    color: var(--ml-gray-600);
+    font-size: var(--ml-font-sm);
+    line-height: var(--ml-line-relaxed);
 }
 
 
@@ -168,9 +158,8 @@
 ========================================================= */
 
 .feature:hover .icon {
-    color: #ffffff;
-    background: #167c80;
-
+    color: var(--ml-white);
+    background: var(--ml-teal);
     transform: translateY(-2px);
 }
 
@@ -180,61 +169,69 @@
 ========================================================= */
 
 .bottom {
+    width: 100%;
+    max-width: 650px;
+    min-width: 0;
     display: flex;
     align-items: center;
-
-    max-width: 650px;
-
     margin: 35px auto 0;
-
     padding: 16px 20px;
-
-    border: 1px solid #dceae8;
-    border-radius: 10px;
-
-    background: #ffffff;
+    box-sizing: border-box;
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-sm);
+    background: var(--ml-white);
+    box-shadow: var(--ml-shadow-sm);
 }
 
 .bottomIcon {
-    width: 34px;
-    height: 34px;
-
+    width: 35px;
+    height: 35px;
+    flex: 0 0 35px;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    flex-shrink: 0;
-
     border-radius: 8px;
-
-    color: #167c80;
-    background: #e9f7f6;
+    color: var(--ml-teal);
+    background: var(--ml-teal-light);
 }
 
 .bottomIcon svg {
     width: 19px;
+    height: 19px;
 }
 
 .bottomContent {
+    min-width: 0;
     display: flex;
     flex-direction: column;
-
     gap: 3px;
-
-    padding-left: 11px;
+    padding-left: 12px;
 }
 
 .bottomContent strong {
-    color: #304b4d;
-
-    font-size: 11px;
-    font-weight: 700;
+    color: var(--ml-navy-light);
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-bold);
+    line-height: var(--ml-line-snug);
 }
 
 .bottomContent span {
-    color: #8a999a;
+    color: var(--ml-gray-500);
+    font-size: var(--ml-font-xs);
+    line-height: var(--ml-line-normal);
+}
 
-    font-size: 9px;
+
+/* =========================================================
+   LARGE TABLET
+========================================================= */
+
+@media (max-width: 1050px) {
+
+    .feature {
+        padding: 27px 21px;
+    }
+
 }
 
 
@@ -249,16 +246,21 @@
     }
 
     .featureGrid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
     }
 
     .feature:nth-child(3) {
         border-left: none;
-        border-top: 1px solid #e6eeee;
+        border-top: 1px solid var(--ml-gray-200);
     }
 
     .feature:nth-child(4) {
-        border-top: 1px solid #e6eeee;
+        border-top: 1px solid var(--ml-gray-200);
+    }
+
+    .featureContent h3 {
+        font-size: var(--ml-font-md);
     }
 
 }
@@ -282,40 +284,56 @@
         margin-bottom: 35px;
     }
 
+    .label {
+        font-size: var(--ml-font-xs);
+    }
+
     .header h2 {
         font-size: 29px;
     }
 
     .header p {
-        font-size: 12px;
+        font-size: var(--ml-font-sm);
+        line-height: var(--ml-line-relaxed);
     }
 
     .featureGrid {
-        grid-template-columns: 1fr;
+        grid-template-columns:
+            minmax(0, 1fr);
     }
 
     .feature {
         min-height: 0;
-
-        padding: 22px;
+        padding: 24px 22px;
     }
 
-    .feature + .feature {
+    .feature + .feature,
+    .feature:nth-child(3),
+    .feature:nth-child(4) {
         border-left: none;
-
-        border-top: 1px solid #e6eeee;
+        border-top: 1px solid var(--ml-gray-200);
     }
 
-    .feature:nth-child(3) {
-        border-top: 1px solid #e6eeee;
+    .featureContent h3 {
+        font-size: var(--ml-font-lg);
+    }
+
+    .featureContent p {
+        font-size: var(--ml-font-sm);
     }
 
     .bottom {
         align-items: flex-start;
-
         margin-top: 25px;
+        padding: 15px;
+    }
 
-        padding: 14px;
+    .bottomContent strong {
+        font-size: var(--ml-font-sm);
+    }
+
+    .bottomContent span {
+        font-size: var(--ml-font-xs);
     }
 
 }
@@ -327,12 +345,51 @@
 
 @media (max-width: 400px) {
 
+    .container {
+        width: calc(100% - 22px);
+    }
+
     .feature {
-        padding: 20px;
+        padding: 22px 19px;
+    }
+
+    .icon {
+        width: 43px;
+        height: 43px;
+        margin-bottom: 16px;
+    }
+
+    .featureContent h3 {
+        font-size: var(--ml-font-md);
     }
 
     .featureContent p {
-        font-size: 10px;
+        font-size: var(--ml-font-sm);
+    }
+
+    .bottom {
+        padding: 13px;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 340px) {
+
+    .header h2 {
+        font-size: 26px;
+    }
+
+    .header p {
+        font-size: var(--ml-font-xs);
+    }
+
+    .feature {
+        padding: 20px 17px;
     }
 
 }

@@ -1,8 +1,10 @@
 .navbar {
     position: sticky;
     top: 0;
+    left: 0;
     z-index: 1000;
     width: 100%;
+    max-width: 100%;
     background: rgba(255, 255, 255, 0.96);
     border-bottom: 1px solid var(--ml-gray-200);
     backdrop-filter: blur(14px);
@@ -13,13 +15,16 @@
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 28px;
+    box-sizing: border-box;
 }
 
 .navbarInner {
+    width: 100%;
     min-height: 72px;
     display: flex;
     align-items: center;
     gap: 28px;
+    box-sizing: border-box;
 }
 
 
@@ -31,6 +36,7 @@
     display: flex;
     align-items: center;
     flex-shrink: 0;
+    min-width: 0;
     text-decoration: none;
 }
 
@@ -40,14 +46,14 @@
 ========================================================= */
 
 .navLinks {
-    flex: 1;
+    flex: 1 1 auto;
+    min-width: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 3px;
 }
 
-.navLink,
 .navLinks a {
     min-height: 40px;
     padding: 0 10px;
@@ -55,6 +61,7 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
+    min-width: 0;
     color: var(--ml-navy-light);
     border-radius: var(--ml-radius-sm);
     text-decoration: none;
@@ -65,9 +72,9 @@
 }
 
 .navLinks a svg {
+    flex-shrink: 0;
     font-size: 18px;
     color: var(--ml-gray-500);
-    transition: var(--ml-transition);
 }
 
 .navLinks a:hover {
@@ -91,6 +98,12 @@
     flex-shrink: 0;
 }
 
+.loginButton,
+.ctaButton {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
 .loginButton {
     min-height: 40px;
     padding: 0 12px;
@@ -102,7 +115,6 @@
     text-decoration: none;
     font-size: var(--ml-font-sm);
     font-weight: var(--ml-weight-semibold);
-    transition: var(--ml-transition);
 }
 
 .loginButton:hover {
@@ -123,8 +135,6 @@
     text-decoration: none;
     font-size: var(--ml-font-sm);
     font-weight: var(--ml-weight-semibold);
-    white-space: nowrap;
-    transition: var(--ml-transition);
 }
 
 .ctaButton svg {
@@ -133,7 +143,6 @@
 
 .ctaButton:hover {
     background: var(--ml-teal-dark);
-    box-shadow: var(--ml-shadow-sm);
 }
 
 
@@ -148,13 +157,12 @@
     display: none;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
+    flex: 0 0 42px;
     border: 1px solid var(--ml-gray-200);
     border-radius: var(--ml-radius-sm);
     background: var(--ml-white);
     color: var(--ml-navy);
     cursor: pointer;
-    transition: var(--ml-transition);
 }
 
 .menuButton:hover {
@@ -163,18 +171,20 @@
     color: var(--ml-teal-dark);
 }
 
-.menuButton svg {
-    font-size: 23px;
-}
-
 
 /* =========================================================
-   MENU OVERLAY
+   MOBILE OVERLAY
 ========================================================= */
 
 .menuOverlay {
     position: fixed;
-    inset: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100vw;
+    overflow: hidden;
     z-index: 1200;
     background: rgba(16, 32, 45, 0.35);
     opacity: 0;
@@ -183,6 +193,7 @@
     transition:
         opacity 0.25s ease,
         visibility 0.25s ease;
+    box-sizing: border-box;
 }
 
 .menuOverlayOpen {
@@ -197,16 +208,20 @@
 ========================================================= */
 
 .menuPanel {
-    width: min(380px, calc(100% - 20px));
+    width: min(380px, calc(100vw - 20px));
+    max-width: 100%;
     height: 100%;
     margin-left: auto;
     padding: 20px;
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
     background: var(--ml-white);
     box-shadow: var(--ml-shadow-lg);
     transform: translateX(100%);
     transition: transform 0.28s ease;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .menuPanelOpen {
@@ -240,6 +255,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
     border: 0;
     border-radius: var(--ml-radius-sm);
     background: var(--ml-gray-100);
@@ -249,7 +265,7 @@
 
 
 /* =========================================================
-   MENU LINKS
+   MOBILE LINKS
 ========================================================= */
 
 .mobileLinks {
@@ -260,17 +276,18 @@
 }
 
 .mobileLinks a {
+    width: 100%;
     min-height: 52px;
     padding: 0 12px;
     display: flex;
     align-items: center;
     gap: 12px;
+    box-sizing: border-box;
     border-radius: var(--ml-radius-sm);
     color: var(--ml-navy);
     text-decoration: none;
     font-size: var(--ml-font-base);
     font-weight: var(--ml-weight-medium);
-    transition: var(--ml-transition);
 }
 
 .mobileLinks a:hover {
@@ -298,41 +315,34 @@
     border-top: 1px solid var(--ml-gray-200);
 }
 
-.menuLogin {
+.menuLogin,
+.menuCta {
+    width: 100%;
     min-height: 46px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
+    box-sizing: border-box;
     border-radius: var(--ml-radius-sm);
-    background: var(--ml-gray-100);
-    color: var(--ml-navy);
     text-decoration: none;
     font-size: var(--ml-font-md);
     font-weight: var(--ml-weight-semibold);
 }
 
-.menuLogin svg {
-    font-size: 19px;
+.menuLogin {
+    gap: 7px;
+    background: var(--ml-gray-100);
+    color: var(--ml-navy);
 }
 
 .menuCta {
-    min-height: 46px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--ml-radius-sm);
     background: var(--ml-teal);
     color: var(--ml-white);
-    text-decoration: none;
-    font-size: var(--ml-font-md);
-    font-weight: var(--ml-weight-semibold);
 }
 
 
 /* =========================================================
-   MEDIUM DESKTOP
-   Hide least important link first.
+   MEDIUM
 ========================================================= */
 
 @media (max-width: 1150px) {
@@ -345,16 +355,11 @@
         display: none !important;
     }
 
-    .navLinks {
-        gap: 1px;
-    }
-
 }
 
 
 /* =========================================================
-   SMALL DESKTOP / LARGE TABLET
-   Hide prescription next.
+   TABLET
 ========================================================= */
 
 @media (max-width: 1000px) {
@@ -365,29 +370,14 @@
 
     .menuButton {
         display: flex;
-    }
-
-    .menuButton {
-        order: 3;
-    }
-
-    .navActions {
-        order: 2;
-    }
-
-    .navLinks {
-        order: 1;
-    }
-
-    .logo {
-        order: 0;
+        margin-left: 0;
     }
 
 }
 
 
 /* =========================================================
-   TABLET
+   SMALL TABLET
 ========================================================= */
 
 @media (max-width: 850px) {
@@ -398,14 +388,6 @@
 
     .trackLink {
         display: none !important;
-    }
-
-    .navLinks {
-        justify-content: flex-start;
-    }
-
-    .navActions {
-        margin-left: auto;
     }
 
 }
@@ -423,13 +405,9 @@
 
     .navbarInner {
         min-height: 64px;
-        gap: 10px;
     }
 
-    .navLinks {
-        display: none;
-    }
-
+    .navLinks,
     .navActions {
         display: none;
     }
@@ -443,7 +421,7 @@
 
 
 /* =========================================================
-   SMALL MOBILE
+   SMALL PHONE
 ========================================================= */
 
 @media (max-width: 420px) {
@@ -459,10 +437,11 @@
     .menuButton {
         width: 40px;
         height: 40px;
+        flex-basis: 40px;
     }
 
     .menuPanel {
-        width: calc(100% - 10px);
+        width: calc(100vw - 10px);
         padding: 16px;
     }
 

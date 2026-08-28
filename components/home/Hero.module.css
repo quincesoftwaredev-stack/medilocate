@@ -4,34 +4,28 @@
 
 .hero {
     position: relative;
-
+    width: 100%;
     overflow: hidden;
-
     padding: 72px 0 80px;
-
     background:
         linear-gradient(
             110deg,
-            #f6fbfa 0%,
-            #ffffff 52%,
-            #edf8f7 100%
+            var(--ml-mint) 0%,
+            var(--ml-white) 52%,
+            var(--ml-teal-light) 100%
         );
+    box-sizing: border-box;
 }
 
 .hero::before {
     content: "";
-
     position: absolute;
-
     width: 400px;
     height: 400px;
-
     right: -180px;
     top: -170px;
-
     border-radius: 50%;
-
-    background: rgba(22, 124, 128, 0.06);
+    background: rgba(15, 157, 138, 0.06);
 }
 
 
@@ -41,8 +35,8 @@
 
 .container {
     width: min(1180px, calc(100% - 40px));
-
     margin: 0 auto;
+    box-sizing: border-box;
 }
 
 
@@ -53,14 +47,11 @@
 .heroGrid {
     position: relative;
     z-index: 2;
-
     display: grid;
-
-    grid-template-columns: 1.05fr 0.95fr;
-
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
     align-items: center;
-
     gap: 70px;
+    box-sizing: border-box;
 }
 
 
@@ -69,7 +60,9 @@
 ========================================================= */
 
 .heroContent {
+    width: 100%;
     max-width: 620px;
+    min-width: 0;
 }
 
 
@@ -80,32 +73,25 @@
 .heroBadge {
     display: inline-flex;
     align-items: center;
-
     gap: 8px;
-
+    max-width: 100%;
     padding: 7px 12px;
-
     margin-bottom: 20px;
-
-    border: 1px solid #d5e9e7;
+    box-sizing: border-box;
+    border: 1px solid var(--ml-gray-200);
     border-radius: 50px;
-
-    color: #106568;
-    background: #ffffff;
-
-    font-size: 12px;
-    font-weight: 650;
+    color: var(--ml-teal-dark);
+    background: var(--ml-white);
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-semibold);
 }
 
 .heroBadge span {
     width: 7px;
     height: 7px;
-
     flex-shrink: 0;
-
     border-radius: 50%;
-
-    background: #2eaa83;
+    background: var(--ml-teal);
 }
 
 
@@ -115,23 +101,21 @@
 
 .hero h1 {
     max-width: 650px;
-
     margin: 0;
-
-    color: #173a3c;
-
-    font-size: clamp(42px, 5vw, 66px);
+    color: var(--ml-navy);
+    font-size: clamp(
+        42px,
+        5vw,
+        66px
+    );
     line-height: 1.05;
-
     letter-spacing: -2.8px;
-
-    font-weight: 760;
+    font-weight: var(--ml-weight-bold);
 }
 
 .hero h1 span {
     display: block;
-
-    color: #167c80;
+    color: var(--ml-teal);
 }
 
 
@@ -141,13 +125,10 @@
 
 .heroDescription {
     max-width: 560px;
-
     margin: 24px 0 28px;
-
-    color: #647779;
-
-    font-size: 17px;
-    line-height: 1.7;
+    color: var(--ml-gray-600);
+    font-size: var(--ml-font-lg);
+    line-height: var(--ml-line-relaxed);
 }
 
 
@@ -156,75 +137,68 @@
 ========================================================= */
 
 .heroActions {
+    width: 100%;
+    max-width: 100%;
     display: flex;
     align-items: center;
-
     gap: 12px;
-
     margin-bottom: 24px;
+    box-sizing: border-box;
 }
 
 .primaryButton,
 .secondaryButton {
+    min-width: 0;
     min-height: 46px;
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     gap: 9px;
-
     padding: 0 17px;
-
-    border-radius: 9px;
-
-    font-size: 14px;
-    font-weight: 650;
-
-    transition:
-        transform 0.2s ease,
-        background 0.2s ease,
-        box-shadow 0.2s ease;
+    box-sizing: border-box;
+    border-radius: var(--ml-radius-sm);
+    font-size: var(--ml-font-md);
+    font-weight: var(--ml-weight-semibold);
+    text-decoration: none;
+    transition: var(--ml-transition);
 }
 
 .primaryButton {
-    color: white;
-    background: #167c80;
+    color: var(--ml-white);
+    background: var(--ml-teal);
 }
 
 .primaryButton:hover {
-    background: #106568;
-
+    background: var(--ml-teal-dark);
     transform: translateY(-2px);
-
-    box-shadow: 0 12px 28px rgba(20, 100, 102, 0.18);
+    box-shadow: var(--ml-shadow-sm);
 }
 
 .primaryButton svg:first-child {
     width: 19px;
+    flex-shrink: 0;
 }
 
 .primaryButton svg:last-child {
     width: 18px;
+    flex-shrink: 0;
 }
 
 .secondaryButton {
-    color: #106568;
-    background: white;
-
-    border: 1px solid #d8e8e7;
+    color: var(--ml-teal-dark);
+    background: var(--ml-white);
+    border: 1px solid var(--ml-gray-200);
 }
 
 .secondaryButton:hover {
-    border-color: #167c80;
-
+    border-color: var(--ml-teal);
     transform: translateY(-2px);
-
-    box-shadow: 0 8px 22px rgba(20, 70, 72, 0.08);
+    box-shadow: var(--ml-shadow-sm);
 }
 
 .secondaryButton svg {
     width: 19px;
+    flex-shrink: 0;
 }
 
 
@@ -235,77 +209,62 @@
 .heroSearch {
     width: 100%;
     max-width: 600px;
-
+    min-width: 0;
     height: 52px;
-
     display: flex;
     align-items: center;
-
-    padding-left: 15px;
-
-    background: white;
-
-    border: 1px solid #dce9e8;
-    border-radius: 10px;
-
-    box-shadow: 0 4px 18px rgba(20, 70, 72, 0.06);
+    padding: 0 6px 0 15px;
+    box-sizing: border-box;
+    background: var(--ml-white);
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-sm);
+    box-shadow: var(--ml-shadow-sm);
 }
 
 .heroSearch > svg {
     flex-shrink: 0;
-
     width: 21px;
-
-    color: #839596;
+    color: var(--ml-gray-500);
 }
 
 .heroSearch input {
-    flex: 1;
-
+    flex: 1 1 auto;
     min-width: 0;
-
+    width: 100%;
     height: 100%;
-
     padding: 0 12px;
-
+    box-sizing: border-box;
     outline: none;
     border: none;
-
-    color: #173436;
+    color: var(--ml-navy);
     background: transparent;
-
-    font-size: 14px;
+    font-size: var(--ml-font-md);
 }
 
 .heroSearch input::placeholder {
-    color: #9aa8a9;
+    color: var(--ml-gray-500);
 }
 
 .heroSearch button {
     height: 40px;
-
-    flex-shrink: 0;
-
-    margin-right: 6px;
-
+    min-width: 0;
+    flex: 0 0 auto;
+    margin: 0;
     padding: 0 16px;
-
+    box-sizing: border-box;
     border: none;
     border-radius: 7px;
-
-    color: white;
-    background: #167c80;
-
-    font-size: 13px;
-    font-weight: 650;
-
+    color: var(--ml-white);
+    background: var(--ml-teal);
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-semibold);
+    white-space: nowrap;
     cursor: pointer;
-
-    transition: background 0.2s ease;
+    transition: var(--ml-transition);
 }
 
 .heroSearch button:hover {
-    background: #106568;
+    background: var(--ml-teal-dark);
 }
 
 
@@ -316,37 +275,34 @@
 .heroStats {
     display: flex;
     align-items: center;
-
     gap: 20px;
-
     margin-top: 27px;
+    max-width: 100%;
 }
 
 .heroStats > div:not(.statDivider) {
+    min-width: 0;
     display: flex;
     flex-direction: column;
-
     gap: 2px;
 }
 
 .heroStats strong {
-    color: #173436;
-
-    font-size: 18px;
-    font-weight: 750;
+    color: var(--ml-navy);
+    font-size: var(--ml-font-xl);
+    font-weight: var(--ml-weight-bold);
 }
 
 .heroStats span {
-    color: #7c8d8e;
-
-    font-size: 11px;
+    color: var(--ml-gray-500);
+    font-size: var(--ml-font-xs);
 }
 
 .statDivider {
     width: 1px;
     height: 28px;
-
-    background: #dce8e7;
+    flex-shrink: 0;
+    background: var(--ml-gray-200);
 }
 
 
@@ -356,23 +312,23 @@
 
 .heroVisual {
     position: relative;
-
+    width: 100%;
     min-height: 440px;
-
+    min-width: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
 }
 
 .heroBackgroundCircle {
     position: absolute;
-
     width: 390px;
     height: 390px;
-
+    max-width: 90%;
+    max-height: 90%;
     border-radius: 50%;
-
-    background: #dff2f0;
+    background: var(--ml-teal-light);
 }
 
 
@@ -383,21 +339,15 @@
 .heroCenterIcon {
     position: absolute;
     z-index: 2;
-
     width: 125px;
     height: 125px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     border-radius: 50%;
-
-    color: #167c80;
-    background: white;
-
-    box-shadow:
-        0 22px 55px rgba(20, 70, 72, 0.14);
+    color: var(--ml-teal);
+    background: var(--ml-white);
+    box-shadow: var(--ml-shadow-md);
 }
 
 .heroCenterIcon svg {
@@ -413,66 +363,51 @@
 .heroMedicalCard {
     position: absolute;
     z-index: 4;
-
     top: 40px;
     left: 10px;
-
     width: 245px;
-
+    max-width: calc(100% - 20px);
     padding: 17px;
-
-    border: 1px solid #e0eceb;
-    border-radius: 14px;
-
-    background: white;
-
-    box-shadow:
-        0 22px 55px rgba(20, 70, 72, 0.14);
+    box-sizing: border-box;
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-md);
+    background: var(--ml-white);
+    box-shadow: var(--ml-shadow-md);
 }
 
 .medicalCardHeader {
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    color: #819192;
-
-    font-size: 10px;
-    font-weight: 650;
-
+    color: var(--ml-gray-500);
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-semibold);
     text-transform: uppercase;
     letter-spacing: 0.7px;
 }
 
 .medicalCardHeader svg {
     width: 18px;
-
-    color: #2caa82;
+    color: var(--ml-teal);
 }
 
 .medicalCardBody {
     display: flex;
     align-items: center;
-
     gap: 11px;
-
     margin-top: 17px;
 }
 
 .doctorAvatar {
     width: 47px;
     height: 47px;
-
     flex-shrink: 0;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     border-radius: 11px;
-
-    color: #167c80;
-    background: #e9f7f6;
+    color: var(--ml-teal);
+    background: var(--ml-teal-light);
 }
 
 .doctorAvatar svg {
@@ -480,22 +415,20 @@
 }
 
 .medicalCardBody > div:last-child {
+    min-width: 0;
     display: flex;
     flex-direction: column;
-
     gap: 3px;
 }
 
 .medicalCardBody strong {
-    color: #173436;
-
-    font-size: 14px;
+    color: var(--ml-navy);
+    font-size: var(--ml-font-md);
 }
 
 .medicalCardBody span {
-    color: #8b9b9c;
-
-    font-size: 11px;
+    color: var(--ml-gray-500);
+    font-size: var(--ml-font-xs);
 }
 
 
@@ -506,22 +439,18 @@
 .cardLocation {
     display: flex;
     align-items: center;
-
     gap: 5px;
-
     margin-top: 15px;
     padding-top: 12px;
-
-    border-top: 1px solid #edf2f2;
-
-    color: #167c80;
-
-    font-size: 11px;
-    font-weight: 600;
+    border-top: 1px solid var(--ml-gray-100);
+    color: var(--ml-teal);
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-semibold);
 }
 
 .cardLocation svg {
     width: 16px;
+    flex-shrink: 0;
 }
 
 
@@ -532,42 +461,31 @@
 .heroMedicineCard {
     position: absolute;
     z-index: 4;
-
     right: 0;
     bottom: 75px;
-
     width: 260px;
-
+    max-width: calc(100% - 20px);
     display: flex;
     align-items: center;
-
     gap: 12px;
-
     padding: 15px;
-
-    border: 1px solid #e0eceb;
+    box-sizing: border-box;
+    border: 1px solid var(--ml-gray-200);
     border-radius: 13px;
-
-    background: white;
-
-    box-shadow:
-        0 22px 55px rgba(20, 70, 72, 0.14);
+    background: var(--ml-white);
+    box-shadow: var(--ml-shadow-md);
 }
 
 .medicineIcon {
     width: 43px;
     height: 43px;
-
     flex-shrink: 0;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     border-radius: 10px;
-
-    color: #167c80;
-    background: #e9f7f6;
+    color: var(--ml-teal);
+    background: var(--ml-teal-light);
 }
 
 .medicineIcon svg {
@@ -575,28 +493,26 @@
 }
 
 .heroMedicineCard > div:nth-child(2) {
+    min-width: 0;
     display: flex;
     flex-direction: column;
-
     gap: 3px;
 }
 
 .heroMedicineCard strong {
-    color: #173436;
-
-    font-size: 13px;
+    color: var(--ml-navy);
+    font-size: var(--ml-font-sm);
 }
 
 .heroMedicineCard span {
-    color: #8a999a;
-
-    font-size: 10px;
+    color: var(--ml-gray-500);
+    font-size: var(--ml-font-xs);
 }
 
 .deliveryCheck {
     margin-left: auto;
-
-    color: #2caa82;
+    flex-shrink: 0;
+    color: var(--ml-teal);
 }
 
 .deliveryCheck svg {
@@ -611,33 +527,26 @@
 .heroFloatingBadge {
     position: absolute;
     z-index: 5;
-
     right: 25px;
     top: 75px;
-
+    max-width: calc(100% - 20px);
     display: flex;
     align-items: center;
-
     gap: 6px;
-
     padding: 9px 12px;
-
-    border-radius: 8px;
-
-    color: #39736f;
-    background: white;
-
-    box-shadow:
-        0 12px 35px rgba(20, 70, 72, 0.1);
-
-    font-size: 10px;
-    font-weight: 650;
+    box-sizing: border-box;
+    border-radius: var(--ml-radius-sm);
+    color: var(--ml-teal-dark);
+    background: var(--ml-white);
+    box-shadow: var(--ml-shadow-sm);
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-semibold);
 }
 
 .heroFloatingBadge svg {
     width: 16px;
-
-    color: #2da681;
+    flex-shrink: 0;
+    color: var(--ml-teal);
 }
 
 
@@ -648,8 +557,7 @@
 @media (max-width: 1000px) {
 
     .heroGrid {
-        grid-template-columns: 1fr;
-
+        grid-template-columns: minmax(0, 1fr);
         gap: 35px;
     }
 
@@ -660,7 +568,6 @@
     .heroVisual {
         width: 100%;
         max-width: 600px;
-
         margin: 0 auto;
     }
 
@@ -687,42 +594,66 @@
 
     .hero h1 {
         font-size: 43px;
-
         letter-spacing: -2px;
     }
 
     .heroDescription {
         margin: 19px 0 23px;
-
-        font-size: 14px;
+        font-size: var(--ml-font-md);
     }
 
-    .heroActions {
-        flex-direction: column;
 
+    /* Buttons */
+
+    .heroActions {
+        width: 100%;
+        flex-direction: column;
         align-items: stretch;
+        gap: 9px;
     }
 
     .primaryButton,
     .secondaryButton {
         width: 100%;
+        max-width: 100%;
+        flex-shrink: 0;
+        box-sizing: border-box;
     }
 
+
+    /* Search */
+
     .heroSearch {
+        width: 100%;
+        max-width: 100%;
         height: 48px;
+        padding-left: 12px;
+    }
+
+    .heroSearch input {
+        padding-left: 8px;
+        padding-right: 7px;
+        font-size: var(--ml-font-sm);
     }
 
     .heroSearch button {
+        height: 36px;
         padding: 0 12px;
     }
+
+
+    /* Stats */
 
     .heroStats {
         gap: 12px;
     }
 
     .heroStats strong {
-        font-size: 16px;
+        font-size: var(--ml-font-lg);
     }
+
+
+    /* Visual */
 
     .heroVisual {
         min-height: 350px;
@@ -746,14 +677,12 @@
     .heroMedicalCard {
         top: 25px;
         left: 0;
-
         width: 205px;
     }
 
     .heroMedicineCard {
         right: 0;
         bottom: 30px;
-
         width: 220px;
     }
 
@@ -775,14 +704,89 @@
         font-size: 38px;
     }
 
-    .heroVisual {
-        transform: scale(0.92);
+    .container {
+        width: calc(100% - 24px);
+    }
 
-        transform-origin: center;
+    .heroSearch {
+        height: 46px;
+        padding-left: 10px;
+    }
+
+    .heroSearch > svg {
+        width: 19px;
+    }
+
+    .heroSearch input {
+        padding-left: 7px;
+        padding-right: 4px;
+        font-size: var(--ml-font-xs);
     }
 
     .heroSearch button {
-        font-size: 11px;
+        height: 34px;
+        padding: 0 10px;
+        font-size: var(--ml-font-xs);
+    }
+
+    .heroStats {
+        gap: 9px;
+    }
+
+    .heroStats strong {
+        font-size: var(--ml-font-md);
+    }
+
+    .heroStats span {
+        font-size: 10px;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .hero {
+        padding-top: 42px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+        letter-spacing: -1.5px;
+    }
+
+    .heroDescription {
+        font-size: var(--ml-font-sm);
+    }
+
+    .primaryButton,
+    .secondaryButton {
+        min-height: 44px;
+        padding-left: 12px;
+        padding-right: 12px;
+        font-size: var(--ml-font-sm);
+    }
+
+    .heroSearch input {
+        font-size: 10px;
+    }
+
+    .heroSearch button {
+        padding: 0 8px;
+        font-size: 10px;
+    }
+
+    .heroVisual {
+        min-height: 315px;
+    }
+
+    .heroBackgroundCircle {
+        width: 270px;
+        height: 270px;
     }
 
 }

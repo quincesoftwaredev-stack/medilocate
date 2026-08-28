@@ -1,11 +1,14 @@
+
 /* =========================================================
    SECTION
 ========================================================= */
 
 .section {
+    width: 100%;
     padding: 90px 0;
-
-    background: #ffffff;
+    background: var(--ml-white);
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 
@@ -15,8 +18,8 @@
 
 .container {
     width: min(1180px, calc(100% - 40px));
-
     margin: 0 auto;
+    box-sizing: border-box;
 }
 
 
@@ -28,49 +31,46 @@
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-
     gap: 30px;
-
     margin-bottom: 40px;
+}
+
+.header > div:first-child {
+    min-width: 0;
 }
 
 .label {
     display: block;
-
     margin-bottom: 9px;
-
-    color: #167c80;
-
-    font-size: 11px;
-    font-weight: 750;
-
-    letter-spacing: 1.3px;
+    color: var(--ml-teal);
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-bold);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
 }
 
 .header h2 {
     margin: 0;
-
-    color: #173436;
-
-    font-size: clamp(30px, 4vw, 40px);
-    line-height: 1.15;
-
+    color: var(--ml-navy);
+    font-size: clamp(
+        var(--ml-heading-sm),
+        4vw,
+        40px
+    );
+    line-height: var(--ml-line-snug);
     letter-spacing: -1.4px;
 }
 
 .header h2 span {
-    color: #167c80;
+    color: var(--ml-teal);
 }
 
 .header p {
     max-width: 560px;
-
     margin: 13px 0 0;
-
-    color: #718182;
-
-    font-size: 13px;
-    line-height: 1.65;
+    color: var(--ml-gray-600);
+    font-size: var(--ml-font-md);
+    line-height: var(--ml-line-relaxed);
 }
 
 
@@ -81,25 +81,25 @@
 .viewAll {
     display: inline-flex;
     align-items: center;
-
     flex-shrink: 0;
-
     gap: 6px;
-
     padding-bottom: 5px;
-
-    color: #167c80;
-
-    font-size: 12px;
-    font-weight: 700;
-
+    color: var(--ml-teal);
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-bold);
     text-decoration: none;
+    white-space: nowrap;
 }
 
 .viewAll svg {
     width: 17px;
-
+    height: 17px;
+    flex-shrink: 0;
     transition: transform 0.2s ease;
+}
+
+.viewAll:hover {
+    color: var(--ml-teal-dark);
 }
 
 .viewAll:hover svg {
@@ -112,10 +112,10 @@
 ========================================================= */
 
 .doctorGrid {
+    width: 100%;
     display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
     gap: 20px;
 }
 
@@ -125,13 +125,12 @@
 ========================================================= */
 
 .doctorCard {
+    min-width: 0;
     overflow: hidden;
-
-    border: 1px solid #e2eceb;
-    border-radius: 14px;
-
-    background: #ffffff;
-
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-md);
+    background: var(--ml-white);
+    box-sizing: border-box;
     transition:
         transform 0.25s ease,
         box-shadow 0.25s ease,
@@ -140,11 +139,8 @@
 
 .doctorCard:hover {
     transform: translateY(-4px);
-
-    border-color: #cfe3e1;
-
-    box-shadow:
-        0 15px 40px rgba(20, 70, 72, 0.09);
+    border-color: var(--ml-gray-300);
+    box-shadow: var(--ml-shadow-md);
 }
 
 
@@ -154,20 +150,17 @@
 
 .doctorImage {
     position: relative;
-
+    width: 100%;
     height: 190px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
-    color: #7fb4b1;
-
+    color: var(--ml-teal);
     background:
         linear-gradient(
             135deg,
-            #e9f7f6,
-            #f5faf9
+            var(--ml-teal-light),
+            var(--ml-gray-50)
         );
 }
 
@@ -178,22 +171,18 @@
 
 .verified {
     position: absolute;
-
     right: 15px;
     bottom: 15px;
-
-    width: 28px;
-    height: 28px;
-
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    border: 3px solid #ffffff;
+    box-sizing: border-box;
+    border: 3px solid var(--ml-white);
     border-radius: 50%;
-
-    color: #ffffff;
-    background: #2ba47e;
+    color: var(--ml-white);
+    background: var(--ml-teal);
 }
 
 .verified svg {
@@ -207,51 +196,81 @@
 ========================================================= */
 
 .doctorInfo {
+    min-width: 0;
     padding: 20px;
+    box-sizing: border-box;
 }
 
 .doctorInfo h3 {
     margin: 0 0 8px;
-
-    color: #173436;
-
-    font-size: 17px;
-    font-weight: 700;
-
+    overflow: hidden;
+    color: var(--ml-navy);
+    font-size: var(--ml-font-lg);
+    font-weight: var(--ml-weight-bold);
+    line-height: var(--ml-line-snug);
     letter-spacing: -0.3px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 
 /* =========================================================
-   SPECIALTY
+   SPECIALTY / LOCATION
 ========================================================= */
 
 .specialty,
 .location {
+    min-width: 0;
     display: flex;
     align-items: center;
-
     gap: 6px;
-
-    color: #6f8081;
-
-    font-size: 11px;
+    color: var(--ml-gray-600);
+    font-size: var(--ml-font-sm);
+    line-height: var(--ml-line-normal);
 }
 
 .specialty {
-    color: #167c80;
-
-    font-weight: 600;
+    color: var(--ml-teal);
+    font-weight: var(--ml-weight-semibold);
 }
 
 .specialty svg,
 .location svg {
-    width: 16px;
-    height: 16px;
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
 }
 
 .location {
     margin-top: 7px;
+}
+
+.specialty,
+.location {
+    overflow: hidden;
+}
+
+.specialty > svg,
+.location > svg {
+    flex-shrink: 0;
+}
+
+.specialty,
+.location {
+    text-overflow: ellipsis;
+}
+
+.specialty::after,
+.location::after {
+    content: "";
+}
+
+.specialty {
+    white-space: nowrap;
+}
+
+.location {
+    white-space: nowrap;
 }
 
 
@@ -261,42 +280,40 @@
 
 .stats {
     display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
     gap: 10px;
-
     margin-top: 18px;
     padding: 14px 0;
-
-    border-top: 1px solid #edf2f2;
-    border-bottom: 1px solid #edf2f2;
+    border-top: 1px solid var(--ml-gray-100);
+    border-bottom: 1px solid var(--ml-gray-100);
 }
 
 .stats > div {
+    min-width: 0;
     display: flex;
     flex-direction: column;
-
     gap: 3px;
 }
 
 .stats > div + div {
     padding-left: 12px;
-
-    border-left: 1px solid #e7eeee;
+    border-left: 1px solid var(--ml-gray-200);
 }
 
 .stats strong {
-    color: #354f51;
-
-    font-size: 12px;
-    font-weight: 700;
+    overflow: hidden;
+    color: var(--ml-navy-light);
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-bold);
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .stats span {
-    color: #9aa8a9;
-
-    font-size: 9px;
+    color: var(--ml-gray-500);
+    font-size: var(--ml-font-xs);
 }
 
 
@@ -306,40 +323,36 @@
 
 .profileButton {
     width: 100%;
-    height: 40px;
-
+    max-width: 100%;
+    height: 42px;
+    min-height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
-
     gap: 6px;
-
     margin-top: 16px;
-
-    border-radius: 7px;
-
-    color: #167c80;
-    background: #edf8f7;
-
-    font-size: 12px;
-    font-weight: 700;
-
+    padding: 0 12px;
+    box-sizing: border-box;
+    border: 1px solid transparent;
+    border-radius: var(--ml-radius-sm);
+    color: var(--ml-teal-dark);
+    background: var(--ml-teal-light);
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-bold);
     text-decoration: none;
-
-    transition:
-        background 0.2s ease,
-        color 0.2s ease;
+    transition: var(--ml-transition);
 }
 
 .profileButton svg {
     width: 16px;
-
+    height: 16px;
+    flex-shrink: 0;
     transition: transform 0.2s ease;
 }
 
 .profileButton:hover {
-    color: #ffffff;
-    background: #167c80;
+    color: var(--ml-white);
+    background: var(--ml-teal);
 }
 
 .profileButton:hover svg {
@@ -358,7 +371,8 @@
     }
 
     .doctorGrid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
     }
 
     .doctorCard:last-child {
@@ -369,14 +383,10 @@
 
 
 /* =========================================================
-   MOBILE
+   SMALL TABLET
 ========================================================= */
 
-@media (max-width: 650px) {
-
-    .section {
-        padding: 60px 0;
-    }
+@media (max-width: 700px) {
 
     .container {
         width: calc(100% - 28px);
@@ -384,7 +394,6 @@
 
     .header {
         display: block;
-
         margin-bottom: 30px;
     }
 
@@ -393,19 +402,77 @@
     }
 
     .header p {
-        font-size: 12px;
+        font-size: var(--ml-font-sm);
     }
 
     .viewAll {
         margin-top: 15px;
+        padding-bottom: 0;
     }
 
     .doctorGrid {
-        grid-template-columns: 1fr;
+        grid-template-columns:
+            minmax(0, 1fr);
     }
 
     .doctorCard:last-child {
         display: block;
+    }
+
+    .doctorImage {
+        height: 190px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .section {
+        padding: 60px 0;
+    }
+
+    .container {
+        width: calc(100% - 24px);
+    }
+
+    .header h2 {
+        font-size: 28px;
+        letter-spacing: -1.1px;
+    }
+
+    .header p {
+        font-size: var(--ml-font-sm);
+    }
+
+    .doctorImage {
+        height: 180px;
+    }
+
+    .doctorImage > svg {
+        width: 75px;
+        height: 75px;
+    }
+
+    .doctorInfo {
+        padding: 18px;
+    }
+
+    .doctorInfo h3 {
+        font-size: var(--ml-font-lg);
+    }
+
+    .specialty,
+    .location {
+        font-size: var(--ml-font-sm);
+    }
+
+    .stats strong {
+        font-size: var(--ml-font-sm);
     }
 
 }
@@ -417,12 +484,64 @@
 
 @media (max-width: 400px) {
 
+    .container {
+        width: calc(100% - 20px);
+    }
+
     .doctorImage {
         height: 170px;
     }
 
     .doctorInfo {
         padding: 17px;
+    }
+
+    .doctorInfo h3 {
+        font-size: var(--ml-font-md);
+    }
+
+    .specialty,
+    .location {
+        font-size: var(--ml-font-xs);
+    }
+
+    .stats {
+        gap: 8px;
+    }
+
+    .stats > div + div {
+        padding-left: 9px;
+    }
+
+    .stats strong {
+        font-size: var(--ml-font-sm);
+    }
+
+    .profileButton {
+        height: 40px;
+        min-height: 40px;
+        font-size: var(--ml-font-sm);
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 340px) {
+
+    .container {
+        width: calc(100% - 18px);
+    }
+
+    .header h2 {
+        font-size: 25px;
+    }
+
+    .doctorImage {
+        height: 155px;
     }
 
 }
