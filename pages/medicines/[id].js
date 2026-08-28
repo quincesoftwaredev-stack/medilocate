@@ -41,6 +41,7 @@ import {
 } from "@/redux/cartSlice";
 
 import axios from "axios";
+import BASE_URL from "@/config";
 
 
 /*
@@ -48,11 +49,6 @@ import axios from "axios";
 | API BASE URL
 |--------------------------------------------------------------------------
 */
-
-const BASE_URL =
-    process.env.NEXT_PUBLIC_API_URL ||
-    "http://localhost:3000";
-
 
 /*
 |--------------------------------------------------------------------------
