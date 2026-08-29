@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
@@ -137,6 +138,9 @@ const getOrderStatus = (status) => {
 
 export default function ProfilePage() {
 
+    const router = useRouter();
+    const profileId = router.query.id;
+
     return (
         <>
             <Head>
@@ -246,7 +250,7 @@ export default function ProfilePage() {
 
 
                                     <Link
-                                        href="/profile/edit"
+                                        href={`/profile/update/${profileId}`}
                                         className={
                                             styles.editButton
                                         }
@@ -385,7 +389,7 @@ export default function ProfilePage() {
 
 
                         <Link
-                            href="/prescriptions"
+                            href="/prescription"
                             className={styles.statCard}
                         >
 
@@ -419,7 +423,7 @@ export default function ProfilePage() {
 
 
                         <Link
-                            href="/profile/addresses"
+                            href={`/user/${profileId}/address`}
                             className={styles.statCard}
                         >
 
@@ -666,7 +670,7 @@ export default function ProfilePage() {
 
 
                                     <Link
-                                        href="/medicines/prescription"
+                                        href="/prescription"
                                         className={
                                             styles.prescriptionButton
                                         }
@@ -718,7 +722,7 @@ export default function ProfilePage() {
 
 
                                     <Link
-                                        href="/profile/edit"
+                                        href={`/profile/update/${profileId}`}
                                         className={
                                             styles.iconEdit
                                         }
@@ -874,7 +878,7 @@ export default function ProfilePage() {
 
 
                                     <Link
-                                        href="/prescriptions"
+                                        href="/prescription"
                                     >
 
                                         <div
@@ -907,7 +911,7 @@ export default function ProfilePage() {
 
 
                                     <Link
-                                        href="/profile/addresses"
+                                        href={`/user/${profileId}/address`}
                                     >
 
                                         <div
@@ -940,7 +944,7 @@ export default function ProfilePage() {
 
 
                                     <Link
-                                        href="/profile/settings"
+                                        href={`/profile/update/${profileId}`}
                                     >
 
                                         <div

@@ -348,7 +348,7 @@ export default function PrescriptionSuccessPage() {
                         ================================================== */}
 
                         <Link
-                            href={`/medicines/prescription/${requestId}`}
+                            href={`/prescription/${requestId}`}
                             className={styles.trackLink}
                         >
 

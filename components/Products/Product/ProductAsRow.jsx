@@ -15,7 +15,7 @@ const ProductAsRow = ({ item, redirect, rowDirection }) => {
     const userInfo = useSelector(state => state.user.userInfo)
     const router = useRouter()
     const handleClick = () => {
-        redirect && router.push(`/product/${item.slug}`)
+        redirect && router.push('/medicines')
         dispatch(handleViewProduct(item))
     }
 

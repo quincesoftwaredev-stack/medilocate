@@ -472,8 +472,6 @@ export default function OrderDetailsPage({
                 </main>
 
 
-                <Footer />
-
             </>
 
         );
@@ -1162,7 +1160,6 @@ export default function OrderDetailsPage({
             </Head>
 
 
-            <Navbar />
 
 
             <main className={styles.page}>

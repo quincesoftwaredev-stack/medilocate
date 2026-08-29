@@ -66,7 +66,7 @@ const Footer = () => {
             </div>
             <div
               className={styles.link}
-              onClick={() => router.push('/terms-and-conditions')}
+              onClick={() => router.push('/terms')}
             >
               Terms and Conditions
             </div>

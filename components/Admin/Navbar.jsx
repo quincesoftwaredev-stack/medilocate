@@ -22,7 +22,7 @@ const Navbar = () => {
       <div className={styles.right}>
         <div
           className={styles.item}
-          onClick={() => router.push(`/admin/order`)}
+          onClick={() => router.push(`/admin/orders`)}
         >
           <Image
             src='https://cdn-icons-png.flaticon.com/128/15414/15414285.png'

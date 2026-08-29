@@ -13,7 +13,7 @@ const Grid = ({ items }) => {
     return (
         <div className={styles.wrapper}>
             {items ? items.slice(0, 12)?.map((c, index) => (
-                <div className={styles.category} onClick={() => router.push(`/dr/?categories=${c._id}`)} onDoubleClick={() => userInfo?.role == "admin" && router.push(`/admin/category/create?id=${c._id}`)}>
+                <div className={styles.category} onClick={() => router.push(`/dr/?categories=${c._id}`)} onDoubleClick={() => userInfo?.role == "admin" && router.push(`/admin/department/create?id=${c._id}`)}>
                     <div className={styles.icon}>
                         <Image src={c?.image} width={50} height={50} alt="" />
                     </div>

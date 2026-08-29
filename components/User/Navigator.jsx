@@ -11,9 +11,12 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useRouter } from 'next/router'
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
+import { useSelector } from 'react-redux'
 
 const Navigator = () => {
   const router = useRouter()
+  const userInfo = useSelector(state => state.user.userInfo)
+  const userId = userInfo?.id || userInfo?._id
   return (
     <div className={styles.wrapper}>
       <div className={styles.top}>
@@ -35,7 +38,7 @@ const Navigator = () => {
           </div>
           <div className={styles.title}>Admin Panel</div>
         </div>
-        <div className={styles.item} onClick={() => router.push('/dashobard')}>
+        <div className={styles.item} onClick={() => router.push(userId ? `/user/${userId}/dashboard` : '/login')}>
           <div className={styles.icon}>
             <DashboardIcon />
           </div>
@@ -49,7 +52,7 @@ const Navigator = () => {
         </div>
         <div
           className={styles.item}
-          onClick={() => router.push('/user/08503253/orders')}
+          onClick={() => router.push(userId ? `/user/${userId}/orders` : '/login')}
         >
           <div className={styles.icon}>
             <AssignmentTurnedInIcon />

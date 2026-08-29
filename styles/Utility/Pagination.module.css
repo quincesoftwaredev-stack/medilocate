@@ -2,13 +2,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
-.flex * {
-    color: var(--hoverButtonBg)
+.flex :global(.MuiPagination-ul) {
+    justify-content: center;
+    row-gap: 8px;
 }
 
-.flex button {
-    border-radius: 0px;
+@media (max-width: 480px) {
+    .flex :global(.MuiPaginationItem-root) {
+        min-width: 34px;
+        height: 34px;
+        margin: 0 2px;
+    }
 }

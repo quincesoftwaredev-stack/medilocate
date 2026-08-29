@@ -26,7 +26,7 @@ handler.post(async (req, res) => {
       { new: true } // Return the updated document
     )
 
-    res.status(200).redirect(`/order/${orderId}`)
+    res.status(200).redirect(`/orders/${orderId}`)
   } catch (error) {
     console.log(error)
   }

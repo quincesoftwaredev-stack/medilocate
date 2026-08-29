@@ -1,7 +1,12 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useMemo, useState } from "react";
+import {
+    useMemo,
+    useState,
+} from "react";
+
+import { useDispatch } from "react-redux";
 import axios from "axios";
 
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
@@ -24,7 +29,11 @@ import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
+import {
+    showSnackBar,
+} from "@/redux/notistackSlice";
 
 import styles from "@/styles/Admin/Prescriptions/PrescriptionReview.module.css";
 
@@ -35,44 +44,76 @@ import styles from "@/styles/Admin/Prescriptions/PrescriptionReview.module.css";
 |--------------------------------------------------------------------------
 */
 
-const getStatusMeta = (status) => {
+const getStatusMeta = (
+    status
+) => {
 
     switch (status) {
 
         case "pending":
+
             return {
-                label: "Pending Review",
-                className: "pending",
+                label:
+                    "Pending Review",
+
+                className:
+                    "pending",
             };
+
 
         case "reviewing":
+
             return {
-                label: "Reviewing",
-                className: "reviewing",
+                label:
+                    "Reviewing",
+
+                className:
+                    "reviewing",
             };
+
 
         case "order_created":
+
             return {
-                label: "Order Created",
-                className: "orderCreated",
+                label:
+                    "Order Created",
+
+                className:
+                    "orderCreated",
             };
+
 
         case "completed":
+
             return {
-                label: "Completed",
-                className: "completed",
+                label:
+                    "Completed",
+
+                className:
+                    "completed",
             };
+
 
         case "rejected":
+
             return {
-                label: "Rejected",
-                className: "rejected",
+                label:
+                    "Rejected",
+
+                className:
+                    "rejected",
             };
 
+
         default:
+
             return {
-                label: status || "Pending Review",
-                className: "pending",
+                label:
+                    status ||
+                    "Pending Review",
+
+                className:
+                    "pending",
             };
 
     }
@@ -82,34 +123,264 @@ const getStatusMeta = (status) => {
 
 /*
 |--------------------------------------------------------------------------
-| DATE FORMAT
+| DATE
 |--------------------------------------------------------------------------
 */
 
-const formatDate = (date) => {
+const formatDate = (
+    date
+) => {
 
     if (!date) {
+
         return "N/A";
+
     }
+
 
     try {
 
-        return new Date(date).toLocaleString(
+        return new Date(
+            date
+        ).toLocaleString(
             "en-BD",
             {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
+
+                day:
+                    "2-digit",
+
+                month:
+                    "short",
+
+                year:
+                    "numeric",
+
+                hour:
+                    "2-digit",
+
+                minute:
+                    "2-digit",
+
             }
         );
+
 
     } catch {
 
         return "N/A";
 
     }
+
+};
+
+
+/*
+|--------------------------------------------------------------------------
+| BUILD ORDER ITEMS
+|--------------------------------------------------------------------------
+|
+| Before order creation:
+|
+| prescription.medicines
+|
+| After order creation:
+|
+| prescription.order.items
+|
+*/
+
+const buildInitialOrderItems = (
+    prescription,
+    medicines = []
+) => {
+
+    const existingOrderItems =
+        prescription
+            ?.order
+            ?.items;
+
+
+    const prescriptionItems =
+        prescription
+            ?.medicines;
+
+
+    const sourceItems =
+        Array.isArray(
+            existingOrderItems
+        ) &&
+        existingOrderItems.length
+
+            ? existingOrderItems
+
+            : Array.isArray(
+                prescriptionItems
+            )
+
+                ? prescriptionItems
+
+                : [];
+
+
+    return sourceItems
+
+        .map(
+            (
+                item
+            ) => {
+
+                /*
+                |--------------------------------------------------------------------------
+                | MEDICINE VALUE
+                |--------------------------------------------------------------------------
+                */
+
+                const medicineValue =
+                    item?.medicine;
+
+
+                const medicineObject =
+                    medicineValue &&
+                    typeof medicineValue ===
+                        "object"
+
+                        ? medicineValue
+
+                        : null;
+
+
+                const medicineId =
+                    medicineObject?._id ||
+
+                    medicineValue ||
+
+                    item?.medicineId ||
+
+                    item?.id;
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | CATALOG FALLBACK
+                |--------------------------------------------------------------------------
+                */
+
+                const catalogMedicine =
+                    medicines.find(
+                        (
+                            medicine
+                        ) =>
+
+                            String(
+                                medicine._id
+                            ) ===
+                            String(
+                                medicineId
+                            )
+                    );
+
+
+                return {
+
+                    id:
+                        medicineId
+
+                            ? String(
+                                medicineId
+                            )
+
+                            : "",
+
+
+                    name:
+
+                        item?.name ||
+
+                        medicineObject
+                            ?.name ||
+
+                        catalogMedicine
+                            ?.name ||
+
+                        "",
+
+
+                    genericName:
+
+                        item?.genericName ||
+
+                        medicineObject
+                            ?.genericName ||
+
+                        catalogMedicine
+                            ?.genericName ||
+
+                        "",
+
+
+                    strength:
+
+                        item?.strength ||
+
+                        medicineObject
+                            ?.strength ||
+
+                        catalogMedicine
+                            ?.strength ||
+
+                        "",
+
+
+                    unit:
+
+                        item?.unit ||
+
+                        medicineObject
+                            ?.unit ||
+
+                        catalogMedicine
+                            ?.unit ||
+
+                        "",
+
+
+                    price:
+                        Number(
+
+                            item?.unitPrice ??
+
+                            item?.price ??
+
+                            medicineObject
+                                ?.price ??
+
+                            catalogMedicine
+                                ?.price ??
+
+                            0
+
+                        ),
+
+
+                    quantity:
+                        Number(
+                            item?.quantity ||
+                            1
+                        ),
+
+                };
+
+            }
+        )
+
+        .filter(
+            (
+                item
+            ) =>
+                Boolean(
+                    item.id
+                )
+        );
 
 };
 
@@ -125,7 +396,58 @@ export default function PrescriptionReviewPage({
     medicines = [],
 }) {
 
-    const router = useRouter();
+    const router =
+        useRouter();
+
+
+    const dispatch =
+        useDispatch();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ORDER STATE
+    |--------------------------------------------------------------------------
+    */
+
+    const orderAlreadyCreated =
+        Boolean(
+            prescription
+                ?.order
+                ?._id
+        ) ||
+
+        prescription?.status ===
+            "order_created" ||
+
+        prescription?.status ===
+            "completed";
+
+
+    const isRejected =
+        prescription?.status ===
+        "rejected";
+
+
+    const isCompleted =
+        prescription?.status ===
+        "completed";
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | CAN EDIT ORDER
+    |--------------------------------------------------------------------------
+    |
+    | Created orders remain editable.
+    |
+    | Completed / rejected requests are locked.
+    |
+    */
+
+    const canEditOrder =
+        !isRejected &&
+        !isCompleted;
 
 
     /*
@@ -134,80 +456,149 @@ export default function PrescriptionReviewPage({
     |--------------------------------------------------------------------------
     */
 
-    const [currentPage, setCurrentPage] =
-        useState(0);
+    const [
+        currentPage,
+        setCurrentPage,
+    ] =
+        useState(
+            0
+        );
 
-    const [zoom, setZoom] =
-        useState(100);
 
-    const [rotation, setRotation] =
-        useState(0);
+    const [
+        zoom,
+        setZoom,
+    ] =
+        useState(
+            100
+        );
+
+
+    const [
+        rotation,
+        setRotation,
+    ] =
+        useState(
+            0
+        );
 
 
     /*
     |--------------------------------------------------------------------------
-    | MEDICINE ORDER
+    | ORDER ITEMS
     |--------------------------------------------------------------------------
     */
 
-    const [orderItems, setOrderItems] =
+    const [
+        orderItems,
+        setOrderItems,
+    ] =
         useState(
-            (prescription?.medicines || []).map(
-                (item) => ({
-                    id:
-                        item.medicine?._id ||
-                        item.medicine ||
-                        item.id,
-
-                    name:
-                        item.name || "",
-
-                    genericName:
-                        item.genericName || "",
-
-                    strength:
-                        item.strength || "",
-
-                    unit:
-                        item.unit || "",
-
-                    price:
-                        Number(item.price || 0),
-
-                    quantity:
-                        Number(item.quantity || 1),
-                })
-            )
+            () =>
+                buildInitialOrderItems(
+                    prescription,
+                    medicines
+                )
         );
 
 
-    const [medicineSearch, setMedicineSearch] =
-        useState("");
+    /*
+    |--------------------------------------------------------------------------
+    | MEDICINE SEARCH
+    |--------------------------------------------------------------------------
+    */
 
-
-    const [deliveryFee, setDeliveryFee] =
+    const [
+        medicineSearch,
+        setMedicineSearch,
+    ] =
         useState(
-            prescription?.order?.deliveryFee ??
+            ""
+        );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DELIVERY FEE
+    |--------------------------------------------------------------------------
+    */
+
+    const [
+        deliveryFee,
+        setDeliveryFee,
+    ] =
+        useState(
+
+            prescription
+                ?.order
+                ?.deliveryFee ??
+
             50
+
         );
 
 
-    const [adminNote, setAdminNote] =
+    /*
+    |--------------------------------------------------------------------------
+    | ADMIN NOTE
+    |--------------------------------------------------------------------------
+    */
+
+    const [
+        adminNote,
+        setAdminNote,
+    ] =
         useState(
-            prescription?.internalNote || ""
+
+            prescription
+                ?.order
+                ?.adminNote ||
+
+            prescription
+                ?.internalNote ||
+
+            ""
+
         );
 
 
-    const [rejectReason, setRejectReason] =
-        useState("");
+    /*
+    |--------------------------------------------------------------------------
+    | REJECTION
+    |--------------------------------------------------------------------------
+    */
+
+    const [
+        rejectReason,
+        setRejectReason,
+    ] =
+        useState(
+            ""
+        );
 
 
-    const [showRejectModal, setShowRejectModal] =
-        useState(false);
+    const [
+        showRejectModal,
+        setShowRejectModal,
+    ] =
+        useState(
+            false
+        );
 
 
-    const [submitting, setSubmitting] =
-        useState(false);
+    /*
+    |--------------------------------------------------------------------------
+    | SUBMIT
+    |--------------------------------------------------------------------------
+    */
+
+    const [
+        submitting,
+        setSubmitting,
+    ] =
+        useState(
+            false
+        );
 
 
     /*
@@ -217,7 +608,9 @@ export default function PrescriptionReviewPage({
     */
 
     const currentFile =
-        prescription?.files?.[currentPage];
+        prescription
+            ?.files
+            ?.[currentPage];
 
 
     /*
@@ -227,64 +620,106 @@ export default function PrescriptionReviewPage({
     */
 
     const filteredCatalog =
-        useMemo(() => {
+        useMemo(
+            () => {
 
-            const query =
-                medicineSearch
-                    .trim()
-                    .toLowerCase();
-
-
-            if (!query) {
-                return [];
-            }
+                const query =
+                    medicineSearch
+                        .trim()
+                        .toLowerCase();
 
 
-            return medicines.filter(
-                (medicine) => {
+                if (!query) {
 
-                    return (
-                        medicine.name
-                            ?.toLowerCase()
-                            .includes(query) ||
-
-                        medicine.genericName
-                            ?.toLowerCase()
-                            .includes(query) ||
-
-                        medicine.strength
-                            ?.toLowerCase()
-                            .includes(query)
-                    );
+                    return [];
 
                 }
-            );
 
-        }, [
-            medicineSearch,
-            medicines,
-        ]);
+
+                return medicines
+
+                    .filter(
+                        (
+                            medicine
+                        ) => {
+
+                            return (
+
+                                medicine
+                                    .name
+                                    ?.toLowerCase()
+                                    .includes(
+                                        query
+                                    ) ||
+
+                                medicine
+                                    .genericName
+                                    ?.toLowerCase()
+                                    .includes(
+                                        query
+                                    ) ||
+
+                                medicine
+                                    .strength
+                                    ?.toLowerCase()
+                                    .includes(
+                                        query
+                                    )
+
+                            );
+
+                        }
+                    )
+
+                    .slice(
+                        0,
+                        15
+                    );
+
+            },
+            [
+                medicineSearch,
+                medicines,
+            ]
+        );
 
 
     /*
     |--------------------------------------------------------------------------
-    | TOTALS
+    | CALCULATIONS
     |--------------------------------------------------------------------------
     */
 
     const subtotal =
         orderItems.reduce(
-            (total, item) =>
+            (
+                total,
+                item
+            ) =>
+
                 total +
-                Number(item.price || 0) *
-                Number(item.quantity || 0),
+
+                Number(
+                    item.price ||
+                    0
+                ) *
+
+                Number(
+                    item.quantity ||
+                    0
+                ),
+
             0
         );
 
 
     const total =
         subtotal +
-        Number(deliveryFee || 0);
+
+        Number(
+            deliveryFee ||
+            0
+        );
 
 
     /*
@@ -293,70 +728,132 @@ export default function PrescriptionReviewPage({
     |--------------------------------------------------------------------------
     */
 
-    const addMedicine = (medicine) => {
+    const addMedicine = (
+        medicine
+    ) => {
+
+        if (
+            !canEditOrder
+        ) {
+
+            return;
+
+        }
+
 
         setOrderItems(
-            (previous) => {
+            (
+                previous
+            ) => {
 
                 const existing =
                     previous.find(
-                        (item) =>
-                            item.id ===
-                            medicine._id
+                        (
+                            item
+                        ) =>
+
+                            String(
+                                item.id
+                            ) ===
+                            String(
+                                medicine._id
+                            )
                     );
 
 
-                if (existing) {
+                /*
+                |--------------------------------------------------------------------------
+                | ALREADY EXISTS → INCREASE
+                |--------------------------------------------------------------------------
+                */
+
+                if (
+                    existing
+                ) {
 
                     return previous.map(
-                        (item) =>
-                            item.id ===
-                            medicine._id
+                        (
+                            item
+                        ) =>
+
+                            String(
+                                item.id
+                            ) ===
+                            String(
+                                medicine._id
+                            )
+
                                 ? {
-                                      ...item,
-                                      quantity:
-                                          item.quantity +
-                                          1,
-                                  }
+
+                                    ...item,
+
+                                    quantity:
+                                        Number(
+                                            item.quantity
+                                        ) +
+                                        1,
+
+                                }
+
                                 : item
                     );
 
                 }
 
 
+                /*
+                |--------------------------------------------------------------------------
+                | ADD NEW
+                |--------------------------------------------------------------------------
+                */
+
                 return [
+
                     ...previous,
 
                     {
+
                         id:
-                            medicine._id,
+                            String(
+                                medicine._id
+                            ),
 
                         name:
-                            medicine.name,
+                            medicine.name ||
+                            "",
 
                         genericName:
-                            medicine.genericName || "",
+                            medicine.genericName ||
+                            "",
 
                         strength:
-                            medicine.strength || "",
+                            medicine.strength ||
+                            "",
 
                         unit:
-                            medicine.unit || "",
+                            medicine.unit ||
+                            "",
 
                         price:
                             Number(
-                                medicine.price || 0
+                                medicine.price ||
+                                0
                             ),
 
-                        quantity: 1,
+                        quantity:
+                            1,
+
                     },
+
                 ];
 
             }
         );
 
 
-        setMedicineSearch("");
+        setMedicineSearch(
+            ""
+        );
 
     };
 
@@ -367,19 +864,44 @@ export default function PrescriptionReviewPage({
     |--------------------------------------------------------------------------
     */
 
-    const increaseQuantity = (id) => {
+    const increaseQuantity = (
+        id
+    ) => {
+
+        if (
+            !canEditOrder
+        ) {
+
+            return;
+
+        }
+
 
         setOrderItems(
-            (previous) =>
+            (
+                previous
+            ) =>
+
                 previous.map(
-                    (item) =>
-                        item.id === id
+                    (
+                        item
+                    ) =>
+
+                        item.id ===
+                        id
+
                             ? {
-                                  ...item,
-                                  quantity:
-                                      item.quantity +
-                                      1,
-                              }
+
+                                ...item,
+
+                                quantity:
+                                    Number(
+                                        item.quantity
+                                    ) +
+                                    1,
+
+                            }
+
                             : item
                 )
         );
@@ -393,25 +915,55 @@ export default function PrescriptionReviewPage({
     |--------------------------------------------------------------------------
     */
 
-    const decreaseQuantity = (id) => {
+    const decreaseQuantity = (
+        id
+    ) => {
+
+        if (
+            !canEditOrder
+        ) {
+
+            return;
+
+        }
+
 
         setOrderItems(
-            (previous) =>
+            (
                 previous
+            ) =>
+
+                previous
+
                     .map(
-                        (item) =>
-                            item.id === id
+                        (
+                            item
+                        ) =>
+
+                            item.id ===
+                            id
+
                                 ? {
-                                      ...item,
-                                      quantity:
-                                          item.quantity -
-                                          1,
-                                  }
+
+                                    ...item,
+
+                                    quantity:
+                                        Number(
+                                            item.quantity
+                                        ) -
+                                        1,
+
+                                }
+
                                 : item
                     )
+
                     .filter(
-                        (item) =>
-                            item.quantity > 0
+                        (
+                            item
+                        ) =>
+                            item.quantity >
+                            0
                     )
         );
 
@@ -420,17 +972,34 @@ export default function PrescriptionReviewPage({
 
     /*
     |--------------------------------------------------------------------------
-    | REMOVE
+    | REMOVE MEDICINE
     |--------------------------------------------------------------------------
     */
 
-    const removeMedicine = (id) => {
+    const removeMedicine = (
+        id
+    ) => {
+
+        if (
+            !canEditOrder
+        ) {
+
+            return;
+
+        }
+
 
         setOrderItems(
-            (previous) =>
+            (
+                previous
+            ) =>
+
                 previous.filter(
-                    (item) =>
-                        item.id !== id
+                    (
+                        item
+                    ) =>
+                        item.id !==
+                        id
                 )
         );
 
@@ -439,86 +1008,295 @@ export default function PrescriptionReviewPage({
 
     /*
     |--------------------------------------------------------------------------
-    | CREATE ORDER
+    | CREATE / UPDATE ORDER
     |--------------------------------------------------------------------------
     */
 
-   const handleCreateOrder = async () => {
+    const handleSaveOrder =
+        async () => {
 
-    if (!orderItems.length) {
+            /*
+            |--------------------------------------------------------------------------
+            | LOCKED
+            |--------------------------------------------------------------------------
+            */
 
-        alert(
-            "Please add at least one medicine."
-        );
+            if (
+                !canEditOrder
+            ) {
 
-        return;
-    }
+                dispatch(
+                    showSnackBar({
 
-    try {
+                        message:
+                            "This order can no longer be edited.",
 
-        setSubmitting(true);
+                        option: {
+                            variant:
+                                "error",
+                        },
 
-        const response =
-            await axios.post(
-                `/api/admin/prescriptions/${router.query.id}/create-order`,
-                {
-                    items:
-                        orderItems.map(
-                            (item) => ({
-                                medicine:
-                                    item.id,
+                    })
+                );
 
-                                quantity:
-                                    item.quantity,
-                            })
-                        ),
 
-                    deliveryFee:
-                        Number(
-                            deliveryFee || 0
-                        ),
+                return;
 
-                    adminNote:
-                        adminNote || "",
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | ITEMS REQUIRED
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                !orderItems.length
+            ) {
+
+                dispatch(
+                    showSnackBar({
+
+                        message:
+                            "Please add at least one medicine.",
+
+                        option: {
+                            variant:
+                                "error",
+                        },
+
+                    })
+                );
+
+
+                return;
+
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | PAYLOAD
+            |--------------------------------------------------------------------------
+            */
+
+            const payload = {
+
+                items:
+                    orderItems.map(
+                        (
+                            item
+                        ) => ({
+
+                            medicine:
+                                item.id,
+
+                            quantity:
+                                Number(
+                                    item.quantity
+                                ),
+
+                        })
+                    ),
+
+
+                deliveryFee:
+                    Number(
+                        deliveryFee ||
+                        0
+                    ),
+
+
+                adminNote:
+                    adminNote.trim(),
+
+            };
+
+
+            try {
+
+                setSubmitting(
+                    true
+                );
+
+
+                let response;
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | UPDATE EXISTING ORDER
+                |--------------------------------------------------------------------------
+                */
+
+                if (
+                    orderAlreadyCreated
+                ) {
+
+                    response =
+                        await axios.patch(
+
+                            `/api/admin/prescriptions/${router.query.id}/create-order`,
+
+                            payload
+
+                        );
+
                 }
-            );
 
-        if (
-            !response.data?.success
-        ) {
-            throw new Error(
-                response.data?.message ||
-                "Failed to create order."
-            );
-        }
 
-        alert(
-            `Order created successfully.\nTracking: ${response.data.order.trackingNumber}`
-        );
+                /*
+                |--------------------------------------------------------------------------
+                | CREATE NEW ORDER
+                |--------------------------------------------------------------------------
+                */
 
-        router.push(
-            "/admin/prescriptions"
-        );
+                else {
 
-    } catch (error) {
+                    response =
+                        await axios.post(
 
-        console.error(
-            "Create order error:",
-            error?.response?.data ||
-            error
-        );
+                            `/api/admin/prescriptions/${router.query.id}/create-order`,
 
-        alert(
-            error?.response?.data?.message ||
-            "Failed to create order."
-        );
+                            payload
 
-    } finally {
+                        );
 
-        setSubmitting(false);
+                }
 
-    }
-};
+
+                /*
+                |--------------------------------------------------------------------------
+                | VALIDATE RESPONSE
+                |--------------------------------------------------------------------------
+                */
+
+                if (
+                    !response
+                        ?.data
+                        ?.success
+                ) {
+
+                    throw new Error(
+
+                        response
+                            ?.data
+                            ?.message ||
+
+                        orderAlreadyCreated
+
+                            ? "Failed to update order."
+
+                            : "Failed to create order."
+
+                    );
+
+                }
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | SUCCESS MESSAGE
+                |--------------------------------------------------------------------------
+                */
+
+                dispatch(
+                    showSnackBar({
+
+                        message:
+                            orderAlreadyCreated
+
+                                ? "Order updated successfully."
+
+                                : `Order created successfully. Tracking: ${
+                                    response
+                                        ?.data
+                                        ?.order
+                                        ?.trackingNumber ||
+                                    "N/A"
+                                }`,
+
+                        option: {
+                            variant:
+                                "success",
+                        },
+
+                    })
+                );
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | REFRESH PAGE
+                |--------------------------------------------------------------------------
+                |
+                | Keeps admin on the same review page.
+                |
+                | After creation:
+                | Create Order → Update Order
+                |
+                */
+
+                await router.replace(
+                    router.asPath
+                );
+
+
+            } catch (
+                error
+            ) {
+
+                console.error(
+                    orderAlreadyCreated
+                        ? "Update order error:"
+                        : "Create order error:",
+                    error
+                        ?.response
+                        ?.data ||
+                    error
+                );
+
+
+                dispatch(
+                    showSnackBar({
+
+                        message:
+
+                            error
+                                ?.response
+                                ?.data
+                                ?.message ||
+
+                            error
+                                ?.message ||
+
+                            (
+                                orderAlreadyCreated
+
+                                    ? "Failed to update order."
+
+                                    : "Failed to create order."
+                            ),
+
+                        option: {
+                            variant:
+                                "error",
+                        },
+
+                    })
+                );
+
+
+            } finally {
+
+                setSubmitting(
+                    false
+                );
+
+            }
+
+        };
 
 
     /*
@@ -527,80 +1305,181 @@ export default function PrescriptionReviewPage({
     |--------------------------------------------------------------------------
     */
 
-    const handleReject = async () => {
+    const handleReject =
+        async () => {
 
-        if (!rejectReason.trim()) {
+            /*
+            |--------------------------------------------------------------------------
+            | ORDER ALREADY CREATED
+            |--------------------------------------------------------------------------
+            */
 
-            alert(
-                "Please provide a reason for rejection."
-            );
+            if (
+                orderAlreadyCreated
+            ) {
 
-            return;
+                dispatch(
+                    showSnackBar({
 
-        }
+                        message:
+                            "An order has already been created for this prescription.",
 
+                        option: {
+                            variant:
+                                "error",
+                        },
 
-        try {
-
-            setSubmitting(true);
-
-
-            const response =
-                await axios.patch(
-                    `/api/admin/prescriptions/${prescription._id}`,
-                    {
-                        status:
-                            "rejected",
-
-                        reason:
-                            rejectReason.trim(),
-                    }
+                    })
                 );
 
 
-            if (!response.data?.success) {
-
-                throw new Error(
-                    response.data?.message ||
-                    "Failed to reject prescription."
-                );
+                return;
 
             }
 
 
-            setShowRejectModal(false);
+            /*
+            |--------------------------------------------------------------------------
+            | REASON
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                !rejectReason.trim()
+            ) {
+
+                dispatch(
+                    showSnackBar({
+
+                        message:
+                            "Please provide a reason for rejection.",
+
+                        option: {
+                            variant:
+                                "error",
+                        },
+
+                    })
+                );
 
 
-            alert(
-                "Prescription rejected successfully."
-            );
+                return;
+
+            }
 
 
-            router.push(
-                "/admin/prescriptions"
-            );
+            try {
+
+                setSubmitting(
+                    true
+                );
 
 
-        } catch (error) {
+                const response =
+                    await axios.patch(
 
-            console.error(
-                "Reject prescription error:",
+                        `/api/admin/prescriptions/${prescription._id}`,
+
+                        {
+
+                            status:
+                                "rejected",
+
+                            reason:
+                                rejectReason.trim(),
+
+                        }
+
+                    );
+
+
+                if (
+                    !response
+                        .data
+                        ?.success
+                ) {
+
+                    throw new Error(
+
+                        response
+                            .data
+                            ?.message ||
+
+                        "Failed to reject prescription."
+
+                    );
+
+                }
+
+
+                setShowRejectModal(
+                    false
+                );
+
+
+                dispatch(
+                    showSnackBar({
+
+                        message:
+                            "Prescription rejected successfully.",
+
+                        option: {
+                            variant:
+                                "success",
+                        },
+
+                    })
+                );
+
+
+                router.push(
+                    "/admin/prescriptions"
+                );
+
+
+            } catch (
                 error
-            );
+            ) {
+
+                console.error(
+                    "Reject prescription error:",
+                    error
+                );
 
 
-            alert(
-                error?.response?.data?.message ||
-                "Failed to reject prescription."
-            );
+                dispatch(
+                    showSnackBar({
 
-        } finally {
+                        message:
 
-            setSubmitting(false);
+                            error
+                                ?.response
+                                ?.data
+                                ?.message ||
 
-        }
+                            error
+                                ?.message ||
 
-    };
+                            "Failed to reject prescription.",
+
+                        option: {
+                            variant:
+                                "error",
+                        },
+
+                    })
+                );
+
+
+            } finally {
+
+                setSubmitting(
+                    false
+                );
+
+            }
+
+        };
 
 
     /*
@@ -609,19 +1488,29 @@ export default function PrescriptionReviewPage({
     |--------------------------------------------------------------------------
     */
 
-    const handleDownload = () => {
+    const handleDownload =
+        () => {
 
-        if (!currentFile?.url) {
-            return;
-        }
+            if (
+                !currentFile?.url
+            ) {
 
-        window.open(
-            currentFile.url,
-            "_blank",
-            "noopener,noreferrer"
-        );
+                return;
 
-    };
+            }
+
+
+            window.open(
+
+                currentFile.url,
+
+                "_blank",
+
+                "noopener,noreferrer"
+
+            );
+
+        };
 
 
     /*
@@ -630,10 +1519,14 @@ export default function PrescriptionReviewPage({
     |--------------------------------------------------------------------------
     */
 
-    if (!prescription) {
+    if (
+        !prescription
+    ) {
 
         return (
+
             <>
+
                 <Head>
 
                     <title>
@@ -643,20 +1536,22 @@ export default function PrescriptionReviewPage({
                 </Head>
 
 
-                <Navbar />
-
-
-                <main className={styles.notFound}>
+                <main
+                    className={
+                        styles.notFound
+                    }
+                >
 
                     <DescriptionOutlinedIcon />
+
 
                     <h1>
                         Prescription request not found
                     </h1>
 
+
                     <p>
-                        The request you're looking for
-                        does not exist.
+                        The request you're looking for does not exist.
                     </p>
 
 
@@ -672,13 +1567,18 @@ export default function PrescriptionReviewPage({
 
                 </main>
 
-
-
             </>
+
         );
 
     }
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | STATUS
+    |--------------------------------------------------------------------------
+    */
 
     const statusMeta =
         getStatusMeta(
@@ -686,35 +1586,62 @@ export default function PrescriptionReviewPage({
         );
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | RENDER
+    |--------------------------------------------------------------------------
+    */
+
     return (
+
         <>
+
             <Head>
 
                 <title>
-                    {prescription.requestCode} |
-                    {" "}
+
+                    {
+                        prescription
+                            .requestCode
+                    }
+
+                    {" | "}
+
                     Prescription Review
+
                 </title>
 
             </Head>
 
 
+            <main
+                className={
+                    styles.page
+                }
+            >
 
-
-            <main className={styles.page}>
-
-                <div className={styles.container}>
+                <div
+                    className={
+                        styles.container
+                    }
+                >
 
 
                     {/* =====================================================
                         TOP BAR
                     ====================================================== */}
 
-                    <div className={styles.topBar}>
+                    <div
+                        className={
+                            styles.topBar
+                        }
+                    >
 
                         <Link
                             href="/admin/prescriptions"
-                            className={styles.backLink}
+                            className={
+                                styles.backLink
+                            }
                         >
 
                             <ArrowBackRoundedIcon />
@@ -724,22 +1651,33 @@ export default function PrescriptionReviewPage({
                         </Link>
 
 
-                        <div className={styles.requestMeta}>
+                        <div
+                            className={
+                                styles.requestMeta
+                            }
+                        >
 
                             <span>
+
                                 {
-                                    prescription.requestCode
+                                    prescription
+                                        .requestCode
                                 }
+
                             </span>
+
 
                             <span
                                 className={
                                     styles.pendingBadge
                                 }
                             >
+
                                 {
-                                    statusMeta.label
+                                    statusMeta
+                                        .label
                                 }
+
                             </span>
 
                         </div>
@@ -748,10 +1686,14 @@ export default function PrescriptionReviewPage({
 
 
                     {/* =====================================================
-                        PAGE HEADER
+                        HEADER
                     ====================================================== */}
 
-                    <header className={styles.pageHeader}>
+                    <header
+                        className={
+                            styles.pageHeader
+                        }
+                    >
 
                         <div>
 
@@ -759,14 +1701,30 @@ export default function PrescriptionReviewPage({
                                 PRESCRIPTION REVIEW
                             </span>
 
+
                             <h1>
-                                Review request
+
+                                {
+                                    orderAlreadyCreated
+
+                                        ? "Review & update order"
+
+                                        : "Review request"
+                                }
+
                             </h1>
 
+
                             <p>
-                                Review the prescription, identify
-                                the medicines and create the patient's
-                                medicine order.
+
+                                {
+                                    orderAlreadyCreated
+
+                                        ? "Review the created order. You can add or remove medicines, change quantities and update the order."
+
+                                        : "Review the prescription, identify the medicines and create the patient's medicine order."
+                                }
+
                             </p>
 
                         </div>
@@ -778,58 +1736,87 @@ export default function PrescriptionReviewPage({
                             }
                         >
 
-                            {prescription.status !==
-                                "order_created" &&
-                                prescription.status !==
-                                    "completed" && (
+                            {/* REJECT */}
 
-                                <button
-                                    type="button"
-                                    className={
-                                        styles.rejectButton
-                                    }
-                                    onClick={() =>
-                                        setShowRejectModal(
-                                            true
-                                        )
-                                    }
-                                    disabled={
-                                        submitting
-                                    }
-                                >
+                            {
+                                !orderAlreadyCreated &&
+                                !isRejected &&
+                                !isCompleted && (
 
-                                    <CloseRoundedIcon />
+                                    <button
+                                        type="button"
+                                        className={
+                                            styles.rejectButton
+                                        }
+                                        onClick={
+                                            () =>
+                                                setShowRejectModal(
+                                                    true
+                                                )
+                                        }
+                                        disabled={
+                                            submitting
+                                        }
+                                    >
 
-                                    Reject
+                                        <CloseRoundedIcon />
 
-                                </button>
+                                        Reject
 
-                            )}
+                                    </button>
+
+                                )
+                            }
 
 
-                            <button
-                                type="button"
-                                className={
-                                    styles.createTopButton
-                                }
-                                onClick={
-                                    handleCreateOrder
-                                }
-                                disabled={
-                                    submitting ||
-                                    !orderItems.length ||
-                                    prescription.status ===
-                                        "completed"
-                                }
-                            >
+                            {/* CREATE / UPDATE */}
 
-                                <ShoppingBagOutlinedIcon />
+                            {
+                                canEditOrder && (
 
-                                {submitting
-                                    ? "Creating..."
-                                    : "Create Order"}
+                                    <button
+                                        type="button"
+                                        className={
+                                            styles.createTopButton
+                                        }
+                                        onClick={
+                                            handleSaveOrder
+                                        }
+                                        disabled={
+                                            submitting ||
+                                            !orderItems.length
+                                        }
+                                    >
 
-                            </button>
+                                        {
+                                            orderAlreadyCreated
+
+                                                ? <EditOutlinedIcon />
+
+                                                : <ShoppingBagOutlinedIcon />
+                                        }
+
+
+                                        {
+                                            submitting
+
+                                                ? (
+                                                    orderAlreadyCreated
+                                                        ? "Updating..."
+                                                        : "Creating..."
+                                                )
+
+                                                : (
+                                                    orderAlreadyCreated
+                                                        ? "Update Order"
+                                                        : "Create Order"
+                                                )
+                                        }
+
+                                    </button>
+
+                                )
+                            }
 
                         </div>
 
@@ -837,14 +1824,18 @@ export default function PrescriptionReviewPage({
 
 
                     {/* =====================================================
-                        MAIN GRID
+                        GRID
                     ====================================================== */}
 
-                    <div className={styles.mainGrid}>
+                    <div
+                        className={
+                            styles.mainGrid
+                        }
+                    >
 
 
                         {/* =================================================
-                            LEFT
+                            PRESCRIPTION VIEWER
                         ================================================== */}
 
                         <section
@@ -865,12 +1856,14 @@ export default function PrescriptionReviewPage({
                                         Prescription
                                     </h2>
 
+
                                     <span>
 
                                         {
                                             prescription
                                                 .files
-                                                ?.length || 0
+                                                ?.length ||
+                                            0
                                         }
 
                                         {" "}
@@ -878,7 +1871,8 @@ export default function PrescriptionReviewPage({
                                         {
                                             prescription
                                                 .files
-                                                ?.length === 1
+                                                ?.length ===
+                                            1
                                                 ? "page"
                                                 : "pages"
                                         }
@@ -888,6 +1882,8 @@ export default function PrescriptionReviewPage({
                                 </div>
 
 
+                                {/* VIEWER TOOLS */}
+
                                 <div
                                     className={
                                         styles.viewerTools
@@ -896,13 +1892,15 @@ export default function PrescriptionReviewPage({
 
                                     <button
                                         type="button"
-                                        onClick={() =>
-                                            setZoom(
-                                                Math.max(
-                                                    50,
-                                                    zoom - 10
+                                        onClick={
+                                            () =>
+                                                setZoom(
+                                                    Math.max(
+                                                        50,
+                                                        zoom -
+                                                            10
+                                                    )
                                                 )
-                                            )
                                         }
                                         aria-label="Zoom out"
                                     >
@@ -919,13 +1917,15 @@ export default function PrescriptionReviewPage({
 
                                     <button
                                         type="button"
-                                        onClick={() =>
-                                            setZoom(
-                                                Math.min(
-                                                    180,
-                                                    zoom + 10
+                                        onClick={
+                                            () =>
+                                                setZoom(
+                                                    Math.min(
+                                                        180,
+                                                        zoom +
+                                                            10
+                                                    )
                                                 )
-                                            )
                                         }
                                         aria-label="Zoom in"
                                     >
@@ -937,12 +1937,15 @@ export default function PrescriptionReviewPage({
 
                                     <button
                                         type="button"
-                                        onClick={() =>
-                                            setRotation(
-                                                (rotation +
-                                                    90) %
-                                                360
-                                            )
+                                        onClick={
+                                            () =>
+                                                setRotation(
+                                                    (
+                                                        rotation +
+                                                        90
+                                                    ) %
+                                                    360
+                                                )
                                         }
                                         aria-label="Rotate"
                                     >
@@ -982,41 +1985,45 @@ export default function PrescriptionReviewPage({
                                         styles.documentFrame
                                     }
                                     style={{
+
                                         transform:
                                             `scale(${zoom / 100}) rotate(${rotation}deg)`,
+
                                     }}
                                 >
 
-                                    {currentFile?.url ? (
+                                    {
+                                        currentFile?.url ? (
 
-                                        <img
-                                            src={
-                                                currentFile.url
-                                            }
-                                            alt={
-                                                currentFile.name ||
-                                                "Prescription"
-                                            }
-                                        />
+                                            <img
+                                                src={
+                                                    currentFile.url
+                                                }
+                                                alt={
+                                                    currentFile.name ||
+                                                    "Prescription"
+                                                }
+                                            />
 
-                                    ) : (
+                                        ) : (
 
-                                        <div
-                                            className={
-                                                styles.documentPlaceholder
-                                            }
-                                        >
+                                            <div
+                                                className={
+                                                    styles.documentPlaceholder
+                                                }
+                                            >
 
-                                            <DescriptionOutlinedIcon />
+                                                <DescriptionOutlinedIcon />
 
-                                            <span>
-                                                Prescription
-                                                preview
-                                            </span>
 
-                                        </div>
+                                                <span>
+                                                    Prescription preview
+                                                </span>
 
-                                    )}
+                                            </div>
+
+                                        )
+                                    }
 
                                 </div>
 
@@ -1031,58 +2038,70 @@ export default function PrescriptionReviewPage({
                                 }
                             >
 
-                                {(
-                                    prescription.files ||
-                                    []
-                                ).map(
-                                    (file, index) => (
+                                {
+                                    (
+                                        prescription
+                                            .files ||
+                                        []
+                                    ).map(
+                                        (
+                                            file,
+                                            index
+                                        ) => (
 
-                                        <button
-                                            type="button"
-                                            key={
-                                                file._id ||
-                                                file.publicId ||
-                                                index
-                                            }
-                                            onClick={() =>
-                                                setCurrentPage(
+                                            <button
+                                                type="button"
+                                                key={
+                                                    file._id ||
+                                                    file.publicId ||
                                                     index
-                                                )
-                                            }
-                                            className={
-                                                index ===
-                                                currentPage
-                                                    ? styles.thumbnailActive
-                                                    : styles.thumbnail
-                                            }
-                                        >
+                                                }
+                                                onClick={
+                                                    () =>
+                                                        setCurrentPage(
+                                                            index
+                                                        )
+                                                }
+                                                className={
+                                                    index ===
+                                                    currentPage
 
-                                            {file.url ? (
+                                                        ? styles.thumbnailActive
 
-                                                <img
-                                                    src={
-                                                        file.url
-                                                    }
-                                                    alt={`Page ${
-                                                        index +
-                                                        1
-                                                    }`}
-                                                />
+                                                        : styles.thumbnail
+                                                }
+                                            >
 
-                                            ) : (
+                                                {
+                                                    file.url ? (
 
-                                                <DescriptionOutlinedIcon />
+                                                        <img
+                                                            src={
+                                                                file.url
+                                                            }
+                                                            alt={`Page ${
+                                                                index +
+                                                                1
+                                                            }`}
+                                                        />
 
-                                            )}
+                                                    ) : (
 
-                                            <span>
-                                                {index + 1}
-                                            </span>
+                                                        <DescriptionOutlinedIcon />
 
-                                        </button>
+                                                    )
+                                                }
 
+
+                                                <span>
+                                                    {index + 1}
+                                                </span>
+
+                                            </button>
+
+                                        )
                                     )
-                                )}
+                                }
 
                             </div>
 
@@ -1090,7 +2109,7 @@ export default function PrescriptionReviewPage({
 
 
                         {/* =================================================
-                            RIGHT
+                            SIDEBAR
                         ================================================== */}
 
                         <aside
@@ -1100,7 +2119,9 @@ export default function PrescriptionReviewPage({
                         >
 
 
-                            {/* PATIENT */}
+                            {/* =================================================
+                                PATIENT
+                            ================================================== */}
 
                             <section
                                 className={
@@ -1116,11 +2137,13 @@ export default function PrescriptionReviewPage({
 
                                     <PersonOutlineRoundedIcon />
 
+
                                     <div>
 
                                         <h2>
                                             Patient information
                                         </h2>
+
 
                                         <span>
                                             Prescription requester
@@ -1137,9 +2160,12 @@ export default function PrescriptionReviewPage({
                                     }
                                 >
 
+                                    {/* NAME */}
+
                                     <div>
 
                                         <PersonOutlineRoundedIcon />
+
 
                                         <div>
 
@@ -1147,13 +2173,16 @@ export default function PrescriptionReviewPage({
                                                 Patient
                                             </span>
 
+
                                             <strong>
+
                                                 {
                                                     prescription
                                                         .patient
                                                         ?.name ||
                                                     "N/A"
                                                 }
+
                                             </strong>
 
                                         </div>
@@ -1161,9 +2190,12 @@ export default function PrescriptionReviewPage({
                                     </div>
 
 
+                                    {/* PHONE */}
+
                                     <div>
 
                                         <PhoneOutlinedIcon />
+
 
                                         <div>
 
@@ -1171,13 +2203,16 @@ export default function PrescriptionReviewPage({
                                                 Phone
                                             </span>
 
+
                                             <strong>
+
                                                 {
                                                     prescription
                                                         .patient
                                                         ?.phone ||
                                                     "N/A"
                                                 }
+
                                             </strong>
 
                                         </div>
@@ -1185,9 +2220,12 @@ export default function PrescriptionReviewPage({
                                     </div>
 
 
+                                    {/* ADDRESS */}
+
                                     <div>
 
                                         <LocationOnOutlinedIcon />
+
 
                                         <div>
 
@@ -1195,9 +2233,12 @@ export default function PrescriptionReviewPage({
                                                 Delivery address
                                             </span>
 
+
                                             <strong>
+
                                                 {
                                                     [
+
                                                         prescription
                                                             .patient
                                                             ?.address,
@@ -1205,11 +2246,20 @@ export default function PrescriptionReviewPage({
                                                         prescription
                                                             .patient
                                                             ?.city,
+
                                                     ]
-                                                        .filter(Boolean)
-                                                        .join(", ") ||
+
+                                                        .filter(
+                                                            Boolean
+                                                        )
+
+                                                        .join(
+                                                            ", "
+                                                        ) ||
+
                                                     "N/A"
                                                 }
+
                                             </strong>
 
                                         </div>
@@ -1217,9 +2267,12 @@ export default function PrescriptionReviewPage({
                                     </div>
 
 
+                                    {/* CREATED */}
+
                                     <div>
 
                                         <CalendarTodayOutlinedIcon />
+
 
                                         <div>
 
@@ -1227,12 +2280,16 @@ export default function PrescriptionReviewPage({
                                                 Submitted
                                             </span>
 
+
                                             <strong>
+
                                                 {
                                                     formatDate(
-                                                        prescription.createdAt
+                                                        prescription
+                                                            .createdAt
                                                     )
                                                 }
+
                                             </strong>
 
                                         </div>
@@ -1242,38 +2299,50 @@ export default function PrescriptionReviewPage({
                                 </div>
 
 
-                                {prescription.notes && (
+                                {/* NOTE */}
 
-                                    <div
-                                        className={
-                                            styles.patientNote
-                                        }
-                                    >
+                                {
+                                    prescription
+                                        .notes && (
 
-                                        <WarningAmberRoundedIcon />
+                                        <div
+                                            className={
+                                                styles.patientNote
+                                            }
+                                        >
 
-                                        <div>
+                                            <WarningAmberRoundedIcon />
 
-                                            <span>
-                                                Patient note
-                                            </span>
 
-                                            <p>
-                                                {
-                                                    prescription.notes
-                                                }
-                                            </p>
+                                            <div>
+
+                                                <span>
+                                                    Patient note
+                                                </span>
+
+
+                                                <p>
+
+                                                    {
+                                                        prescription
+                                                            .notes
+                                                    }
+
+                                                </p>
+
+                                            </div>
 
                                         </div>
 
-                                    </div>
-
-                                )}
+                                    )
+                                }
 
                             </section>
 
 
-                            {/* MEDICINES */}
+                            {/* =================================================
+                                MEDICINES
+                            ================================================== */}
 
                             <section
                                 className={
@@ -1289,15 +2358,32 @@ export default function PrescriptionReviewPage({
 
                                     <ShoppingBagOutlinedIcon />
 
+
                                     <div>
 
                                         <h2>
-                                            Order medicines
+
+                                            {
+                                                orderAlreadyCreated
+
+                                                    ? "Order medicines"
+
+                                                    : "Add medicines"
+                                            }
+
                                         </h2>
 
+
                                         <span>
-                                            Identify medicines
-                                            from prescription
+
+                                            {
+                                                orderAlreadyCreated
+
+                                                    ? "Add, remove or change medicine quantities"
+
+                                                    : "Identify medicines from prescription"
+                                            }
+
                                         </span>
 
                                     </div>
@@ -1305,112 +2391,158 @@ export default function PrescriptionReviewPage({
                                 </div>
 
 
-                                <div
-                                    className={
-                                        styles.medicineSearch
-                                    }
-                                >
+                                {/* =================================================
+                                    SEARCH
+                                ================================================== */}
 
-                                    <SearchRoundedIcon />
+                                {
+                                    canEditOrder && (
 
-                                    <input
-                                        type="text"
-                                        value={
-                                            medicineSearch
-                                        }
-                                        onChange={(event) =>
-                                            setMedicineSearch(
-                                                event.target.value
-                                            )
-                                        }
-                                        placeholder="Search medicine..."
-                                    />
+                                        <div
+                                            className={
+                                                styles.medicineSearch
+                                            }
+                                        >
 
-                                </div>
+                                            <SearchRoundedIcon />
 
 
-                                {medicineSearch && (
+                                            <input
+                                                type="text"
+                                                value={
+                                                    medicineSearch
+                                                }
+                                                onChange={
+                                                    (
+                                                        event
+                                                    ) =>
+                                                        setMedicineSearch(
+                                                            event
+                                                                .target
+                                                                .value
+                                                        )
+                                                }
+                                                placeholder="Search medicine..."
+                                            />
 
-                                    <div
-                                        className={
-                                            styles.catalogResults
-                                        }
-                                    >
+                                        </div>
 
-                                        {filteredCatalog.length >
-                                        0 ? (
+                                    )
+                                }
 
-                                            filteredCatalog.map(
-                                                (medicine) => (
 
-                                                    <button
-                                                        type="button"
-                                                        key={
-                                                            medicine._id
-                                                        }
-                                                        onClick={() =>
-                                                            addMedicine(
-                                                                medicine
-                                                            )
-                                                        }
+                                {/* =================================================
+                                    SEARCH RESULT
+                                ================================================== */}
+
+                                {
+                                    canEditOrder &&
+                                    medicineSearch && (
+
+                                        <div
+                                            className={
+                                                styles.catalogResults
+                                            }
+                                        >
+
+                                            {
+                                                filteredCatalog.length >
+                                                0 ? (
+
+                                                    filteredCatalog.map(
+                                                        (
+                                                            medicine
+                                                        ) => (
+
+                                                            <button
+                                                                type="button"
+                                                                key={
+                                                                    medicine._id
+                                                                }
+                                                                onClick={
+                                                                    () =>
+                                                                        addMedicine(
+                                                                            medicine
+                                                                        )
+                                                                }
+                                                                className={
+                                                                    styles.catalogItem
+                                                                }
+                                                            >
+
+                                                                <div>
+
+                                                                    <strong>
+
+                                                                        {
+                                                                            medicine.name
+                                                                        }
+
+                                                                    </strong>
+
+
+                                                                    <span>
+
+                                                                        {
+                                                                            medicine.genericName ||
+                                                                            "N/A"
+                                                                        }
+
+                                                                        {
+                                                                            medicine.strength
+
+                                                                                ? ` • ${medicine.strength}`
+
+                                                                                : ""
+                                                                        }
+
+                                                                    </span>
+
+                                                                </div>
+
+
+                                                                <span>
+
+                                                                    ৳
+
+                                                                    {
+                                                                        Number(
+                                                                            medicine.price ||
+                                                                            0
+                                                                        )
+                                                                    }
+
+                                                                </span>
+
+                                                            </button>
+
+                                                        )
+                                                    )
+
+                                                ) : (
+
+                                                    <div
                                                         className={
-                                                            styles.catalogItem
+                                                            styles.emptyItems
                                                         }
                                                     >
 
-                                                        <div>
+                                                        No medicine found.
 
-                                                            <strong>
-                                                                {
-                                                                    medicine.name
-                                                                }
-                                                            </strong>
-
-                                                            <span>
-                                                                {
-                                                                    medicine.genericName
-                                                                }
-                                                                {" • "}
-                                                                {
-                                                                    medicine.strength
-                                                                }
-                                                            </span>
-
-                                                        </div>
-
-
-                                                        <span>
-                                                            ৳
-                                                            {
-                                                                medicine.price
-                                                            }
-                                                        </span>
-
-                                                    </button>
+                                                    </div>
 
                                                 )
-                                            )
+                                            }
 
-                                        ) : (
+                                        </div>
 
-                                            <div
-                                                className={
-                                                    styles.emptyItems
-                                                }
-                                            >
-
-                                                No medicine found.
-
-                                            </div>
-
-                                        )}
-
-                                    </div>
-
-                                )}
+                                    )
+                                }
 
 
-                                {/* ORDER ITEMS */}
+                                {/* =================================================
+                                    ITEMS
+                                ================================================== */}
 
                                 <div
                                     className={
@@ -1418,166 +2550,255 @@ export default function PrescriptionReviewPage({
                                     }
                                 >
 
-                                    {orderItems.length === 0 ? (
+                                    {
+                                        orderItems.length ===
+                                        0 ? (
 
-                                        <div
-                                            className={
-                                                styles.emptyItems
-                                            }
-                                        >
+                                            <div
+                                                className={
+                                                    styles.emptyItems
+                                                }
+                                            >
 
-                                            <ShoppingBagOutlinedIcon />
+                                                <ShoppingBagOutlinedIcon />
 
-                                            <span>
-                                                No medicines added yet
-                                            </span>
 
-                                        </div>
+                                                <span>
+                                                    No medicines added yet
+                                                </span>
 
-                                    ) : (
+                                            </div>
 
-                                        orderItems.map(
-                                            (item) => (
+                                        ) : (
 
-                                                <div
-                                                    key={
-                                                        item.id
-                                                    }
-                                                    className={
-                                                        styles.orderItem
-                                                    }
-                                                >
+                                            orderItems.map(
+                                                (
+                                                    item
+                                                ) => (
 
                                                     <div
+                                                        key={
+                                                            item.id
+                                                        }
                                                         className={
-                                                            styles.itemInfo
+                                                            styles.orderItem
                                                         }
                                                     >
 
-                                                        <strong>
-                                                            {
-                                                                item.name
-                                                            }
-                                                        </strong>
-
-                                                        <span>
-                                                            {
-                                                                item.genericName
-                                                            }
-                                                            {" • "}
-                                                            {
-                                                                item.strength
-                                                            }
-                                                        </span>
-
-                                                        <small>
-                                                            ৳
-                                                            {
-                                                                item.price
-                                                            }
-                                                            {" "}
-                                                            / pack
-                                                        </small>
-
-                                                    </div>
-
-
-                                                    <div
-                                                        className={
-                                                            styles.itemActions
-                                                        }
-                                                    >
+                                                        {/* INFO */}
 
                                                         <div
                                                             className={
-                                                                styles.quantity
+                                                                styles.itemInfo
                                                             }
                                                         >
 
-                                                            <button
-                                                                type="button"
-                                                                onClick={() =>
-                                                                    decreaseQuantity(
-                                                                        item.id
-                                                                    )
-                                                                }
-                                                                aria-label="Decrease"
-                                                            >
-
-                                                                <RemoveRoundedIcon />
-
-                                                            </button>
-
-
                                                             <strong>
+
                                                                 {
-                                                                    item.quantity
+                                                                    item.name ||
+                                                                    "Medicine"
                                                                 }
+
                                                             </strong>
 
 
-                                                            <button
-                                                                type="button"
-                                                                onClick={() =>
-                                                                    increaseQuantity(
-                                                                        item.id
+                                                            <span>
+
+                                                                {
+                                                                    item.genericName ||
+                                                                    "N/A"
+                                                                }
+
+
+                                                                {
+                                                                    item.strength
+
+                                                                        ? ` • ${item.strength}`
+
+                                                                        : ""
+                                                                }
+
+                                                            </span>
+
+
+                                                            <small>
+
+                                                                ৳
+                                                                {
+                                                                    Number(
+                                                                        item.price ||
+                                                                        0
                                                                     )
                                                                 }
-                                                                aria-label="Increase"
-                                                            >
 
-                                                                <AddRoundedIcon />
+                                                                {
+                                                                    item.unit
 
-                                                            </button>
+                                                                        ? ` / ${item.unit}`
+
+                                                                        : " / unit"
+                                                                }
+
+                                                            </small>
 
                                                         </div>
 
 
-                                                        <strong
+                                                        {/* ACTION */}
+
+                                                        <div
                                                             className={
-                                                                styles.itemTotal
+                                                                styles.itemActions
                                                             }
                                                         >
-                                                            ৳
+
+                                                            {/* QUANTITY */}
+
                                                             {
-                                                                item.price *
-                                                                item.quantity
-                                                            }
-                                                        </strong>
+                                                                canEditOrder ? (
+
+                                                                    <div
+                                                                        className={
+                                                                            styles.quantity
+                                                                        }
+                                                                    >
+
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={
+                                                                                () =>
+                                                                                    decreaseQuantity(
+                                                                                        item.id
+                                                                                    )
+                                                                            }
+                                                                            aria-label="Decrease quantity"
+                                                                        >
+
+                                                                            <RemoveRoundedIcon />
+
+                                                                        </button>
 
 
-                                                        <button
-                                                            type="button"
-                                                            className={
-                                                                styles.removeItem
-                                                            }
-                                                            onClick={() =>
-                                                                removeMedicine(
-                                                                    item.id
+                                                                        <strong>
+
+                                                                            {
+                                                                                item.quantity
+                                                                            }
+
+                                                                        </strong>
+
+
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={
+                                                                                () =>
+                                                                                    increaseQuantity(
+                                                                                        item.id
+                                                                                    )
+                                                                            }
+                                                                            aria-label="Increase quantity"
+                                                                        >
+
+                                                                            <AddRoundedIcon />
+
+                                                                        </button>
+
+                                                                    </div>
+
+                                                                ) : (
+
+                                                                    <div
+                                                                        className={
+                                                                            styles.quantity
+                                                                        }
+                                                                    >
+
+                                                                        <strong>
+
+                                                                            Qty:{" "}
+
+                                                                            {
+                                                                                item.quantity
+                                                                            }
+
+                                                                        </strong>
+
+                                                                    </div>
+
                                                                 )
                                                             }
-                                                            aria-label="Remove medicine"
-                                                        >
 
-                                                            <DeleteOutlineRoundedIcon />
 
-                                                        </button>
+                                                            {/* TOTAL */}
+
+                                                            <strong
+                                                                className={
+                                                                    styles.itemTotal
+                                                                }
+                                                            >
+
+                                                                ৳
+
+                                                                {
+                                                                    Number(
+                                                                        item.price ||
+                                                                        0
+                                                                    ) *
+
+                                                                    Number(
+                                                                        item.quantity ||
+                                                                        0
+                                                                    )
+                                                                }
+
+                                                            </strong>
+
+
+                                                            {/* REMOVE */}
+
+                                                            {
+                                                                canEditOrder && (
+
+                                                                    <button
+                                                                        type="button"
+                                                                        className={
+                                                                            styles.removeItem
+                                                                        }
+                                                                        onClick={
+                                                                            () =>
+                                                                                removeMedicine(
+                                                                                    item.id
+                                                                                )
+                                                                        }
+                                                                        aria-label="Remove medicine"
+                                                                    >
+
+                                                                        <DeleteOutlineRoundedIcon />
+
+                                                                    </button>
+
+                                                                )
+                                                            }
+
+                                                        </div>
 
                                                     </div>
 
-                                                </div>
-
+                                                )
                                             )
-                                        )
 
-                                    )}
+                                        )
+                                    }
 
                                 </div>
 
                             </section>
 
 
-                            {/* ORDER SUMMARY */}
+                            {/* =================================================
+                                ORDER SUMMARY
+                            ================================================== */}
 
                             <section
                                 className={
@@ -1593,15 +2814,24 @@ export default function PrescriptionReviewPage({
 
                                     <LocalShippingOutlinedIcon />
 
+
                                     <div>
 
                                         <h2>
                                             Order summary
                                         </h2>
 
+
                                         <span>
-                                            Review before creating
-                                            the order
+
+                                            {
+                                                orderAlreadyCreated
+
+                                                    ? "Edit and update this order"
+
+                                                    : "Review before creating order"
+                                            }
+
                                         </span>
 
                                     </div>
@@ -1609,17 +2839,22 @@ export default function PrescriptionReviewPage({
                                 </div>
 
 
+                                {/* SUMMARY */}
+
                                 <div
                                     className={
                                         styles.summaryRows
                                     }
                                 >
 
+                                    {/* MEDICINE TOTAL */}
+
                                     <div>
 
                                         <span>
                                             Medicines
                                         </span>
+
 
                                         <strong>
                                             ৳{subtotal}
@@ -1628,6 +2863,8 @@ export default function PrescriptionReviewPage({
                                     </div>
 
 
+                                    {/* DELIVERY */}
+
                                     <div>
 
                                         <span>
@@ -1635,35 +2872,63 @@ export default function PrescriptionReviewPage({
                                         </span>
 
 
-                                        <div
-                                            className={
-                                                styles.deliveryInput
-                                            }
-                                        >
+                                        {
+                                            canEditOrder ? (
 
-                                            <span>
-                                                ৳
-                                            </span>
+                                                <div
+                                                    className={
+                                                        styles.deliveryInput
+                                                    }
+                                                >
 
-                                            <input
-                                                type="number"
-                                                min="0"
-                                                value={
-                                                    deliveryFee
-                                                }
-                                                onChange={(event) =>
-                                                    setDeliveryFee(
-                                                        event.target.value
-                                                    )
-                                                }
-                                            />
+                                                    <span>
+                                                        ৳
+                                                    </span>
 
-                                        </div>
+
+                                                    <input
+                                                        type="number"
+                                                        min="0"
+                                                        value={
+                                                            deliveryFee
+                                                        }
+                                                        onChange={
+                                                            (
+                                                                event
+                                                            ) =>
+                                                                setDeliveryFee(
+                                                                    event
+                                                                        .target
+                                                                        .value
+                                                                )
+                                                        }
+                                                    />
+
+                                                </div>
+
+                                            ) : (
+
+                                                <strong>
+
+                                                    ৳
+                                                    {
+                                                        Number(
+                                                            deliveryFee ||
+                                                            0
+                                                        )
+                                                    }
+
+                                                </strong>
+
+                                            )
+                                        }
 
                                     </div>
 
                                 </div>
 
+
+                                {/* TOTAL */}
 
                                 <div
                                     className={
@@ -1675,6 +2940,7 @@ export default function PrescriptionReviewPage({
                                         Total
                                     </span>
 
+
                                     <strong>
                                         ৳{total}
                                     </strong>
@@ -1682,71 +2948,196 @@ export default function PrescriptionReviewPage({
                                 </div>
 
 
-                                <div
-                                    className={
-                                        styles.adminNote
-                                    }
-                                >
+                                {/* =================================================
+                                    ADMIN NOTE
+                                ================================================== */}
 
-                                    <label>
-                                        Internal note
-                                    </label>
+                                {
+                                    canEditOrder && (
 
-                                    <textarea
-                                        rows={3}
-                                        value={
-                                            adminNote
-                                        }
-                                        onChange={(event) =>
-                                            setAdminNote(
-                                                event.target.value
-                                            )
-                                        }
-                                        placeholder="Optional note for this order..."
-                                    />
+                                        <div
+                                            className={
+                                                styles.adminNote
+                                            }
+                                        >
 
-                                </div>
+                                            <label>
+                                                Internal note
+                                            </label>
 
 
-                                <button
-                                    type="button"
-                                    className={
-                                        styles.createOrderButton
-                                    }
-                                    onClick={
-                                        handleCreateOrder
-                                    }
-                                    disabled={
-                                        submitting ||
-                                        !orderItems.length
-                                    }
-                                >
+                                            <textarea
+                                                rows={3}
+                                                value={
+                                                    adminNote
+                                                }
+                                                onChange={
+                                                    (
+                                                        event
+                                                    ) =>
+                                                        setAdminNote(
+                                                            event
+                                                                .target
+                                                                .value
+                                                        )
+                                                }
+                                                placeholder="Optional note for this order..."
+                                            />
 
-                                    <CheckCircleRoundedIcon />
+                                        </div>
 
-                                    {submitting
-                                        ? "Creating order..."
-                                        : "Create Order"}
-
-                                    {!submitting && (
-                                        <ArrowForwardRoundedIcon />
-                                    )}
-
-                                </button>
+                                    )
+                                }
 
 
-                                <p
-                                    className={
-                                        styles.createNote
-                                    }
-                                >
-                                    Creating the order will move
-                                    this prescription request to
-                                    <strong>
-                                        Order Created
-                                    </strong>
-                                    status.
-                                </p>
+                                {/* =================================================
+                                    SAVE BUTTON
+                                ================================================== */}
+
+                                {
+                                    canEditOrder ? (
+
+                                        <>
+
+                                            <button
+                                                type="button"
+                                                className={
+                                                    styles.createOrderButton
+                                                }
+                                                onClick={
+                                                    handleSaveOrder
+                                                }
+                                                disabled={
+                                                    submitting ||
+                                                    !orderItems.length
+                                                }
+                                            >
+
+                                                {
+                                                    orderAlreadyCreated
+
+                                                        ? <EditOutlinedIcon />
+
+                                                        : <CheckCircleRoundedIcon />
+                                                }
+
+
+                                                {
+                                                    submitting
+
+                                                        ? (
+                                                            orderAlreadyCreated
+                                                                ? "Updating order..."
+                                                                : "Creating order..."
+                                                        )
+
+                                                        : (
+                                                            orderAlreadyCreated
+                                                                ? "Update Order"
+                                                                : "Create Order"
+                                                        )
+                                                }
+
+
+                                                {
+                                                    !submitting && (
+
+                                                        <ArrowForwardRoundedIcon />
+
+                                                    )
+                                                }
+
+                                            </button>
+
+
+                                            <p
+                                                className={
+                                                    styles.createNote
+                                                }
+                                            >
+
+                                                {
+                                                    orderAlreadyCreated ? (
+
+                                                        <>
+
+                                                            Changes to medicines,
+                                                            quantities and delivery
+                                                            fee will update order{" "}
+
+                                                            <strong>
+
+                                                                {
+                                                                    prescription
+                                                                        ?.order
+                                                                        ?.trackingNumber ||
+                                                                    ""
+                                                                }
+
+                                                            </strong>
+
+                                                            .
+
+                                                        </>
+
+                                                    ) : (
+
+                                                        <>
+
+                                                            Creating the order will
+                                                            move this prescription
+                                                            request to{" "}
+
+                                                            <strong>
+                                                                Order Created
+                                                            </strong>
+
+                                                            {" "}status.
+
+                                                        </>
+
+                                                    )
+                                                }
+
+                                            </p>
+
+                                        </>
+
+                                    ) : (
+
+                                        <>
+
+                                            <button
+                                                type="button"
+                                                className={
+                                                    styles.createOrderButton
+                                                }
+                                                disabled
+                                            >
+
+                                                {
+                                                    isRejected
+
+                                                        ? <CloseRoundedIcon />
+
+                                                        : <CheckCircleRoundedIcon />
+                                                }
+
+
+                                                {
+                                                    isRejected
+
+                                                        ? "Request Rejected"
+
+                                                        : "Order Completed"
+                                                }
+
+                                            </button>
+
+                                        </>
+
+                                    )
+                                }
 
                             </section>
 
@@ -1763,159 +3154,188 @@ export default function PrescriptionReviewPage({
                 REJECT MODAL
             ====================================================== */}
 
-            {showRejectModal && (
-
-                <div
-                    className={
-                        styles.modalOverlay
-                    }
-                    onClick={() =>
-                        setShowRejectModal(false)
-                    }
-                >
+            {
+                showRejectModal && (
 
                     <div
                         className={
-                            styles.rejectModal
+                            styles.modalOverlay
                         }
-                        onClick={(event) =>
-                            event.stopPropagation()
+                        onClick={
+                            () =>
+                                setShowRejectModal(
+                                    false
+                                )
                         }
                     >
 
-                        <button
-                            type="button"
-                            className={
-                                styles.modalClose
-                            }
-                            onClick={() =>
-                                setShowRejectModal(false)
-                            }
-                            aria-label="Close"
-                        >
-
-                            <CloseRoundedIcon />
-
-                        </button>
-
-
                         <div
                             className={
-                                styles.modalIcon
+                                styles.rejectModal
                             }
-                        >
-
-                            <WarningAmberRoundedIcon />
-
-                        </div>
-
-
-                        <h2>
-                            Reject prescription?
-                        </h2>
-
-
-                        <p>
-                            Please provide a reason before
-                            rejecting this prescription request.
-                        </p>
-
-
-                        <textarea
-                            className={
-                                styles.rejectReason
-                            }
-                            value={
-                                rejectReason
-                            }
-                            onChange={(event) =>
-                                setRejectReason(
-                                    event.target.value
-                                )
-                            }
-                            placeholder="Reason for rejection..."
-                            rows={4}
-                        />
-
-
-                        <div
-                            className={
-                                styles.modalActions
+                            onClick={
+                                (
+                                    event
+                                ) =>
+                                    event.stopPropagation()
                             }
                         >
 
                             <button
                                 type="button"
-                                onClick={() =>
-                                    setShowRejectModal(
-                                        false
-                                    )
-                                }
                                 className={
-                                    styles.cancelButton
+                                    styles.modalClose
                                 }
-                            >
-                                Cancel
-                            </button>
-
-
-                            <button
-                                type="button"
                                 onClick={
-                                    handleReject
+                                    () =>
+                                        setShowRejectModal(
+                                            false
+                                        )
                                 }
+                                aria-label="Close"
+                            >
+
+                                <CloseRoundedIcon />
+
+                            </button>
+
+
+                            <div
                                 className={
-                                    styles.confirmRejectButton
-                                }
-                                disabled={
-                                    submitting
+                                    styles.modalIcon
                                 }
                             >
 
-                                {submitting
-                                    ? "Rejecting..."
-                                    : "Reject Request"}
+                                <WarningAmberRoundedIcon />
 
-                            </button>
+                            </div>
+
+
+                            <h2>
+                                Reject prescription?
+                            </h2>
+
+
+                            <p>
+                                Please provide a reason before
+                                rejecting this prescription request.
+                            </p>
+
+
+                            <textarea
+                                className={
+                                    styles.rejectReason
+                                }
+                                value={
+                                    rejectReason
+                                }
+                                onChange={
+                                    (
+                                        event
+                                    ) =>
+                                        setRejectReason(
+                                            event
+                                                .target
+                                                .value
+                                        )
+                                }
+                                placeholder="Reason for rejection..."
+                                rows={4}
+                            />
+
+
+                            <div
+                                className={
+                                    styles.modalActions
+                                }
+                            >
+
+                                <button
+                                    type="button"
+                                    onClick={
+                                        () =>
+                                            setShowRejectModal(
+                                                false
+                                            )
+                                    }
+                                    className={
+                                        styles.cancelButton
+                                    }
+                                >
+
+                                    Cancel
+
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    onClick={
+                                        handleReject
+                                    }
+                                    className={
+                                        styles.confirmRejectButton
+                                    }
+                                    disabled={
+                                        submitting
+                                    }
+                                >
+
+                                    {
+                                        submitting
+
+                                            ? "Rejecting..."
+
+                                            : "Reject Request"
+                                    }
+
+                                </button>
+
+                            </div>
 
                         </div>
 
                     </div>
 
-                </div>
-
-            )}
-
-
-            <Footer />
+                )
+            }
 
         </>
+
     );
+
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| SERVER SIDE DATA
+| SERVER SIDE
 |--------------------------------------------------------------------------
 */
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(
+    context
+) {
 
     const {
         params,
-        req,
-    } = context;
+    } =
+        context;
 
 
     const id =
         params?.id;
 
 
-    if (!id) {
+    if (
+        !id
+    ) {
 
         return {
-            notFound: true,
+
+            notFound:
+                true,
+
         };
 
     }
@@ -1925,28 +3345,32 @@ export async function getServerSideProps(context) {
 
         /*
         |--------------------------------------------------------------------------
-        | DATABASE DIRECTLY
+        | DATABASE
         |--------------------------------------------------------------------------
-        |
-        | Because this is getServerSideProps, there is no reason
-        | to call your own API endpoint here.
-        |
         */
 
         const db =
-            (await import(
-                "@/database/connection"
-            )).default;
+            (
+                await import(
+                    "@/database/connection"
+                )
+            ).default;
+
 
         const Prescription =
-            (await import(
-                "@/database/model/Prescription"
-            )).default;
+            (
+                await import(
+                    "@/database/model/Prescription"
+                )
+            ).default;
+
 
         const Medicine =
-            (await import(
-                "@/database/model/Medicine"
-            )).default;
+            (
+                await import(
+                    "@/database/model/Medicine"
+                )
+            ).default;
 
 
         await db.connect();
@@ -1960,22 +3384,62 @@ export async function getServerSideProps(context) {
 
         const prescription =
             await Prescription
-                .findById(id)
+
+                .findById(
+                    id
+                )
+
                 .populate(
                     "user",
                     "name phone email"
                 )
+
+                /*
+                |--------------------------------------------------------------------------
+                | LOAD FULL ORDER DATA
+                |--------------------------------------------------------------------------
+                */
+
                 .populate(
                     "order",
-                    "orderId trackingNumber status deliveryFee total"
+
+                    [
+
+                        "orderId",
+
+                        "trackingNumber",
+
+                        "status",
+
+                        "items",
+
+                        "subtotal",
+
+                        "deliveryFee",
+
+                        "total",
+
+                        "adminNote",
+
+                        "createdAt",
+
+                    ].join(
+                        " "
+                    )
                 )
+
                 .lean();
 
 
-        if (!prescription) {
+        if (
+            !prescription
+        ) {
 
             return {
-                notFound: true,
+
+                notFound:
+                    true,
+
             };
 
         }
@@ -1983,29 +3447,53 @@ export async function getServerSideProps(context) {
 
         /*
         |--------------------------------------------------------------------------
-        | MEDICINE CATALOG
+        | MEDICINES
         |--------------------------------------------------------------------------
         */
 
         const medicines =
             await Medicine
+
                 .find({
+
                     status: {
-                        $ne: "inactive",
+
+                        $ne:
+                            "inactive",
+
                     },
+
                 })
+
                 .select(
-                    "name genericName strength unit price prescriptionRequired status"
+
+                    [
+                        "name",
+                        "genericName",
+                        "strength",
+                        "unit",
+                        "price",
+                        "prescriptionRequired",
+                        "status",
+                    ].join(
+                        " "
+                    )
+
                 )
+
                 .sort({
-                    name: 1,
+
+                    name:
+                        1,
+
                 })
+
                 .lean();
 
 
         /*
         |--------------------------------------------------------------------------
-        | SERIALIZE MONGOOSE DATA
+        | SERIALIZE
         |--------------------------------------------------------------------------
         */
 
@@ -2040,7 +3528,9 @@ export async function getServerSideProps(context) {
         };
 
 
-    } catch (error) {
+    } catch (
+        error
+    ) {
 
         console.error(
             "Prescription review SSR error:",
@@ -2049,7 +3539,10 @@ export async function getServerSideProps(context) {
 
 
         return {
-            notFound: true,
+
+            notFound:
+                true,
+
         };
 
     }

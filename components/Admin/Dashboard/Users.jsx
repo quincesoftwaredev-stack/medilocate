@@ -129,7 +129,7 @@ const Users = ({
                   <td onClick={() => router.push(`/profile/${user._id}`)}>{user.firstName}{" "}{user.lastName}</td>
                   <td
                     onClick={() =>
-                      router.push(`/admin/order?query=${user.phone}`)
+                      router.push(`/admin/orders?query=${user.phone}`)
                     }
                   >
                     {user.phone}

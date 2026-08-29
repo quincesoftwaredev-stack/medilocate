@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema(
     phoneNumber: {
       type: String
     },
+    gender: {
+      type: String,
+      enum: ['Male', 'Female'],
+    },
 
     // User roles (optional)
     role: {

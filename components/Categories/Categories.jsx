@@ -28,7 +28,7 @@ const Categories = () => {
               {categories && (
                 <div
                   className={styles.category__item}
-                  onClick={() => router.push('/shop')}
+                  onClick={() => router.push('/medicines')}
                 >
                   Shop
                 </div>
@@ -88,7 +88,7 @@ const Categories = () => {
                 minWidth: `${'Shop'.length * 8}px`
                 // background: 'red'
               }}
-              onClick={() => router.push(`/shop`)}
+              onClick={() => router.push(`/medicines`)}
             >
               Shop
             </div>
@@ -105,7 +105,7 @@ const Categories = () => {
                     display: 'flex',
                     justifyContent: 'center'
                   }}
-                  onClick={() => router.push(`/shop?categories=${item._id}`)}
+                  onClick={() => router.push(`/medicines?categories=${item._id}`)}
                 >
                   <Image src={item.image} width='25' height='25' alt='' />
                   {item.name}

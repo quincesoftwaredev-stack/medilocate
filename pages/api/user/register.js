@@ -212,6 +212,18 @@ handler.post(async (req, res) => {
 
         if (role === "doctor") {
 
+            if (!["Male", "Female"].includes(profile.gender)) {
+
+                await User.findByIdAndDelete(
+                    user._id
+                );
+
+                return res.status(400).json({
+                    error:
+                        "Gender is required.",
+                });
+            }
+
             if (!profile.bmdcNumber?.trim()) {
 
                 await User.findByIdAndDelete(
@@ -283,6 +295,9 @@ handler.post(async (req, res) => {
                         "inactive",
 
                 });
+
+            user.gender = profile.gender;
+            await user.save();
 
 
             return res.status(201).json({

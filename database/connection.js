@@ -3,18 +3,31 @@ import { MONGODB_URI } from '@/config'
 const connection = {}
 
 async function connect () {
-  if (connection.isConnected) {
+  const readyState = mongoose.connection.readyState
+
+  if (connection.isConnected && readyState === 1) {
     console.log('already connected')
     return
   }
-  if (mongoose.connections.length > 0) {
-    connection.isConnected = mongoose.connections[0].readyState
-    if (connection.isConnected === 1) {
-      console.log('use previous connection')
-      return
-    }
+
+  connection.isConnected = false
+
+  if (readyState === 1) {
+    connection.isConnected = true
+    console.log('use previous connection')
+    return
+  }
+
+  if (readyState === 2) {
+    await mongoose.connection.asPromise()
+    connection.isConnected = mongoose.connection.readyState === 1
+    return
+  }
+
+  if (readyState === 3) {
     await mongoose.disconnect()
   }
+
   const db = await mongoose.connect(MONGODB_URI, {})
   console.log('new connection')
   connection.isConnected = db.connections[0].readyState

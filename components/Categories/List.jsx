@@ -30,7 +30,7 @@ const List = () => {
                   className={styles.item}
                   onMouseEnter={() => setSelected(i)}
                   onMouse
-                  onClick={() => router.push(`/shop?categories=${i._id}`)}
+                  onClick={() => router.push(`/medicines?categories=${i._id}`)}
                   style={{ minWidth: `${i.name.length * 9.4}px` }}
                 >
                   {i.name}

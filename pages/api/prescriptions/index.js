@@ -1,5 +1,7 @@
 import db from "@/database/connection";
 import Prescription from "@/database/model/Prescription";
+import Message from "@/services/message-service";
+import { whatsapp } from "@/utility/const";
 import nextConnect from "next-connect";
 
 const handler = nextConnect();
@@ -165,6 +167,40 @@ handler.post(async (req, res) => {
                 ],
 
             });
+
+
+        /*
+        |----------------------------------------------------------------------
+        | NOTIFY ADMIN
+        |----------------------------------------------------------------------
+        |
+        | A failed SMS must never roll back an otherwise valid prescription.
+        |
+        */
+
+        try {
+
+            const messageService =
+                new Message();
+
+            await messageService.sendMessage({
+
+                number:
+                    whatsapp,
+
+                message:
+                    "A new prescription has been uploaded. Please review it in the MediLocate admin dashboard.",
+
+            });
+
+        } catch (messageError) {
+
+            console.error(
+                "Prescription notification error:",
+                messageError
+            );
+
+        }
 
 
         /*

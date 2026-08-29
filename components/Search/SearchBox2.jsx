@@ -17,7 +17,7 @@ const SearchBox2 = ({ setOpen }) => {
   const updateRoute = data => {
     const queryParams = { ...router.query, ...data }
     router.push({
-      pathname: '/shop',
+      pathname: '/medicines',
       query: queryParams,
       shallow: false
     })

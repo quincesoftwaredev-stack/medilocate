@@ -37,7 +37,7 @@ const List2 = () => {
             >
               <span
 
-                onClick={() => router.push(`/shop`)}
+                onClick={() => router.push(`/medicines`)}
               >
                 Shop
               </span>
@@ -53,7 +53,7 @@ const List2 = () => {
                       setSelected(i)
                       setExapanded()
                     }}
-                    onClick={() => router.push(`/shop?categories=${i._id}`)}
+                    onClick={() => router.push(`/medicines?categories=${i._id}`)}
                   >
                     {i.name}
                   </span>
@@ -70,7 +70,7 @@ const List2 = () => {
                         >
                           <span
                             onClick={() =>
-                              router.push(`/shop?categories=${i._id}`)
+                              router.push(`/medicines?categories=${i._id}`)
                             }
                           >
                             {i.name}
@@ -95,7 +95,7 @@ const List2 = () => {
                                     <div
                                       className={styles.expanded_category}
                                       onClick={() =>
-                                        router.push(`/shop?categories=${i._id}`)
+                                        router.push(`/medicines?categories=${i._id}`)
                                       }
                                     >
                                       {i.name}

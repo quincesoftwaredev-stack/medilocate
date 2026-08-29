@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import SearchIcon from "@mui/icons-material/Search";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
@@ -9,6 +8,7 @@ import MedicalServicesOutlinedIcon from "@mui/icons-material/MedicalServicesOutl
 import HealthAndSafetyOutlinedIcon from "@mui/icons-material/HealthAndSafetyOutlined";
 
 import styles from "./Hero.module.css";
+import GlobalSearch from "@/components/Search/GlobalSearch";
 
 export default function Hero() {
     return (
@@ -77,20 +77,7 @@ export default function Hero() {
 
                         {/* SEARCH */}
 
-                        <div className={styles.heroSearch}>
-
-                            <SearchIcon />
-
-                            <input
-                                type="text"
-                                placeholder="Search doctors, specialties or medicines..."
-                            />
-
-                            <button type="button">
-                                Search
-                            </button>
-
-                        </div>
+                        <GlobalSearch />
 
 
                         {/* STATS */}

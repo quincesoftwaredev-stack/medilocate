@@ -1,0 +1,167 @@
+.root {
+    position: relative;
+    z-index: 20;
+    width: 100%;
+    margin-top: 27px;
+}
+
+.form {
+    min-height: 60px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 7px 7px 18px;
+    border: 1px solid var(--ml-gray-200);
+    border-radius: 16px;
+    background: var(--ml-white);
+    box-shadow: var(--ml-shadow-md);
+    transition: var(--ml-transition);
+}
+
+.form:focus-within {
+    border-color: var(--ml-teal);
+    box-shadow: 0 14px 35px rgba(15, 157, 138, 0.14);
+}
+
+.searchIcon {
+    width: 22px;
+    color: var(--ml-teal);
+}
+
+.form input {
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    color: var(--ml-navy);
+    background: transparent;
+    font: inherit;
+    font-size: var(--ml-font-base);
+}
+
+.form input::placeholder { color: var(--ml-gray-500); }
+.form input::-webkit-search-cancel-button { cursor: pointer; }
+
+.form > button {
+    min-height: 46px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 11px;
+    color: var(--ml-white);
+    background: var(--ml-teal);
+    font: inherit;
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-bold);
+    cursor: pointer;
+    transition: var(--ml-transition);
+}
+
+.form > button span { display: inline; }
+.form > button svg { display: none; width: 21px; height: 21px; }
+
+.form > button:hover { background: var(--ml-teal-dark); transform: translateY(-1px); }
+
+.suggestions {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    left: 0;
+    z-index: 50;
+    max-height: min(520px, 65vh);
+    overflow-y: auto;
+    border: 1px solid var(--ml-gray-200);
+    border-radius: 15px;
+    background: var(--ml-white);
+    box-shadow: 0 22px 55px rgba(18, 48, 74, 0.18);
+}
+
+.message {
+    padding: 24px 18px;
+    color: var(--ml-gray-500);
+    font-size: var(--ml-font-sm);
+    text-align: center;
+}
+
+.error { color: #a83b46; }
+
+.suggestionGroup { padding: 7px; border-bottom: 1px solid var(--ml-gray-100); }
+.groupLabel { padding: 7px 9px 5px; color: var(--ml-gray-500); font-size: 10px; font-weight: var(--ml-weight-bold); letter-spacing: 0.08em; text-transform: uppercase; }
+
+.suggestionItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px;
+    border-radius: 10px;
+    color: inherit;
+    text-decoration: none;
+    transition: var(--ml-transition);
+}
+
+.suggestionItem:hover,
+.activeSuggestion { background: var(--ml-mint); }
+
+.resultIcon {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border-radius: 9px;
+    color: var(--ml-teal);
+    background: var(--ml-teal-light);
+}
+
+.resultIcon svg { width: 19px; }
+.resultCopy { min-width: 0; display: flex; flex: 1; flex-direction: column; gap: 2px; }
+.resultCopy strong { overflow: hidden; color: var(--ml-navy); font-size: var(--ml-font-sm); text-overflow: ellipsis; white-space: nowrap; }
+.resultCopy small { overflow: hidden; color: var(--ml-gray-500); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.resultArrow { width: 17px; color: var(--ml-gray-300); }
+.suggestionItem:hover .resultArrow,
+.activeSuggestion .resultArrow { color: var(--ml-teal); }
+
+.viewAll {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 15px;
+    color: var(--ml-teal);
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-bold);
+    text-decoration: none;
+}
+
+.viewAll:hover { background: var(--ml-mint); }
+.viewAll svg { width: 17px; }
+
+@media (max-width: 600px) {
+    .root { margin-top: 20px; }
+    .form {
+        min-height: 54px;
+        grid-template-columns: 20px minmax(0, 1fr) 42px;
+        gap: 8px;
+        padding: 6px 6px 6px 13px;
+        border-radius: 13px;
+    }
+    .searchIcon { width: 20px; }
+    .form input { width: 100%; font-size: 14px; }
+    .form > button {
+        width: 42px;
+        min-width: 42px;
+        min-height: 42px;
+        display: grid;
+        place-items: center;
+        padding: 0;
+        border-radius: 10px;
+    }
+    .form > button span { display: none; }
+    .form > button svg { display: block; }
+    .suggestions { max-height: 58vh; }
+}
+
+@media (max-width: 390px) {
+    .form { grid-template-columns: 18px minmax(0, 1fr) 40px; gap: 7px; padding-left: 11px; }
+    .form > button { width: 40px; min-width: 40px; min-height: 40px; }
+}

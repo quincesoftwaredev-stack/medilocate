@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from '../../styles/Cart/CartItems.module.css'
 import Image from 'next/image'
-import { removeItem } from '@/redux/cartSlice'
+import { removeFromCart } from '@/redux/cartSlice'
 import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
 import { getPrice } from '@/utility/helper'
@@ -54,7 +54,14 @@ const CartItems = ({ cartItems }) => {
             </div>
             <div
               className={styles.x}
-              onClick={() => dispatch(removeItem(item))}
+              onClick={() =>
+                dispatch(
+                  removeFromCart(
+                    item.id ||
+                    item.product?._id
+                  )
+                )
+              }
             >
               X
             </div>
@@ -67,7 +74,7 @@ const CartItems = ({ cartItems }) => {
         </div>
         <div className={styles.flex}>
           <button onClick={() => router.push('/cart')}>Cart</button>
-          <button onClick={() => router.push('/checkout/address')}>
+          <button onClick={() => router.push('/checkout')}>
             Check Out
           </button>
         </div>

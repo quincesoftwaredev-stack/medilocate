@@ -61,12 +61,12 @@ export default function MedicineCard({
                         }
                     >
 
-                        {
-                            medicine.name
-                                ?.charAt(0)
-                                ?.toUpperCase() ||
-                            "M"
-                        }
+                        <strong>
+                            {
+                                medicine.name ||
+                                "Medicine"
+                            }
+                        </strong>
 
                     </div>
 

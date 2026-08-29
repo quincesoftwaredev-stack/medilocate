@@ -134,7 +134,7 @@ export default function MedicineHero({
 
 
                         <Link
-                            href="/medicines/prescription"
+                            href="/prescription"
                             className={styles.uploadButton}
                         >
 

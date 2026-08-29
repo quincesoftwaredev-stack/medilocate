@@ -120,6 +120,7 @@ const Register = () => {
 
     const [doctor, setDoctor] =
         useState({
+            gender: "",
             bmdcNumber: "",
             speciality: "",
             department: "",
@@ -341,6 +342,21 @@ const Register = () => {
     const validateProfile = () => {
 
         if (role === "doctor") {
+
+            if (!doctor.gender) {
+
+                dispatch(
+                    showSnackBar({
+                        message:
+                            "Gender is required.",
+                        option: {
+                            variant: "error",
+                        },
+                    })
+                );
+
+                return false;
+            }
 
             if (!doctor.bmdcNumber.trim()) {
 
@@ -1575,6 +1591,58 @@ const Register = () => {
                                     }
                                 >
 
+                                    <div
+                                        className={
+                                            styles.formGroup
+                                        }
+                                    >
+
+                                        <label>
+                                            Gender
+                                            <span
+                                                className={
+                                                    styles.required
+                                                }
+                                            >
+                                                *
+                                            </span>
+                                        </label>
+
+                                        <div
+                                            className={
+                                                styles.inputWrapper
+                                            }
+                                        >
+
+                                            <PersonOutlineRoundedIcon />
+
+                                            <select
+                                                value={
+                                                    doctor.gender
+                                                }
+                                                onChange={(event) =>
+                                                    setDoctor({
+                                                        ...doctor,
+                                                        gender:
+                                                            event.target.value,
+                                                    })
+                                                }
+                                            >
+                                                <option value="">
+                                                    Select gender
+                                                </option>
+                                                <option value="Male">
+                                                    Male
+                                                </option>
+                                                <option value="Female">
+                                                    Female
+                                                </option>
+                                            </select>
+
+                                        </div>
+
+                                    </div>
+
                                     <FormInput
                                         label="BMDC number"
                                         icon={
@@ -2231,7 +2299,7 @@ const Register = () => {
                                             role ===
                                                 "patient"
                                                 ? "/"
-                                                : "/profile"
+                                                : "/login"
                                         )
                                     }
                                 >

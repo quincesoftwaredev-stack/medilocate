@@ -4,17 +4,29 @@ import Booking from '@/database/model/Booking';
 import User from '@/database/model/User'
 import db from '@/database/connection';
 import { generateUniqueID } from '@/utility/helper';
+import mongoose from 'mongoose';
 
 const handler = nextConnect();
 
 // GET booking by ID
-handler.get(async (req, res) => {
+handler.get(isAuth, async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.query.id)) {
+      return res.status(400).json({ error: 'Invalid booking ID' });
+    }
     await db.connect();
-    const booking = await Booking.findById(req.query.id)
-      .populate('patient', 'fullName phone location image')
-      .populate('doctor', 'fullName phone speciality workingIn location image');
+    const booking = await Booking.findById(req.query.id);
     if (!booking) return res.status(404).json({ error: 'Booking not found' });
+
+    const userId = String(req.user._id);
+    const canView = req.user.role === 'admin'
+      || String(booking.patient) === userId
+      || String(booking.doctor) === userId;
+
+    if (!canView) return res.status(403).json({ error: 'Not authorized to view this booking' });
+
+    await booking.populate('patient', 'fullName firstName lastName');
+    await booking.populate('doctor', 'fullName firstName lastName speciality workingIn');
     res.status(200).json(booking);
   } catch (error) {
     console.error(error);

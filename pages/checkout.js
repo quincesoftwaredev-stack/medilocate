@@ -109,6 +109,12 @@ export default function CheckoutPage() {
                 state.cart?.prescription
         );
 
+    const userInfo = useSelector(
+        (state) => state.user?.userInfo
+    );
+
+    const accountId = userInfo?.id || userInfo?._id;
+
 
     /*
     |--------------------------------------------------------------------------
@@ -809,9 +815,6 @@ export default function CheckoutPage() {
             </Head>
 
 
-            <Navbar />
-
-
             <main
                 className={
                     styles.page
@@ -950,7 +953,7 @@ export default function CheckoutPage() {
 
 
                                     <Link
-                                        href="/profile/addresses"
+                                        href={accountId ? `/user/${accountId}/address` : "/login?redirectTo=/checkout"}
                                         className={
                                             styles.manageLink
                                         }
@@ -1322,7 +1325,7 @@ export default function CheckoutPage() {
 
 
                                                 <Link
-                                                    href="/medicines/prescription"
+                                                    href="/prescription"
                                                 >
 
                                                     Change
@@ -1334,7 +1337,7 @@ export default function CheckoutPage() {
                                         ) : (
 
                                             <Link
-                                                href="/medicines/prescription"
+                                                href="/prescription"
                                                 className={
                                                     styles.uploadPrescription
                                                 }
@@ -1388,7 +1391,7 @@ export default function CheckoutPage() {
                                             </h2>
 
                                             <span>
-                                                Choose how you'd like
+                                                Choose how you&apos;d like
                                                 to pay.
                                             </span>
 
@@ -1881,7 +1884,7 @@ export default function CheckoutPage() {
                             >
 
                                 By placing this order, you agree
-                                to MediLocate's order and delivery
+                                to MediLocate&apos;s order and delivery
                                 terms.
 
                             </p>
@@ -1908,8 +1911,6 @@ export default function CheckoutPage() {
 
             </main>
 
-
-            <Footer />
 
         </>
 

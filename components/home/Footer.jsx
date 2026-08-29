@@ -18,7 +18,7 @@ const doctorLinks = [
     },
     {
         label: "Medical Specialties",
-        href: "/specialties",
+        href: "/doctors",
     },
 ];
 
@@ -220,7 +220,7 @@ export default function Footer() {
 
                     <div className={styles.legal}>
 
-                        <Link href="/privacy">
+                        <Link href="/privacy-policy">
                             Privacy Policy
                         </Link>
 

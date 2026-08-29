@@ -1,5 +1,6 @@
 import db from "@/database/connection";
 import Doctor from "@/database/model/Doctor";
+import "@/database/model/Department";
 import User from "@/database/model/User";
 import nextConnect from "next-connect";
 
@@ -21,7 +22,39 @@ handler.get(async (req, res) => {
         const filter = {
             status: "active",
             verificationStatus: "verified",
+            consultationFee: { $gt: 0 },
+            bmdcNumber: { $regex: /\d/ },
+            speciality: { $regex: /\S/ },
+            education: { $regex: /\S/ },
+            workingIn: { $regex: /\S/ },
         };
+
+        const completeUserFilter = {
+            role: "doctor",
+            $and: [
+                {
+                    $or: [
+                        { fullName: { $regex: /\S/ } },
+                        { firstName: { $regex: /\S/ } },
+                    ],
+                },
+                {
+                    $or: [
+                        { phone: { $regex: /\S/ } },
+                        { phoneNumber: { $regex: /\S/ } },
+                    ],
+                },
+            ],
+        };
+
+        if (gender) {
+            completeUserFilter.gender = gender;
+        }
+
+        const completeUsers = await User.find(completeUserFilter).select("_id");
+        const completeUserIds = completeUsers.map((user) => user._id);
+
+        filter.user = { $in: completeUserIds };
 
         /*
         |--------------------------------------------------------------------------
@@ -59,6 +92,7 @@ handler.get(async (req, res) => {
 
             const users =
                 await User.find({
+                    _id: { $in: completeUserIds },
                     $or: [
                         {
                             fullName: {
@@ -160,35 +194,7 @@ handler.get(async (req, res) => {
         |
         */
 
-        if (gender) {
-
-            const genderUsers =
-                await User.find({
-                    gender,
-                }).select("_id");
-
-            const genderUserIds =
-                genderUsers.map(
-                    (user) =>
-                        user._id
-                );
-
-            if (filter.$or) {
-
-                filter.user = {
-                    $in:
-                        genderUserIds,
-                };
-
-            } else {
-
-                filter.user = {
-                    $in:
-                        genderUserIds,
-                };
-
-            }
-        }
+        // Gender is applied while selecting complete public user profiles above.
 
         /*
         |--------------------------------------------------------------------------

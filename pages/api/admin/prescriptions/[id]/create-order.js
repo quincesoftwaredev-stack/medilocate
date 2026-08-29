@@ -604,4 +604,82 @@ handler.post(async (req, res) => {
 });
 
 
+handler.patch(async (req, res) => {
+    try {
+        await db.connect();
+        const prescription = await Prescription.findById(req.query.id);
+        const { items, deliveryFee = 0, adminNote = "" } = req.body;
+
+        if (!prescription) {
+            return res.status(404).json({ success: false, message: "Prescription not found." });
+        }
+        if (!prescription.order) {
+            return res.status(404).json({ success: false, message: "No order has been created for this prescription." });
+        }
+        if (!Array.isArray(items) || items.length === 0) {
+            return res.status(400).json({ success: false, message: "At least one medicine is required." });
+        }
+
+        const medicines = await Medicine.find({ _id: { $in: items.map((item) => item.medicine) } });
+        const orderItems = [];
+        let subtotal = 0;
+
+        for (const item of items) {
+            const medicine = medicines.find(
+                (candidate) => candidate._id.toString() === String(item.medicine)
+            );
+            const quantity = Number(item.quantity);
+
+            if (!medicine) {
+                return res.status(400).json({ success: false, message: "One or more medicines could not be found." });
+            }
+            if (!Number.isInteger(quantity) || quantity < 1) {
+                return res.status(400).json({ success: false, message: `Invalid quantity for ${medicine.name}.` });
+            }
+
+            const unitPrice = Number(medicine.price);
+            if (!Number.isFinite(unitPrice) || unitPrice < 0) {
+                return res.status(400).json({ success: false, message: `Invalid price for ${medicine.name}.` });
+            }
+
+            subtotal += unitPrice * quantity;
+            orderItems.push({ medicine: medicine._id, quantity, unitPrice });
+        }
+
+        const parsedDeliveryFee = Number(deliveryFee);
+        if (!Number.isFinite(parsedDeliveryFee) || parsedDeliveryFee < 0) {
+            return res.status(400).json({ success: false, message: "Invalid delivery fee." });
+        }
+
+        const order = await Order.findById(prescription.order);
+        if (!order) {
+            return res.status(404).json({ success: false, message: "Order not found." });
+        }
+
+        order.items = orderItems;
+        order.subtotal = subtotal;
+        order.deliveryFee = parsedDeliveryFee;
+        order.total = subtotal + parsedDeliveryFee;
+        order.internalNote = adminNote || "";
+        await order.save();
+
+        prescription.medicines = orderItems.map((item) => {
+            const medicine = medicines.find((candidate) => candidate._id.toString() === item.medicine.toString());
+            return { medicine: item.medicine, prescribedName: medicine.name, quantity: item.quantity, status: "identified", note: "" };
+        });
+        prescription.internalNote = adminNote || "";
+        await prescription.save();
+
+        return res.status(200).json({ success: true, message: "Order updated successfully.", order });
+    } catch (error) {
+        console.error("Update prescription order error:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to update order.",
+            error: process.env.NODE_ENV === "development" ? error.message : undefined,
+        });
+    }
+});
+
+
 export default handler;

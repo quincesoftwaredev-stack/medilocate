@@ -40,7 +40,7 @@ const Checkout = ({ cartItems }) => {
       return
     }
     // dispatch(handleInitiateCheckout(cartItems))
-    router.push('/checkout/address')
+    router.push('/checkout')
   }
 
   const applyCoupon = async () => {

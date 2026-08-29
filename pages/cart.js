@@ -157,8 +157,6 @@ export default function CartPage() {
                 </main>
 
 
-                <Footer />
-
             </>
         );
 
@@ -579,7 +577,7 @@ export default function CartPage() {
                                     {prescription ? (
 
                                         <Link
-                                            href="/medicines/prescription"
+                                            href="/prescription"
                                             className={
                                                 styles.uploadedPrescription
                                             }
@@ -596,7 +594,7 @@ export default function CartPage() {
                                     ) : (
 
                                         <Link
-                                            href="/medicines/prescription"
+                                            href="/prescription"
                                             className={
                                                 styles.uploadPrescription
                                             }

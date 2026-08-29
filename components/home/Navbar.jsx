@@ -217,7 +217,7 @@ export default function Navbar() {
 
 
                         <Link
-                            href="/medicines/prescription"
+                            href="/prescription"
                             onClick={closeMenu}
                         >
                             <ReceiptLongOutlinedIcon />

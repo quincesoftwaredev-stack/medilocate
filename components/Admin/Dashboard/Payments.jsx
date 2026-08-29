@@ -112,7 +112,7 @@ const Payments = ({ title, dashboard, payments, totalPages, currentPage }) => {
                   <td>{payment.orderId.split('').slice(0, 9)}...</td>
                   <td
                     onClick={() =>
-                      router.push(`/admin/order?query=${payment.phone}`)
+                      router.push(`/admin/orders?query=${payment.phone}`)
                     }
                   >
                     {payment.currency} {payment.amount}

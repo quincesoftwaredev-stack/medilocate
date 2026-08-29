@@ -1,7 +1,11 @@
 import Head from "next/head";
 import Link from "next/link";
-import { useState } from "react";
+import {
+    useEffect,
+    useState,
+} from "react";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
@@ -13,15 +17,42 @@ import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 
-
 import PrescriptionUpload from "@/components/common/PrescriptionUpload";
+
+import {
+    showSnackBar,
+} from "@/redux/notistackSlice";
 
 import styles from "@/styles/Medicines/Prescription.module.css";
 
 
+/*
+|--------------------------------------------------------------------------
+| LOCAL STORAGE KEY
+|--------------------------------------------------------------------------
+|
+| Same key used by Checkout.
+|
+| This means:
+|
+| Checkout → Prescription
+| Prescription → Checkout
+|
+| Both pages share the same saved delivery information.
+|
+*/
+
+const SAVED_ADDRESS_KEY =
+    "medilocate_saved_address";
+
+
 export default function PrescriptionPage() {
 
-    const router = useRouter();
+    const router =
+        useRouter();
+
+    const dispatch =
+        useDispatch();
 
 
     /*
@@ -30,22 +61,182 @@ export default function PrescriptionPage() {
     |--------------------------------------------------------------------------
     */
 
-    const [files, setFiles] = useState([]);
+    const [files, setFiles] =
+        useState([]);
+
 
     const [patientName, setPatientName] =
         useState("");
 
+
     const [phone, setPhone] =
         useState("");
+
 
     const [address, setAddress] =
         useState("");
 
+
+    const [city, setCity] =
+        useState("Rangpur");
+
+
     const [notes, setNotes] =
         useState("");
 
+
     const [submitting, setSubmitting] =
         useState(false);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADDRESS LOADING STATE
+    |--------------------------------------------------------------------------
+    */
+
+    const [addressLoaded, setAddressLoaded] =
+        useState(false);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | LOAD SAVED ADDRESS
+    |--------------------------------------------------------------------------
+    |
+    | If the customer previously entered delivery information
+    | in Checkout or this Prescription page, automatically
+    | pre-fill the fields.
+    |
+    */
+
+    useEffect(() => {
+
+        try {
+
+            const storedAddress =
+                localStorage.getItem(
+                    SAVED_ADDRESS_KEY
+                );
+
+
+            if (storedAddress) {
+
+                const parsedAddress =
+                    JSON.parse(
+                        storedAddress
+                    );
+
+
+                if (
+                    parsedAddress &&
+                    typeof parsedAddress === "object"
+                ) {
+
+                    setPatientName(
+                        parsedAddress.name ||
+                        ""
+                    );
+
+
+                    setPhone(
+                        parsedAddress.phone ||
+                        ""
+                    );
+
+
+                    setAddress(
+                        parsedAddress.address ||
+                        ""
+                    );
+
+
+                    setCity(
+                        parsedAddress.city ||
+                        "Rangpur"
+                    );
+
+                }
+
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "Failed to load saved address:",
+                error
+            );
+
+
+        } finally {
+
+            setAddressLoaded(
+                true
+            );
+
+        }
+
+    }, []);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SAVE ADDRESS TO LOCAL STORAGE
+    |--------------------------------------------------------------------------
+    |
+    | Whenever the user submits a prescription,
+    | the latest delivery information becomes
+    | their saved address.
+    |
+    */
+
+    const saveAddressToLocalStorage = () => {
+
+        const newAddress = {
+
+            label:
+                "Saved address",
+
+            name:
+                patientName.trim(),
+
+            phone:
+                phone.trim(),
+
+            address:
+                address.trim(),
+
+            city:
+                city.trim() ||
+                "Rangpur",
+
+        };
+
+
+        try {
+
+            localStorage.setItem(
+
+                SAVED_ADDRESS_KEY,
+
+                JSON.stringify(
+                    newAddress
+                )
+
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Failed to save address:",
+                error
+            );
+
+        }
+
+    };
 
 
     /*
@@ -58,9 +249,20 @@ export default function PrescriptionPage() {
 
         if (!files.length) {
 
-            alert(
-                "Please upload your prescription first."
+            dispatch(
+                showSnackBar({
+
+                    message:
+                        "প্রথমে আপনার Prescription Upload করুন।",
+
+                    option: {
+                        variant:
+                            "error",
+                    },
+
+                })
             );
+
 
             return false;
 
@@ -69,9 +271,20 @@ export default function PrescriptionPage() {
 
         if (!patientName.trim()) {
 
-            alert(
-                "Please enter the patient's name."
+            dispatch(
+                showSnackBar({
+
+                    message:
+                        "রোগীর নাম লিখুন।",
+
+                    option: {
+                        variant:
+                            "error",
+                    },
+
+                })
             );
+
 
             return false;
 
@@ -80,9 +293,20 @@ export default function PrescriptionPage() {
 
         if (!phone.trim()) {
 
-            alert(
-                "Please enter a phone number."
+            dispatch(
+                showSnackBar({
+
+                    message:
+                        "মোবাইল নম্বর লিখুন।",
+
+                    option: {
+                        variant:
+                            "error",
+                    },
+
+                })
             );
+
 
             return false;
 
@@ -91,9 +315,42 @@ export default function PrescriptionPage() {
 
         if (!address.trim()) {
 
-            alert(
-                "Please enter the delivery address."
+            dispatch(
+                showSnackBar({
+
+                    message:
+                        "Delivery Address লিখুন।",
+
+                    option: {
+                        variant:
+                            "error",
+                    },
+
+                })
             );
+
+
+            return false;
+
+        }
+
+
+        if (!city.trim()) {
+
+            dispatch(
+                showSnackBar({
+
+                    message:
+                        "City লিখুন।",
+
+                    option: {
+                        variant:
+                            "error",
+                    },
+
+                })
+            );
+
 
             return false;
 
@@ -114,77 +371,106 @@ export default function PrescriptionPage() {
     const handleSubmit = async () => {
 
         if (!validateForm()) {
+
             return;
+
         }
 
 
         try {
 
-            setSubmitting(true);
-
-
-            const prescriptionData = {
-
-                patientName:
-                    patientName.trim(),
-
-                phone:
-                    phone.trim(),
-
-                address:
-                    address.trim(),
-
-                notes:
-                    notes.trim(),
-
-                files: files.map(
-                    (file) => ({
-                        url: file.url,
-                        publicId:
-                            file.publicId || "",
-                        name:
-                            file.name || "",
-                        type:
-                            file.type || "",
-                        size:
-                            file.size || 0,
-                    })
-                ),
-
-            };
-
-
-            const response = await axios.post(
-                "/api/prescriptions",
-                {
-                    patient: {
-                        name: patientName.trim(),
-                        phone: phone.trim(),
-                        address: address.trim(),
-                    },
-
-                    notes: notes.trim(),
-
-                    files,
-                }
+            setSubmitting(
+                true
             );
 
 
-            const requestCode =
-                response?.data?.prescription.requestCode;
-            console.log(response.data)
+            /*
+            |--------------------------------------------------------------------------
+            | SAVE LATEST ADDRESS
+            |--------------------------------------------------------------------------
+            |
+            | If the customer changed any saved information,
+            | this replaces the previous saved address.
+            |
+            */
 
+            saveAddressToLocalStorage();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | CREATE PRESCRIPTION REQUEST
+            |--------------------------------------------------------------------------
+            */
+
+            const response =
+                await axios.post(
+
+                    "/api/prescriptions",
+
+                    {
+
+                        patient: {
+
+                            name:
+                                patientName.trim(),
+
+                            phone:
+                                phone.trim(),
+
+                            address:
+                                address.trim(),
+
+                            city:
+                                city.trim(),
+
+                        },
+
+
+                        notes:
+                            notes.trim(),
+
+
+                        files,
+
+                    }
+
+                );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | RESPONSE
+            |--------------------------------------------------------------------------
+            */
+
+            const requestCode =
+                response?.data
+                    ?.prescription
+                    ?.requestCode;
+
+
+            console.log(
+                response.data
+            );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | SUCCESS
+            |--------------------------------------------------------------------------
+            */
 
             if (requestCode) {
 
                 router.push(
-                    `/medicines/prescription/success?request=${requestCode}`
+                    `/prescription/success?request=${requestCode}`
                 );
 
             } else {
 
                 router.push(
-                    "/medicines/prescription/success"
+                    "/prescription/success"
                 );
 
             }
@@ -198,19 +484,48 @@ export default function PrescriptionPage() {
             );
 
 
-            alert(
-                error?.response?.data?.message ||
-                "Something went wrong. Please try again."
+            dispatch(
+                showSnackBar({
+
+                    message:
+                        error?.response?.data?.message ||
+                        "কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।",
+
+                    option: {
+                        variant:
+                            "error",
+                    },
+
+                })
             );
 
 
         } finally {
 
-            setSubmitting(false);
+            setSubmitting(
+                false
+            );
 
         }
 
     };
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | WAIT FOR SAVED ADDRESS
+    |--------------------------------------------------------------------------
+    |
+    | Prevents the form from briefly showing empty fields
+    | before localStorage is loaded.
+    |
+    */
+
+    if (!addressLoaded) {
+
+        return null;
+
+    }
 
 
     /*
@@ -221,35 +536,48 @@ export default function PrescriptionPage() {
 
     return (
         <>
+
             <Head>
 
                 <title>
-                    Upload Prescription | MediLocate
+                    Prescription Upload করুন | MediLocate
                 </title>
 
 
                 <meta
                     name="description"
-                    content="Upload your prescription and let MediLocate arrange your medicine order."
+                    content="MediLocate-এ Prescription Upload করুন। Medicine availability, price এবং available discount জানার পর Order Confirm করুন এবং Rangpur-এ দ্রুত Medicine Delivery পান।"
                 />
 
             </Head>
 
 
+            <main
+                className={
+                    styles.page
+                }
+            >
 
-
-            <main className={styles.page}>
-
-                <div className={styles.container}>
+                <div
+                    className={
+                        styles.container
+                    }
+                >
 
 
                     {/* =====================================================
                         BREADCRUMB
                     ====================================================== */}
 
-                    <div className={styles.breadcrumb}>
+                    <div
+                        className={
+                            styles.breadcrumb
+                        }
+                    >
 
-                        <Link href="/medicines">
+                        <Link
+                            href="/medicines"
+                        >
 
                             <ArrowBackRoundedIcon />
 
@@ -264,7 +592,7 @@ export default function PrescriptionPage() {
 
 
                         <strong>
-                            Upload Prescription
+                            Prescription Upload
                         </strong>
 
                     </div>
@@ -274,7 +602,11 @@ export default function PrescriptionPage() {
                         HEADER
                     ====================================================== */}
 
-                    <header className={styles.header}>
+                    <header
+                        className={
+                            styles.header
+                        }
+                    >
 
                         <div>
 
@@ -284,14 +616,17 @@ export default function PrescriptionPage() {
 
 
                             <h1>
-                                Upload your prescription
+                                Prescription Upload করুন
                             </h1>
 
 
                             <p>
-                                Don't want to search for medicines
-                                yourself? Simply upload your prescription
-                                and our pharmacy team will handle the rest.
+                                Prescription Upload করুন।
+                                আমরা প্রয়োজনীয় Medicine-এর
+                                availability, price এবং available
+                                discount যাচাই করে আপনাকে জানাবো।
+                                আপনি Confirm করার পরই Order
+                                process করা হবে।
                             </p>
 
                         </div>
@@ -303,14 +638,22 @@ export default function PrescriptionPage() {
                         MAIN LAYOUT
                     ====================================================== */}
 
-                    <div className={styles.layout}>
+                    <div
+                        className={
+                            styles.layout
+                        }
+                    >
 
 
                         {/* =================================================
                             MAIN COLUMN
                         ================================================== */}
 
-                        <div className={styles.mainColumn}>
+                        <div
+                            className={
+                                styles.mainColumn
+                            }
+                        >
 
 
                             {/* =============================================
@@ -337,8 +680,10 @@ export default function PrescriptionPage() {
 
 
                                         <p>
-                                            Upload one or more pages
-                                            of your prescription.
+                                            Prescription-এর পরিষ্কার
+                                            ছবি বা PDF Upload করুন।
+                                            একাধিক page থাকলে সবগুলো
+                                            Upload করতে পারবেন।
                                         </p>
 
                                     </div>
@@ -347,8 +692,12 @@ export default function PrescriptionPage() {
 
 
                                 <PrescriptionUpload
-                                    value={files}
-                                    onChange={setFiles}
+                                    value={
+                                        files
+                                    }
+                                    onChange={
+                                        setFiles
+                                    }
                                 />
 
                             </section>
@@ -378,29 +727,37 @@ export default function PrescriptionPage() {
                                 <div>
 
                                     <h3>
-                                        For a better result
+                                        Upload করার আগে
                                     </h3>
 
 
                                     <ul>
 
                                         <li>
-                                            Make sure every part
-                                            of the prescription is
-                                            clearly visible.
+                                            Prescription-এর সব লেখা
+                                            যেন পরিষ্কারভাবে দেখা যায়।
                                         </li>
 
 
                                         <li>
-                                            Use good lighting and
-                                            avoid blurry photos.
+                                            ভালো আলোতে ছবি তুলুন এবং
+                                            blurry ছবি Upload করা
+                                            এড়িয়ে চলুন।
                                         </li>
 
 
                                         <li>
-                                            Upload all pages if your
-                                            prescription has multiple
-                                            pages.
+                                            Prescription-এ একাধিক
+                                            page থাকলে সব page Upload
+                                            করুন।
+                                        </li>
+
+
+                                        <li>
+                                            Medicine availability,
+                                            price এবং available
+                                            discount জানার পর আপনি
+                                            Order Confirm করবেন।
                                         </li>
 
                                     </ul>
@@ -411,7 +768,7 @@ export default function PrescriptionPage() {
 
 
                             {/* =================================================
-                                PATIENT INFORMATION
+                                ORDER INFORMATION
                             ================================================== */}
 
                             <section
@@ -429,13 +786,15 @@ export default function PrescriptionPage() {
                                     <div>
 
                                         <h2>
-                                            Patient information
+                                            Order Information
                                         </h2>
 
 
                                         <p>
-                                            Tell us who the medicine
-                                            is for.
+                                            Medicine-এর price,
+                                            availability এবং Delivery
+                                            সম্পর্কে যোগাযোগ করার জন্য
+                                            নিচের তথ্যগুলো দিন।
                                         </p>
 
                                     </div>
@@ -449,6 +808,7 @@ export default function PrescriptionPage() {
                                     }
                                 >
 
+
                                     {/* =====================================
                                         PATIENT NAME
                                     ====================================== */}
@@ -460,7 +820,7 @@ export default function PrescriptionPage() {
                                     >
 
                                         <label>
-                                            Patient name
+                                            রোগীর নাম
                                         </label>
 
 
@@ -474,16 +834,22 @@ export default function PrescriptionPage() {
 
 
                                             <input
+
                                                 type="text"
-                                                placeholder="Enter patient name"
+
+                                                placeholder="রোগীর নাম লিখুন"
+
                                                 value={
                                                     patientName
                                                 }
-                                                onChange={(e) =>
-                                                    setPatientName(
-                                                        e.target.value
-                                                    )
+
+                                                onChange={
+                                                    (event) =>
+                                                        setPatientName(
+                                                            event.target.value
+                                                        )
                                                 }
+
                                             />
 
                                         </div>
@@ -502,7 +868,7 @@ export default function PrescriptionPage() {
                                     >
 
                                         <label>
-                                            Phone number
+                                            মোবাইল নম্বর
                                         </label>
 
 
@@ -516,16 +882,24 @@ export default function PrescriptionPage() {
 
 
                                             <input
+
                                                 type="tel"
+
+                                                inputMode="numeric"
+
                                                 placeholder="01XXXXXXXXX"
+
                                                 value={
                                                     phone
                                                 }
-                                                onChange={(e) =>
-                                                    setPhone(
-                                                        e.target.value
-                                                    )
+
+                                                onChange={
+                                                    (event) =>
+                                                        setPhone(
+                                                            event.target.value
+                                                        )
                                                 }
+
                                             />
 
                                         </div>
@@ -542,7 +916,7 @@ export default function PrescriptionPage() {
                                     >
 
                                         <label>
-                                            Delivery address
+                                            Delivery Address
                                         </label>
 
 
@@ -556,16 +930,70 @@ export default function PrescriptionPage() {
 
 
                                             <input
+
                                                 type="text"
-                                                placeholder="House, road, area, city"
+
+                                                placeholder="বাড়ি, রোড, এলাকা"
+
                                                 value={
                                                     address
                                                 }
-                                                onChange={(e) =>
-                                                    setAddress(
-                                                        e.target.value
-                                                    )
+
+                                                onChange={
+                                                    (event) =>
+                                                        setAddress(
+                                                            event.target.value
+                                                        )
                                                 }
+
+                                            />
+
+                                        </div>
+
+                                    </div>
+
+
+                                    {/* =====================================
+                                        CITY
+                                    ====================================== */}
+
+                                    <div
+                                        className={
+                                            styles.formGroup
+                                        }
+                                    >
+
+                                        <label>
+                                            City
+                                        </label>
+
+
+                                        <div
+                                            className={
+                                                styles.inputWrapper
+                                            }
+                                        >
+
+                                            <LocationOnOutlinedIcon />
+
+
+                                            <input
+
+                                                type="text"
+
+                                                placeholder="Rangpur"
+
+                                                value={
+                                                    city
+                                                }
+
+                                                onChange={
+                                                    (event) =>
+                                                        setCity(
+                                                            event.target.value
+                                                        )
+                                                }
+
                                             />
 
                                         </div>
@@ -583,7 +1011,7 @@ export default function PrescriptionPage() {
 
                                         <label>
 
-                                            Additional instructions
+                                            Additional Note
 
                                             <span>
                                                 Optional
@@ -593,16 +1021,22 @@ export default function PrescriptionPage() {
 
 
                                         <textarea
-                                            placeholder="Any note for our pharmacy team or delivery person..."
+
+                                            placeholder="Medicine, Prescription বা Delivery সম্পর্কে কোনো অতিরিক্ত তথ্য থাকলে লিখুন..."
+
                                             value={
                                                 notes
                                             }
-                                            onChange={(e) =>
-                                                setNotes(
-                                                    e.target.value
-                                                )
+
+                                            onChange={
+                                                (event) =>
+                                                    setNotes(
+                                                        event.target.value
+                                                    )
                                             }
+
                                             rows={4}
+
                                         />
 
                                     </div>
@@ -636,7 +1070,7 @@ export default function PrescriptionPage() {
 
 
                             <h2>
-                                How it works
+                                যেভাবে Order করবেন
                             </h2>
 
 
@@ -645,6 +1079,7 @@ export default function PrescriptionPage() {
                                     styles.steps
                                 }
                             >
+
 
                                 {/* STEP 1 */}
 
@@ -666,13 +1101,13 @@ export default function PrescriptionPage() {
                                     <div>
 
                                         <strong>
-                                            Upload prescription
+                                            Prescription Upload করুন
                                         </strong>
 
 
                                         <span>
-                                            Send us a clear photo
-                                            or PDF.
+                                            Prescription-এর পরিষ্কার
+                                            ছবি বা PDF Upload করুন।
                                         </span>
 
                                     </div>
@@ -700,13 +1135,14 @@ export default function PrescriptionPage() {
                                     <div>
 
                                         <strong>
-                                            Our team reviews it
+                                            Price & Discount জানুন
                                         </strong>
 
 
                                         <span>
-                                            Our pharmacy team checks
-                                            the prescription.
+                                            আমরা Medicine availability,
+                                            price এবং available discount
+                                            যাচাই করে আপনাকে জানাবো।
                                         </span>
 
                                     </div>
@@ -734,13 +1170,15 @@ export default function PrescriptionPage() {
                                     <div>
 
                                         <strong>
-                                            We prepare your order
+                                            Order Confirm করুন
                                         </strong>
 
 
                                         <span>
-                                            The required medicines
-                                            are added to your order.
+                                            Price এবং Order details
+                                            দেখে আপনি Confirm করবেন।
+                                            আপনার Confirmation ছাড়া
+                                            Order proceed করা হবে না।
                                         </span>
 
                                     </div>
@@ -768,13 +1206,15 @@ export default function PrescriptionPage() {
                                     <div>
 
                                         <strong>
-                                            Get it delivered
+                                            দ্রুত Delivery পান
                                         </strong>
 
 
                                         <span>
-                                            We contact you and
-                                            arrange delivery.
+                                            Order Confirm করার পর
+                                            আপনার ঠিকানায় Medicine
+                                            Delivery-এর ব্যবস্থা
+                                            করা হবে।
                                         </span>
 
                                     </div>
@@ -795,45 +1235,54 @@ export default function PrescriptionPage() {
                             >
 
                                 <button
+
                                     type="button"
+
                                     className={
                                         styles.continueButton
                                     }
+
                                     onClick={
                                         handleSubmit
                                     }
+
                                     disabled={
                                         submitting
                                     }
+
                                 >
 
-                                    {submitting
-                                        ? "Submitting..."
-                                        : "Submit prescription"
+                                    {
+                                        submitting
+                                            ? "Submit হচ্ছে..."
+                                            : "Prescription Submit করুন"
                                     }
 
 
-                                    {!submitting && (
+                                    {
+                                        !submitting && (
 
-                                        <ArrowForwardRoundedIcon />
+                                            <ArrowForwardRoundedIcon />
 
-                                    )}
+                                        )
+                                    }
 
                                 </button>
 
 
                                 <p>
-                                    No payment is required at
-                                    this stage. Our team will
-                                    contact you after reviewing
-                                    your prescription.
+                                    এখন কোনো Payment করতে হবে না।
+                                    আমরা Medicine availability,
+                                    price এবং available discount
+                                    জানাবো। আপনি Confirm করার পরই
+                                    Order process করা হবে।
                                 </p>
 
                             </div>
 
 
                             {/* =============================================
-                                SECURITY NOTE
+                                CONFIRMATION NOTE
                             ============================================== */}
 
                             <div
@@ -846,8 +1295,8 @@ export default function PrescriptionPage() {
 
 
                                 <span>
-                                    Your prescription will be
-                                    reviewed by our pharmacy team.
+                                    আপনার Confirmation ছাড়া কোনো
+                                    Medicine Delivery করা হবে না।
                                 </span>
 
                             </div>
@@ -862,7 +1311,7 @@ export default function PrescriptionPage() {
 
                                 <ArrowBackRoundedIcon />
 
-                                Back to medicines
+                                Medicine Search করে Order করুন
 
                             </Link>
 
@@ -873,8 +1322,6 @@ export default function PrescriptionPage() {
                 </div>
 
             </main>
-
-
 
         </>
     );

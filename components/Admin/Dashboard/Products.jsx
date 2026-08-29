@@ -134,7 +134,7 @@ const Products = ({
                     )}`
                   }}
                 >
-                  <td onClick={() => router.push(`/product/${product.slug}`)} style = {{minWidth:"240px"}}>
+                  <td onClick={() => router.push(`/admin/product/create?id=${product._id}`)} style = {{minWidth:"240px"}}>
                     <div className={styles.flex} style={{ justifyContent: "flex-start", gap: "15px", alignItems: "center" }}>
                       <Image src={product.thumbnail} width={35} height={35} />
                       {product.name.length > 20 ? <>{product.name.slice(0, 20)}...</> : product.name}

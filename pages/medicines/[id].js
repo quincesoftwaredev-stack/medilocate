@@ -99,9 +99,6 @@ export default function MedicineDetailsPage({
                 </Head>
 
 
-                <Navbar />
-
-
                 <main
                     className={
                         styles.notFound
@@ -127,8 +124,6 @@ export default function MedicineDetailsPage({
 
                 </main>
 
-
-                <Footer />
 
             </>
         );
@@ -835,7 +830,7 @@ export default function MedicineDetailsPage({
 
 
                                 <Link
-                                    href="/medicines/prescription"
+                                    href="/prescription"
                                 >
 
                                     Upload prescription

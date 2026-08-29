@@ -118,7 +118,7 @@ const Expanded = ({ categories, setHistory, history, setOpen }) => {
         {categories &&
           categories.map((i, index) => (
             <div className={styles.category} key={index}>
-              <div onClick={() => router.push(`/shop?categories=${i._id}`)}>
+              <div onClick={() => router.push(`/medicines?categories=${i._id}`)}>
                 {i.name}
               </div>
               {i.children.length > 0 && (

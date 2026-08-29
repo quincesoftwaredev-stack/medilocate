@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import {
     useEffect,
@@ -68,6 +69,8 @@ export default function MedicinesPage({
     initialCategories = [],
 }) {
 
+    const router = useRouter();
+
     /*
     |--------------------------------------------------------------------------
     | REDUX
@@ -119,7 +122,11 @@ export default function MedicinesPage({
     const [
         search,
         setSearch
-    ] = useState("");
+    ] = useState(
+        typeof router.query.search === "string"
+            ? router.query.search
+            : ""
+    );
 
 
     /*

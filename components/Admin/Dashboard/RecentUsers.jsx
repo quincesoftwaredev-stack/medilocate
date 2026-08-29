@@ -11,7 +11,7 @@ const RecentUsers = () => {
     <div className={styles.wrapper}>
       <div className={styles.header}>
         <h3>New Users</h3>
-        <div className={styles.btn} onClick={() => router.push('/admin/users')}>
+        <div className={styles.btn} onClick={() => router.push('/admin/user')}>
           See All
         </div>
       </div>

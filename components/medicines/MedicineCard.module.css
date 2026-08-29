@@ -48,16 +48,79 @@
 }
 
 .placeholder {
-    width: 85px;
-    height: 85px;
+    position: relative;
+    width: 100%;
+    height: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 8px;
+    overflow: hidden;
+    padding: 22px;
+    box-sizing: border-box;
+    border: 1px solid rgba(15, 157, 138, 0.16);
     border-radius: 18px;
-    color: var(--ml-teal);
-    background: var(--ml-teal-light);
-    font-size: 35px;
+    color: var(--ml-navy);
+    background:
+        radial-gradient(
+            circle at 85% 18%,
+            rgba(15, 157, 138, 0.14),
+            transparent 32%
+        ),
+        linear-gradient(
+            145deg,
+            var(--ml-white),
+            var(--ml-teal-light)
+        );
+    text-align: center;
+}
+
+.placeholder::before,
+.placeholder::after {
+    position: absolute;
+    content: "";
+    border-radius: 999px;
+    background: rgba(15, 157, 138, 0.08);
+    transform: rotate(-35deg);
+}
+
+.placeholder::before {
+    width: 72px;
+    height: 26px;
+    top: 13px;
+    right: -18px;
+}
+
+.placeholder::after {
+    width: 54px;
+    height: 20px;
+    bottom: 12px;
+    left: -15px;
+}
+
+.placeholder strong {
+    position: relative;
+    z-index: 1;
+    display: -webkit-box;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 10px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    border-radius: 14px;
+    color: var(--ml-navy);
+    background: rgba(255, 255, 255, 0.58);
+    box-shadow:
+        0 8px 24px rgba(15, 157, 138, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    font-size: clamp(16px, 1.5vw, 22px);
     font-weight: var(--ml-weight-bold);
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+    text-shadow: 0 1px 0 var(--ml-white);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
 }
 
 
@@ -287,6 +350,19 @@
     .image {
         height: 145px;
         padding: 13px;
+    }
+
+    .placeholder {
+        gap: 5px;
+        padding: 16px;
+        border-radius: 14px;
+    }
+
+    .placeholder strong {
+        padding: 8px 11px;
+        border-radius: 11px;
+        font-size: 16px;
+        -webkit-line-clamp: 3;
     }
 
     .info {

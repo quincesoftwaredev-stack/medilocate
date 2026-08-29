@@ -12,7 +12,7 @@ const SubCategories = ({ categories, setSelected }) => {
             {' '}
             <b
               className={styles.subcategory}
-              onClick={() => router.push(`/shop?categories=${i._id}`)}
+              onClick={() => router.push(`/medicines?categories=${i._id}`)}
             >
               {i.name}
             </b>
@@ -21,7 +21,7 @@ const SubCategories = ({ categories, setSelected }) => {
                 <div
                   className={styles.subcategory}
                   style={{ fontSize: '95%' }}
-                  onClick={() => router.push(`/shop?categories=${i._id}`)}
+                  onClick={() => router.push(`/medicines?categories=${i._id}`)}
                 >
                   - {i.name}
                 </div>

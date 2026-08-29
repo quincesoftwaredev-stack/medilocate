@@ -466,9 +466,6 @@ export default function DoctorDetailsPage() {
             </Head>
 
 
-            <Navbar />
-
-
             <main className={styles.page}>
 
                 <div className={styles.container}>
@@ -2080,8 +2077,6 @@ export default function DoctorDetailsPage() {
 
             )}
 
-
-            <Footer />
 
         </>
     );
