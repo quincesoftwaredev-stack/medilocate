@@ -5,6 +5,8 @@ import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
+import Logo from "@/components/Utility/Logo";
+
 import styles from "./Footer.module.css";
 
 const doctorLinks = [
@@ -72,18 +74,9 @@ export default function Footer() {
 
                     <div className={styles.brand}>
 
-                        <Link
-                            href="/"
-                            className={styles.logo}
-                        >
-                            <span className={styles.logoMark}>
-                                M
-                            </span>
-
-                            <span>
-                                Medi<span>locate</span>
-                            </span>
-                        </Link>
+                        <div className={styles.logo}>
+                            <Logo dark />
+                        </div>
 
 
                         <p>

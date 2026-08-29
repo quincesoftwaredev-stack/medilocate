@@ -50,32 +50,7 @@
 .logo {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
     max-width: 100%;
-    color: var(--ml-white);
-    font-size: var(--ml-font-2xl);
-    font-weight: var(--ml-weight-bold);
-    letter-spacing: -0.5px;
-    text-decoration: none;
-}
-
-.logo > span:last-child span {
-    color: #8fd4ce;
-}
-
-.logoMark {
-    width: 38px;
-    height: 38px;
-    flex: 0 0 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    border-radius: var(--ml-radius-sm);
-    color: var(--ml-teal);
-    background: var(--ml-white);
-    font-size: var(--ml-font-xl);
-    font-weight: var(--ml-weight-extrabold);
 }
 
 .brand > p {
@@ -335,16 +310,6 @@
     .main {
         gap: 27px;
         padding: 44px 0 35px;
-    }
-
-    .logo {
-        font-size: var(--ml-font-xl);
-    }
-
-    .logoMark {
-        width: 36px;
-        height: 36px;
-        flex-basis: 36px;
     }
 
     .brand > p {
