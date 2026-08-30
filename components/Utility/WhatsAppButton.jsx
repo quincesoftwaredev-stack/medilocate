@@ -28,7 +28,7 @@ Lng: ${location.lng}`
       rel="noopener noreferrer"
       style={{
         position: "fixed",
-        bottom: "20px",
+        bottom: "65px",
         right: "20px",
         backgroundColor: "#25D366",
         color: "white",
@@ -40,7 +40,7 @@ Lng: ${location.lng}`
         zIndex: 999,
       }}
     >
-      💬 Chat On Whatsapp
+      💬 Chat
     </a>
   );
 };

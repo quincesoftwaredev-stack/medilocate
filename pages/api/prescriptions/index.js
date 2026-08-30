@@ -189,7 +189,7 @@ handler.post(async (req, res) => {
                     whatsapp,
 
                 message:
-                    "A new prescription has been uploaded. Please review it in the MediLocate admin dashboard.",
+                    "A new prescription has been uploaded. Please eview it in the MediLocate admin dashboard.",
 
             });
 
