@@ -2,6 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import {
+    useEffect,
     useMemo,
     useState,
 } from "react";
@@ -516,6 +517,20 @@ export default function PrescriptionReviewPage({
             ""
         );
 
+    const [catalogMedicines, setCatalogMedicines] =
+        useState([]);
+
+    useEffect(() => {
+        fetch('/data/medicines-catalog.json')
+            .then((response) => response.ok ? response.json() : [])
+            .then((data) => {
+                if (Array.isArray(data)) setCatalogMedicines(data);
+            })
+            .catch(() => {
+                // Keep the server-provided list as a selector fallback.
+            });
+    }, []);
+
 
     /*
     |--------------------------------------------------------------------------
@@ -636,7 +651,11 @@ export default function PrescriptionReviewPage({
                 }
 
 
-                return medicines
+                const source = catalogMedicines.length
+                    ? catalogMedicines
+                    : medicines;
+
+                return source
 
                     .filter(
                         (
@@ -679,6 +698,7 @@ export default function PrescriptionReviewPage({
             },
             [
                 medicineSearch,
+                catalogMedicines,
                 medicines,
             ]
         );

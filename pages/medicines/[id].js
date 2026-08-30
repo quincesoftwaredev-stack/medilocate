@@ -1164,26 +1164,21 @@ export async function getServerSideProps(
 
         const response =
             await axios.get(
-
-                `${BASE_URL}/api/medicines/${id}`,
-
-                {
-
-                    headers: {
-
-                        Cookie:
-                            cookies
-
-                    }
-
-                }
-
+                `${BASE_URL}/data/medicines-catalog.json`,
+                { headers: { Cookie: cookies } }
             );
 
+        const catalogMedicine =
+            response.data?.find(
+                (item) => String(item._id) === String(id)
+            );
 
-        const medicine =
-            response.data?.medicine ||
-            response.data;
+        const medicine = catalogMedicine
+            ? {
+                ...catalogMedicine,
+                image: { url: catalogMedicine.image || '' },
+            }
+            : null;
 
 
         /*

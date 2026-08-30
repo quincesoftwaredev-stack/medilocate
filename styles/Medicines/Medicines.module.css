@@ -77,6 +77,7 @@
 
 .resultsInfo {
     margin-bottom: 16px;
+    scroll-margin-top: 88px;
     color: var(--ml-gray-500);
     font-size: var(--ml-font-sm);
 }
@@ -84,7 +85,7 @@
 @media (max-width: 650px) {
 
     .content {
-        padding: 55px 0 90px;
+        padding: 24px 0 90px;
     }
 
     .container {
@@ -93,6 +94,7 @@
 
     .sectionHeader {
         align-items: center;
+        margin-bottom: 16px;
     }
 
     .sectionHeader h2 {

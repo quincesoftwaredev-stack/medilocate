@@ -5,10 +5,13 @@ import { useRouter } from "next/router";
 import {
     useEffect,
     useMemo,
+    useRef,
     useState,
 } from "react";
 
 import axios from "axios";
+import fs from "fs/promises";
+import path from "path";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
@@ -98,6 +101,20 @@ export default function MedicinesPage({
         initialMedicines
     );
 
+    const [catalogMedicines, setCatalogMedicines] =
+        useState([]);
+
+    useEffect(() => {
+        fetch('/data/medicines-catalog.json')
+            .then((response) => response.ok ? response.json() : [])
+            .then((data) => {
+                if (Array.isArray(data)) setCatalogMedicines(data);
+            })
+            .catch(() => {
+                // Database API remains the fallback until the catalog is exported.
+            });
+    }, []);
+
 
     /*
     |--------------------------------------------------------------------------
@@ -153,6 +170,11 @@ export default function MedicinesPage({
         loading,
         setLoading
     ] = useState(false);
+
+    const resultsRef = useRef(null);
+
+    const shouldScrollToResultsRef =
+        useRef(false);
 
 
     /*
@@ -216,6 +238,30 @@ export default function MedicinesPage({
 
             setLoading(true);
 
+            if (catalogMedicines.length) {
+                const normalizedSearch = searchValue.trim().toLowerCase();
+                const filtered = catalogMedicines.filter((medicine) => {
+                    const matchesSearch = !normalizedSearch || [
+                        medicine.name,
+                        medicine.genericName,
+                        medicine.manufacturer,
+                    ].some((value) => String(value || '').toLowerCase().includes(normalizedSearch));
+                    const matchesCategory = categoryValue === 'All Medicines' || medicine.category === categoryValue;
+                    return matchesSearch && matchesCategory;
+                });
+                const pageNumber = Math.max(Number(page) || 1, 1);
+                const start = (pageNumber - 1) * ITEMS_PER_PAGE;
+                setMedicines(filtered.slice(start, start + ITEMS_PER_PAGE));
+                setPagination({
+                    page: pageNumber,
+                    limit: ITEMS_PER_PAGE,
+                    total: filtered.length,
+                    pages: Math.ceil(filtered.length / ITEMS_PER_PAGE),
+                });
+                setLoading(false);
+                return;
+            }
+
 
             const response =
                 await axios.get(
@@ -257,6 +303,24 @@ export default function MedicinesPage({
                     pages: 0,
                 }
             );
+
+            if (
+                shouldScrollToResultsRef.current
+            ) {
+
+                shouldScrollToResultsRef.current =
+                    false;
+
+                window.requestAnimationFrame(
+                    () => {
+                        resultsRef.current?.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start",
+                        });
+                    }
+                );
+
+            }
 
         } catch (error) {
 
@@ -370,6 +434,13 @@ export default function MedicinesPage({
         event
     ) => {
 
+        if (
+            event.target.value.trim()
+        ) {
+            shouldScrollToResultsRef.current =
+                true;
+        }
+
         setSearch(
             event.target.value
         );
@@ -430,6 +501,9 @@ export default function MedicinesPage({
     const handleCategoryChange = (
         category
     ) => {
+
+        shouldScrollToResultsRef.current =
+            true;
 
         setSelectedCategory(
             category
@@ -760,6 +834,9 @@ export default function MedicinesPage({
                         {/* RESULTS */}
 
                         <div
+                            ref={
+                                resultsRef
+                            }
                             className={
                                 styles.resultsInfo
                             }
@@ -891,88 +968,24 @@ export async function getServerSideProps(
 ) {
 
     try {
-
-        const {
-            req
-        } = context;
-
-
-        const protocol =
-            req.headers[
-                "x-forwarded-proto"
-            ] ||
-            (
-                process.env.NODE_ENV ===
-                    "production"
-                    ? "https"
-                    : "http"
-            );
-
-
-        const host =
-            req.headers.host;
-
-
-        const baseUrl =
-            `${protocol}://${host}`;
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | ONLY INITIAL DATA FETCH
-        |--------------------------------------------------------------------------
-        */
-
-        const response =
-            await axios.get(
-
-                `${baseUrl}${API_PATH}`,
-
-                {
-
-                    params: {
-
-                        page: 1,
-
-                        limit:
-                            ITEMS_PER_PAGE,
-
-                        search: "",
-
-                        status:
-                            "active",
-
-                        category:
-                            "all",
-
-                        prescription:
-                            "all",
-
-                        stock:
-                            "all",
-
-                    },
-
-                    headers: {
-
-                        Cookie:
-                            req.headers.cookie ||
-                            "",
-
-                    },
-
-                }
-
-            );
-
-
-        const data =
-            response.data || {};
+        const filePath = path.join(
+            process.cwd(),
+            "public",
+            "data",
+            "medicines-catalog.json"
+        );
+        const catalog = JSON.parse(
+            await fs.readFile(filePath, "utf8")
+        );
+        const data = Array.isArray(catalog) ? catalog : [];
+        const categories = [
+            ...new Set(data.map((medicine) => medicine.category).filter(Boolean)),
+        ].sort();
 
 
         console.log(
             "SSR medicines:",
-            data.medicines?.length || 0
+            data.length
         );
 
 
@@ -981,19 +994,18 @@ export async function getServerSideProps(
             props: {
 
                 initialMedicines:
-                    data.medicines || [],
+                    data.slice(0, ITEMS_PER_PAGE),
 
                 initialPagination:
-                    data.pagination || {
-                        page: 1,
-                        limit:
-                            ITEMS_PER_PAGE,
-                        total: 0,
-                        pages: 0,
-                    },
+                {
+                    page: 1,
+                    limit: ITEMS_PER_PAGE,
+                    total: data.length,
+                    pages: Math.ceil(data.length / ITEMS_PER_PAGE),
+                },
 
                 initialCategories:
-                    data.categories || [],
+                    categories,
 
             },
 

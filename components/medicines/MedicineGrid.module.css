@@ -4,10 +4,20 @@
 
 .grid {
     width: 100%;
+
     display: grid;
+
     grid-template-columns:
-        repeat(4, minmax(0, 1fr));
+        repeat(
+            4,
+            minmax(0, 1fr)
+        );
+
     gap: 18px;
+
+    margin: 0;
+    padding: 0;
+
     box-sizing: border-box;
 }
 
@@ -18,66 +28,127 @@
 
 .empty {
     width: 100%;
-    min-height: 280px;
-    padding: 40px 20px;
+
+    min-height: 250px;
+
+    padding: 32px 20px;
+
     display: flex;
-    align-items: center;
-    justify-content: center;
+
     flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
     box-sizing: border-box;
-    border: 1px solid var(--ml-gray-200);
-    border-radius: var(--ml-radius-md);
-    background: var(--ml-white);
+
+    border:
+        1px solid
+        var(--ml-gray-200);
+
+    border-radius:
+        var(--ml-radius-md);
+
+    background:
+        var(--ml-white);
+
     text-align: center;
 }
 
+
 .emptyIcon {
-    width: 52px;
-    height: 52px;
+    width: 48px;
+    height: 48px;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     border-radius: 50%;
-    color: var(--ml-teal);
-    background: var(--ml-teal-light);
+
+    color:
+        var(--ml-teal);
+
+    background:
+        var(--ml-teal-light);
 }
+
 
 .emptyIcon svg {
-    width: 27px;
-    height: 27px;
+    width: 25px;
+    height: 25px;
 }
 
+
 .empty h3 {
-    margin: 15px 0 6px;
-    color: var(--ml-navy);
-    font-size: var(--ml-font-xl);
-    font-weight: var(--ml-weight-bold);
+    margin:
+        12px 0 5px;
+
+    color:
+        var(--ml-navy);
+
+    font-size:
+        var(--ml-font-lg);
+
+    font-weight:
+        var(--ml-weight-bold);
 }
+
 
 .empty p {
     max-width: 400px;
+
     margin: 0;
-    color: var(--ml-gray-500);
-    font-size: var(--ml-font-sm);
-    line-height: var(--ml-line-relaxed);
+
+    color:
+        var(--ml-gray-500);
+
+    font-size:
+        var(--ml-font-sm);
+
+    line-height:
+        var(--ml-line-relaxed);
 }
+
 
 .empty button {
-    min-height: 40px;
-    margin-top: 18px;
-    padding: 0 16px;
+    min-height: 38px;
+
+    margin-top: 14px;
+
+    padding:
+        0 15px;
+
     border: 0;
-    border-radius: var(--ml-radius-sm);
-    color: var(--ml-white);
-    background: var(--ml-teal);
-    font-size: var(--ml-font-sm);
-    font-weight: var(--ml-weight-semibold);
+
+    border-radius:
+        var(--ml-radius-sm);
+
+    color:
+        var(--ml-white);
+
+    background:
+        var(--ml-teal);
+
+    font-size:
+        var(--ml-font-sm);
+
+    font-weight:
+        var(--ml-weight-semibold);
+
     cursor: pointer;
-    transition: var(--ml-transition);
+
+    transition:
+        var(--ml-transition);
 }
 
+
 .empty button:hover {
-    background: var(--ml-teal-dark);
+    background:
+        var(--ml-teal-dark);
 }
 
 
@@ -89,7 +160,12 @@
 
     .grid {
         grid-template-columns:
-            repeat(3, minmax(0, 1fr));
+            repeat(
+                3,
+                minmax(0, 1fr)
+            );
+
+        gap: 15px;
     }
 
 }
@@ -103,8 +179,12 @@
 
     .grid {
         grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-        gap: 14px;
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+        gap: 12px;
     }
 
 }
@@ -118,21 +198,74 @@
 
     .grid {
         grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-        gap: 10px;
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+        gap: 9px;
+
+        margin-top: 0;
+
+        padding-top: 0;
     }
 
+
     .empty {
-        min-height: 240px;
-        padding: 30px 16px;
+        min-height: 200px;
+
+        padding:
+            22px 14px;
+    }
+
+
+    .emptyIcon {
+        width: 42px;
+        height: 42px;
+    }
+
+
+    .emptyIcon svg {
+        width: 22px;
+        height: 22px;
+    }
+
+
+    .empty h3 {
+        margin:
+            10px 0 4px;
+
+        font-size:
+            var(--ml-font-md);
+    }
+
+
+    .empty p {
+        font-size:
+            var(--ml-font-xs);
+    }
+
+
+    .empty button {
+        min-height: 36px;
+
+        margin-top: 12px;
+
+        font-size:
+            var(--ml-font-xs);
     }
 
 }
 
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
 @media (max-width: 360px) {
 
     .grid {
-        gap: 8px;
+        gap: 7px;
     }
 
 }
