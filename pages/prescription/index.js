@@ -1,4 +1,4 @@
-import Head from "next/head";
+import PageSeo from "@/components/SEO/PageSeo";
 import Link from "next/link";
 import {
     useEffect,
@@ -537,19 +537,7 @@ export default function PrescriptionPage() {
     return (
         <>
 
-            <Head>
-
-                <title>
-                    Prescription Upload করুন | MediLocate
-                </title>
-
-
-                <meta
-                    name="description"
-                    content="MediLocate-এ Prescription Upload করুন। Medicine availability, price এবং available discount জানার পর Order Confirm করুন এবং Rangpur-এ দ্রুত Medicine Delivery পান।"
-                />
-
-            </Head>
+            <PageSeo title="Upload Prescription for Medicine Orders | MediLocate" description="Upload your prescription securely to MediLocate, share delivery details and let the pharmacy team prepare your medicine order for confirmation." path="/prescription" keywords="upload prescription online, prescription medicine order, pharmacy delivery Bangladesh" schemaType="WebPage" />
 
 
             <main

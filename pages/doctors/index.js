@@ -1,4 +1,4 @@
-import Head from "next/head";
+import PageSeo from "@/components/SEO/PageSeo";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
@@ -248,18 +248,7 @@ export default function DoctorsPage({
 
     return (
         <>
-            <Head>
-
-                <title>
-                    Find a Doctor | MediLocate
-                </title>
-
-                <meta
-                    name="description"
-                    content="Find trusted doctors near you with MediLocate."
-                />
-
-            </Head>
+            <PageSeo title="Find Trusted Doctors Near You | MediLocate" description="Browse active doctor profiles by specialty, location and consultation details to find a suitable healthcare professional with MediLocate." path="/doctors" keywords="find doctor Bangladesh, doctors near me, doctor specialty search, MediLocate doctors" schemaType="CollectionPage" />
 
 
 

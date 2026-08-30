@@ -1,4 +1,4 @@
-import Head from "next/head";
+import PageSeo from "@/components/SEO/PageSeo";
 
 import Hero from "../components/home/Hero";
 import Services from "../components/home/Services";
@@ -12,16 +12,7 @@ import FinalCTA from "../components/home/FinalCTA";
 export default function Home() {
     return (
         <>
-            <Head>
-                <title>
-                    Medilocate | Find Doctors & Get Medicines Delivered
-                </title>
-
-                <meta
-                    name="description"
-                    content="Find trusted doctors near you and get medicines delivered to your doorstep with Medilocate."
-                />
-            </Head>
+            <PageSeo title="MediLocate | Find Doctors & Order Medicines Online" description="Find trusted doctors, search medicines, upload prescriptions and arrange convenient medicine delivery with MediLocate in Bangladesh." path="/" keywords="find doctors Bangladesh, order medicine online, prescription upload, medicine delivery, MediLocate" schemaType="WebPage" />
 
             <main>
 

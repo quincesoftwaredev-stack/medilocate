@@ -1,4 +1,4 @@
-import Head from "next/head";
+import PageSeo from "@/components/SEO/PageSeo";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -745,18 +745,7 @@ export default function MedicinesPage({
 
         <>
 
-            <Head>
-
-                <title>
-                    Order Medicine Online | MediLocate
-                </title>
-
-                <meta
-                    name="description"
-                    content="Order medicines online with MediLocate. Browse medicines, upload prescriptions and get fast local medicine delivery."
-                />
-
-            </Head>
+            <PageSeo title="Search & Order Medicines Online | MediLocate" description="Search medicines by brand or generic name, compare essential details and add the quantity you need to your MediLocate cart for convenient delivery." path="/medicines" keywords="search medicine online, order medicine Bangladesh, generic medicine search, medicine delivery" schemaType="CollectionPage" />
 
 
             <main
