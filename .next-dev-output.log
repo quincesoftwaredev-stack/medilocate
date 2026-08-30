@@ -10,3 +10,228 @@
  ○ Compiling /middleware ...
  ✓ Compiled /middleware in 1641ms (71 modules)
  ○ Compiling /api/doctors ...
+ ✓ Compiled /doctors in 94.7s (973 modules)
+ ○ Compiling /api/doctors/[id] ...
+new connection
+ ✓ Compiled /_error in 12s (991 modules)
+use previous connection
+already connected
+already connected
+already connected
+already connected
+ ○ Compiling /api/department/view ...
+ ✓ Compiled /api/department/view in 1149ms (244 modules)
+use previous connection
+already connected
+ ✓ Compiled /api/doctors/[id] in 128ms (251 modules)
+use previous connection
+{
+  signature: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InF1aW5jZXNvZnR3YXJlZGV2QGdtYWlsLmNvbSIsIl9pZCI6IjY5OGExMTI2NzAyZDQyNDAzZjNiZTc2MiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc4NzgxNTMyMywiZXhwIjoxNzkwNDA3MzIzfQ.lcKRpJgEfvg1hzDmD6rcXkqtqkmBQmgl26Q58wOIX9I'
+}
+already connected
+ ✓ Compiled /doctors/[id] in 437ms (913 modules)
+use previous connection
+ ○ Compiling / ...
+ ✓ Compiled / in 668ms (986 modules)
+ ✓ Compiled in 3.1s (841 modules)
+ ○ Compiling /doctors ...
+ ✓ Compiled /doctors in 959ms (963 modules)
+ ○ Compiling /api/doctors ...
+ ✓ Compiled /api/doctors in 2.5s (984 modules)
+use previous connection
+ ✓ Compiled in 8s (841 modules)
+ ○ Compiling /doctors ...
+ ✓ Compiled /doctors in 1124ms (963 modules)
+ ○ Compiling /api/doctors ...
+ ✓ Compiled /api/doctors in 562ms (283 modules)
+use previous connection
+ ○ Compiling /api/department/view ...
+ ✓ Compiled /api/department/view in 9.3s (999 modules)
+ ✓ Compiled (1002 modules)
+use previous connection
+already connected
+ ✓ Compiled /api/doctors/[id] in 531ms (298 modules)
+use previous connection
+ ○ Compiling / ...
+ ✓ Compiled / in 2.2s (935 modules)
+ ✓ Compiled /doctors in 408ms (983 modules)
+ ✓ Compiled /api/doctors in 152ms (292 modules)
+use previous connection
+ ✓ Compiled /api/doctors/[id] in 319ms (297 modules)
+use previous connection
+ ✓ Compiled /api/department/view in 209ms (300 modules)
+use previous connection
+already connected
+ ✓ Compiled in 2.3s (1012 modules)
+use previous connection
+ ○ Compiling /doctors ...
+ ✓ Compiled /doctors in 3.1s (1006 modules)
+ ✓ Compiled /api/doctors in 195ms (297 modules)
+use previous connection
+ ✓ Compiled in 1047ms (1004 modules)
+ ✓ Compiled /api/doctors/[id] in 132ms (297 modules)
+use previous connection
+ ○ Compiling / ...
+ ✓ Compiled / in 4.4s (983 modules)
+ ✓ Compiled /api/doctors in 226ms (292 modules)
+use previous connection
+ ○ Compiling / ...
+ ✓ Compiled / in 3.1s (983 modules)
+ ○ Compiling /api/doctors ...
+ ✓ Compiled /api/doctors in 2.6s (1004 modules)
+use previous connection
+ ✓ Compiled in 2.2s (861 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 1418ms (983 modules)
+ ✓ Compiled /api/doctors in 221ms (292 modules)
+use previous connection
+ ✓ Compiled in 6.3s (1006 modules)
+ ✓ Compiled in 2.8s (863 modules)
+ ○ Compiling /doctors ...
+ ✓ Compiled /doctors in 1378ms (985 modules)
+ ○ Compiling /api/doctors ...
+ ✓ Compiled /api/doctors in 2.1s (1006 modules)
+use previous connection
+ ✓ Compiled in 1881ms (863 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 1159ms (985 modules)
+ ✓ Compiled /api/doctors in 372ms (293 modules)
+use previous connection
+ ✓ Compiled in 1370ms (1006 modules)
+ ✓ Compiled in 806ms (863 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 1165ms (985 modules)
+ ✓ Compiled /api/doctors in 223ms (293 modules)
+use previous connection
+ ✓ Compiled /api/doctors/[id] in 435ms (298 modules)
+use previous connection
+already connected
+ ✓ Compiled in 1071ms (886 modules)
+ ○ Compiling /doctors ...
+ ✓ Compiled /doctors in 1145ms (1008 modules)
+ ○ Compiling /api/doctors ...
+ ✓ Compiled /api/doctors in 776ms (1011 modules)
+use previous connection
+already connected
+ ✓ Compiled /doctors in 1182ms (965 modules)
+ ✓ Compiled /api/doctors in 80ms (293 modules)
+use previous connection
+ ○ Compiling /profile/[id] ...
+ ✓ Compiled /profile/[id] in 3.1s (1003 modules)
+ ○ Compiling /doctors/[id]/edit ...
+ ✓ Compiled /doctors/[id]/edit in 1486ms (1003 modules)
+ ○ Compiling /api/doctors/[id] ...
+ ✓ Compiled /api/doctors/[id] in 554ms (305 modules)
+use previous connection
+ ✓ Compiled in 1732ms (865 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 665ms (971 modules)
+ ✓ Compiled /api/doctors in 130ms (287 modules)
+use previous connection
+ ✓ Compiled in 1724ms (865 modules)
+ ○ Compiling /doctors ...
+ ✓ Compiled /doctors in 1188ms (971 modules)
+ ○ Compiling /api/doctors ...
+ ✓ Compiled /api/doctors in 2.4s (992 modules)
+use previous connection
+ ✓ Compiled in 2.4s (869 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 607ms (973 modules)
+ ✓ Compiled /api/doctors in 189ms (288 modules)
+use previous connection
+ ○ Compiling /api/doctors/[id] ...
+ ✓ Compiled /api/doctors/[id] in 1449ms (277 modules)
+{
+  signature: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InF1aW5jZXNvZnR3YXJlZGV2QGdtYWlsLmNvbSIsIl9pZCI6IjY5OGExMTI2NzAyZDQyNDAzZjNiZTc2MiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc4NzgxNTMyMywiZXhwIjoxNzkwNDA3MzIzfQ.lcKRpJgEfvg1hzDmD6rcXkqtqkmBQmgl26Q58wOIX9I'
+}
+use previous connection
+ ○ Compiling /doctors/[id] ...
+ ✓ Compiled / in 6.1s (1029 modules)
+ ○ Compiling /api/doctors ...
+ ✓ Compiled /api/doctors in 1686ms (1032 modules)
+use previous connection
+already connected
+already connected
+ ✓ Compiled in 2.1s (865 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 1056ms (998 modules)
+ ○ Compiling /api/doctors ...
+ ✓ Compiled /api/doctors in 721ms (1019 modules)
+use previous connection
+ ✓ Compiled in 2.5s (865 modules)
+ ○ Compiling /doctors ...
+ ✓ Compiled /doctors in 2.6s (998 modules)
+ ○ Compiling /api/doctors ...
+ ✓ Compiled /api/doctors in 1107ms (1019 modules)
+use previous connection
+ ✓ Compiled in 2.7s (1019 modules)
+ ✓ Compiled in 1917ms (865 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 2.2s (998 modules)
+ ○ Compiling /api/doctors ...
+ ✓ Compiled /api/doctors in 1021ms (1019 modules)
+use previous connection
+ ✓ Compiled in 4s (925 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 1382ms (998 modules)
+ ✓ Compiled in 3.7s (940 modules)
+ ○ Compiling /doctors ...
+ ✓ Compiled /doctors in 944ms (998 modules)
+ ○ Compiling /api/doctors ...
+ ✓ Compiled /api/doctors in 1166ms (303 modules)
+use previous connection
+ ✓ Compiled /api/doctors/[id] in 480ms (276 modules)
+{
+  signature: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InF1aW5jZXNvZnR3YXJlZGV2QGdtYWlsLmNvbSIsIl9pZCI6IjY5OGExMTI2NzAyZDQyNDAzZjNiZTc2MiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc4NzgxNTMyMywiZXhwIjoxNzkwNDA3MzIzfQ.lcKRpJgEfvg1hzDmD6rcXkqtqkmBQmgl26Q58wOIX9I'
+}
+use previous connection
+already connected
+ ○ Compiling /doctors ...
+ ✓ Compiled /doctors in 4.8s (998 modules)
+ ✓ Compiled /api/doctors in 327ms (303 modules)
+use previous connection
+ ✓ Compiled /api/doctors/[id] in 312ms (308 modules)
+use previous connection
+ ✓ Compiled in 2.7s (1024 modules)
+ ✓ Compiled in 1123ms (888 modules)
+ ○ Compiling /doctors ...
+ ✓ Compiled /doctors in 2.2s (1021 modules)
+ ○ Compiling /api/doctors ...
+ ✓ Compiled /api/doctors in 1392ms (1019 modules)
+use previous connection
+ ✓ Compiled /api/doctors/[id] in 325ms (308 modules)
+{
+  signature: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InF1aW5jZXNvZnR3YXJlZGV2QGdtYWlsLmNvbSIsIl9pZCI6IjY5OGExMTI2NzAyZDQyNDAzZjNiZTc2MiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc4NzgxNTMyMywiZXhwIjoxNzkwNDA3MzIzfQ.lcKRpJgEfvg1hzDmD6rcXkqtqkmBQmgl26Q58wOIX9I'
+}
+use previous connection
+already connected
+already connected
+ ○ Compiling /api/department/view ...
+ ✓ Compiled /api/department/view in 627ms (311 modules)
+use previous connection
+already connected
+ ✓ Compiled in 4.8s (892 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 3.6s (1025 modules)
+ ○ Compiling /api/doctors ...
+ ✓ Compiled /api/doctors in 907ms (311 modules)
+use previous connection
+already connected
+{
+  signature: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InF1aW5jZXNvZnR3YXJlZGV2QGdtYWlsLmNvbSIsIl9pZCI6IjY5OGExMTI2NzAyZDQyNDAzZjNiZTc2MiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc4NzgxNTMyMywiZXhwIjoxNzkwNDA3MzIzfQ.lcKRpJgEfvg1hzDmD6rcXkqtqkmBQmgl26Q58wOIX9I'
+}
+already connected
+already connected
+ ○ Compiling / ...
+ ✓ Compiled / in 6.9s (998 modules)
+ ○ Compiling /api/doctors ...
+ ✓ Compiled /api/doctors in 1735ms (1019 modules)
+use previous connection
+ ○ Compiling /api/doctors/[id] ...
+ ✓ Compiled /api/doctors/[id] in 1220ms (308 modules)
+use previous connection
+{
+  signature: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InF1aW5jZXNvZnR3YXJlZGV2QGdtYWlsLmNvbSIsIl9pZCI6IjY5OGExMTI2NzAyZDQyNDAzZjNiZTc2MiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc4NzgxNTMyMywiZXhwIjoxNzkwNDA3MzIzfQ.lcKRpJgEfvg1hzDmD6rcXkqtqkmBQmgl26Q58wOIX9I'
+}
+already connected
+already connected
