@@ -123,6 +123,10 @@
 .layout {
     display: grid;
 
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+
     grid-template-columns:
         minmax(0, 1fr)
         370px;
@@ -895,6 +899,11 @@
 .summaryCard {
     position: sticky;
 
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+
     top: 20px;
 
     padding: 20px;
@@ -961,6 +970,10 @@
 
 .item {
     display: grid;
+
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
 
     grid-template-columns:
         45px
@@ -1221,27 +1234,30 @@
 
 .placeOrderButton {
     width: 100%;
-    min-height: 50px;
+    min-height: 54px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    gap: 7px;
+    gap: 10px;
 
     margin-top: 15px;
 
-    border: 0;
-    border-radius: 9px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 13px;
 
     color: var(--ml-white);
 
-    background: var(--ml-teal);
+    background: linear-gradient(135deg, var(--ml-teal), var(--ml-teal-dark));
 
     font-family: inherit;
 
     font-size: var(--ml-font-md);
-    font-weight: var(--ml-weight-semibold);
+    font-weight: var(--ml-weight-bold);
+    letter-spacing: 0.01em;
+
+    box-shadow: 0 10px 24px rgba(15, 157, 138, 0.22);
 
     cursor: pointer;
 
@@ -1250,7 +1266,7 @@
 
 
 .placeOrderButton:hover:not(:disabled) {
-    background: var(--ml-teal-dark);
+    background: linear-gradient(135deg, var(--ml-teal-dark), var(--ml-navy-light));
 
     transform: translateY(-1px);
 
@@ -1580,4 +1596,9 @@
         font-size: var(--ml-font-sm);
     }
 
+}
+
+.placeOrderButton:active:not(:disabled) {
+    transform: translateY(0) scale(0.99);
+    box-shadow: 0 5px 14px rgba(15, 157, 138, 0.2);
 }

@@ -223,10 +223,6 @@ export default function CartPage() {
                                 YOUR ORDER
                             </span>
 
-                            <h1>
-                                Your medicine cart
-                            </h1>
-
                             <p>
                                 {totalItems}{" "}
                                 {totalItems === 1

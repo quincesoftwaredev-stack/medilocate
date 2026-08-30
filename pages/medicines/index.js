@@ -10,13 +10,10 @@ import {
 } from "react";
 
 import axios from "axios";
-import fs from "fs/promises";
-import path from "path";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import RemoveRoundedIcon from "@mui/icons-material/RemoveRounded";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
@@ -28,7 +25,6 @@ import PaginationComponent from "@/components/common/Pagination";
 import MedicineHero from "../../components/medicines/MedicineHero";
 import MedicineCategories from "../../components/medicines/MedicineCategories";
 import MedicineGrid from "../../components/medicines/MedicineGrid";
-import MobileCartBar from "../../components/medicines/MobileCartBar";
 
 import styles from "../../styles/Medicines/Medicines.module.css";
 
@@ -108,7 +104,16 @@ export default function MedicinesPage({
         fetch('/data/medicines-catalog.json')
             .then((response) => response.ok ? response.json() : [])
             .then((data) => {
-                if (Array.isArray(data)) setCatalogMedicines(data);
+                if (Array.isArray(data)) {
+                    setCatalogMedicines(data);
+                    setMedicines(data.slice(0, ITEMS_PER_PAGE));
+                    setPagination({
+                        page: 1,
+                        limit: ITEMS_PER_PAGE,
+                        total: data.length,
+                        pages: Math.ceil(data.length / ITEMS_PER_PAGE),
+                    });
+                }
             })
             .catch(() => {
                 // Database API remains the fallback until the catalog is exported.
@@ -186,7 +191,9 @@ export default function MedicinesPage({
     const categories = useMemo(() => {
 
         const values = (
-            initialCategories || []
+            catalogMedicines.length
+                ? catalogMedicines.map((medicine) => medicine.category)
+                : initialCategories || []
         )
             .map((category) => {
 
@@ -218,7 +225,8 @@ export default function MedicinesPage({
         ];
 
     }, [
-        initialCategories
+        initialCategories,
+        catalogMedicines
     ]);
 
 
@@ -280,7 +288,7 @@ export default function MedicinesPage({
                                     : categoryValue,
                             prescription: "all",
                             stock: "all",
-                        },
+},
                     }
                 );
 
@@ -358,6 +366,10 @@ export default function MedicinesPage({
 
     useEffect(() => {
 
+        if (!catalogMedicines.length) {
+            return undefined;
+        }
+
         const timer =
             setTimeout(() => {
 
@@ -395,7 +407,8 @@ export default function MedicinesPage({
 
     }, [
         search,
-        selectedCategory
+        selectedCategory,
+        catalogMedicines
     ]);
 
 
@@ -451,13 +464,20 @@ export default function MedicinesPage({
                 "All Medicines"
         ) {
 
-            setMedicines(
-                initialMedicines
-            );
-
-            setPagination(
-                initialPagination
-            );
+            const source = catalogMedicines.length
+                ? catalogMedicines
+                : initialMedicines;
+            setMedicines(source.slice(0, ITEMS_PER_PAGE));
+            setPagination({
+                page: 1,
+                limit: ITEMS_PER_PAGE,
+                total: catalogMedicines.length
+                    ? catalogMedicines.length
+                    : initialPagination.total,
+                pages: catalogMedicines.length
+                    ? Math.ceil(catalogMedicines.length / ITEMS_PER_PAGE)
+                    : initialPagination.pages,
+            });
 
         }
 
@@ -479,13 +499,20 @@ export default function MedicinesPage({
                 "All Medicines"
         ) {
 
-            setMedicines(
-                initialMedicines
-            );
-
-            setPagination(
-                initialPagination
-            );
+            const source = catalogMedicines.length
+                ? catalogMedicines
+                : initialMedicines;
+            setMedicines(source.slice(0, ITEMS_PER_PAGE));
+            setPagination({
+                page: 1,
+                limit: ITEMS_PER_PAGE,
+                total: catalogMedicines.length
+                    ? catalogMedicines.length
+                    : initialPagination.total,
+                pages: catalogMedicines.length
+                    ? Math.ceil(catalogMedicines.length / ITEMS_PER_PAGE)
+                    : initialPagination.pages,
+            });
 
         }
 
@@ -541,6 +568,18 @@ export default function MedicinesPage({
                 selectedCategory,
 
         });
+
+        router.push(
+            {
+                pathname: router.pathname,
+                query: {
+                    ...router.query,
+                    page,
+                },
+            },
+            undefined,
+            { shallow: true }
+        );
 
 
         window.scrollTo({
@@ -786,28 +825,6 @@ export default function MedicinesPage({
                             </div>
 
 
-                            {cartCount > 0 && (
-
-                                <Link
-                                    href="/cart"
-                                    className={
-                                        styles.cartButton
-                                    }
-                                >
-
-                                    <ShoppingCartOutlinedIcon />
-
-                                    <span>
-                                        Cart
-                                    </span>
-
-                                    <b>
-                                        {cartCount}
-                                    </b>
-
-                                </Link>
-
-                            )}
 
                         </div>
 
@@ -942,14 +959,6 @@ export default function MedicinesPage({
             </main>
 
 
-            {/* MOBILE CART */}
-
-            <MobileCartBar
-                cartCount={
-                    cartCount
-                }
-            />
-
         </>
 
     );
@@ -963,83 +972,3 @@ export default function MedicinesPage({
 |--------------------------------------------------------------------------
 */
 
-export async function getServerSideProps(
-    context
-) {
-
-    try {
-        const filePath = path.join(
-            process.cwd(),
-            "public",
-            "data",
-            "medicines-catalog.json"
-        );
-        const catalog = JSON.parse(
-            await fs.readFile(filePath, "utf8")
-        );
-        const data = Array.isArray(catalog) ? catalog : [];
-        const categories = [
-            ...new Set(data.map((medicine) => medicine.category).filter(Boolean)),
-        ].sort();
-
-
-        console.log(
-            "SSR medicines:",
-            data.length
-        );
-
-
-        return {
-
-            props: {
-
-                initialMedicines:
-                    data.slice(0, ITEMS_PER_PAGE),
-
-                initialPagination:
-                {
-                    page: 1,
-                    limit: ITEMS_PER_PAGE,
-                    total: data.length,
-                    pages: Math.ceil(data.length / ITEMS_PER_PAGE),
-                },
-
-                initialCategories:
-                    categories,
-
-            },
-
-        };
-
-    } catch (error) {
-
-        console.error(
-            "Medicines SSR error:",
-            error.response?.data ||
-            error.message
-        );
-
-
-        return {
-
-            props: {
-
-                initialMedicines: [],
-
-                initialPagination: {
-                    page: 1,
-                    limit:
-                        ITEMS_PER_PAGE,
-                    total: 0,
-                    pages: 0,
-                },
-
-                initialCategories: [],
-
-            },
-
-        };
-
-    }
-
-}

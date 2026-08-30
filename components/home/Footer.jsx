@@ -6,6 +6,7 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import Logo from "@/components/Utility/Logo";
+import { support_mail, whatsapp } from "@/utility/const";
 
 import styles from "./Footer.module.css";
 
@@ -98,22 +99,22 @@ export default function Footer() {
                             </div>
 
 
-                            <div>
+                            <a href={`https://wa.me/${whatsapp}`} target="_blank" rel="noreferrer">
                                 <PhoneOutlinedIcon />
 
                                 <span>
-                                    +880 1XXX-XXXXXX
+                                    +{whatsapp}
                                 </span>
-                            </div>
+                            </a>
 
 
-                            <div>
+                            <a href={`mailto:${support_mail}`}>
                                 <EmailOutlinedIcon />
 
                                 <span>
-                                    support@medilocate.com
+                                    {support_mail}
                                 </span>
-                            </div>
+                            </a>
 
                         </div>
 

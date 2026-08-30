@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import ArrowBackRoundedIcon
     from "@mui/icons-material/ArrowBackRounded";
@@ -40,8 +40,6 @@ import {
     addToCart as addToCartAction,
 } from "@/redux/cartSlice";
 
-import axios from "axios";
-import BASE_URL from "@/config";
 
 
 /*
@@ -57,7 +55,7 @@ import BASE_URL from "@/config";
 */
 
 export default function MedicineDetailsPage({
-    medicine
+    medicine: initialMedicine
 }) {
 
     const dispatch =
@@ -65,6 +63,27 @@ export default function MedicineDetailsPage({
 
     const router =
         useRouter();
+
+    const [medicine, setMedicine] =
+        useState(initialMedicine || null);
+
+    const [loadingMedicine, setLoadingMedicine] =
+        useState(!initialMedicine);
+
+    useEffect(() => {
+        if (!router.isReady || initialMedicine) return;
+
+        fetch('/data/medicines-catalog.json')
+            .then((response) => response.ok ? response.json() : [])
+            .then((catalog) => {
+                const item = Array.isArray(catalog)
+                    ? catalog.find((entry) => String(entry._id) === String(router.query.id))
+                    : null;
+                setMedicine(item ? { ...item, image: { url: item.image || '' } } : null);
+            })
+            .catch(() => setMedicine(null))
+            .finally(() => setLoadingMedicine(false));
+    }, [router.isReady, router.query.id, initialMedicine]);
 
 
     /*
@@ -84,6 +103,10 @@ export default function MedicineDetailsPage({
     | NOT FOUND
     |--------------------------------------------------------------------------
     */
+
+    if (loadingMedicine) {
+        return <main className={styles.notFound}><p>Loading medicine...</p></main>;
+    }
 
     if (!medicine) {
 
@@ -1103,166 +1126,3 @@ export default function MedicineDetailsPage({
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| SERVER SIDE DATA FETCHING
-|--------------------------------------------------------------------------
-*/
-
-export async function getServerSideProps(
-    context
-) {
-
-    const {
-        params,
-        req
-    } = context;
-
-
-    const id =
-        params?.id;
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | INVALID ID
-    |--------------------------------------------------------------------------
-    */
-
-    if (!id) {
-
-        return {
-
-            notFound:
-                true
-
-        };
-
-    }
-
-
-    try {
-
-        /*
-        |--------------------------------------------------------------------------
-        | FORWARD COOKIES
-        |--------------------------------------------------------------------------
-        |
-        | Useful if your API later requires authentication.
-        |
-        */
-
-        const cookies =
-            req.headers.cookie || "";
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | FETCH MEDICINE
-        |--------------------------------------------------------------------------
-        */
-
-        const response =
-            await axios.get(
-                `${BASE_URL}/data/medicines-catalog.json`,
-                { headers: { Cookie: cookies } }
-            );
-
-        const catalogMedicine =
-            response.data?.find(
-                (item) => String(item._id) === String(id)
-            );
-
-        const medicine = catalogMedicine
-            ? {
-                ...catalogMedicine,
-                image: { url: catalogMedicine.image || '' },
-            }
-            : null;
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | MEDICINE NOT FOUND
-        |--------------------------------------------------------------------------
-        */
-
-        if (!medicine) {
-
-            return {
-
-                notFound:
-                    true
-
-            };
-
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | RETURN PROPS
-        |--------------------------------------------------------------------------
-        */
-
-        return {
-
-            props: {
-
-                medicine:
-                    JSON.parse(
-                        JSON.stringify(
-                            medicine
-                        )
-                    )
-
-            }
-
-        };
-
-
-    } catch (error) {
-
-        console.log(
-            "Medicine details SSR error:",
-            error?.response?.data ||
-            error.message
-        );
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | 404
-        |--------------------------------------------------------------------------
-        */
-
-        if (
-            error?.response?.status === 404
-        ) {
-
-            return {
-
-                notFound:
-                    true
-
-            };
-
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | OTHER SERVER ERROR
-        |--------------------------------------------------------------------------
-        */
-
-        return {
-
-            notFound:
-                true
-
-        };
-
-    }
-
-}

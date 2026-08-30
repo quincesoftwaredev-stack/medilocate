@@ -72,7 +72,8 @@
     gap: 11px;
 }
 
-.contact > div {
+.contact > div,
+.contact > a {
     min-width: 0;
     display: flex;
     align-items: center;
@@ -80,7 +81,11 @@
     color: rgba(255, 255, 255, 0.62);
     font-size: var(--ml-font-sm);
     line-height: var(--ml-line-normal);
+    text-decoration: none;
+    transition: var(--ml-transition);
 }
+
+.contact > a:hover { color: var(--ml-white); }
 
 .contact svg {
     width: 17px;
@@ -278,7 +283,8 @@
         font-size: var(--ml-font-base);
     }
 
-    .contact > div {
+    .contact > div,
+    .contact > a {
         font-size: var(--ml-font-base);
     }
 
@@ -324,7 +330,8 @@
         font-size: var(--ml-font-md);
     }
 
-    .contact > div {
+    .contact > div,
+    .contact > a {
         font-size: var(--ml-font-md);
     }
 

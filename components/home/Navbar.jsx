@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { addToCart, increaseQuantity, decreaseQuantity, removeFromCart } from "@/redux/cartSlice";
 
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -10,6 +13,9 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 
 import Logo from "@/components/Utility/Logo";
 
@@ -17,10 +23,23 @@ import styles from "./Navbar.module.css";
 
 export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [searchOpen, setSearchOpen] = useState(false);
+    const [searchText, setSearchText] = useState("");
+    const [medicines, setMedicines] = useState([]);
+    const [quantities, setQuantities] = useState({});
+    const cartItems = useSelector((state) => state.cart?.items || []);
+    const userInfo = useSelector((state) => state.user?.userInfo);
+    const dispatch = useDispatch();
+    const addMedicineToCart = (medicine) => dispatch(addToCart({ id: medicine._id, name: medicine.name, genericName: medicine.genericName, strength: medicine.strength, dosageForm: medicine.dosageForm, price: medicine.price, image: medicine.image, quantity: quantities[medicine._id] || 1 }));
 
     const closeMenu = () => {
         setMenuOpen(false);
     };
+
+    useEffect(() => {
+        if (!searchOpen || medicines.length) return;
+        fetch("/data/medicines-catalog.json").then((response) => response.json()).then(setMedicines).catch(() => {});
+    }, [searchOpen, medicines.length]);
 
     useEffect(() => {
         if (menuOpen) {
@@ -132,6 +151,16 @@ export default function Navbar() {
 
                         {/* Menu Button */}
 
+                        <div className={styles.mobileActions}>
+                            <button type="button" className={styles.mobileIconButton} aria-label="Search medicines" onClick={() => setSearchOpen(true)}>
+                                <SearchOutlinedIcon />
+                            </button>
+                            <Link href="/cart" className={styles.mobileIconButton} aria-label="Open cart">
+                                <ShoppingCartOutlinedIcon />
+                                {cartItems.length > 0 && <span className={styles.cartBadge}>{cartItems.length}</span>}
+                            </Link>
+                        </div>
+
                         <button
                             type="button"
                             className={styles.menuButton}
@@ -145,6 +174,23 @@ export default function Navbar() {
                     </div>
 
                 </div>
+
+            {searchOpen && (
+                <div className={styles.searchPanel}>
+                    <div className={styles.searchPanelHeader}>
+                        <div className={styles.searchInputWrap}><SearchOutlinedIcon /><input autoFocus value={searchText} onChange={(event) => setSearchText(event.target.value)} placeholder="Search medicines by name or generic" /></div>
+                        <button type="button" aria-label="Close medicine search" onClick={() => { setSearchOpen(false); setSearchText(""); }}><CloseIcon /></button>
+                    </div>
+                    <div className={styles.searchResults}>
+                        {medicines.filter((medicine) => `${medicine.name} ${medicine.genericName || ""}`.toLowerCase().includes(searchText.toLowerCase())).slice(0, 24).map((medicine) => (
+                            <div className={styles.searchResult} key={medicine._id}>
+                                <Link href={`/medicines/${medicine._id}`} onClick={() => setSearchOpen(false)}><span className={styles.searchResultImage}>{medicine.image?.url || medicine.image ? <img src={medicine.image?.url || medicine.image} alt="" /> : medicine.name.slice(0, 18)}</span><span className={styles.searchResultInfo}><strong>{medicine.name}</strong><small>{medicine.genericName || "Medicine"}</small><em>{[medicine.strength, medicine.dosageForm].filter(Boolean).join(" • ")}</em><b>৳{medicine.price || 0}</b></span></Link>
+                                <div className={styles.quantityControls}><button type="button" onClick={() => { const next = Math.max(0, (quantities[medicine._id] || 0) - 1); setQuantities((current) => ({ ...current, [medicine._id]: next })); if (next === 0) dispatch(removeFromCart(medicine._id)); else dispatch(decreaseQuantity(medicine._id)); }}>−</button><b>{quantities[medicine._id] || 0}</b><button type="button" onClick={() => { const next = (quantities[medicine._id] || 0) + 1; setQuantities((current) => ({ ...current, [medicine._id]: next })); if (next === 1) addMedicineToCart(medicine); else dispatch(increaseQuantity(medicine._id)); }}>+</button></div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             </header>
 
@@ -174,10 +220,7 @@ export default function Navbar() {
                 >
 
                     <div className={styles.menuHeader}>
-
-                        <span>
-                            Menu
-                        </span>
+                        <Link href="/" className={styles.menuLogo} onClick={closeMenu} aria-label="MediLocate home"><Logo /></Link>
 
                         <button
                             type="button"
@@ -188,6 +231,13 @@ export default function Navbar() {
                         </button>
 
                     </div>
+
+                    {userInfo && (
+                        <Link href={`/profile/${userInfo.id}`} className={styles.menuUser} onClick={closeMenu}>
+                            <AccountCircleOutlinedIcon />
+                            <span><strong>{userInfo.name || userInfo.fullName || "Your account"}</strong><small>{userInfo.email || userInfo.phone || userInfo.role || "View profile"}</small></span>
+                        </Link>
+                    )}
 
 
                     <nav className={styles.mobileLinks}>
@@ -256,26 +306,12 @@ export default function Navbar() {
 
                     <div className={styles.menuBottom}>
 
-                        <Link
-                            href="/login"
-                            className={styles.menuLogin}
-                            onClick={closeMenu}
-                        >
-                            <LoginOutlinedIcon />
-
-                            <span>
-                                Login
-                            </span>
-                        </Link>
-
-
-                        <Link
-                            href="/register"
-                            className={styles.menuCta}
-                            onClick={closeMenu}
-                        >
-                            Get Started
-                        </Link>
+                        {userInfo ? (
+                            <Link href={`/profile/${userInfo.id}`} className={styles.menuCta} onClick={closeMenu}>View Profile</Link>
+                        ) : (<>
+                            <Link href="/login" className={styles.menuLogin} onClick={closeMenu}><LoginOutlinedIcon /><span>Login</span></Link>
+                            <Link href="/register" className={styles.menuCta} onClick={closeMenu}>Get Started</Link>
+                        </>)}
 
                     </div>
 

@@ -17,7 +17,9 @@ export default function MedicinePagination({
 
     pages = 1,
 
-    disabled = false
+    disabled = false,
+
+    onChange
 
 }) {
 
@@ -70,6 +72,11 @@ export default function MedicinePagination({
         event,
         newPage
     ) => {
+
+        if (onChange) {
+            onChange(newPage);
+            return;
+        }
 
         const query = {
             ...router.query,
