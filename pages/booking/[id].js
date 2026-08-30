@@ -32,7 +32,7 @@ export default function BookingDetailsPage({ booking }) {
                         </div>
                         <div className={styles.bookingGrid}>
                             <div><MedicalServicesOutlinedIcon /><span>Doctor</span><strong>{doctorName}</strong></div>
-                            <div><CalendarMonthOutlinedIcon /><span>Date</span><strong>{displayDate(booking.dateOfConsultation)}</strong></div>
+                            <div><CalendarMonthOutlinedIcon /><span>Date</span><strong>{displayDate(booking.appointmentDate || booking.dateOfConsultation)}</strong></div>
                             <div><ScheduleOutlinedIcon /><span>Time</span><strong>{booking.startTime ? `${booking.startTime}${booking.endTime ? ` – ${booking.endTime}` : ""}` : "To be confirmed"}</strong></div>
                             <div><PaymentsOutlinedIcon /><span>Consultation fee</span><strong>৳{Number(booking.consultationFee || 0).toLocaleString("en-BD")}</strong></div>
                         </div>

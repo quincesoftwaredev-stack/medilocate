@@ -2,10 +2,13 @@ import Head from "next/head";
 import Link from "next/link";
 import { useState } from "react";
 import axios from "axios";
+import { parse } from "cookie";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
+import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import MedicalServicesOutlinedIcon from "@mui/icons-material/MedicalServicesOutlined";
@@ -22,6 +25,7 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 
 
 import DoctorProfileImageUpload from "@/components/Doctors/DoctorProfileImageUpload";
+import DoctorAvailabilityEditor, { createAvailabilityForm } from "@/components/Doctors/DoctorAvailabilityEditor";
 
 import {
     showSnackBar,
@@ -176,15 +180,14 @@ export default function DoctorProfileEditPage({
                 doctorData.consultationFee ??
                 "",
 
-            followUpFee:
-                doctorData.followUpFee ??
-                "",
-
             about:
                 doctorData.about ||
                 "",
 
         });
+
+    const [availability, setAvailability] =
+        useState(() => createAvailabilityForm(doctorData));
 
 
     /*
@@ -209,6 +212,9 @@ export default function DoctorProfileEditPage({
     const [saving, setSaving] =
         useState(false);
 
+    const [step, setStep] =
+        useState(1);
+
 
     /*
     |--------------------------------------------------------------------------
@@ -221,6 +227,14 @@ export default function DoctorProfileEditPage({
     ) => {
 
         event.preventDefault();
+
+        // Step navigation must never persist draft changes. Browsers can
+        // submit a form from nested controls or the Enter key, so only the
+        // final review step is allowed to reach the update request.
+        if (step !== 3) {
+            setStep((current) => Math.min(current + 1, 3));
+            return;
+        }
 
 
         if (
@@ -358,26 +372,47 @@ export default function DoctorProfileEditPage({
                             0
                         ),
 
-                    followUpFee:
-                        Number(
-                            doctor.followUpFee ||
-                            0
-                        ),
-
                     about:
                         doctor.about.trim(),
+
+                    chambers:
+                        availability.chambers,
+
+                    weeklyAvailability:
+                        availability.weeklyAvailability,
+
+                    unavailablePeriods:
+                        availability.unavailablePeriods.filter(
+                            (period) => period.startDate && period.endDate
+                        ),
+
+                    consultationModes:
+                        availability.consultationModes,
+
+                    bookingSettings:
+                        availability.bookingSettings,
 
                 },
 
             };
 
 
+            const browserCookies = parse(document.cookie || "");
+            const authenticatedUser = browserCookies.userInfo
+                ? JSON.parse(browserCookies.userInfo)
+                : {};
+
             const response =
                 await axios.patch(
                     `${BASE_URL}/api/doctors/${encodeURIComponent(
                         router.query.id
                     )}`,
-                    payload
+                    payload,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${authenticatedUser.token || ""}`,
+                        },
+                    }
                 );
 
 
@@ -550,12 +585,9 @@ export default function DoctorProfileEditPage({
                             className={
                                 styles.saveTopButton
                             }
-                            onClick={() =>
-                                document
-                                    .getElementById(
-                                        "doctor-profile-form"
-                                    )
-                                    ?.requestSubmit()
+                            onClick={() => step < 3
+                                ? setStep((current) => current + 1)
+                                : document.getElementById("doctor-profile-form")?.requestSubmit()
                             }
                             disabled={saving}
                         >
@@ -564,7 +596,9 @@ export default function DoctorProfileEditPage({
 
                             {saving
                                 ? "Saving..."
-                                : "Save Changes"}
+                                : step < 3
+                                    ? "Continue"
+                                    : "Save Changes"}
 
                         </button>
 
@@ -578,6 +612,25 @@ export default function DoctorProfileEditPage({
                         }
                         className={styles.form}
                     >
+
+                        <nav className={styles.stepper} aria-label="Profile update progress">
+                            {["Profile", "Availability", "Review"].map((label, index) => {
+                                const number = index + 1;
+                                const active = step >= number;
+                                return (
+                                    <div className={styles.stepGroup} key={label}>
+                                        <button type="button" className={`${styles.stepItem} ${active ? styles.stepActive : ""}`} onClick={() => number < step && setStep(number)}>
+                                            <span className={styles.stepNumber}>{step > number ? <CheckCircleRoundedIcon /> : number}</span>
+                                            <span>{label}</span>
+                                        </button>
+                                        {number < 3 && <span className={`${styles.stepLine} ${step > number ? styles.lineActive : ""}`} />}
+                                    </div>
+                                );
+                            })}
+                        </nav>
+
+                        {step === 1 && (
+                        <>
 
 
                         {/* =================================================
@@ -979,29 +1032,6 @@ export default function DoctorProfileEditPage({
                                 />
 
 
-                                <InputField
-                                    label="Follow-up fee"
-                                    value={
-                                        doctor.followUpFee
-                                    }
-                                    onChange={(
-                                        value
-                                    ) =>
-                                        setDoctor(
-                                            (previous) => ({
-                                                ...previous,
-                                                followUpFee:
-                                                    value,
-                                            })
-                                        )
-                                    }
-                                    placeholder="৳"
-                                    icon={
-                                        <AttachMoneyOutlinedIcon />
-                                    }
-                                    type="number"
-                                />
-
                             </div>
 
                         </section>
@@ -1078,6 +1108,39 @@ export default function DoctorProfileEditPage({
                         </section>
 
 
+                        </>
+                        )}
+
+                        {step === 2 && (
+                        <DoctorAvailabilityEditor
+                            value={availability}
+                            onChange={setAvailability}
+                        />
+                        )}
+
+                        {step === 3 && (
+                        <section className={styles.reviewCard}>
+                            <div className={styles.reviewIntro}>
+                                <div className={styles.sectionIcon}><CheckCircleRoundedIcon /></div>
+                                <div>
+                                    <span>FINAL REVIEW</span>
+                                    <h2>Ready to update your profile?</h2>
+                                    <p>Check this summary, then use Save Changes to publish everything together.</p>
+                                </div>
+                            </div>
+                            <div className={styles.reviewIdentity}>
+                                <strong>{user.fullName}</strong>
+                                <span>{doctor.speciality || "Speciality not added"}</span>
+                            </div>
+                            <div className={styles.reviewGrid}>
+                                <div><strong>{availability.chambers.length}</strong><span>Chambers</span></div>
+                                <div><strong>{Object.values(availability.consultationModes).filter((mode) => mode?.enabled).length}</strong><span>Consultation modes</span></div>
+                                <div><strong>{availability.weeklyAvailability.reduce((count, day) => count + (day.slots?.length || 0), 0)}</strong><span>Weekly slots</span></div>
+                                <div><strong>{availability.unavailablePeriods.length}</strong><span>Leave periods</span></div>
+                            </div>
+                        </section>
+                        )}
+
                         {/* =================================================
                             VERIFICATION NOTICE
                         ================================================== */}
@@ -1122,33 +1185,36 @@ export default function DoctorProfileEditPage({
                             }
                         >
 
-                            <Link
-                                href={`/doctors/${doctorData._id}`}
-                                className={
-                                    styles.cancelButton
-                                }
-                            >
-
-                                Cancel
-
-                            </Link>
+                            {step === 1 ? (
+                                <Link href={`/doctors/${doctorData._id}`} className={styles.cancelButton}>Cancel</Link>
+                            ) : (
+                                <button type="button" className={styles.cancelButton} onClick={() => setStep((current) => current - 1)}>
+                                    <ArrowBackRoundedIcon /> Back
+                                </button>
+                            )}
 
 
-                            <button
-                                type="submit"
-                                className={
-                                    styles.saveButton
-                                }
-                                disabled={saving}
-                            >
-
-                                <SaveOutlinedIcon />
-
-                                {saving
-                                    ? "Saving..."
-                                    : "Save Changes"}
-
-                            </button>
+                            {step < 3 ? (
+                                <button
+                                    key="continue-step"
+                                    type="button"
+                                    className={styles.saveButton}
+                                    onClick={() => setStep((current) => current + 1)}
+                                >
+                                    <ArrowForwardRoundedIcon />
+                                    Continue
+                                </button>
+                            ) : (
+                                <button
+                                    key="save-profile"
+                                    type="submit"
+                                    className={styles.saveButton}
+                                    disabled={saving}
+                                >
+                                    <SaveOutlinedIcon />
+                                    {saving ? "Saving..." : "Save Changes"}
+                                </button>
+                            )}
 
                         </div>
 
@@ -1185,6 +1251,23 @@ export async function getServerSideProps(
 
         const id =
             params?.id;
+
+        let viewer = null;
+        try {
+            const cookies = parse(req.headers.cookie || "");
+            viewer = cookies.userInfo ? JSON.parse(cookies.userInfo) : null;
+        } catch {
+            viewer = null;
+        }
+
+        if (!viewer) {
+            return {
+                redirect: {
+                    destination: `/login?redirectTo=/doctors/${encodeURIComponent(id)}/edit`,
+                    permanent: false,
+                },
+            };
+        }
 
 
         if (!id) {
@@ -1230,6 +1313,12 @@ export async function getServerSideProps(
                 notFound: true,
             };
 
+        }
+
+        const profileUserId = String(response.data.doctor.user?._id || response.data.doctor.user || "");
+        const viewerId = String(viewer._id || viewer.id || "");
+        if (viewer.role !== "admin" && viewerId !== profileUserId) {
+            return { notFound: true };
         }
 
 

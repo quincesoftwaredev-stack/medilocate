@@ -7,16 +7,20 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
+import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutline";
 import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 import MedicalServicesOutlinedIcon from "@mui/icons-material/MedicalServicesOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 
 import axios from "axios";
+import { parse } from "cookie";
 import styles from "@/styles/Doctor/Profile.module.css";
 import BASE_URL from "@/config";
+import { ConsultationAvailability, ProfessionalOverview } from "@/components/Doctors/Profile";
 
 
 /*
@@ -210,6 +214,27 @@ const normalizeDoctor = (
         visitingDays:
             [],
 
+        designation:
+            doctor.designation || "",
+
+        languages:
+            Array.isArray(doctor.languages) ? doctor.languages : [],
+
+        chambers:
+            Array.isArray(doctor.chambers) ? doctor.chambers : [],
+
+        weeklyAvailability:
+            Array.isArray(doctor.weeklyAvailability) ? doctor.weeklyAvailability : [],
+
+        unavailablePeriods:
+            Array.isArray(doctor.unavailablePeriods) ? doctor.unavailablePeriods : [],
+
+        bookingSettings:
+            doctor.bookingSettings || null,
+
+        consultationModes:
+            doctor.consultationModes || {},
+
         bmdcNumber:
             doctor.bmdcNumber ||
             "",
@@ -239,6 +264,7 @@ const normalizeDoctor = (
 
 export default function DoctorProfilePage({
     doctor,
+    canEdit = false,
 }) {
 
     /*
@@ -309,6 +335,17 @@ export default function DoctorProfilePage({
         doctor.verificationStatus ===
         "verified";
 
+    const hasBookingAvailability =
+        doctor.status === "active" &&
+        (
+            doctor.weeklyAvailability?.some(
+                (day) => day.isAvailable && day.slots?.length
+            ) ||
+            Object.values(doctor.consultationModes || {}).some(
+                (mode) => mode?.enabled
+            )
+        );
+
 
     return (
         <>
@@ -342,18 +379,13 @@ export default function DoctorProfilePage({
                     }
                 >
 
-                    <Link
-                        href="/doctors"
-                        className={
-                            styles.backLink
-                        }
-                    >
+                    <div className={styles.profileToolbar}>
+                        <Link href="/doctors" className={styles.backLink}>
+                            <ArrowBackIcon />
+                            Back to Doctors
+                        </Link>
 
-                        <ArrowBackIcon />
-
-                        Back to Doctors
-
-                    </Link>
+                    </div>
 
                 </div>
 
@@ -424,14 +456,14 @@ export default function DoctorProfilePage({
                                 )}
 
 
-                                {doctor.available && (
+                                {hasBookingAvailability && (
 
                                     <span
                                         className={
                                             styles.availableIndicator
                                         }
                                     >
-                                        Available
+                                        Booking available
                                     </span>
 
                                 )}
@@ -476,10 +508,20 @@ export default function DoctorProfilePage({
                                         styles.specialty
                                     }
                                 >
-                                    {
-                                        doctor.specialty
-                                    }
+                                    {doctor.specialty}
                                 </div>
+
+                                {canEdit && (
+                                    <Link
+                                        href={`/doctors/${doctor.id}/edit`}
+                                        className={styles.updateProfileButton}
+                                        aria-label="Update doctor profile"
+                                        title="Update profile"
+                                    >
+                                        <EditOutlinedIcon />
+                                        <span>Edit profile</span>
+                                    </Link>
+                                )}
 
 
                                 <div
@@ -588,6 +630,14 @@ export default function DoctorProfilePage({
 
                                     </div>
 
+                                    <div>
+                                        <VerifiedOutlinedIcon />
+                                        <span>
+                                            {doctor.status === "active" ? "Active profile" : doctor.status}
+                                            {hasBookingAvailability ? " · Accepting bookings" : " · Booking unavailable"}
+                                        </span>
+                                    </div>
+
                                 </div>
 
                             </div>
@@ -613,6 +663,13 @@ export default function DoctorProfilePage({
                                         doctor.fee
                                     }
                                 </strong>
+
+                                {doctor.followUpFee && (
+                                    <div className={styles.heroFeeDetail}>
+                                        <span>Follow-up fee</span>
+                                        <strong>{doctor.followUpFee}</strong>
+                                    </div>
+                                )}
 
 
                                 {doctor.phone && (
@@ -647,6 +704,8 @@ export default function DoctorProfilePage({
                 </section>
 
 
+                <ConsultationAvailability doctor={doctor} />
+
                 {/* =====================================================
                     CONTENT
                 ====================================================== */}
@@ -679,6 +738,11 @@ export default function DoctorProfilePage({
                                     styles.mainColumn
                                 }
                             >
+
+                                <ProfessionalOverview doctor={doctor} />
+
+                                {false && (
+                                <>
 
 
                                 {/* =============================================
@@ -1034,6 +1098,9 @@ export default function DoctorProfilePage({
 
                                 )}
 
+                                </>
+                                )}
+
                             </div>
 
 
@@ -1053,9 +1120,7 @@ export default function DoctorProfilePage({
                                 ============================================== */}
 
                                 <div
-                                    className={
-                                        styles.sidebarCard
-                                    }
+                                    className={`${styles.sidebarCard} ${styles.legacyConsultationCard}`}
                                 >
 
                                     <div
@@ -1496,6 +1561,18 @@ export async function getServerSideProps(
         const user =
             doctor.user || {};
 
+        let viewer = null;
+        try {
+            const cookies = parse(context.req?.headers?.cookie || "");
+            viewer = cookies.userInfo ? JSON.parse(cookies.userInfo) : null;
+        } catch {
+            viewer = null;
+        }
+
+        const viewerId = String(viewer?._id || viewer?.id || "");
+        const doctorUserId = String(user?._id || "");
+        const canEdit = viewer?.role === "admin" || (viewerId && viewerId === doctorUserId);
+
 
         /*
         |--------------------------------------------------------------------------
@@ -1637,6 +1714,27 @@ export async function getServerSideProps(
             visitingDays:
                 [],
 
+            designation:
+                doctor.designation || "",
+
+            languages:
+                Array.isArray(doctor.languages) ? doctor.languages : [],
+
+            chambers:
+                Array.isArray(doctor.chambers) ? doctor.chambers : [],
+
+            weeklyAvailability:
+                Array.isArray(doctor.weeklyAvailability) ? doctor.weeklyAvailability : [],
+
+            unavailablePeriods:
+                Array.isArray(doctor.unavailablePeriods) ? doctor.unavailablePeriods : [],
+
+            bookingSettings:
+                doctor.bookingSettings || null,
+
+            consultationModes:
+                doctor.consultationModes || {},
+
 
             bmdcNumber:
                 doctor.bmdcNumber ||
@@ -1689,6 +1787,8 @@ export async function getServerSideProps(
                             normalizedDoctor
                         )
                     ),
+
+                canEdit: Boolean(canEdit),
 
             },
 

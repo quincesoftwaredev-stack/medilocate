@@ -1,5 +1,35 @@
 import mongoose from "mongoose";
 
+const timeSlotSchema = new mongoose.Schema({
+    startTime: { type: String, required: true, trim: true },
+    endTime: { type: String, required: true, trim: true },
+    slotDurationMinutes: { type: Number, min: 5, max: 240, default: 30 },
+    maxPatientsPerSlot: { type: Number, min: 1, default: 1 },
+    consultationMode: { type: String, enum: ["chamber", "online", "home-visit"], default: "chamber" },
+    chamberId: { type: mongoose.Schema.Types.ObjectId, default: null },
+}, { _id: true });
+
+const weeklyAvailabilitySchema = new mongoose.Schema({
+    dayOfWeek: { type: Number, min: 0, max: 6, required: true },
+    isAvailable: { type: Boolean, default: true },
+    slots: { type: [timeSlotSchema], default: [] },
+}, { _id: false });
+
+const chamberSchema = new mongoose.Schema({
+    name: { type: String, trim: true, required: true },
+    address: { type: String, trim: true, required: true },
+    city: { type: String, trim: true, default: "" },
+    phone: { type: String, trim: true, default: "" },
+    isActive: { type: Boolean, default: true },
+}, { _id: true });
+
+const unavailablePeriodSchema = new mongoose.Schema({
+    startDate: { type: Date, required: true },
+    endDate: { type: Date, required: true },
+    reason: { type: String, trim: true, default: "" },
+    allDay: { type: Boolean, default: true },
+}, { _id: true });
+
 const doctorSchema = new mongoose.Schema(
     {
         user: {
@@ -39,6 +69,30 @@ const doctorSchema = new mongoose.Schema(
             type: String,
             trim: true,
             default: "",
+        },
+
+        designation: { type: String, trim: true, default: "" },
+
+        languages: { type: [String], default: [] },
+
+        chambers: { type: [chamberSchema], default: [] },
+
+        weeklyAvailability: { type: [weeklyAvailabilitySchema], default: [] },
+
+        unavailablePeriods: { type: [unavailablePeriodSchema], default: [] },
+
+        bookingSettings: {
+            advanceBookingDays: { type: Number, min: 0, max: 365, default: 30 },
+            minimumNoticeMinutes: { type: Number, min: 0, default: 60 },
+            cancellationNoticeMinutes: { type: Number, min: 0, default: 120 },
+            maxPatientsPerDay: { type: Number, min: 1, default: 30 },
+            autoConfirmBookings: { type: Boolean, default: false },
+        },
+
+        consultationModes: {
+            chamber: { enabled: { type: Boolean, default: true }, fee: { type: Number, min: 0, default: 0 } },
+            online: { enabled: { type: Boolean, default: false }, fee: { type: Number, min: 0, default: 0 } },
+            homeVisit: { enabled: { type: Boolean, default: false }, fee: { type: Number, min: 0, default: 0 } },
         },
 
         consultationFee: {

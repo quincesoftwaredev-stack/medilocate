@@ -2,6 +2,7 @@ import db from "@/database/connection";
 import Doctor from "@/database/model/Doctor";
 import User from "@/database/model/User";
 import nextConnect from "next-connect";
+import { isAuth } from "@/utility";
 
 const handler = nextConnect();
 
@@ -105,7 +106,7 @@ handler.get(async (req, res) => {
 |--------------------------------------------------------------------------
 */
 
-handler.patch(async (req, res) => {
+handler.patch(isAuth, async (req, res) => {
 
     try {
 
@@ -161,6 +162,15 @@ handler.patch(async (req, res) => {
 
             });
 
+        }
+
+        const requesterId = String(req.user?._id || req.user?.id || "");
+        const ownsProfile = requesterId && requesterId === String(doctor.user);
+        if (req.user?.role !== "admin" && !ownsProfile) {
+            return res.status(403).json({
+                success: false,
+                message: "You are not allowed to update this doctor profile.",
+            });
         }
 
 
@@ -561,6 +571,28 @@ handler.patch(async (req, res) => {
                     doctorData.about
                 ).trim();
 
+        }
+
+        if (Array.isArray(doctorData.chambers)) {
+            doctor.chambers = doctorData.chambers;
+        }
+
+        if (Array.isArray(doctorData.weeklyAvailability)) {
+            doctor.weeklyAvailability = doctorData.weeklyAvailability;
+        }
+
+        if (Array.isArray(doctorData.unavailablePeriods)) {
+            doctor.unavailablePeriods = doctorData.unavailablePeriods;
+        }
+
+        if (doctorData.consultationModes && typeof doctorData.consultationModes === "object") {
+            doctor.consultationModes = doctorData.consultationModes;
+            doctor.availableForOnline = Boolean(doctorData.consultationModes.online?.enabled);
+            doctor.availableForHomeVisit = Boolean(doctorData.consultationModes.homeVisit?.enabled);
+        }
+
+        if (doctorData.bookingSettings && typeof doctorData.bookingSettings === "object") {
+            doctor.bookingSettings = doctorData.bookingSettings;
         }
 
 

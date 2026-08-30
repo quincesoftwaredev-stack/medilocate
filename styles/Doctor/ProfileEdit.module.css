@@ -1,12 +1,11 @@
 .page {
     min-height: 100vh;
-    padding: 34px 20px 70px;
+    padding: 22px 20px 60px;
     background: var(--ml-gray-50);
 }
 
 .container {
-    width: 100%;
-    max-width: 1050px;
+    width: min(1180px, 100%);
     margin: 0 auto;
 }
 
@@ -22,7 +21,7 @@
 
     gap: 20px;
 
-    margin-bottom: 22px;
+    margin-bottom: 16px;
 }
 
 .backLink {
@@ -71,7 +70,12 @@
 ========================================================= */
 
 .header {
-    margin-bottom: 25px;
+    margin-bottom: 18px;
+    padding: 20px 22px;
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-md);
+    background: var(--ml-white);
+    box-shadow: var(--ml-shadow-sm);
 
     display: flex;
     align-items: flex-end;
@@ -105,7 +109,7 @@
 }
 
 .header p {
-    margin: 9px 0 0;
+    margin: 6px 0 0;
 
     color: var(--ml-gray-500);
 
@@ -162,7 +166,7 @@
     display: flex;
     flex-direction: column;
 
-    gap: 16px;
+    gap: 14px;
 }
 
 
@@ -171,7 +175,7 @@
 ========================================================= */
 
 .card {
-    padding: 23px;
+    padding: 18px 20px;
 
     border: 1px solid var(--ml-gray-200);
     border-radius: var(--ml-radius-md);
@@ -187,12 +191,12 @@
 
     gap: 12px;
 
-    margin-bottom: 22px;
+    margin-bottom: 16px;
 }
 
 .sectionIcon {
-    width: 42px;
-    height: 42px;
+    width: 38px;
+    height: 38px;
 
     flex-shrink: 0;
 
@@ -236,7 +240,7 @@
 ========================================================= */
 
 .profileArea {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 
@@ -250,7 +254,7 @@
     grid-template-columns:
         repeat(2, minmax(0, 1fr));
 
-    gap: 17px;
+    gap: 14px;
 }
 
 .formGroup {
@@ -281,14 +285,14 @@
 ========================================================= */
 
 .inputWrapper {
-    min-height: 47px;
+    min-height: 41px;
 
     display: flex;
     align-items: center;
 
     gap: 9px;
 
-    padding: 0 12px;
+    padding: 0 10px;
 
     border: 1px solid var(--ml-gray-200);
     border-radius: var(--ml-radius-sm);
@@ -363,8 +367,10 @@
 
 .textareaGroup textarea {
     width: 100%;
+    box-sizing: border-box;
+    max-width: 100%;
 
-    min-height: 145px;
+    min-height: 112px;
 
     padding: 13px 14px;
 
@@ -466,6 +472,9 @@
     justify-content: flex-end;
 
     gap: 9px;
+    box-sizing: border-box;
+    max-width: 100%;
+    min-width: 0;
 }
 
 .cancelButton,
@@ -492,6 +501,8 @@
     cursor: pointer;
 
     transition: var(--ml-transition);
+    box-sizing: border-box;
+    max-width: 100%;
 }
 
 .cancelButton {
@@ -534,6 +545,157 @@
     font-size: 18px;
 }
 
+/* Registration-style update steps */
+.stepper {
+    align-items: center;
+    background: var(--ml-white);
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-md);
+    display: flex;
+    margin-bottom: 14px;
+    padding: 14px 18px;
+}
+
+.stepGroup {
+    align-items: center;
+    display: flex;
+    flex: 1;
+}
+
+.stepGroup:last-child {
+    flex: 0;
+}
+
+.stepItem {
+    align-items: center;
+    background: transparent;
+    box-shadow: none;
+    color: var(--ml-gray-500);
+    display: flex;
+    flex-shrink: 0;
+    font-family: inherit;
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-medium);
+    gap: 8px;
+    padding: 0;
+}
+
+.stepNumber {
+    align-items: center;
+    background: var(--ml-white);
+    border: 1px solid var(--ml-gray-300);
+    border-radius: 50%;
+    display: flex;
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-bold);
+    height: 30px;
+    justify-content: center;
+    width: 30px;
+}
+
+.stepNumber svg {
+    font-size: 18px;
+}
+
+.stepActive {
+    color: var(--ml-navy);
+    font-weight: var(--ml-weight-semibold);
+}
+
+.stepActive .stepNumber {
+    background: var(--ml-teal);
+    border-color: var(--ml-teal);
+    color: var(--ml-white);
+}
+
+.stepLine {
+    background: var(--ml-gray-200);
+    height: 1px;
+    margin: 0 12px;
+    flex: 1;
+}
+
+.lineActive {
+    background: var(--ml-teal);
+}
+
+.reviewCard {
+    background: var(--ml-white);
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-md);
+    box-shadow: var(--ml-shadow-sm);
+    display: grid;
+    gap: 16px;
+    padding: 20px;
+}
+
+.reviewIntro {
+    align-items: flex-start;
+    display: flex;
+    gap: 12px;
+}
+
+.reviewIntro > div:last-child > span {
+    color: var(--ml-teal);
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-bold);
+    letter-spacing: .08em;
+}
+
+.reviewCard h2 {
+    color: var(--ml-navy);
+    font-size: var(--ml-font-xl);
+    margin: 0;
+}
+
+.reviewCard p,
+.reviewCard span {
+    color: var(--ml-gray-500);
+    font-size: var(--ml-font-sm);
+}
+
+.reviewCard p {
+    margin: 5px 0 0;
+}
+
+.reviewIdentity {
+    align-items: center;
+    background: var(--ml-mint);
+    border-radius: var(--ml-radius-sm);
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 13px;
+}
+
+.reviewIdentity strong {
+    color: var(--ml-navy);
+    font-size: var(--ml-font-md);
+}
+
+.reviewGrid {
+    display: grid;
+    gap: 9px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.reviewGrid > div {
+    border: 1px solid var(--ml-gray-200);
+    border-radius: var(--ml-radius-sm);
+    display: grid;
+    gap: 2px;
+    padding: 12px;
+}
+
+.reviewGrid strong {
+    color: var(--ml-teal-dark);
+    font-size: var(--ml-font-xl);
+}
+
+.reviewGrid span {
+    font-size: var(--ml-font-xs);
+}
+
 
 /* =========================================================
    MOBILE
@@ -542,7 +704,7 @@
 @media (max-width: 760px) {
 
     .page {
-        padding: 24px 13px 50px;
+        padding: 18px 14px 50px;
     }
 
     .header {
@@ -550,7 +712,8 @@
 
         flex-direction: column;
 
-        gap: 15px;
+        gap: 12px;
+        padding: 17px;
     }
 
     .saveTopButton {
@@ -558,13 +721,26 @@
     }
 
     .card {
-        padding: 18px 15px;
+        padding: 16px;
     }
 
     .formGrid {
         grid-template-columns: 1fr;
 
         gap: 15px;
+    }
+
+    .stepper {
+        overflow-x: auto;
+        padding: 13px 14px;
+    }
+
+    .stepItem > span:last-child {
+        display: none;
+    }
+
+    .reviewGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
 }
@@ -601,14 +777,35 @@
     }
 
     .bottomActions {
-        flex-direction: column-reverse;
-
-        align-items: stretch;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        flex-wrap: wrap;
     }
 
     .cancelButton,
     .saveButton {
-        width: 100%;
+        width: auto;
+        min-width: 108px;
+    }
+
+    .stepper {
+        border-radius: var(--ml-radius-md);
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .reviewCard {
+        border-radius: var(--ml-radius-md);
+        margin-left: 0;
+        margin-right: 0;
+        padding: 17px;
+    }
+
+    .reviewIdentity {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 3px;
     }
 
 }

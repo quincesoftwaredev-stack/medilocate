@@ -59,7 +59,7 @@ handler.get(async (req, res) => {
             const end = new Date(date);
             end.setHours(23, 59, 59, 999);
 
-            filter.date = { $gte: start, $lte: end };
+            filter.appointmentDate = { $gte: start, $lte: end };
         }
 
         // 🔹 Total count
@@ -96,18 +96,27 @@ handler.get(async (req, res) => {
 handler.post(isAuth, async (req, res) => {
     try {
         await db.connect();
-        const { doctorId, date, startTime, endTime, symptoms, consultationFee, followUpFee } = req.body;
+        const { doctorId, doctorProfileId, department, chamberId, date, appointmentDate, startTime, endTime, symptoms, consultationMode, consultationFee, followUpFee } = req.body;
+
+        const selectedDate = appointmentDate || date;
+        if (!selectedDate || !startTime || !endTime) {
+            return res.status(400).json({ error: 'Appointment date, start time and end time are required' });
+        }
 
         // Calculate serial number
 
         const booking = await Booking.create({
             patient: req.user._id,
             doctor: doctorId,
-            date,
+            doctorProfile: doctorProfileId || null,
+            department: department || null,
+            chamberId: chamberId || null,
+            appointmentDate: selectedDate,
             startTime,
             endTime,
             serial: generateUniqueID([]),
             symptoms,
+            consultationMode: consultationMode || 'chamber',
             consultationFee,
             followUpFee,
             status: 'pending',

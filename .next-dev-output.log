@@ -1,0 +1,12 @@
+
+> ecomerce@0.1.0 dev
+> next dev
+
+   ▲ Next.js 14.1.3
+   - Local:        http://localhost:3000
+   - Environments: .env
+
+ ✓ Ready in 20.6s
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 1641ms (71 modules)
+ ○ Compiling /api/doctors ...

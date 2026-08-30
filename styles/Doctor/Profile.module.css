@@ -58,20 +58,20 @@
 ========================================================= */
 
 .hero {
-    padding: 0 0 25px;
+    padding: 0 0 18px;
 }
 
 
 .heroCard {
     display: grid;
 
-    grid-template-columns: auto 1fr 230px;
+    grid-template-columns: auto 1fr 210px;
 
     align-items: center;
 
-    gap: 28px;
+    gap: 20px;
 
-    padding: 30px;
+    padding: 22px;
 
     border: 1px solid var(--ml-gray-200);
     border-radius: var(--ml-radius-lg);
@@ -89,8 +89,8 @@
 .photoWrapper {
     position: relative;
 
-    width: 155px;
-    height: 155px;
+    width: 135px;
+    height: 135px;
 }
 
 
@@ -162,7 +162,7 @@
 
     gap: 5px;
 
-    margin-bottom: 8px;
+    margin-bottom: 5px;
 
     color: var(--ml-teal);
 
@@ -189,7 +189,7 @@
 
 
 .specialty {
-    margin-top: 7px;
+    margin-top: 5px;
 
     color: var(--ml-teal);
 
@@ -217,7 +217,7 @@
 
     gap: 9px;
 
-    margin-top: 16px;
+    margin-top: 11px;
 }
 
 
@@ -255,9 +255,9 @@
     display: flex;
     flex-wrap: wrap;
 
-    gap: 18px;
+    gap: 10px 16px;
 
-    margin-top: 18px;
+    margin-top: 12px;
 }
 
 
@@ -288,7 +288,7 @@
     display: flex;
     flex-direction: column;
 
-    padding-left: 24px;
+    padding-left: 18px;
 
     border-left: 1px solid var(--ml-gray-200);
 }
@@ -302,7 +302,7 @@
 
 
 .heroAction > strong {
-    margin: 4px 0 15px;
+    margin: 3px 0 10px;
 
     color: var(--ml-navy);
 
@@ -319,7 +319,7 @@
 
     gap: 7px;
 
-    min-height: 46px;
+    min-height: 42px;
 
     border-radius: var(--ml-radius-sm);
 
@@ -350,7 +350,7 @@
 
 
 .heroAction small {
-    margin-top: 9px;
+    margin-top: 6px;
 
     color: var(--ml-gray-500);
 
@@ -947,15 +947,15 @@
     .heroCard {
         grid-template-columns: 1fr;
 
-        gap: 18px;
+        gap: 14px;
 
-        padding: 20px;
+        padding: 16px;
     }
 
 
     .photoWrapper {
-        width: 110px;
-        height: 110px;
+        width: 96px;
+        height: 96px;
 
         margin: 0 auto;
     }
@@ -1156,4 +1156,72 @@
         text-align: left;
     }
 
+}
+
+.heroFeeDetail {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: -7px 0 15px;
+    padding: 8px 10px;
+    border-radius: var(--ml-radius-sm);
+    background: var(--ml-gray-50);
+    color: var(--ml-gray-600);
+    font-size: var(--ml-font-sm);
+}
+
+.heroFeeDetail > span {
+    color: var(--ml-gray-600);
+}
+
+.heroFeeDetail > strong {
+    color: var(--ml-teal-dark);
+    font-size: var(--ml-font-md);
+    font-weight: var(--ml-weight-semibold);
+}
+
+.legacyConsultationCard,
+.consultationCard {
+    display: none;
+}
+.profileToolbar {
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
+    gap: 16px;
+}
+
+.updateProfileButton {
+    align-items: center;
+    gap: 4px;
+    min-height: 28px;
+    padding: 4px 9px;
+    border: 1px solid var(--ml-gray-200);
+    border-radius: 999px;
+    background: var(--ml-white);
+    color: var(--ml-teal-dark);
+    display: inline-flex;
+    font-size: var(--ml-font-xs);
+    font-weight: var(--ml-weight-semibold);
+    justify-content: center;
+    text-decoration: none;
+    transition: var(--ml-transition);
+    margin-top: 7px;
+}
+
+.updateProfileButton svg {
+    width: 15px;
+    height: 15px;
+}
+
+.updateProfileButton:hover {
+    border-color: var(--ml-teal);
+    background: var(--ml-teal-light);
+}
+
+@media (max-width: 520px) {
+    .updateProfileButton {
+        width: auto;
+    }
 }
