@@ -16,7 +16,6 @@ import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutline";
-import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
@@ -955,82 +954,6 @@ export default function DoctorProfileEditPage({
                                     }
                                     type="number"
                                 />
-
-                            </div>
-
-                        </section>
-
-
-                        {/* =================================================
-                            FEES
-                        ================================================== */}
-
-                        <section
-                            className={styles.card}
-                        >
-
-                            <div
-                                className={
-                                    styles.cardHeader
-                                }
-                            >
-
-                                <div
-                                    className={
-                                        styles.sectionIcon
-                                    }
-                                >
-
-                                    <AttachMoneyOutlinedIcon />
-
-                                </div>
-
-
-                                <div>
-
-                                    <h2>
-                                        Consultation
-                                    </h2>
-
-                                    <p>
-                                        Manage your consultation
-                                        pricing.
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-
-                            <div
-                                className={
-                                    styles.formGrid
-                                }
-                            >
-
-                                <InputField
-                                    label="Consultation fee"
-                                    value={
-                                        doctor.consultationFee
-                                    }
-                                    onChange={(
-                                        value
-                                    ) =>
-                                        setDoctor(
-                                            (previous) => ({
-                                                ...previous,
-                                                consultationFee:
-                                                    value,
-                                            })
-                                        )
-                                    }
-                                    placeholder="৳"
-                                    icon={
-                                        <AttachMoneyOutlinedIcon />
-                                    }
-                                    type="number"
-                                />
-
 
                             </div>
 

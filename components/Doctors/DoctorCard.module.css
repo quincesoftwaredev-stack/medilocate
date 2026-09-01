@@ -312,13 +312,14 @@
 }
 
 
-.callButton {
-    width: 39px;
+.bookButton {
     height: 39px;
 
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 5px;
+    padding: 0 10px;
 
     border: 1px solid var(--ml-gray-200);
     border-radius: 8px;
@@ -328,17 +329,19 @@
     background: var(--ml-white);
 
     text-decoration: none;
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-semibold);
 
     transition: var(--ml-transition);
 }
 
 
-.callButton svg {
+.bookButton svg {
     width: 18px;
 }
 
 
-.callButton:hover {
+.bookButton:hover {
     color: var(--ml-white);
 
     border-color: var(--ml-teal);
@@ -422,8 +425,8 @@
     }
 
 
-    .callButton {
-        width: 44px;
+    .bookButton {
+        flex: 1;
     }
 
 

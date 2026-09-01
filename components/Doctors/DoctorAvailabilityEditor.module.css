@@ -547,9 +547,25 @@
   align-items: end;
   background: var(--ml-mint);
   border-top: 1px solid var(--ml-gray-100);
-  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   margin-top: 0;
   padding: 11px 12px;
+}
+.slotSummary {
+  background: var(--ml-white);
+  border: 1px solid var(--ml-gray-200);
+  border-radius: var(--ml-radius-sm);
+  color: var(--ml-teal-dark) !important;
+  font-size: var(--ml-font-xs) !important;
+  font-weight: var(--ml-weight-medium);
+  grid-column: 1 / -1;
+  margin: 0 !important;
+  padding: 8px 10px;
+}
+.slotSummaryError {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #be123c !important;
 }
 .slotFields + .slotFields {
   border-top-style: dashed;

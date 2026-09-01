@@ -26,18 +26,7 @@ const Layout = ({ children }) => {
   const fetchAgain = useSelector(state => state.category.fetchAgain);
   const userInfo = useSelector(state => state.user.userInfo);
 
-  const fetchCategory = async () => {
-    try {
-      const { data } = await axios.get("/api/department/view");
-      dispatch(setCategories(data));
-    } catch (error) {
-      console.error("Failed to fetch departments:", error);
-    }
-  };
 
-  useEffect(() => {
-    fetchCategory();
-  }, [fetchAgain]);
 
   useEffect(() => {
     let ReactPixel;
@@ -104,7 +93,7 @@ const Layout = ({ children }) => {
   const isAdminPage = containsAdmin(router.asPath);
 
   return (
-    <GoogleMapsProvider>
+    <GoogleMapsProvider>/
       <div>
         {loading && <Loading />}
 

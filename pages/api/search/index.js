@@ -5,6 +5,7 @@ import User from "@/database/model/User";
 import nextConnect from "next-connect";
 
 const handler = nextConnect();
+const SUGGESTION_LIMIT = 8;
 
 const escapeRegex = (value) =>
     value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -83,7 +84,7 @@ handler.get(async (req, res) => {
             : "all";
         const mode = req.query.mode === "suggestions" ? "suggestions" : "results";
         const page = Math.max(Number(req.query.page) || 1, 1);
-        const perGroup = mode === "suggestions" ? 3 : type === "all" ? 6 : 12;
+        const perGroup = mode === "suggestions" ? SUGGESTION_LIMIT : type === "all" ? 6 : 12;
 
         if (query.length < 2) {
             return res.status(200).json({
@@ -151,7 +152,7 @@ handler.get(async (req, res) => {
             ),
         ]
             .sort((a, b) => getScore(query, [a]) - getScore(query, [b]) || a.localeCompare(b))
-            .slice(0, mode === "suggestions" ? 3 : 12)
+            .slice(0, mode === "suggestions" ? 4 : 12)
             .map((name) => ({ type: "specialty", name }));
 
         if (mode === "suggestions") {
@@ -159,9 +160,9 @@ handler.get(async (req, res) => {
                 success: true,
                 query,
                 groups: {
-                    doctors: doctors.slice(0, 3),
+                    doctors: doctors.slice(0, SUGGESTION_LIMIT),
                     specialties,
-                    medicines: medicines.slice(0, 3),
+                    medicines: medicines.slice(0, SUGGESTION_LIMIT),
                 },
                 counts: { doctors: doctors.length, medicines: medicines.length },
             });
@@ -209,4 +210,3 @@ handler.get(async (req, res) => {
 });
 
 export default handler;
-

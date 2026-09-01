@@ -1,218 +1,199 @@
-
 /* =========================================================
    SECTION
 ========================================================= */
 
 .section {
-    width: 100%;
-    padding: 90px 0;
-    background: var(--ml-white);
-    box-sizing: border-box;
-    overflow: hidden;
+  width: 100%;
+  padding: 90px 0;
+  background: var(--ml-white);
+  box-sizing: border-box;
+  overflow: hidden;
 }
-
 
 /* =========================================================
    CONTAINER
 ========================================================= */
 
 .container {
-    width: min(1180px, calc(100% - 40px));
-    margin: 0 auto;
-    box-sizing: border-box;
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  box-sizing: border-box;
 }
-
 
 /* =========================================================
    HEADER
 ========================================================= */
 
 .header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 30px;
-    margin-bottom: 40px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 40px;
 }
 
 .header > div:first-child {
-    min-width: 0;
+  min-width: 0;
 }
 
 .label {
-    display: block;
-    margin-bottom: 9px;
-    color: var(--ml-teal);
-    font-size: var(--ml-font-sm);
-    font-weight: var(--ml-weight-bold);
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
+  display: block;
+  margin-bottom: 9px;
+  color: var(--ml-teal);
+  font-size: var(--ml-font-sm);
+  font-weight: var(--ml-weight-bold);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
 }
 
 .header h2 {
-    margin: 0;
-    color: var(--ml-navy);
-    font-size: clamp(
-        var(--ml-heading-sm),
-        4vw,
-        40px
-    );
-    line-height: var(--ml-line-snug);
-    letter-spacing: -1.4px;
+  margin: 0;
+  color: var(--ml-navy);
+  font-size: clamp(var(--ml-heading-sm), 4vw, 40px);
+  line-height: var(--ml-line-snug);
+  letter-spacing: -1.4px;
 }
 
 .header h2 span {
-    color: var(--ml-teal);
+  color: var(--ml-teal);
 }
 
 .header p {
-    max-width: 560px;
-    margin: 13px 0 0;
-    color: var(--ml-gray-600);
-    font-size: var(--ml-font-md);
-    line-height: var(--ml-line-relaxed);
+  max-width: 560px;
+  margin: 13px 0 0;
+  color: var(--ml-gray-600);
+  font-size: var(--ml-font-md);
+  line-height: var(--ml-line-relaxed);
 }
-
 
 /* =========================================================
    VIEW ALL
 ========================================================= */
 
 .viewAll {
-    display: inline-flex;
-    align-items: center;
-    flex-shrink: 0;
-    gap: 6px;
-    padding-bottom: 5px;
-    color: var(--ml-teal);
-    font-size: var(--ml-font-sm);
-    font-weight: var(--ml-weight-bold);
-    text-decoration: none;
-    white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 6px;
+  padding-bottom: 5px;
+  color: var(--ml-teal);
+  font-size: var(--ml-font-sm);
+  font-weight: var(--ml-weight-bold);
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 .viewAll svg {
-    width: 17px;
-    height: 17px;
-    flex-shrink: 0;
-    transition: transform 0.2s ease;
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
 }
 
 .viewAll:hover {
-    color: var(--ml-teal-dark);
+  color: var(--ml-teal-dark);
 }
 
 .viewAll:hover svg {
-    transform: translateX(3px);
+  transform: translateX(3px);
 }
-
 
 /* =========================================================
    DOCTOR GRID
 ========================================================= */
 
 .doctorGrid {
-    width: 100%;
-    display: grid;
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
-    gap: 20px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
 }
-
 
 /* =========================================================
    DOCTOR CARD
 ========================================================= */
 
 .doctorCard {
-    min-width: 0;
-    overflow: hidden;
-    border: 1px solid var(--ml-gray-200);
-    border-radius: var(--ml-radius-md);
-    background: var(--ml-white);
-    box-sizing: border-box;
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease,
-        border-color 0.25s ease;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--ml-gray-200);
+  border-radius: var(--ml-radius-md);
+  background: var(--ml-white);
+  box-sizing: border-box;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
 }
 
 .doctorCard:hover {
-    transform: translateY(-4px);
-    border-color: var(--ml-gray-300);
-    box-shadow: var(--ml-shadow-md);
+  transform: translateY(-4px);
+  border-color: var(--ml-gray-300);
+  box-shadow: var(--ml-shadow-md);
 }
-
 
 /* =========================================================
    DOCTOR IMAGE
 ========================================================= */
 
 .doctorImage {
-    position: relative;
-    width: 100%;
-    height: 190px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--ml-teal);
-    background:
-        linear-gradient(
-            135deg,
-            var(--ml-teal-light),
-            var(--ml-gray-50)
-        );
+  position: relative;
+  width: 100%;
+  height: 190px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ml-teal);
+  background: linear-gradient(135deg, var(--ml-teal-light), var(--ml-gray-50));
 }
 
 .doctorImage > svg {
-    width: 85px;
-    height: 85px;
+  width: 85px;
+  height: 85px;
 }
 
 .verified {
-    position: absolute;
-    right: 15px;
-    bottom: 15px;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    border: 3px solid var(--ml-white);
-    border-radius: 50%;
-    color: var(--ml-white);
-    background: var(--ml-teal);
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 3px solid var(--ml-white);
+  border-radius: 50%;
+  color: var(--ml-white);
+  background: var(--ml-teal);
 }
 
 .verified svg {
-    width: 17px;
-    height: 17px;
+  width: 17px;
+  height: 17px;
 }
-
 
 /* =========================================================
    INFORMATION
 ========================================================= */
 
 .doctorInfo {
-    min-width: 0;
-    padding: 20px;
-    box-sizing: border-box;
+  min-width: 0;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .doctorInfo h3 {
-    margin: 0 0 8px;
-    overflow: hidden;
-    color: var(--ml-navy);
-    font-size: var(--ml-font-lg);
-    font-weight: var(--ml-weight-bold);
-    line-height: var(--ml-line-snug);
-    letter-spacing: -0.3px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  margin: 0 0 8px;
+  overflow: hidden;
+  color: var(--ml-navy);
+  font-size: var(--ml-font-lg);
+  font-weight: var(--ml-weight-bold);
+  line-height: var(--ml-line-snug);
+  letter-spacing: -0.3px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-
 
 /* =========================================================
    SPECIALTY / LOCATION
@@ -220,328 +201,364 @@
 
 .specialty,
 .location {
-    min-width: 0;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--ml-gray-600);
-    font-size: var(--ml-font-sm);
-    line-height: var(--ml-line-normal);
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ml-gray-600);
+  font-size: var(--ml-font-sm);
+  line-height: var(--ml-line-normal);
 }
 
 .specialty {
-    color: var(--ml-teal);
-    font-weight: var(--ml-weight-semibold);
+  color: var(--ml-teal);
+  font-weight: var(--ml-weight-semibold);
 }
 
 .specialty svg,
 .location svg {
-    width: 17px;
-    height: 17px;
-    flex-shrink: 0;
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
 }
 
 .location {
-    margin-top: 7px;
+  margin-top: 7px;
 }
 
 .specialty,
 .location {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .specialty > svg,
 .location > svg {
-    flex-shrink: 0;
+  flex-shrink: 0;
 }
 
 .specialty,
 .location {
-    text-overflow: ellipsis;
+  text-overflow: ellipsis;
 }
 
 .specialty::after,
 .location::after {
-    content: "";
+  content: "";
 }
 
 .specialty {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 .location {
-    white-space: nowrap;
+  white-space: nowrap;
 }
-
 
 /* =========================================================
    STATS
 ========================================================= */
 
 .stats {
-    display: grid;
-    grid-template-columns:
-        minmax(0, 1fr)
-        minmax(0, 1fr);
-    gap: 10px;
-    margin-top: 18px;
-    padding: 14px 0;
-    border-top: 1px solid var(--ml-gray-100);
-    border-bottom: 1px solid var(--ml-gray-100);
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+  gap: 10px;
+  margin-top: 18px;
+  padding: 14px 0;
+  border-top: 1px solid var(--ml-gray-100);
+  border-bottom: 1px solid var(--ml-gray-100);
 }
 
 .stats > div {
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
 .stats > div + div {
-    padding-left: 12px;
-    border-left: 1px solid var(--ml-gray-200);
+  padding-left: 12px;
+  border-left: 1px solid var(--ml-gray-200);
 }
 
 .stats strong {
-    overflow: hidden;
-    color: var(--ml-navy-light);
-    font-size: var(--ml-font-sm);
-    font-weight: var(--ml-weight-bold);
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  overflow: hidden;
+  color: var(--ml-navy-light);
+  font-size: var(--ml-font-sm);
+  font-weight: var(--ml-weight-bold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .stats span {
-    color: var(--ml-gray-500);
-    font-size: var(--ml-font-xs);
+  color: var(--ml-gray-500);
+  font-size: var(--ml-font-xs);
 }
-
 
 /* =========================================================
    PROFILE BUTTON
 ========================================================= */
 
 .profileButton {
-    width: 100%;
-    max-width: 100%;
-    height: 42px;
-    min-height: 42px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    margin-top: 16px;
-    padding: 0 12px;
-    box-sizing: border-box;
-    border: 1px solid transparent;
-    border-radius: var(--ml-radius-sm);
-    color: var(--ml-teal-dark);
-    background: var(--ml-teal-light);
-    font-size: var(--ml-font-sm);
-    font-weight: var(--ml-weight-bold);
-    text-decoration: none;
-    transition: var(--ml-transition);
+  width: 100%;
+  max-width: 100%;
+  height: 42px;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-radius: var(--ml-radius-sm);
+  color: var(--ml-teal-dark);
+  background: var(--ml-teal-light);
+  font-size: var(--ml-font-sm);
+  font-weight: var(--ml-weight-bold);
+  text-decoration: none;
+  transition: var(--ml-transition);
 }
 
 .profileButton svg {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-    transition: transform 0.2s ease;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
 }
 
 .profileButton:hover {
-    color: var(--ml-white);
-    background: var(--ml-teal);
+  color: var(--ml-white);
+  background: var(--ml-teal);
 }
 
 .profileButton:hover svg {
-    transform: translateX(3px);
+  transform: translateX(3px);
 }
-
 
 /* =========================================================
    TABLET
 ========================================================= */
 
 @media (max-width: 900px) {
+  .section {
+    padding: 75px 0;
+  }
 
-    .section {
-        padding: 75px 0;
-    }
+  .doctorGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 
-    .doctorGrid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-    }
-
-    .doctorCard:last-child {
-        display: none;
-    }
-
+  .doctorCard:last-child {
+    display: none;
+  }
 }
-
 
 /* =========================================================
    SMALL TABLET
 ========================================================= */
 
 @media (max-width: 700px) {
+  .container {
+    width: calc(100% - 28px);
+  }
 
-    .container {
-        width: calc(100% - 28px);
-    }
+  .header {
+    display: block;
+    margin-bottom: 30px;
+  }
 
-    .header {
-        display: block;
-        margin-bottom: 30px;
-    }
+  .header h2 {
+    font-size: 29px;
+  }
 
-    .header h2 {
-        font-size: 29px;
-    }
+  .header p {
+    font-size: var(--ml-font-sm);
+  }
 
-    .header p {
-        font-size: var(--ml-font-sm);
-    }
+  .viewAll {
+    margin-top: 15px;
+    padding-bottom: 0;
+  }
 
-    .viewAll {
-        margin-top: 15px;
-        padding-bottom: 0;
-    }
+  .doctorGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 
-    .doctorGrid {
-        grid-template-columns:
-            minmax(0, 1fr);
-    }
+  .doctorCard:last-child {
+    display: block;
+  }
 
-    .doctorCard:last-child {
-        display: block;
-    }
-
-    .doctorImage {
-        height: 190px;
-    }
-
+  .doctorImage {
+    height: 190px;
+  }
 }
-
 
 /* =========================================================
    MOBILE
 ========================================================= */
 
 @media (max-width: 480px) {
+  .section {
+    padding: 60px 0;
+  }
 
-    .section {
-        padding: 60px 0;
-    }
+  .container {
+    width: calc(100% - 24px);
+  }
 
-    .container {
-        width: calc(100% - 24px);
-    }
+  .header h2 {
+    font-size: 28px;
+    letter-spacing: -1.1px;
+  }
 
-    .header h2 {
-        font-size: 28px;
-        letter-spacing: -1.1px;
-    }
+  .header p {
+    font-size: var(--ml-font-sm);
+  }
 
-    .header p {
-        font-size: var(--ml-font-sm);
-    }
+  .doctorImage {
+    height: 180px;
+  }
 
-    .doctorImage {
-        height: 180px;
-    }
+  .doctorImage > svg {
+    width: 75px;
+    height: 75px;
+  }
 
-    .doctorImage > svg {
-        width: 75px;
-        height: 75px;
-    }
+  .doctorInfo {
+    padding: 18px;
+  }
 
-    .doctorInfo {
-        padding: 18px;
-    }
+  .doctorInfo h3 {
+    font-size: var(--ml-font-lg);
+  }
 
-    .doctorInfo h3 {
-        font-size: var(--ml-font-lg);
-    }
+  .specialty,
+  .location {
+    font-size: var(--ml-font-sm);
+  }
 
-    .specialty,
-    .location {
-        font-size: var(--ml-font-sm);
-    }
-
-    .stats strong {
-        font-size: var(--ml-font-sm);
-    }
-
+  .stats strong {
+    font-size: var(--ml-font-sm);
+  }
 }
-
 
 /* =========================================================
    SMALL MOBILE
 ========================================================= */
 
 @media (max-width: 400px) {
+  .container {
+    width: calc(100% - 20px);
+  }
 
-    .container {
-        width: calc(100% - 20px);
-    }
+  .doctorImage {
+    height: 170px;
+  }
 
-    .doctorImage {
-        height: 170px;
-    }
+  .doctorInfo {
+    padding: 17px;
+  }
 
-    .doctorInfo {
-        padding: 17px;
-    }
+  .doctorInfo h3 {
+    font-size: var(--ml-font-md);
+  }
 
-    .doctorInfo h3 {
-        font-size: var(--ml-font-md);
-    }
+  .specialty,
+  .location {
+    font-size: var(--ml-font-xs);
+  }
 
-    .specialty,
-    .location {
-        font-size: var(--ml-font-xs);
-    }
+  .stats {
+    gap: 8px;
+  }
 
-    .stats {
-        gap: 8px;
-    }
+  .stats > div + div {
+    padding-left: 9px;
+  }
 
-    .stats > div + div {
-        padding-left: 9px;
-    }
+  .stats strong {
+    font-size: var(--ml-font-sm);
+  }
 
-    .stats strong {
-        font-size: var(--ml-font-sm);
-    }
-
-    .profileButton {
-        height: 40px;
-        min-height: 40px;
-        font-size: var(--ml-font-sm);
-    }
-
+  .profileButton {
+    height: 40px;
+    min-height: 40px;
+    font-size: var(--ml-font-sm);
+  }
 }
-
 
 /* =========================================================
    VERY SMALL MOBILE
 ========================================================= */
 
 @media (max-width: 340px) {
+  .container {
+    width: calc(100% - 18px);
+  }
 
-    .container {
-        width: calc(100% - 18px);
-    }
+  .header h2 {
+    font-size: 25px;
+  }
 
-    .header h2 {
-        font-size: 25px;
-    }
+  .doctorImage {
+    height: 155px;
+  }
+}
 
-    .doctorImage {
-        height: 155px;
-    }
+.doctorImage > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
+.cardActions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.cardActions .profileButton,
+.bookingButton {
+  width: 100%;
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 0;
+  padding: 0 10px;
+  box-sizing: border-box;
+  border-radius: var(--ml-radius-sm);
+  font-size: var(--ml-font-xs);
+  font-weight: var(--ml-weight-bold);
+  text-decoration: none;
+}
+
+.bookingButton {
+  color: var(--ml-white);
+  background: var(--ml-teal);
+}
+
+.bookingButton:hover {
+  background: var(--ml-teal-dark);
+}
+
+.bookingButton svg {
+  width: 16px;
+}
+
+.empty {
+  grid-column: 1 / -1;
+  color: var(--ml-gray-500);
+  text-align: center;
+}
+
+@media (max-width: 400px) {
+  .cardActions {
+    grid-template-columns: 1fr;
+  }
 }

@@ -14,7 +14,7 @@ export default function ConsultationAvailability({ doctor }) {
         <div className={styles.icon}><EventAvailableOutlinedIcon /></div>
         <div><span>APPOINTMENTS</span><h2>Consultation & availability</h2></div>
       </header>
-      <ConsultationModes modes={doctor.consultationModes} />
+      <ConsultationModes modes={doctor.consultationModes} availability={doctor.weeklyAvailability} fallbackFee={doctor.consultationFee} />
       <div className={styles.content}>
         <div className={styles.schedule}>
           <h3>Weekly schedule</h3>

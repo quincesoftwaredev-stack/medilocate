@@ -38,7 +38,7 @@ export default function Navbar() {
 
     useEffect(() => {
         if (!searchOpen || medicines.length) return;
-        fetch("/data/medicines-catalog.json").then((response) => response.json()).then(setMedicines).catch(() => {});
+        fetch("/data/medicines-catalog.json").then((response) => response.json()).then(setMedicines).catch(() => { });
     }, [searchOpen, medicines.length]);
 
     useEffect(() => {
@@ -175,22 +175,44 @@ export default function Navbar() {
 
                 </div>
 
-            {searchOpen && (
-                <div className={styles.searchPanel}>
-                    <div className={styles.searchPanelHeader}>
-                        <div className={styles.searchInputWrap}><SearchOutlinedIcon /><input autoFocus value={searchText} onChange={(event) => setSearchText(event.target.value)} placeholder="Search medicines by name or generic" /></div>
-                        <button type="button" aria-label="Close medicine search" onClick={() => { setSearchOpen(false); setSearchText(""); }}><CloseIcon /></button>
+                {searchOpen && (
+                    <div className={styles.searchPanel}>
+                        <div className={styles.searchPanelHeader}>
+                            <div className={styles.searchInputWrap}><SearchOutlinedIcon /><input autoFocus value={searchText} onChange={(event) => setSearchText(event.target.value)} placeholder="Search medicines by name or generic" /></div>
+                            <button type="button" aria-label="Close medicine search" onClick={() => { setSearchOpen(false); setSearchText(""); }}><CloseIcon /></button>
+                        </div>
+                        <div className={styles.searchResults}>
+                            {medicines
+                                .filter((medicine) =>
+                                    String(medicine.name || "")
+                                        .toLowerCase()
+                                        .includes(searchText.toLowerCase())
+                                )
+                                .sort((a, b) => {
+                                    const search = searchText.toLowerCase();
+
+                                    const aName = String(a.name || "").toLowerCase();
+                                    const bName = String(b.name || "").toLowerCase();
+
+                                    const getScore = (name) => {
+                                        if (name === search) return 3;
+                                        if (name.startsWith(search)) return 2;
+                                        if (name.includes(search)) return 1;
+                                        return 0;
+                                    };
+
+                                    return getScore(bName) - getScore(aName);
+                                })
+                                .slice(0, 24)
+                                .map((medicine) => (
+                                    <div className={styles.searchResult} key={medicine._id}>
+                                        <Link href={`/medicines/${medicine._id}`} onClick={() => setSearchOpen(false)}><span className={styles.searchResultImage}>{medicine.image?.url || medicine.image ? <img src={medicine.image?.url || medicine.image} alt="" /> : medicine.name.slice(0, 18)}</span><span className={styles.searchResultInfo}><strong>{medicine.name}</strong><small>{medicine.genericName || "Medicine"}</small><em>{[medicine.strength, medicine.dosageForm].filter(Boolean).join(" • ")}</em><b>৳{medicine.price || 0}</b></span></Link>
+                                        <div className={styles.quantityControls}><button type="button" onClick={() => { const next = Math.max(0, (quantities[medicine._id] || 0) - 1); setQuantities((current) => ({ ...current, [medicine._id]: next })); if (next === 0) dispatch(removeFromCart(medicine._id)); else dispatch(decreaseQuantity(medicine._id)); }}>−</button><b>{quantities[medicine._id] || 0}</b><button type="button" onClick={() => { const next = (quantities[medicine._id] || 0) + 1; setQuantities((current) => ({ ...current, [medicine._id]: next })); if (next === 1) addMedicineToCart(medicine); else dispatch(increaseQuantity(medicine._id)); }}>+</button></div>
+                                    </div>
+                                ))}
+                        </div>
                     </div>
-                    <div className={styles.searchResults}>
-                        {medicines.filter((medicine) => `${medicine.name} ${medicine.genericName || ""}`.toLowerCase().includes(searchText.toLowerCase())).slice(0, 24).map((medicine) => (
-                            <div className={styles.searchResult} key={medicine._id}>
-                                <Link href={`/medicines/${medicine._id}`} onClick={() => setSearchOpen(false)}><span className={styles.searchResultImage}>{medicine.image?.url || medicine.image ? <img src={medicine.image?.url || medicine.image} alt="" /> : medicine.name.slice(0, 18)}</span><span className={styles.searchResultInfo}><strong>{medicine.name}</strong><small>{medicine.genericName || "Medicine"}</small><em>{[medicine.strength, medicine.dosageForm].filter(Boolean).join(" • ")}</em><b>৳{medicine.price || 0}</b></span></Link>
-                                <div className={styles.quantityControls}><button type="button" onClick={() => { const next = Math.max(0, (quantities[medicine._id] || 0) - 1); setQuantities((current) => ({ ...current, [medicine._id]: next })); if (next === 0) dispatch(removeFromCart(medicine._id)); else dispatch(decreaseQuantity(medicine._id)); }}>−</button><b>{quantities[medicine._id] || 0}</b><button type="button" onClick={() => { const next = (quantities[medicine._id] || 0) + 1; setQuantities((current) => ({ ...current, [medicine._id]: next })); if (next === 1) addMedicineToCart(medicine); else dispatch(increaseQuantity(medicine._id)); }}>+</button></div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
+                )}
 
             </header>
 
@@ -200,20 +222,18 @@ export default function Navbar() {
             ========================================================== */}
 
             <div
-                className={`${styles.menuOverlay} ${
-                    menuOpen
+                className={`${styles.menuOverlay} ${menuOpen
                         ? styles.menuOverlayOpen
                         : ""
-                }`}
+                    }`}
                 onClick={closeMenu}
             >
 
                 <aside
-                    className={`${styles.menuPanel} ${
-                        menuOpen
+                    className={`${styles.menuPanel} ${menuOpen
                             ? styles.menuPanelOpen
                             : ""
-                    }`}
+                        }`}
                     onClick={(event) =>
                         event.stopPropagation()
                     }

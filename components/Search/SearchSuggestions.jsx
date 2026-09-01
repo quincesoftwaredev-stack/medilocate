@@ -11,6 +11,10 @@ const sections = [
     { key: "medicines", label: "Medicines", icon: LocalPharmacyOutlinedIcon },
 ];
 
+export const filterSuggestionGroups = (groups = {}, type = "medicines") => type === "medicines"
+    ? { doctors: [], specialties: [], medicines: groups.medicines || [] }
+    : { doctors: groups.doctors || [], specialties: groups.specialties || [], medicines: [] };
+
 export const getSuggestionHref = (item) => {
     if (item.type === "doctor") return `/doctors/${item.id}`;
     if (item.type === "medicine") return `/medicines/${item._id}`;
@@ -27,12 +31,22 @@ export default function SearchSuggestions({
     error,
     activeIndex,
     onSelect,
+    activeType,
+    onTypeChange,
 }) {
     const hasResults = flattenSuggestions(groups).length > 0;
     let itemIndex = -1;
 
     return (
         <div className={styles.suggestions} role="listbox">
+            <div className={styles.resultTabs} role="tablist" aria-label="Search result type">
+                <button type="button" role="tab" aria-selected={activeType === "medicines"} className={activeType === "medicines" ? styles.activeTab : ""} onClick={() => onTypeChange("medicines")}>
+                    <LocalPharmacyOutlinedIcon /> Medicines
+                </button>
+                <button type="button" role="tab" aria-selected={activeType === "doctors"} className={activeType === "doctors" ? styles.activeTab : ""} onClick={() => onTypeChange("doctors")}>
+                    <MedicalServicesOutlinedIcon /> Doctors
+                </button>
+            </div>
             {loading && <div className={styles.message}>Searching doctors and medicines…</div>}
             {!loading && error && <div className={`${styles.message} ${styles.error}`}>{error}</div>}
             {!loading && !error && !hasResults && (
@@ -96,4 +110,3 @@ export default function SearchSuggestions({
         </div>
     );
 }
-

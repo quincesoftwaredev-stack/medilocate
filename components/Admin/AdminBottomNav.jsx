@@ -6,6 +6,7 @@ import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import MedicationOutlinedIcon from "@mui/icons-material/MedicationOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import MedicalServicesOutlinedIcon from "@mui/icons-material/MedicalServicesOutlined";
+import EventAvailableOutlinedIcon from "@mui/icons-material/EventAvailableOutlined";
 
 import styles from "@/styles/Admin/AdminBottomNav.module.css";
 
@@ -29,6 +30,11 @@ const navItems = [
         label: "Prescriptions",
         href: "/admin/prescriptions",
         icon: DescriptionOutlinedIcon,
+    },
+    {
+        label: "Appointments",
+        href: "/admin/booking",
+        icon: EventAvailableOutlinedIcon,
     },
     {
         label: "Doctors",

@@ -3,7 +3,10 @@ import mongoose from "mongoose";
 const timeSlotSchema = new mongoose.Schema({
     startTime: { type: String, required: true, trim: true },
     endTime: { type: String, required: true, trim: true },
+    calculationMethod: { type: String, enum: ["capacity", "duration"], default: "duration" },
     slotDurationMinutes: { type: Number, min: 5, max: 240, default: 30 },
+    maxPatientsPerWindow: { type: Number, min: 1, default: 1 },
+    bufferMinutes: { type: Number, min: 0, max: 120, default: 0 },
     maxPatientsPerSlot: { type: Number, min: 1, default: 1 },
     consultationMode: { type: String, enum: ["chamber", "online", "home-visit"], default: "chamber" },
     chamberId: { type: mongoose.Schema.Types.ObjectId, default: null },
@@ -87,6 +90,16 @@ const doctorSchema = new mongoose.Schema(
             cancellationNoticeMinutes: { type: Number, min: 0, default: 120 },
             maxPatientsPerDay: { type: Number, min: 1, default: 30 },
             autoConfirmBookings: { type: Boolean, default: false },
+            maxReschedules: { type: Number, min: 0, max: 10, default: 2 },
+        },
+
+        platformFeePercent: { type: Number, min: 0, max: 100, default: 0 },
+
+        payoutDetails: {
+            method: { type: String, enum: ["bkash", "nagad", "bank", ""], default: "" },
+            accountName: { type: String, trim: true, default: "" },
+            accountNumber: { type: String, trim: true, default: "" },
+            verified: { type: Boolean, default: false },
         },
 
         consultationModes: {

@@ -5,7 +5,7 @@ import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 
 import styles from "./DoctorCard.module.css";
 
@@ -171,13 +171,14 @@ export default function DoctorCard({ doctor }) {
 
                 <div className={styles.actions}>
 
-                    <a
-                        href={`tel:+880XXXXXXXXXX`}
-                        className={styles.callButton}
-                        aria-label={`Call ${doctor.name}`}
+                    <Link
+                        href={{ pathname: `/doctors/${doctor.id}`, query: { book: "1" } }}
+                        className={styles.bookButton}
+                        aria-label={`Book an appointment with ${doctor.name}`}
                     >
-                        <PhoneOutlinedIcon />
-                    </a>
+                        <CalendarMonthOutlinedIcon />
+                        Book now
+                    </Link>
 
 
                     <Link

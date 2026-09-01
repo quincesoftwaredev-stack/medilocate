@@ -3,6 +3,7 @@ import Doctor from "@/database/model/Doctor";
 import User from "@/database/model/User";
 import nextConnect from "next-connect";
 import { isAuth } from "@/utility";
+import { normalizeWeeklyAvailability } from "@/utility/booking";
 
 const handler = nextConnect();
 
@@ -578,7 +579,11 @@ handler.patch(isAuth, async (req, res) => {
         }
 
         if (Array.isArray(doctorData.weeklyAvailability)) {
-            doctor.weeklyAvailability = doctorData.weeklyAvailability;
+            try {
+                doctor.weeklyAvailability = normalizeWeeklyAvailability(doctorData.weeklyAvailability);
+            } catch (error) {
+                return res.status(400).json({ success: false, message: error.message });
+            }
         }
 
         if (Array.isArray(doctorData.unavailablePeriods)) {

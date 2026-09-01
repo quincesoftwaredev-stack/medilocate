@@ -7,6 +7,7 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import EventBusyOutlinedIcon from "@mui/icons-material/EventBusyOutlined";
 import TuneOutlinedIcon from "@mui/icons-material/TuneOutlined";
 import { useState } from "react";
+import { getWindowPlan } from "@/utility/booking";
 import styles from "./DoctorAvailabilityEditor.module.css";
 
 const DAYS = [
@@ -44,6 +45,9 @@ const defaultDay = (dayOfWeek) => ({
       startTime: "09:00",
       endTime: "17:00",
       slotDurationMinutes: 30,
+      calculationMethod: "duration",
+      maxPatientsPerWindow: 16,
+      bufferMinutes: 0,
       maxPatientsPerSlot: 1,
       consultationMode: "chamber",
     },
@@ -52,7 +56,15 @@ const defaultDay = (dayOfWeek) => ({
 
 export function createAvailabilityForm(doctor = {}) {
   const savedDays = Array.isArray(doctor.weeklyAvailability)
-    ? doctor.weeklyAvailability
+    ? doctor.weeklyAvailability.map((day) => ({
+        ...day,
+        slots: (day.slots || []).map((slot) => ({
+          ...slot,
+          calculationMethod: slot.calculationMethod || "duration",
+          maxPatientsPerWindow: Number(slot.maxPatientsPerWindow || slot.maxPatientsPerSlot || 1),
+          bufferMinutes: Number(slot.bufferMinutes || 0),
+        })),
+      }))
     : [];
   return {
     chambers: Array.isArray(doctor.chambers) ? doctor.chambers : [],
@@ -103,7 +115,8 @@ export default function DoctorAvailabilityEditor({ value, onChange }) {
   const updateSlot = (dayIndex, slotIndex, key, nextValue) => {
     const day = value.weeklyAvailability[dayIndex];
     const slots = [...(day.slots || [])];
-    slots[slotIndex] = { ...slots[slotIndex], [key]: nextValue };
+    const changes = typeof key === "object" ? key : { [key]: nextValue };
+    slots[slotIndex] = { ...slots[slotIndex], ...changes };
     updateDay(dayIndex, { slots });
   };
   const addSlot = (dayIndex) => {
@@ -393,37 +406,63 @@ export default function DoctorAvailabilityEditor({ value, onChange }) {
                       />
                     </label>
                     <label>
-                      Minutes
-                      <input
-                        type="number"
-                        min="5"
-                        value={slot.slotDurationMinutes || 30}
-                        onChange={(event) =>
-                          updateSlot(
-                            index,
-                            slotIndex,
-                            "slotDurationMinutes",
-                            Number(event.target.value),
-                          )
-                        }
-                      />
+                      Calculate by
+                      <select
+                        value={slot.calculationMethod || "duration"}
+                        onChange={(event) => updateSlot(index, slotIndex, {
+                          calculationMethod: event.target.value,
+                          maxPatientsPerSlot: 1,
+                        })}
+                      >
+                        <option value="duration">Time per patient</option>
+                        <option value="capacity">Patient capacity</option>
+                      </select>
                     </label>
+                    {slot.calculationMethod === "capacity" ? (
+                      <label>
+                        Maximum patients
+                        <input
+                          type="number"
+                          min="1"
+                          value={slot.maxPatientsPerWindow || 1}
+                          onChange={(event) => updateSlot(index, slotIndex, "maxPatientsPerWindow", Number(event.target.value))}
+                        />
+                      </label>
+                    ) : (
+                      <label>
+                        Minutes per patient
+                        <input
+                          type="number"
+                          min="5"
+                          max="240"
+                          value={slot.slotDurationMinutes || 30}
+                          onChange={(event) => updateSlot(index, slotIndex, "slotDurationMinutes", Number(event.target.value))}
+                        />
+                      </label>
+                    )}
                     <label>
-                      Capacity
-                      <input
-                        type="number"
-                        min="1"
-                        value={slot.maxPatientsPerSlot || 1}
-                        onChange={(event) =>
-                          updateSlot(
-                            index,
-                            slotIndex,
-                            "maxPatientsPerSlot",
-                            Number(event.target.value),
-                          )
-                        }
-                      />
+                      Break between patients
+                      <select
+                        value={slot.bufferMinutes || 0}
+                        onChange={(event) => updateSlot(index, slotIndex, "bufferMinutes", Number(event.target.value))}
+                      >
+                        {[0, 5, 10, 15, 20, 30].map((minutes) => (
+                          <option key={minutes} value={minutes}>{minutes ? `${minutes} minutes` : "No break"}</option>
+                        ))}
+                      </select>
                     </label>
+                    {(() => {
+                      const plan = getWindowPlan(slot);
+                      return (
+                        <p className={`${styles.slotSummary} ${!plan.valid ? styles.slotSummaryError : ""}`}>
+                          {!plan.valid
+                            ? plan.error
+                            : slot.calculationMethod === "capacity"
+                              ? `${plan.capacity} patients · about ${plan.durationMinutes} minutes each${plan.bufferMinutes ? ` · ${plan.bufferMinutes}-minute breaks` : ""}`
+                              : `${plan.capacity} ${activeMode === "chamber" ? "serials" : "appointment times"} · ${plan.durationMinutes} minutes each${plan.bufferMinutes ? ` · ${plan.bufferMinutes}-minute breaks` : ""}`}
+                        </p>
+                      );
+                    })()}
                   </div>
                 ))}
               </article>

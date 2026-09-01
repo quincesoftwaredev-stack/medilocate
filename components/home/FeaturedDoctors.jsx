@@ -1,177 +1,161 @@
-import Link from "next/link";
+import PageSeo from "@/components/SEO/PageSeo";
 
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-import VerifiedIcon from "@mui/icons-material/Verified";
-import MedicalServicesOutlinedIcon from "@mui/icons-material/MedicalServicesOutlined";
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import Hero from "@/components/home/Hero";
 
-import styles from "./FeaturedDoctors.module.css";
+import Services from "@/components/home/Services";
 
-const doctors = [
-    {
-        id: 1,
-        name: "Dr. Ahmed Rahman",
-        specialty: "Medicine Specialist",
-        location: "Rangpur",
-        experience: "12+ Years",
-        patients: "500+ Patients",
+import HowItWorks from "@/components/home/HowItWorks";
+
+import FeaturedDoctors from "@/components/home/FeaturedDoctors";
+
+import MedicineSection from "@/components/home/MedicineSection";
+
+import PrescriptionSection from "@/components/home/PrescriptionSection";
+
+import WhyMedilocate from "@/components/home/WhyMedilocate";
+
+import FinalCTA from "@/components/home/FinalCTA";
+
+
+const featuredDoctors = [
+  {
+    _id: "doctor-1",
+
+    user: {
+      fullName: "Dr. Abdullah Al Mamun",
+      firstName: "Abdullah",
+      lastName: "Al Mamun",
+      image: "",
     },
-    {
-        id: 2,
-        name: "Dr. Nusrat Jahan",
-        specialty: "Gynecology Specialist",
-        location: "Rangpur",
-        experience: "8+ Years",
-        patients: "350+ Patients",
+
+    speciality: "Medicine Specialist",
+
+    workingIn: "Rangpur Medical College Hospital",
+
+    totalExperience: 12,
+
+    patientAttended: 2500,
+  },
+
+  {
+    _id: "doctor-2",
+
+    user: {
+      fullName: "Dr. Nusrat Jahan",
+      firstName: "Nusrat",
+      lastName: "Jahan",
+      image: "",
     },
-    {
-        id: 3,
-        name: "Dr. Mahmud Hasan",
-        specialty: "Child Specialist",
-        location: "Rangpur",
-        experience: "10+ Years",
-        patients: "420+ Patients",
+
+    speciality: "Gynecology & Obstetrics",
+
+    workingIn: "Prime Medical College Hospital",
+
+    totalExperience: 8,
+
+    patientAttended: 1800,
+  },
+
+  {
+    _id: "doctor-3",
+
+    user: {
+      fullName: "Dr. Mahmudul Hasan",
+      firstName: "Mahmudul",
+      lastName: "Hasan",
+      image: "",
     },
+
+    speciality: "Child Specialist",
+
+    workingIn: "Rangpur Community Medical College Hospital",
+
+    totalExperience: 10,
+
+    patientAttended: 2100,
+  },
 ];
 
-export default function FeaturedDoctors() {
-    return (
-        <section className={styles.section}>
-            <div className={styles.container}>
 
-                {/* =====================================================
-                    HEADER
-                ====================================================== */}
+const featuredMedicines = [
+  {
+    _id: "medicine-1",
 
-                <div className={styles.header}>
+    name: "Napa",
 
-                    <div>
+    genericName: "Paracetamol",
 
-                        <span className={styles.label}>
-                            FIND YOUR DOCTOR
-                        </span>
+    strength: "500 mg",
 
-                        <h2>
-                            Connect with trusted
-                            <span> doctors.</span>
-                        </h2>
+    dosageForm: "Tablet",
 
-                        <p>
-                            Explore healthcare professionals near you
-                            and contact them directly for an onsite visit.
-                        </p>
+    price: 15,
 
-                    </div>
+    image: "",
+  },
 
+  {
+    _id: "medicine-2",
 
-                    <Link
-                        href="/doctors"
-                        className={styles.viewAll}
-                    >
-                        View all doctors
+    name: "Seclo",
 
-                        <ArrowForwardIcon />
-                    </Link>
+    genericName: "Omeprazole",
 
-                </div>
+    strength: "20 mg",
 
+    dosageForm: "Capsule",
 
-                {/* =====================================================
-                    DOCTOR GRID
-                ====================================================== */}
+    price: 70,
 
-                <div className={styles.doctorGrid}>
+    image: "",
+  },
 
-                    {doctors.map((doctor) => (
+  {
+    _id: "medicine-3",
 
-                        <div
-                            className={styles.doctorCard}
-                            key={doctor.id}
-                        >
+    name: "Fexo",
 
-                            {/* Doctor Image / Avatar */}
+    genericName: "Fexofenadine Hydrochloride",
 
-                            <div className={styles.doctorImage}>
+    strength: "120 mg",
 
-                                <PersonOutlineOutlinedIcon />
+    dosageForm: "Tablet",
 
-                                <span className={styles.verified}>
-                                    <VerifiedIcon />
-                                </span>
+    price: 100,
 
-                            </div>
+    image: "",
+  },
+];
 
 
-                            {/* Doctor Information */}
+export default function Home() {
+  return (
+    <>
+      <PageSeo
+        title="MediLocate | Find Doctors & Order Medicines Online"
+        description="Find trusted doctors, search medicines, upload prescriptions and arrange convenient medicine delivery with MediLocate in Bangladesh."
+        path="/"
+        keywords="find doctors Bangladesh, order medicine online, prescription upload, medicine delivery, MediLocate"
+        schemaType="WebPage"
+      />
 
-                            <div className={styles.doctorInfo}>
+      <main>
+        <Hero />
 
-                                <h3>
-                                    {doctor.name}
-                                </h3>
+        <Services />
 
-                                <div className={styles.specialty}>
-                                    <MedicalServicesOutlinedIcon />
+        <HowItWorks />
 
-                                    {doctor.specialty}
-                                </div>
+        {/* <FeaturedDoctors doctors={featuredDoctors} />
 
+        <MedicineSection medicines={featuredMedicines} /> */}
 
-                                <div className={styles.location}>
-                                    <LocationOnOutlinedIcon />
+        <PrescriptionSection />
 
-                                    {doctor.location}
-                                </div>
+        <WhyMedilocate />
 
-
-                                {/* Stats */}
-
-                                <div className={styles.stats}>
-
-                                    <div>
-                                        <strong>
-                                            {doctor.experience}
-                                        </strong>
-
-                                        <span>
-                                            Experience
-                                        </span>
-                                    </div>
-
-                                    <div>
-                                        <strong>
-                                            {doctor.patients}
-                                        </strong>
-
-                                        <span>
-                                            Patients
-                                        </span>
-                                    </div>
-
-                                </div>
-
-
-                                {/* Action */}
-
-                                <Link
-                                    href={`/doctors/${doctor.id}`}
-                                    className={styles.profileButton}
-                                >
-                                    View Profile
-
-                                    <ArrowForwardIcon />
-                                </Link>
-
-                            </div>
-
-                        </div>
-
-                    ))}
-
-                </div>
-
-            </div>
-        </section>
-    );
+        <FinalCTA />
+      </main>
+    </>
+  );
 }

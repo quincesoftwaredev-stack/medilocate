@@ -248,15 +248,74 @@ export default function MedicinesPage({
 
             if (catalogMedicines.length) {
                 const normalizedSearch = searchValue.trim().toLowerCase();
-                const filtered = catalogMedicines.filter((medicine) => {
-                    const matchesSearch = !normalizedSearch || [
-                        medicine.name,
-                        medicine.genericName,
-                        medicine.manufacturer,
-                    ].some((value) => String(value || '').toLowerCase().includes(normalizedSearch));
-                    const matchesCategory = categoryValue === 'All Medicines' || medicine.category === categoryValue;
-                    return matchesSearch && matchesCategory;
-                });
+                const filtered = catalogMedicines
+                    .filter((medicine) => {
+                        const matchesSearch =
+                            !normalizedSearch ||
+                            [
+                                medicine.name,
+                                medicine.genericName,
+                                medicine.manufacturer,
+                            ].some((value) =>
+                                String(value || "")
+                                    .toLowerCase()
+                                    .includes(normalizedSearch)
+                            );
+
+                        const matchesCategory =
+                            categoryValue === "All Medicines" ||
+                            medicine.category === categoryValue;
+
+                        return matchesSearch && matchesCategory;
+                    })
+                    .sort((a, b) => {
+                        if (!normalizedSearch) return 0;
+
+                        const aName = String(a.name || "").toLowerCase();
+                        const bName = String(b.name || "").toLowerCase();
+
+                        const aGeneric = String(
+                            a.genericName || ""
+                        ).toLowerCase();
+
+                        const bGeneric = String(
+                            b.genericName || ""
+                        ).toLowerCase();
+
+                        const getScore = (name, generic) => {
+                            // Exact name: Napa
+                            if (name === normalizedSearch) {
+                                return 100;
+                            }
+
+                            // Starts with: Napa Extra
+                            if (name.startsWith(normalizedSearch)) {
+                                return 80;
+                            }
+
+                            // Contains: Extra Napa Plus
+                            if (name.includes(normalizedSearch)) {
+                                return 60;
+                            }
+
+                            // Exact generic
+                            if (generic === normalizedSearch) {
+                                return 40;
+                            }
+
+                            // Generic contains
+                            if (generic.includes(normalizedSearch)) {
+                                return 20;
+                            }
+
+                            return 0;
+                        };
+
+                        return (
+                            getScore(bName, bGeneric) -
+                            getScore(aName, aGeneric)
+                        );
+                    });
                 const pageNumber = Math.max(Number(page) || 1, 1);
                 const start = (pageNumber - 1) * ITEMS_PER_PAGE;
                 setMedicines(filtered.slice(start, start + ITEMS_PER_PAGE));
@@ -288,7 +347,7 @@ export default function MedicinesPage({
                                     : categoryValue,
                             prescription: "all",
                             stock: "all",
-},
+                        },
                     }
                 );
 
@@ -383,7 +442,7 @@ export default function MedicinesPage({
                 if (
                     search.trim() === "" &&
                     selectedCategory ===
-                        "All Medicines"
+                    "All Medicines"
                 ) {
 
                     return;
@@ -461,7 +520,7 @@ export default function MedicinesPage({
         if (
             event.target.value.trim() === "" &&
             selectedCategory ===
-                "All Medicines"
+            "All Medicines"
         ) {
 
             const source = catalogMedicines.length
@@ -496,7 +555,7 @@ export default function MedicinesPage({
 
         if (
             selectedCategory ===
-                "All Medicines"
+            "All Medicines"
         ) {
 
             const source = catalogMedicines.length
@@ -820,7 +879,7 @@ export default function MedicinesPage({
 
                         {/* CATEGORIES */}
 
-                        <MedicineCategories
+                        {/* <MedicineCategories
 
                             categories={
                                 categories
@@ -834,7 +893,7 @@ export default function MedicinesPage({
                                 handleCategoryChange
                             }
 
-                        />
+                        /> */}
 
 
                         {/* RESULTS */}
@@ -921,7 +980,7 @@ export default function MedicinesPage({
 
                         {!loading &&
                             pagination.pages >
-                                1 && (
+                            1 && (
 
                                 <PaginationComponent
 

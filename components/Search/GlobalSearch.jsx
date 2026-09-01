@@ -3,8 +3,10 @@ import { useRouter } from "next/router";
 
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 import SearchSuggestions, {
+    filterSuggestionGroups,
     flattenSuggestions,
     getSuggestionHref,
 } from "./SearchSuggestions";
@@ -26,8 +28,19 @@ export default function GlobalSearch({
     const [error, setError] = useState("");
     const [open, setOpen] = useState(false);
     const [activeIndex, setActiveIndex] = useState(-1);
+    const [activeType, setActiveType] = useState("medicines");
+    const visibleGroups = filterSuggestionGroups(groups, activeType);
 
     useEffect(() => setValue(initialValue), [initialValue]);
+
+    useEffect(() => {
+        if (!open) return undefined;
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = previousOverflow;
+        };
+    }, [open]);
 
     useEffect(() => {
         const handleOutsideClick = (event) => {
@@ -96,7 +109,7 @@ export default function GlobalSearch({
     };
 
     const handleKeyDown = (event) => {
-        const items = flattenSuggestions(groups);
+        const items = flattenSuggestions(visibleGroups);
         if (event.key === "Escape") {
             setOpen(false);
             return;
@@ -115,8 +128,14 @@ export default function GlobalSearch({
     };
 
     return (
-        <div ref={rootRef} className={`${styles.root} ${className}`}>
-            <form className={styles.form} onSubmit={submit} role="search">
+        <div
+            ref={rootRef}
+            className={`${styles.root} ${open ? styles.open : ""} ${className}`}
+            onMouseDown={(event) => {
+                if (open && event.target === event.currentTarget) setOpen(false);
+            }}
+        >
+            <form className={`${styles.form} ${!open && value ? styles.hasClear : ""}`} onSubmit={submit} role="search">
                 <SearchRoundedIcon className={styles.searchIcon} />
                 <input
                     type="search"
@@ -129,6 +148,25 @@ export default function GlobalSearch({
                     onFocus={() => value.trim().length >= 2 && setOpen(true)}
                     onKeyDown={handleKeyDown}
                 />
+                {(open || value) && (
+                    <button
+                        type="button"
+                        className={styles.closeButton}
+                        aria-label={open ? "Close search" : "Clear search"}
+                        onClick={() => {
+                            if (open) {
+                                setOpen(false);
+                                return;
+                            }
+                            setValue("");
+                            setGroups(emptyGroups);
+                            setError("");
+                            setActiveIndex(-1);
+                        }}
+                    >
+                        <CloseRoundedIcon aria-hidden="true" />
+                    </button>
+                )}
                 <button type="submit" aria-label="Submit search">
                     <span>Search</span>
                     <ArrowForwardRoundedIcon aria-hidden="true" />
@@ -137,12 +175,17 @@ export default function GlobalSearch({
 
             {open && (
                 <SearchSuggestions
-                    groups={groups}
+                    groups={visibleGroups}
                     query={value.trim()}
                     loading={loading}
                     error={error}
                     activeIndex={activeIndex}
                     onSelect={select}
+                    activeType={activeType}
+                    onTypeChange={(type) => {
+                        setActiveType(type);
+                        setActiveIndex(-1);
+                    }}
                 />
             )}
         </div>

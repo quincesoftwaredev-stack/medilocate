@@ -1158,6 +1158,34 @@
 
 }
 
+.modeFeeList {
+    display: grid;
+    gap: 6px;
+    margin: 7px 0 11px;
+}
+
+.modeFeeItem {
+    align-items: center;
+    background: var(--ml-gray-50);
+    border: 1px solid var(--ml-gray-100);
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 7px 9px;
+}
+
+.modeFeeItem span {
+    color: var(--ml-gray-600);
+    font-size: var(--ml-font-sm);
+}
+
+.modeFeeItem strong {
+    color: var(--ml-teal-dark);
+    font-size: var(--ml-font-md);
+    font-weight: var(--ml-weight-bold);
+}
+
 .heroFeeDetail {
     display: flex;
     align-items: center;
@@ -1184,6 +1212,43 @@
 .legacyConsultationCard,
 .consultationCard {
     display: none;
+}
+
+.profileCreated {
+    align-items: center;
+    color: var(--ml-gray-500);
+    display: flex;
+    font-size: var(--ml-font-sm);
+    gap: 7px;
+    justify-content: center;
+    margin: 4px auto 26px;
+    padding: 8px 14px;
+    width: min(1180px, calc(100% - 40px));
+}
+
+.profileCreated svg {
+    color: var(--ml-teal);
+    font-size: 17px;
+}
+
+.contentGrid {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.sidebar {
+    display: none;
+}
+
+.content {
+    padding-bottom: 18px;
+}
+
+@media (max-width: 650px) {
+    .profileCreated {
+        margin-bottom: 20px;
+        padding: 7px 10px;
+        width: calc(100% - 28px);
+    }
 }
 .profileToolbar {
     align-items: center;

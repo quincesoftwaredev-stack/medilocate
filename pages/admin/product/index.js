@@ -1,6 +1,5 @@
 import React from 'react'
 import styles from '../../../styles/Admin/Home.module.css'
-import SideBar from '@/components/Admin/SideBar'
 import Dashboard from '@/components/Admin/Dashboard/Dashboard'
 import Product from '@/components/Product'
 import Products from '@/components/Admin/Dashboard/Products'

@@ -5,6 +5,102 @@
     margin-top: 27px;
 }
 
+.root.open {
+    position: fixed;
+    top: 72px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 900;
+    width: auto;
+    margin: 0;
+    padding: 18px clamp(16px, 5vw, 72px) 36px;
+    overflow-y: auto;
+    background: rgba(238, 247, 246, 0.96);
+    backdrop-filter: blur(12px);
+}
+
+.open .form,
+.open .suggestions {
+    width: 100%;
+    max-width: 980px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.resultTabs {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding: 10px;
+    border-bottom: 1px solid var(--ml-gray-100);
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(10px);
+}
+
+.resultTabs button {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border: 1px solid var(--ml-gray-200);
+    border-radius: 10px;
+    color: var(--ml-gray-600);
+    background: var(--ml-gray-50);
+    font: inherit;
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-bold);
+    cursor: pointer;
+}
+
+.resultTabs button svg {
+    width: 19px;
+}
+
+.resultTabs .activeTab {
+    border-color: var(--ml-teal);
+    color: var(--ml-teal-dark);
+    background: var(--ml-teal-light);
+    box-shadow: 0 0 0 2px rgba(14, 148, 136, 0.1);
+}
+
+.open .form {
+    grid-template-columns: auto minmax(0, 1fr) 42px auto;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    box-shadow: 0 18px 45px rgba(18, 48, 74, 0.18);
+}
+
+.form > .closeButton {
+    width: 42px;
+    min-width: 42px;
+    min-height: 42px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 1px solid var(--ml-gray-200);
+    border-radius: 10px;
+    color: var(--ml-gray-600);
+    background: var(--ml-gray-50);
+}
+
+.form > .closeButton:hover {
+    color: var(--ml-navy);
+    background: var(--ml-gray-100);
+    transform: none;
+}
+
+.closeButton svg {
+    display: block !important;
+    width: 20px !important;
+    height: 20px !important;
+}
+
 .form {
     min-height: 60px;
     display: grid;
@@ -24,6 +120,10 @@
     box-shadow: 0 14px 35px rgba(15, 157, 138, 0.14);
 }
 
+.form.hasClear {
+    grid-template-columns: auto minmax(0, 1fr) 42px auto;
+}
+
 .searchIcon {
     width: 22px;
     color: var(--ml-teal);
@@ -40,7 +140,10 @@
 }
 
 .form input::placeholder { color: var(--ml-gray-500); }
-.form input::-webkit-search-cancel-button { cursor: pointer; }
+.form input::-webkit-search-cancel-button {
+    display: none;
+    -webkit-appearance: none;
+}
 
 .form > button {
     min-height: 46px;
@@ -73,6 +176,16 @@
     border-radius: 15px;
     background: var(--ml-white);
     box-shadow: 0 22px 55px rgba(18, 48, 74, 0.18);
+}
+
+.open .suggestions {
+    position: relative;
+    top: auto;
+    right: auto;
+    left: auto;
+    max-height: none;
+    margin-top: 12px;
+    min-height: 220px;
 }
 
 .message {
@@ -138,12 +251,23 @@
 
 @media (max-width: 600px) {
     .root { margin-top: 20px; }
+    .root.open {
+        top: 64px;
+        margin: 0;
+        padding: 12px 12px 28px;
+    }
+    .open .form {
+        grid-template-columns: 20px minmax(0, 1fr) 42px 42px;
+    }
     .form {
         min-height: 54px;
         grid-template-columns: 20px minmax(0, 1fr) 42px;
         gap: 8px;
         padding: 6px 6px 6px 13px;
         border-radius: 13px;
+    }
+    .form.hasClear {
+        grid-template-columns: 20px minmax(0, 1fr) 42px 42px;
     }
     .searchIcon { width: 20px; }
     .form input { width: 100%; font-size: 14px; }
@@ -159,9 +283,12 @@
     .form > button span { display: none; }
     .form > button svg { display: block; }
     .suggestions { max-height: 58vh; }
+    .open .suggestions { max-height: none; }
 }
 
 @media (max-width: 390px) {
+    .root.open { top: 60px; }
     .form { grid-template-columns: 18px minmax(0, 1fr) 40px; gap: 7px; padding-left: 11px; }
+    .form.hasClear { grid-template-columns: 18px minmax(0, 1fr) 40px 40px; }
     .form > button { width: 40px; min-width: 40px; min-height: 40px; }
 }

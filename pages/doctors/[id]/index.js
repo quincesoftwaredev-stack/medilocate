@@ -2,11 +2,9 @@ import Head from "next/head";
 import Link from "next/link";
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
-import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutline";
@@ -20,7 +18,7 @@ import axios from "axios";
 import { parse } from "cookie";
 import styles from "@/styles/Doctor/Profile.module.css";
 import BASE_URL from "@/config";
-import { ConsultationAvailability, ProfessionalOverview } from "@/components/Doctors/Profile";
+import { BookingWizard, ConsultationAvailability, ProfessionalOverview } from "@/components/Doctors/Profile";
 
 
 /*
@@ -653,46 +651,30 @@ export default function DoctorProfilePage({
                                 }
                             >
 
-                                <span>
-                                    Consultation Fee
-                                </span>
+                                <span>Consultation fees</span>
 
+                                <div className={styles.modeFeeList}>
+                                    {[
+                                        ["Chamber", "chamber", doctor.consultationModes?.chamber],
+                                        ["Online", "online", doctor.consultationModes?.online],
+                                        ["Home visit", "home-visit", doctor.consultationModes?.homeVisit],
+                                    ].filter(([, modeKey]) => doctor.weeklyAvailability?.some(
+                                        (day) => day.isAvailable !== false && day.slots?.some((slot) => (slot.consultationMode || "chamber") === modeKey)
+                                    )).map(([label, , mode]) => (
+                                        <div className={styles.modeFeeItem} key={label}>
+                                            <span>{label}</span>
+                                            <strong>৳{Number(mode?.fee || 0).toLocaleString("en-BD")}</strong>
+                                        </div>
+                                    ))}
+                                </div>
 
-                                <strong>
-                                    {
-                                        doctor.fee
-                                    }
-                                </strong>
-
-                                {doctor.followUpFee && (
-                                    <div className={styles.heroFeeDetail}>
-                                        <span>Follow-up fee</span>
-                                        <strong>{doctor.followUpFee}</strong>
-                                    </div>
-                                )}
-
-
-                                {doctor.phone && (
-
-                                    <a
-                                        href={`tel:${doctor.phone}`}
-                                        className={
-                                            styles.callButton
-                                        }
-                                    >
-
-                                        <PhoneOutlinedIcon />
-
-                                        Call Doctor
-
-                                    </a>
-
+                                {hasBookingAvailability && (
+                                    <BookingWizard doctor={doctor} />
                                 )}
 
 
                                 <small>
-                                    Contact the doctor directly
-                                    for consultation information.
+                                    Select an available mode and schedule to book.
                                 </small>
 
                             </div>
@@ -703,8 +685,6 @@ export default function DoctorProfilePage({
 
                 </section>
 
-
-                <ConsultationAvailability doctor={doctor} />
 
                 {/* =====================================================
                     CONTENT
@@ -1155,82 +1135,6 @@ export default function DoctorProfilePage({
                                     </div>
 
 
-                                    {/* Fee */}
-
-                                    <div
-                                        className={
-                                            styles.chamber
-                                        }
-                                    >
-
-                                        <div
-                                            className={
-                                                styles.detailIcon
-                                            }
-                                        >
-
-                                            <MedicalServicesOutlinedIcon />
-
-                                        </div>
-
-
-                                        <div>
-
-                                            <span>
-                                                Consultation Fee
-                                            </span>
-
-                                            <strong>
-                                                {
-                                                    doctor.fee
-                                                }
-                                            </strong>
-
-                                        </div>
-
-                                    </div>
-
-
-                                    {/* Follow up */}
-
-                                    {doctor.followUpFee && (
-
-                                        <div
-                                            className={
-                                                styles.chamber
-                                            }
-                                        >
-
-                                            <div
-                                                className={
-                                                    styles.detailIcon
-                                                }
-                                            >
-
-                                                <AccessTimeOutlinedIcon />
-
-                                            </div>
-
-
-                                            <div>
-
-                                                <span>
-                                                    Follow-up Fee
-                                                </span>
-
-                                                <strong>
-                                                    {
-                                                        doctor.followUpFee
-                                                    }
-                                                </strong>
-
-                                            </div>
-
-                                        </div>
-
-                                    )}
-
-
                                     {/* Working institution */}
 
                                     {doctor.workingIn && (
@@ -1311,23 +1215,6 @@ export default function DoctorProfilePage({
                                     )}
 
 
-                                    {doctor.phone && (
-
-                                        <a
-                                            href={`tel:${doctor.phone}`}
-                                            className={
-                                                styles.sidebarCall
-                                            }
-                                        >
-
-                                            <PhoneOutlinedIcon />
-
-                                            Call Doctor
-
-                                        </a>
-
-                                    )}
-
                                 </div>
 
 
@@ -1367,64 +1254,8 @@ export default function DoctorProfilePage({
                                     </p>
 
 
-                                    {doctor.phone && (
-
-                                        <a
-                                            href={`tel:${doctor.phone}`}
-                                        >
-
-                                            <PhoneOutlinedIcon />
-
-                                            Contact Doctor
-
-                                        </a>
-
-                                    )}
-
                                 </div>
 
-
-                                {/* =============================================
-                                    MEMBER SINCE
-                                ============================================== */}
-
-                                {doctor.createdAt && (
-
-                                    <div
-                                        style={{
-                                            marginTop: "12px",
-                                            padding: "12px 14px",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: "8px",
-                                            color:
-                                                "var(--ml-gray-500)",
-                                            fontSize:
-                                                "var(--ml-font-sm)",
-                                        }}
-                                    >
-
-                                        <CalendarTodayOutlinedIcon
-                                            style={{
-                                                fontSize: "18px",
-                                                color:
-                                                    "var(--ml-teal)",
-                                            }}
-                                        />
-
-                                        <span>
-                                            Profile created
-                                            {" "}
-                                            {
-                                                formatDate(
-                                                    doctor.createdAt
-                                                )
-                                            }
-                                        </span>
-
-                                    </div>
-
-                                )}
 
                             </aside>
 
@@ -1434,51 +1265,16 @@ export default function DoctorProfilePage({
 
                 </section>
 
-            </main>
+                <ConsultationAvailability doctor={doctor} />
 
-
-            {/* =====================================================
-                MOBILE CALL BAR
-            ====================================================== */}
-
-            {doctor.phone && (
-
-                <div
-                    className={
-                        styles.mobileCallBar
-                    }
-                >
-
-                    <div>
-
-                        <span>
-                            Consultation
-                        </span>
-
-                        <strong>
-                            {
-                                doctor.fee
-                            }
-                        </strong>
-
+                {doctor.createdAt && (
+                    <div className={styles.profileCreated}>
+                        <CalendarTodayOutlinedIcon />
+                        <span>Profile created {formatDate(doctor.createdAt)}</span>
                     </div>
+                )}
 
-
-                    <a
-                        href={`tel:${doctor.phone}`}
-                    >
-
-                        <PhoneOutlinedIcon />
-
-                        Call Doctor
-
-                    </a>
-
-                </div>
-
-            )}
-
-
+            </main>
 
 
         </>

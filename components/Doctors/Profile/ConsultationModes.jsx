@@ -6,10 +6,15 @@ const MODE_CONFIG = [
   ["homeVisit", "Home visit"],
 ];
 
-export default function ConsultationModes({ modes = {} }) {
+export default function ConsultationModes({ modes = {}, availability = [], fallbackFee = 0 }) {
+  const scheduled = new Set(
+    availability
+      .filter((day) => day.isAvailable !== false)
+      .flatMap((day) => (day.slots || []).map((slot) => slot.consultationMode === "home-visit" ? "homeVisit" : slot.consultationMode))
+  );
   const enabledModes = MODE_CONFIG
     .map(([key, label]) => ({ key, label, ...modes[key] }))
-    .filter((mode) => mode.enabled);
+    .filter((mode) => scheduled.has(mode.key));
 
   if (!enabledModes.length) return null;
 
@@ -18,7 +23,7 @@ export default function ConsultationModes({ modes = {} }) {
       {enabledModes.map((mode) => (
         <div className={styles.modeItem} key={mode.key}>
           <span>{mode.label}</span>
-          <strong>৳{Number(mode.fee || 0).toLocaleString("en-BD")}</strong>
+          <strong>৳{Number(mode.fee ?? fallbackFee ?? 0).toLocaleString("en-BD")}</strong>
         </div>
       ))}
     </div>
