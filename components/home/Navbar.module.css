@@ -5,9 +5,11 @@
     z-index: 1000;
     width: 100%;
     max-width: 100%;
+    margin-top: -17px;
     background: rgba(255, 255, 255, 0.96);
     border-bottom: 1px solid var(--ml-gray-200);
     backdrop-filter: blur(14px);
+    /* border:1px solid red; */
 }
 
 .container {
