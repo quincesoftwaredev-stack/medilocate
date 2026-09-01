@@ -3385,6 +3385,20 @@ export async function getServerSideProps(
             ).default;
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | REGISTER ORDER MODEL
+        |--------------------------------------------------------------------------
+        */
+
+        const Order =
+            (
+                await import(
+                    "@/database/model/Orders"
+                )
+            ).default;
+
+
         const Medicine =
             (
                 await import(
@@ -3414,35 +3428,20 @@ export async function getServerSideProps(
                     "name phone email"
                 )
 
-                /*
-                |--------------------------------------------------------------------------
-                | LOAD FULL ORDER DATA
-                |--------------------------------------------------------------------------
-                */
-
                 .populate(
                     "order",
 
                     [
-
+                        "_id",
                         "orderId",
-
                         "trackingNumber",
-
                         "status",
-
                         "items",
-
                         "subtotal",
-
                         "deliveryFee",
-
                         "total",
-
                         "adminNote",
-
                         "createdAt",
-
                     ].join(
                         " "
                     )
@@ -3454,6 +3453,9 @@ export async function getServerSideProps(
         if (
             !prescription
         ) {
+
+            await db.disconnect();
+
 
             return {
 
@@ -3467,48 +3469,115 @@ export async function getServerSideProps(
 
         /*
         |--------------------------------------------------------------------------
-        | MEDICINES
+        | ORDER / PRESCRIPTION MEDICINE IDS
+        |--------------------------------------------------------------------------
+        */
+
+        const existingOrderItems =
+            prescription
+                ?.order
+                ?.items;
+
+
+        const prescriptionItems =
+            prescription
+                ?.medicines;
+
+
+        const sourceItems =
+            Array.isArray(
+                existingOrderItems
+            ) &&
+                existingOrderItems.length
+
+                ? existingOrderItems
+
+                : Array.isArray(
+                    prescriptionItems
+                )
+
+                    ? prescriptionItems
+
+                    : [];
+
+
+        const medicineIds =
+            sourceItems
+
+                .map(
+                    (
+                        item
+                    ) => {
+
+                        const medicineValue =
+                            item?.medicine ??
+                            item?.medicineId ??
+                            item?.id;
+
+
+                        if (
+                            medicineValue &&
+                            typeof medicineValue ===
+                            "object"
+                        ) {
+
+                            return medicineValue
+                                ?._id;
+
+                        }
+
+
+                        return medicineValue;
+
+                    }
+                )
+
+                .filter(
+                    Boolean
+                );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ASSOCIATED MEDICINES ONLY
         |--------------------------------------------------------------------------
         */
 
         const medicines =
-            await Medicine
+            medicineIds.length
 
-                .find({
+                ? await Medicine
 
-                    status: {
+                    .find({
 
-                        $ne:
-                            "inactive",
+                        _id: {
 
-                    },
+                            $in:
+                                medicineIds,
 
-                })
+                        },
 
-                .select(
+                    })
 
-                    [
-                        "name",
-                        "genericName",
-                        "strength",
-                        "unit",
-                        "price",
-                        "prescriptionRequired",
-                        "status",
-                    ].join(
-                        " "
+                    .select(
+
+                        [
+                            "name",
+                            "genericName",
+                            "strength",
+                            "unit",
+                            "price",
+                            "prescriptionRequired",
+                            "status",
+                        ].join(
+                            " "
+                        )
+
                     )
 
-                )
+                    .lean()
 
-                .sort({
-
-                    name:
-                        1,
-
-                })
-
-                .lean();
+                : [];
 
 
         /*
@@ -3532,6 +3601,15 @@ export async function getServerSideProps(
                 )
             );
 
+
+        await db.disconnect();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RETURN
+        |--------------------------------------------------------------------------
+        */
 
         return {
 
@@ -3560,8 +3638,19 @@ export async function getServerSideProps(
 
         return {
 
-            notFound:
-                true,
+            props: {
+
+                prescription:
+                    null,
+
+                medicines:
+                    [],
+
+                error:
+                    error?.message ||
+                    "Failed to load prescription",
+
+            },
 
         };
 
