@@ -20,6 +20,7 @@
     "@reduxjs/toolkit": "^2.0.1",
     "axios": "^1.6.2",
     "bcryptjs": "^2.4.3",
+    "chalk": "^6.0.0",
     "cookie": "^0.6.0",
     "date-fns": "^3.6.0",
     "email-validator": "^2.0.4",

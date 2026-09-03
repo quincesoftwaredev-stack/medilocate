@@ -43,22 +43,12 @@ const MedicineSchema = new mongoose.Schema(
 
         dosageForm: {
             type: String,
-            enum: [
-                "Tablet",
-                "Capsule",
-                "Syrup",
-                "Suspension",
-                "Injection",
-                "Cream",
-                "Ointment",
-                "Drops",
-                "Inhaler",
-                "Powder",
-                "Other",
-            ],
             default: "Tablet",
         },
 
+        sourceUrl: {
+            type: String,
+        },
 
         packSize: {
             type: String,

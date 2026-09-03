@@ -12,6 +12,13 @@ import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import MedicationRoundedIcon from "@mui/icons-material/MedicationRounded";
+import LocalDrinkRoundedIcon from "@mui/icons-material/LocalDrinkRounded";
+import VaccinesRoundedIcon from "@mui/icons-material/VaccinesRounded";
+import OpacityRoundedIcon from "@mui/icons-material/OpacityRounded";
+import AirRoundedIcon from "@mui/icons-material/AirRounded";
+import SpaRoundedIcon from "@mui/icons-material/SpaRounded";
+import ScienceRoundedIcon from "@mui/icons-material/ScienceRounded";
 
 
 import {
@@ -22,6 +29,299 @@ import {
 
 import styles from "@/styles/Cart/Cart.module.css";
 
+
+
+const getDosageFormMeta = (dosageForm = "") => {
+
+    const value = String(dosageForm || "")
+        .trim()
+        .toLowerCase();
+
+
+    /* =====================================================
+       LIQUID / ORAL LIQUID
+    ===================================================== */
+
+    if (
+        value.includes("syrup") ||
+        value.includes("suspension") ||
+        value.includes("solution") ||
+        value.includes("liquid") ||
+        value.includes("elixir") ||
+        value.includes("mixture") ||
+        value.includes("emulsion") ||
+        value.includes("mouthwash") ||
+        value.includes("gargle")
+    ) {
+        return {
+            type: "liquid",
+            icon: <LocalDrinkRoundedIcon />,
+        };
+    }
+
+
+    /* =====================================================
+       CAPSULE
+    ===================================================== */
+
+    if (
+        value.includes("capsule") ||
+        value.includes("softgel") ||
+        value.includes("soft gel")
+    ) {
+        return {
+            type: "capsule",
+            icon: <MedicationRoundedIcon />,
+        };
+    }
+
+
+    /* =====================================================
+       TABLET
+       Handles:
+       Tablet
+       Chewable Tablet
+       Dispersible Tablet
+       Sustained Release Tablet
+       Extended Release Tablet
+       Film Coated Tablet
+       Effervescent Tablet
+       etc.
+    ===================================================== */
+
+    if (
+        value.includes("tablet") ||
+        value.includes("caplet") ||
+        value.includes("pill") ||
+        value.includes("lozenge")
+    ) {
+        return {
+            type: "tablet",
+            icon: <MedicationRoundedIcon />,
+        };
+    }
+
+
+    /* =====================================================
+       INJECTION / IV
+    ===================================================== */
+
+    if (
+        value.includes("injection") ||
+        value.includes("injectable") ||
+        value.includes("infusion") ||
+        value.includes("iv infusion") ||
+        value.includes("i.v.") ||
+        value.includes("ampoule") ||
+        value.includes("ampule") ||
+        value.includes("vial") ||
+        value.includes("prefilled syringe") ||
+        value.includes("pre-filled syringe")
+    ) {
+        return {
+            type: "injection",
+            icon: <VaccinesRoundedIcon />,
+        };
+    }
+
+
+    /* =====================================================
+       DROPS
+       Eye / Ear / Nasal drops
+    ===================================================== */
+
+    if (
+        value.includes("drop") ||
+        value.includes("eye drop") ||
+        value.includes("ear drop") ||
+        value.includes("nasal drop") ||
+        value.includes("ophthalmic drop") ||
+        value.includes("otic drop")
+    ) {
+        return {
+            type: "drops",
+            icon: <OpacityRoundedIcon />,
+        };
+    }
+
+
+    /* =====================================================
+       INHALER / RESPIRATORY
+    ===================================================== */
+
+    if (
+        value.includes("inhaler") ||
+        value.includes("inhalation") ||
+        value.includes("respirator") ||
+        value.includes("nebulizer") ||
+        value.includes("nebuliser") ||
+        value.includes("nebule") ||
+        value.includes("rotacap") ||
+        value.includes("rotahaler") ||
+        value.includes("dpi") ||
+        value.includes("metered dose") ||
+        value.includes("mdi")
+    ) {
+        return {
+            type: "inhaler",
+            icon: <AirRoundedIcon />,
+        };
+    }
+
+
+    /* =====================================================
+       SPRAY
+       Nasal spray / oral spray / throat spray
+    ===================================================== */
+
+    if (
+        value.includes("spray") ||
+        value.includes("nasal spray") ||
+        value.includes("oral spray") ||
+        value.includes("throat spray")
+    ) {
+        return {
+            type: "inhaler",
+            icon: <AirRoundedIcon />,
+        };
+    }
+
+
+    /* =====================================================
+       TOPICAL
+    ===================================================== */
+
+    if (
+        value.includes("cream") ||
+        value.includes("ointment") ||
+        value.includes("gel") ||
+        value.includes("lotion") ||
+        value.includes("paste") ||
+        value.includes("balm") ||
+        value.includes("liniment") ||
+        value.includes("paint") ||
+        value.includes("topical") ||
+        value.includes("jelly")
+    ) {
+        return {
+            type: "topical",
+            icon: <SpaRoundedIcon />,
+        };
+    }
+
+
+    /* =====================================================
+       SUPPOSITORY / RECTAL / VAGINAL
+    ===================================================== */
+
+    if (
+        value.includes("suppository") ||
+        value.includes("pessary") ||
+        value.includes("vaginal tablet") ||
+        value.includes("rectal")
+    ) {
+        return {
+            type: "suppository",
+            icon: <SpaRoundedIcon />,
+        };
+    }
+
+
+    /* =====================================================
+       POWDER / GRANULE / SACHET
+    ===================================================== */
+
+    if (
+        value.includes("powder") ||
+        value.includes("granule") ||
+        value.includes("granules") ||
+        value.includes("sachet") ||
+        value.includes("dry powder") ||
+        value.includes("oral powder")
+    ) {
+        return {
+            type: "powder",
+            icon: <ScienceRoundedIcon />,
+        };
+    }
+
+
+    /* =====================================================
+       ORS / POWDER FOR SOLUTION
+    ===================================================== */
+
+    if (
+        value.includes("powder for solution") ||
+        value.includes("powder for suspension") ||
+        value.includes("dry syrup")
+    ) {
+        return {
+            type: "powder",
+            icon: <ScienceRoundedIcon />,
+        };
+    }
+
+
+    /* =====================================================
+       PATCH
+    ===================================================== */
+
+    if (
+        value.includes("patch") ||
+        value.includes("transdermal")
+    ) {
+        return {
+            type: "topical",
+            icon: <SpaRoundedIcon />,
+        };
+    }
+
+
+    /* =====================================================
+       SHAMPOO / WASH
+    ===================================================== */
+
+    if (
+        value.includes("shampoo") ||
+        value.includes("wash") ||
+        value.includes("cleanser")
+    ) {
+        return {
+            type: "topical",
+            icon: <SpaRoundedIcon />,
+        };
+    }
+
+
+    /* =====================================================
+       DENTAL
+    ===================================================== */
+
+    if (
+        value.includes("toothpaste") ||
+        value.includes("dental gel") ||
+        value.includes("dental paste")
+    ) {
+        return {
+            type: "topical",
+            icon: <SpaRoundedIcon />,
+        };
+    }
+
+
+    /* =====================================================
+       UNKNOWN / FALLBACK
+
+       This guarantees that even an unusual dosage form
+       still receives an icon.
+    ===================================================== */
+
+    return {
+        type: "other",
+        icon: <MedicationRoundedIcon />,
+    };
+
+};
 
 export default function CartPage() {
 
@@ -303,219 +603,349 @@ export default function CartPage() {
                                 >
 
                                     {items.map(
-                                        (item) => (
+                                        (item) => {
 
-                                            <article
-                                                key={
-                                                    item.id
+                                            const dosageMeta =
+                                                getDosageFormMeta(
+                                                    item.dosageForm
+                                                );
+
+                                            const dosageType =
+                                                dosageMeta.type;
+
+
+                                            const handleDecrease = () => {
+
+                                                if (
+                                                    Number(
+                                                        item.quantity || 0
+                                                    ) <= 1
+                                                ) {
+
+                                                    // dispatch(
+                                                    //     removeFromCart(
+                                                    //         item.id
+                                                    //     )
+                                                    // );
+
+                                                    return;
                                                 }
-                                                className={
-                                                    styles.cartItem
-                                                }
-                                            >
 
-                                                {/* IMAGE */}
 
-                                                <Link
-                                                    href={`/medicines/${item.id}`}
+                                                dispatch(
+                                                    decreaseQuantity(
+                                                        item.id
+                                                    )
+                                                );
+
+                                            };
+
+
+                                            return (
+
+                                                <article
+                                                    key={
+                                                        item.id
+                                                    }
                                                     className={
-                                                        styles.itemImage
+                                                        styles.cartItem
                                                     }
                                                 >
 
-                                                    {item.image ? (
 
-                                                        <img
-                                                            src={
-                                                                item.image
-                                                            }
-                                                            alt={
-                                                                item.name
-                                                            }
-                                                        />
-
-                                                    ) : (
-
-                                                        <span>
-                                                            {
-                                                                item.name?.charAt(
-                                                                    0
-                                                                )
-                                                            }
-                                                        </span>
-
-                                                    )}
-
-                                                </Link>
-
-
-                                                {/* INFO */}
-
-                                                <div
-                                                    className={
-                                                        styles.itemInfo
-                                                    }
-                                                >
+                                                    {/* =================================================
+                                                        IMAGE / DOSAGE IDENTITY
+                                                    ================================================== */}
 
                                                     <Link
                                                         href={`/medicines/${item.id}`}
                                                         className={
-                                                            styles.itemName
+                                                            `${styles.itemImage} ${
+                                                                styles[
+                                                                    `itemImage_${dosageType}`
+                                                                ]
+                                                            }`
                                                         }
                                                     >
 
-                                                        {
-                                                            item.name
-                                                        }
+                                                        {/* {item.image ? (
+
+                                                            <img
+                                                                src={
+                                                                    item.image
+                                                                }
+                                                                alt={
+                                                                    item.name
+                                                                }
+                                                            />
+
+                                                        ) : ( */}
+
+                                                            <span
+                                                                className={
+                                                                    styles.itemPlaceholder
+                                                                }
+                                                            >
+
+                                                                <span
+                                                                    className={
+                                                                        styles.itemPlaceholderIcon
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        dosageMeta.icon
+                                                                    }
+                                                                </span>
+
+                                                                <small>
+                                                                    {
+                                                                        item.dosageForm ||
+                                                                        "Medicine"
+                                                                    }
+                                                                </small>
+
+                                                            </span>
+
+                                                        {/* )} */}
 
                                                     </Link>
 
 
-                                                    <span
+                                                    {/* =================================================
+                                                        INFO
+                                                    ================================================== */}
+
+                                                    <div
                                                         className={
-                                                            styles.itemGeneric
+                                                            styles.itemInfo
                                                         }
                                                     >
-                                                        {
-                                                            item.genericName
-                                                        }
-                                                    </span>
 
-
-                                                    <span
-                                                        className={
-                                                            styles.itemStrength
-                                                        }
-                                                    >
-                                                        {
-                                                            item.strength
-                                                        }
-                                                    </span>
-
-
-                                                    {item.prescriptionRequired && (
-
-                                                        <span
+                                                        <Link
+                                                            href={`/medicines/${item.id}`}
                                                             className={
-                                                                styles.rxBadge
+                                                                styles.itemName
                                                             }
                                                         >
-                                                            Prescription
-                                                            required
+                                                            {
+                                                                item.name
+                                                            }
+                                                        </Link>
+
+
+                                                        <div
+                                                            className={
+                                                                styles.itemVariant
+                                                            }
+                                                        >
+
+                                                            {item.dosageForm && (
+
+                                                                <span
+                                                                    className={
+                                                                        `${styles.itemDosageBadge} ${
+                                                                            styles[
+                                                                                `itemDosage_${dosageType}`
+                                                                            ]
+                                                                        }`
+                                                                    }
+                                                                >
+
+                                                                    <span
+                                                                        className={
+                                                                            styles.itemDosageIcon
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            dosageMeta.icon
+                                                                        }
+                                                                    </span>
+
+                                                                    <span>
+                                                                        {
+                                                                            item.dosageForm
+                                                                        }
+                                                                    </span>
+
+                                                                </span>
+
+                                                            )}
+
+
+                                                            {item.strength && (
+
+                                                                <strong
+                                                                    className={
+                                                                        styles.itemStrength
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        item.strength
+                                                                    }
+                                                                </strong>
+
+                                                            )}
+
+                                                        </div>
+
+
+                                                        {item.genericName && (
+
+                                                            <span
+                                                                className={
+                                                                    styles.itemGeneric
+                                                                }
+                                                            >
+                                                                {
+                                                                    item.genericName
+                                                                }
+                                                            </span>
+
+                                                        )}
+
+
+                                                        {item.packSize && (
+
+                                                            <span
+                                                                className={
+                                                                    styles.itemPack
+                                                                }
+                                                            >
+                                                                {
+                                                                    item.packSize
+                                                                }
+                                                            </span>
+
+                                                        )}
+
+
+                                                        {item.prescriptionRequired && (
+
+                                                            <span
+                                                                className={
+                                                                    styles.rxBadge
+                                                                }
+                                                            >
+                                                                Prescription required
+                                                            </span>
+
+                                                        )}
+
+                                                    </div>
+
+
+                                                    {/* =================================================
+                                                        QUANTITY
+                                                    ================================================== */}
+
+                                                    <div
+                                                        className={
+                                                            styles.quantity
+                                                        }
+                                                    >
+
+                                                        <button
+                                                            type="button"
+                                                            onClick={
+                                                                handleDecrease
+                                                            }
+                                                            aria-label={`Decrease quantity of ${item.name}`}
+                                                        >
+
+                                                            <RemoveRoundedIcon />
+
+                                                        </button>
+
+
+                                                        <strong>
+                                                            {
+                                                                item.quantity
+                                                            }
+                                                        </strong>
+
+
+                                                        <button
+                                                            type="button"
+                                                            onClick={() =>
+                                                                dispatch(
+                                                                    increaseQuantity(
+                                                                        item.id
+                                                                    )
+                                                                )
+                                                            }
+                                                            aria-label={`Increase quantity of ${item.name}`}
+                                                        >
+
+                                                            <AddRoundedIcon />
+
+                                                        </button>
+
+                                                    </div>
+
+
+                                                    {/* =================================================
+                                                        PRICE
+                                                    ================================================== */}
+
+                                                    <div
+                                                        className={
+                                                            styles.itemPrice
+                                                        }
+                                                    >
+
+                                                        <strong>
+                                                            ৳
+                                                            {
+                                                                (
+                                                                    item.price *
+                                                                    item.quantity
+                                                                ).toFixed(2)
+                                                            }
+                                                        </strong>
+
+
+                                                        <span>
+                                                            ৳
+                                                            {
+                                                                Number(
+                                                                    item.price || 0
+                                                                ).toFixed(2)
+                                                            }
+                                                            {" "}
+                                                            each
                                                         </span>
 
-                                                    )}
-
-                                                </div>
+                                                    </div>
 
 
-                                                {/* QUANTITY */}
-
-                                                <div
-                                                    className={
-                                                        styles.quantity
-                                                    }
-                                                >
+                                                    {/* =================================================
+                                                        DELETE
+                                                    ================================================== */}
 
                                                     <button
                                                         type="button"
+                                                        className={
+                                                            styles.deleteButton
+                                                        }
                                                         onClick={() =>
                                                             dispatch(
-                                                                decreaseQuantity(
+                                                                removeFromCart(
                                                                     item.id
                                                                 )
                                                             )
                                                         }
-                                                        aria-label="Decrease quantity"
+                                                        aria-label={`Remove ${item.name}`}
                                                     >
 
-                                                        <RemoveRoundedIcon />
+                                                        <DeleteOutlineRoundedIcon />
 
                                                     </button>
 
+                                                </article>
 
-                                                    <strong>
-                                                        {
-                                                            item.quantity
-                                                        }
-                                                    </strong>
+                                            );
 
-
-                                                    <button
-                                                        type="button"
-                                                        onClick={() =>
-                                                            dispatch(
-                                                                increaseQuantity(
-                                                                    item.id
-                                                                )
-                                                            )
-                                                        }
-                                                        aria-label="Increase quantity"
-                                                    >
-
-                                                        <AddRoundedIcon />
-
-                                                    </button>
-
-                                                </div>
-
-
-                                                {/* PRICE */}
-
-                                                <div
-                                                    className={
-                                                        styles.itemPrice
-                                                    }
-                                                >
-
-                                                    <strong>
-                                                        ৳
-                                                        {
-                                                            (
-                                                                item.price *
-                                                                item.quantity
-                                                            ).toFixed(
-                                                                0
-                                                            )
-                                                        }
-                                                    </strong>
-
-
-                                                    <span>
-                                                        ৳
-                                                        {
-                                                            item.price
-                                                        }{" "}
-                                                        each
-                                                    </span>
-
-                                                </div>
-
-
-                                                {/* DELETE */}
-
-                                                <button
-                                                    type="button"
-                                                    className={
-                                                        styles.deleteButton
-                                                    }
-                                                    onClick={() =>
-                                                        dispatch(
-                                                            removeFromCart(
-                                                                item.id
-                                                            )
-                                                        )
-                                                    }
-                                                    aria-label={`Remove ${item.name}`}
-                                                >
-
-                                                    <DeleteOutlineRoundedIcon />
-
-                                                </button>
-
-                                            </article>
-
-                                        )
+                                        }
                                     )}
 
                                 </div>

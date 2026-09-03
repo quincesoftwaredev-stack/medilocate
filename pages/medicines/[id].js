@@ -5,7 +5,10 @@ import { useEffect, useState } from "react";
 
 import ArrowBackRoundedIcon
     from "@mui/icons-material/ArrowBackRounded";
-import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
+
+import ArrowForwardRoundedIcon
+    from "@mui/icons-material/ArrowForwardRounded";
+
 import AddRoundedIcon
     from "@mui/icons-material/AddRounded";
 
@@ -30,6 +33,26 @@ import DescriptionOutlinedIcon
 import InfoOutlinedIcon
     from "@mui/icons-material/InfoOutlined";
 
+import MedicationRoundedIcon
+    from "@mui/icons-material/MedicationRounded";
+
+import LocalDrinkRoundedIcon
+    from "@mui/icons-material/LocalDrinkRounded";
+
+import VaccinesRoundedIcon
+    from "@mui/icons-material/VaccinesRounded";
+
+import OpacityRoundedIcon
+    from "@mui/icons-material/OpacityRounded";
+
+import AirRoundedIcon
+    from "@mui/icons-material/AirRounded";
+
+import SpaRoundedIcon
+    from "@mui/icons-material/SpaRounded";
+
+import ScienceRoundedIcon
+    from "@mui/icons-material/ScienceRounded";
 
 import styles
     from "@/styles/Medicines/MedicineDetails.module.css";
@@ -41,21 +64,152 @@ import {
 } from "@/redux/cartSlice";
 
 
+/* =========================================================
+   DOSAGE FORM META
+========================================================= */
 
-/*
-|--------------------------------------------------------------------------
-| API BASE URL
-|--------------------------------------------------------------------------
-*/
+const getDosageFormMeta = (dosageForm = "") => {
 
-/*
-|--------------------------------------------------------------------------
-| MEDICINE DETAILS PAGE
-|--------------------------------------------------------------------------
-*/
+    const value = String(
+        dosageForm || ""
+    )
+        .trim()
+        .toLowerCase();
+
+
+    /* LIQUID */
+
+    if (
+        value.includes("syrup") ||
+        value.includes("suspension") ||
+        value.includes("solution") ||
+        value.includes("liquid") ||
+        value.includes("elixir")
+    ) {
+        return {
+            type: "liquid",
+            icon: <LocalDrinkRoundedIcon />,
+        };
+    }
+
+
+    /* SUPPOSITORY */
+
+    if (
+        value.includes("suppository")
+    ) {
+        return {
+            type: "suppository",
+            icon: <SpaRoundedIcon />,
+        };
+    }
+
+
+    /* CAPSULE */
+
+    if (
+        value.includes("capsule")
+    ) {
+        return {
+            type: "capsule",
+            icon: <MedicationRoundedIcon />,
+        };
+    }
+
+
+    /* TABLET */
+
+    if (
+        value.includes("tablet") ||
+        value.includes("caplet")
+    ) {
+        return {
+            type: "tablet",
+            icon: <MedicationRoundedIcon />,
+        };
+    }
+
+
+    /* INJECTION */
+
+    if (
+        value.includes("injection") ||
+        value.includes("injectable")
+    ) {
+        return {
+            type: "injection",
+            icon: <VaccinesRoundedIcon />,
+        };
+    }
+
+
+    /* DROPS */
+
+    if (
+        value.includes("drop")
+    ) {
+        return {
+            type: "drops",
+            icon: <OpacityRoundedIcon />,
+        };
+    }
+
+
+    /* INHALER */
+
+    if (
+        value.includes("inhaler") ||
+        value.includes("inhalation") ||
+        value.includes("respirator")
+    ) {
+        return {
+            type: "inhaler",
+            icon: <AirRoundedIcon />,
+        };
+    }
+
+
+    /* TOPICAL */
+
+    if (
+        value.includes("cream") ||
+        value.includes("ointment") ||
+        value.includes("gel") ||
+        value.includes("lotion")
+    ) {
+        return {
+            type: "topical",
+            icon: <SpaRoundedIcon />,
+        };
+    }
+
+
+    /* POWDER */
+
+    if (
+        value.includes("powder") ||
+        value.includes("granule")
+    ) {
+        return {
+            type: "powder",
+            icon: <ScienceRoundedIcon />,
+        };
+    }
+
+
+    return {
+        type: "other",
+        icon: <MedicationRoundedIcon />,
+    };
+};
+
+
+/* =========================================================
+   MEDICINE DETAILS PAGE
+========================================================= */
 
 export default function MedicineDetailsPage({
-    medicine: initialMedicine
+    medicine: initialMedicine,
 }) {
 
     const dispatch =
@@ -64,49 +218,130 @@ export default function MedicineDetailsPage({
     const router =
         useRouter();
 
-    const [medicine, setMedicine] =
-        useState(initialMedicine || null);
 
-    const [loadingMedicine, setLoadingMedicine] =
-        useState(!initialMedicine);
+    const [
+        medicine,
+        setMedicine,
+    ] = useState(
+        initialMedicine || null
+    );
+
+
+    const [
+        loadingMedicine,
+        setLoadingMedicine,
+    ] = useState(
+        !initialMedicine
+    );
+
+
+    /* =====================================================
+       FALLBACK MEDICINE LOAD
+    ===================================================== */
 
     useEffect(() => {
-        if (!router.isReady || initialMedicine) return;
 
-        fetch('/data/medicines-catalog.json')
-            .then((response) => response.ok ? response.json() : [])
-            .then((catalog) => {
-                const item = Array.isArray(catalog)
-                    ? catalog.find((entry) => String(entry._id) === String(router.query.id))
-                    : null;
-                setMedicine(item ? { ...item, image: { url: item.image || '' } } : null);
+        if (
+            !router.isReady ||
+            initialMedicine
+        ) {
+            return;
+        }
+
+
+        fetch(
+            "/data/medicines-catalog.json"
+        )
+            .then(
+                response =>
+                    response.ok
+                        ? response.json()
+                        : []
+            )
+            .then(catalog => {
+
+                const item =
+                    Array.isArray(catalog)
+                        ? catalog.find(
+                            entry =>
+                                String(
+                                    entry._id
+                                ) ===
+                                String(
+                                    router.query.id
+                                )
+                        )
+                        : null;
+
+
+                setMedicine(
+                    item
+                        ? {
+                            ...item,
+
+                            image: {
+                                url:
+                                    item.image || "",
+                            },
+                        }
+                        : null
+                );
+
             })
-            .catch(() => setMedicine(null))
-            .finally(() => setLoadingMedicine(false));
-    }, [router.isReady, router.query.id, initialMedicine]);
+            .catch(
+                () =>
+                    setMedicine(null)
+            )
+            .finally(
+                () =>
+                    setLoadingMedicine(false)
+            );
+
+    }, [
+        router.isReady,
+        router.query.id,
+        initialMedicine,
+    ]);
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | QUANTITY
-    |--------------------------------------------------------------------------
-    */
+    /* =====================================================
+       QUANTITY
+    ===================================================== */
 
     const [
         quantity,
-        setQuantity
+        setQuantity,
     ] = useState(1);
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | NOT FOUND
-    |--------------------------------------------------------------------------
-    */
+    /* =====================================================
+       LOADING
+    ===================================================== */
 
     if (loadingMedicine) {
-        return <main className={styles.notFound}><p>Loading medicine...</p></main>;
+
+        return (
+
+            <main
+                className={
+                    styles.notFound
+                }
+            >
+
+                <p>
+                    Loading medicine...
+                </p>
+
+            </main>
+
+        );
+
     }
+
+
+    /* =====================================================
+       NOT FOUND
+    ===================================================== */
 
     if (!medicine) {
 
@@ -130,14 +365,17 @@ export default function MedicineDetailsPage({
 
                     <InfoOutlinedIcon />
 
+
                     <h1>
                         Medicine not found
                     </h1>
+
 
                     <p>
                         The medicine you're looking for
                         could not be found.
                     </p>
+
 
                     <Link
                         href="/medicines"
@@ -147,18 +385,25 @@ export default function MedicineDetailsPage({
 
                 </main>
 
-
             </>
         );
 
     }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | QUANTITY
-    |--------------------------------------------------------------------------
-    */
+    /* =====================================================
+       DOSAGE FORM
+    ===================================================== */
+
+    const dosageMeta =
+        getDosageFormMeta(
+            medicine.dosageForm
+        );
+
+
+    /* =====================================================
+       QUANTITY
+    ===================================================== */
 
     const increaseQuantity = () => {
 
@@ -183,11 +428,9 @@ export default function MedicineDetailsPage({
     };
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | CART
-    |--------------------------------------------------------------------------
-    */
+    /* =====================================================
+       CART
+    ===================================================== */
 
     const addToCart = () => {
 
@@ -237,43 +480,28 @@ export default function MedicineDetailsPage({
     };
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | TOTAL PRICE
-    |--------------------------------------------------------------------------
-    */
+    /* =====================================================
+       TOTAL PRICE
+    ===================================================== */
 
     const totalPrice =
-        Number(medicine.price || 0) *
+        Number(
+            medicine.price || 0
+        ) *
         quantity;
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | IMAGE
-    |--------------------------------------------------------------------------
-    */
+    /* =====================================================
+       IMAGE
+    ===================================================== */
 
     const medicineImage =
         medicine.image?.url || "";
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | DESCRIPTION
-    |--------------------------------------------------------------------------
-    */
-
-    const description =
-        medicine.description ||
-        `${medicine.name} ${medicine.strength || ""} - ${medicine.genericName}.`;
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | USES
-    |--------------------------------------------------------------------------
-    */
+    /* =====================================================
+       USES
+    ===================================================== */
 
     const uses =
         Array.isArray(
@@ -282,27 +510,23 @@ export default function MedicineDetailsPage({
             ? medicine.usage
             : medicine.usage
                 ? [
-                    medicine.usage
+                    medicine.usage,
                 ]
                 : [];
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | PACK SIZE
-    |--------------------------------------------------------------------------
-    */
+    /* =====================================================
+       PACK SIZE
+    ===================================================== */
 
     const packSize =
         medicine.packSize ||
         "Available pack";
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | STOCK
-    |--------------------------------------------------------------------------
-    */
+    /* =====================================================
+       STOCK
+    ===================================================== */
 
     const inStock =
         Number(
@@ -310,11 +534,9 @@ export default function MedicineDetailsPage({
         ) > 0;
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | RENDER
-    |--------------------------------------------------------------------------
-    */
+    /* =====================================================
+       RENDER
+    ===================================================== */
 
     return (
         <>
@@ -322,23 +544,26 @@ export default function MedicineDetailsPage({
             <Head>
 
                 <title>
+
                     {medicine.name}
+
                     {" "}
+
                     {medicine.strength}
+
                     {" | MediLocate"}
+
                 </title>
 
 
                 <meta
                     name="description"
                     content={
-                        `${medicine.name} ${medicine.strength || ""} - ${medicine.genericName}. Order medicine online with MediLocate.`
+                        `${medicine.name} ${medicine.strength || ""} ${medicine.dosageForm || ""} - ${medicine.genericName}. Order medicine online with MediLocate.`
                     }
                 />
 
             </Head>
-
-
 
 
             <main
@@ -381,7 +606,9 @@ export default function MedicineDetailsPage({
 
 
                         <span>
-                            {medicine.name}
+                            {
+                                medicine.name
+                            }
                         </span>
 
                     </div>
@@ -399,7 +626,7 @@ export default function MedicineDetailsPage({
 
 
                         {/* =================================================
-                            IMAGE
+                            VISUAL
                         ================================================== */}
 
                         <div
@@ -410,11 +637,12 @@ export default function MedicineDetailsPage({
 
                             <div
                                 className={
-                                    styles.imageBox
+                                    `${styles.imageBox}
+                                    ${styles[`imageBox_${dosageMeta.type}`]}`
                                 }
                             >
 
-                                {medicineImage ? (
+                                {/* {medicineImage ? (
 
                                     <img
                                         src={
@@ -425,18 +653,61 @@ export default function MedicineDetailsPage({
                                         }
                                     />
 
-                                ) : (
+                                ) : ( */}
 
                                     <div
                                         className={
-                                            styles.imagePlaceholder
+                                            `${styles.imagePlaceholder}
+                                            ${styles[`placeholder_${dosageMeta.type}`]}`
                                         }
                                     >
-                                        {
-                                            medicine.name
-                                                ?.charAt(0)
-                                                ?.toUpperCase()
+
+                                        <div
+                                            className={
+                                                styles.placeholderIcon
+                                            }
+                                        >
+
+                                            {
+                                                dosageMeta.icon
+                                            }
+
+                                        </div>
+
+
+                                        <strong>
+                                            {
+                                                medicine.dosageForm ||
+                                                "Medicine"
+                                            }
+                                        </strong>
+
+                                    </div>
+
+                                {/* )} */}
+
+
+                                {/* DOSAGE IDENTITY */}
+
+                                {medicine.dosageForm && (
+
+                                    <div
+                                        className={
+                                            `${styles.visualDosage}
+                                            ${styles[`dosage_${dosageMeta.type}`]}`
                                         }
+                                    >
+
+                                        {
+                                            dosageMeta.icon
+                                        }
+
+                                        <span>
+                                            {
+                                                medicine.dosageForm
+                                            }
+                                        </span>
+
                                     </div>
 
                                 )}
@@ -451,9 +722,11 @@ export default function MedicineDetailsPage({
                                         styles.categoryTag
                                     }
                                 >
+
                                     {
                                         medicine.category
                                     }
+
                                 </span>
 
                             )}
@@ -462,7 +735,7 @@ export default function MedicineDetailsPage({
 
 
                         {/* =================================================
-                            INFORMATION
+                            PRODUCT INFORMATION
                         ================================================== */}
 
                         <div
@@ -471,23 +744,38 @@ export default function MedicineDetailsPage({
                             }
                         >
 
+
+                            {/* =================================================
+                                HEADER
+                            ================================================== */}
+
                             <div
                                 className={
                                     styles.productHeader
                                 }
                             >
 
-                                <div>
+                                <div
+                                    className={
+                                        styles.titleArea
+                                    }
+                                >
 
-                                    <span
-                                        className={
-                                            styles.genericName
-                                        }
-                                    >
-                                        {
-                                            medicine.genericName
-                                        }
-                                    </span>
+                                    {medicine.genericName && (
+
+                                        <span
+                                            className={
+                                                styles.genericName
+                                            }
+                                        >
+
+                                            {
+                                                medicine.genericName
+                                            }
+
+                                        </span>
+
+                                    )}
 
 
                                     <h1>
@@ -497,23 +785,55 @@ export default function MedicineDetailsPage({
                                     </h1>
 
 
-                                    <p
+                                    {/* VARIANT */}
+
+                                    <div
                                         className={
-                                            styles.strength
+                                            styles.variantRow
                                         }
                                     >
 
-                                        {
-                                            medicine.strength
-                                        }
+                                        {medicine.dosageForm && (
 
-                                        {" • "}
+                                            <span
+                                                className={
+                                                    `${styles.dosageBadge}
+                                                    ${styles[`dosage_${dosageMeta.type}`]}`
+                                                }
+                                            >
 
-                                        {
-                                            medicine.dosageForm
-                                        }
+                                                {
+                                                    dosageMeta.icon
+                                                }
 
-                                    </p>
+                                                <strong>
+                                                    {
+                                                        medicine.dosageForm
+                                                    }
+                                                </strong>
+
+                                            </span>
+
+                                        )}
+
+
+                                        {medicine.strength && (
+
+                                            <strong
+                                                className={
+                                                    styles.strengthBadge
+                                                }
+                                            >
+
+                                                {
+                                                    medicine.strength
+                                                }
+
+                                            </strong>
+
+                                        )}
+
+                                    </div>
 
                                 </div>
 
@@ -525,7 +845,9 @@ export default function MedicineDetailsPage({
                                             styles.inStock
                                         }
                                     >
+
                                         In stock
+
                                     </span>
 
                                 ) : (
@@ -535,7 +857,9 @@ export default function MedicineDetailsPage({
                                             styles.outOfStock
                                         }
                                     >
+
                                         Out of stock
+
                                     </span>
 
                                 )}
@@ -544,26 +868,44 @@ export default function MedicineDetailsPage({
 
 
                             {/* =================================================
-                                MANUFACTURER
+                                QUICK INFO
                             ================================================== */}
 
                             <div
                                 className={
-                                    styles.manufacturer
+                                    styles.quickInfo
                                 }
                             >
 
-                                <span>
-                                    Manufacturer
-                                </span>
+                                <div>
+
+                                    <span>
+                                        Pack
+                                    </span>
+
+                                    <strong>
+                                        {
+                                            packSize
+                                        }
+                                    </strong>
+
+                                </div>
 
 
-                                <strong>
-                                    {
-                                        medicine.manufacturer ||
-                                        "Not specified"
-                                    }
-                                </strong>
+                                <div>
+
+                                    <span>
+                                        Manufacturer
+                                    </span>
+
+                                    <strong>
+                                        {
+                                            medicine.manufacturer ||
+                                            "Not specified"
+                                        }
+                                    </strong>
+
+                                </div>
 
                             </div>
 
@@ -578,26 +920,50 @@ export default function MedicineDetailsPage({
                                 }
                             >
 
-                                <div
-                                    className={
-                                        styles.price
-                                    }
-                                >
+                                <div>
 
-                                    <strong>
-                                        ৳
-                                        {
-                                            Number(
-                                                medicine.price || 0
-                                            ).toFixed(2)
+                                    <span
+                                        className={
+                                            styles.priceLabel
                                         }
-                                    </strong>
+                                    >
+                                        Price
+                                    </span>
+
+
+                                    <div
+                                        className={
+                                            styles.price
+                                        }
+                                    >
+
+                                        <span>
+                                            ৳
+                                        </span>
+
+                                        <strong>
+
+                                            {
+                                                Number(
+                                                    medicine.price || 0
+                                                ).toFixed(2)
+                                            }
+
+                                        </strong>
+
+                                    </div>
 
                                 </div>
 
 
-                                <span>
+                                <span
+                                    className={
+                                        styles.pricePack
+                                    }
+                                >
+
                                     per {packSize}
+
                                 </span>
 
                             </div>
@@ -701,7 +1067,9 @@ export default function MedicineDetailsPage({
 
 
                                     <strong>
-                                        {quantity}
+                                        {
+                                            quantity
+                                        }
                                     </strong>
 
 
@@ -735,14 +1103,21 @@ export default function MedicineDetailsPage({
 
                                     <ShoppingCartOutlinedIcon />
 
-                                    Add to Cart
+                                    <span
+                                        className={
+                                            styles.cartText
+                                        }
+                                    >
+                                        Add to Cart
+                                    </span>
 
-                                    <span>
+
+                                    <strong>
                                         ৳
                                         {
                                             totalPrice.toFixed(2)
                                         }
-                                    </span>
+                                    </strong>
 
                                 </button>
 
@@ -754,7 +1129,7 @@ export default function MedicineDetailsPage({
 
 
                     {/* =================================================
-                        DELIVERY / TRUST
+                        SERVICES
                     ================================================== */}
 
                     <section
@@ -774,7 +1149,9 @@ export default function MedicineDetailsPage({
                                     styles.serviceIcon
                                 }
                             >
+
                                 <LocalShippingOutlinedIcon />
+
                             </div>
 
 
@@ -805,7 +1182,9 @@ export default function MedicineDetailsPage({
                                     styles.serviceIcon
                                 }
                             >
+
                                 <VerifiedOutlinedIcon />
+
                             </div>
 
 
@@ -836,7 +1215,9 @@ export default function MedicineDetailsPage({
                                     styles.serviceIcon
                                 }
                             >
+
                                 <CloudUploadOutlinedIcon />
+
                             </div>
 
 
@@ -910,7 +1291,8 @@ export default function MedicineDetailsPage({
 
                                 <strong>
                                     {
-                                        medicine.genericName
+                                        medicine.genericName ||
+                                        "—"
                                     }
                                 </strong>
 
@@ -939,11 +1321,21 @@ export default function MedicineDetailsPage({
                                     Dosage form
                                 </span>
 
-                                <strong>
+                                <strong
+                                    className={
+                                        styles.detailDosage
+                                    }
+                                >
+
+                                    {
+                                        dosageMeta.icon
+                                    }
+
                                     {
                                         medicine.dosageForm ||
                                         "—"
                                     }
+
                                 </strong>
 
                             </div>
@@ -1094,7 +1486,7 @@ export default function MedicineDetailsPage({
 
 
                     {/* =================================================
-                        MEDICAL DISCLAIMER
+                        DISCLAIMER
                     ================================================== */}
 
                     <div
@@ -1119,10 +1511,6 @@ export default function MedicineDetailsPage({
 
             </main>
 
-
-
         </>
     );
 }
-
-

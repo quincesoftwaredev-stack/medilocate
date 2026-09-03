@@ -19,6 +19,13 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import MedicationRoundedIcon from "@mui/icons-material/MedicationRounded";
+import LocalDrinkRoundedIcon from "@mui/icons-material/LocalDrinkRounded";
+import VaccinesRoundedIcon from "@mui/icons-material/VaccinesRounded";
+import OpacityRoundedIcon from "@mui/icons-material/OpacityRounded";
+import AirRoundedIcon from "@mui/icons-material/AirRounded";
+import SpaRoundedIcon from "@mui/icons-material/SpaRounded";
+import ScienceRoundedIcon from "@mui/icons-material/ScienceRounded";
 
 
 
@@ -72,6 +79,225 @@ const paymentMethods = [
     },
 
 ];
+
+
+
+const getDosageFormMeta = (dosageForm = "") => {
+
+    const original =
+        String(dosageForm || "").trim();
+
+    const value =
+        original
+            .normalize("NFKD")
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+
+
+    const hasAny = (words = []) =>
+        words.some((word) =>
+            value.includes(
+                String(word)
+                    .toLowerCase()
+                    .trim()
+            )
+        );
+
+
+    if (
+        hasAny([
+            "injection",
+            "injectable",
+            "ampoule",
+            "ampule",
+            "vial",
+            "infusion",
+            "syringe",
+            "prefilled syringe",
+            "pre filled syringe",
+        ])
+    ) {
+        return {
+            type: "injection",
+            icon: <VaccinesRoundedIcon />,
+        };
+    }
+
+
+    if (
+        hasAny([
+            "eye drop",
+            "ear drop",
+            "nasal drop",
+            "ophthalmic",
+            "otic",
+            "drops",
+            "drop",
+        ])
+    ) {
+        return {
+            type: "drops",
+            icon: <OpacityRoundedIcon />,
+        };
+    }
+
+
+    if (
+        hasAny([
+            "inhaler",
+            "inhalation",
+            "respirator",
+            "respule",
+            "respules",
+            "nebule",
+            "nebules",
+            "nebulizer",
+            "nebuliser",
+            "rotacap",
+            "rotahaler",
+            "metered dose",
+            "mdi",
+            "dpi",
+            "spray",
+        ])
+    ) {
+        return {
+            type: "inhaler",
+            icon: <AirRoundedIcon />,
+        };
+    }
+
+
+    if (
+        hasAny([
+            "suppository",
+            "suppositories",
+            "pessary",
+            "pessaries",
+            "rectal",
+            "vaginal",
+        ])
+    ) {
+        return {
+            type: "suppository",
+            icon: <SpaRoundedIcon />,
+        };
+    }
+
+
+    if (
+        hasAny([
+            "capsule",
+            "capsules",
+            "softgel",
+            "soft gel",
+            "soft gelatin",
+        ])
+    ) {
+        return {
+            type: "capsule",
+            icon: <MedicationRoundedIcon />,
+        };
+    }
+
+
+    if (
+        hasAny([
+            "tablet",
+            "tablets",
+            "caplet",
+            "caplets",
+            "pill",
+            "pills",
+            "lozenge",
+            "lozenges",
+        ])
+    ) {
+        return {
+            type: "tablet",
+            icon: <MedicationRoundedIcon />,
+        };
+    }
+
+
+    if (
+        hasAny([
+            "syrup",
+            "syp",
+            "suspension",
+            "susp",
+            "solution",
+            "soln",
+            "liquid",
+            "elixir",
+            "mixture",
+            "emulsion",
+            "oral solution",
+            "oral suspension",
+        ])
+    ) {
+        return {
+            type: "liquid",
+            icon: <LocalDrinkRoundedIcon />,
+        };
+    }
+
+
+    if (
+        hasAny([
+            "cream",
+            "ointment",
+            "gel",
+            "lotion",
+            "paste",
+            "balm",
+            "liniment",
+            "paint",
+            "topical",
+            "jelly",
+            "shampoo",
+            "wash",
+            "cleanser",
+            "patch",
+            "transdermal",
+        ])
+    ) {
+        return {
+            type: "topical",
+            icon: <SpaRoundedIcon />,
+        };
+    }
+
+
+    if (
+        hasAny([
+            "powder",
+            "powders",
+            "granule",
+            "granules",
+            "sachet",
+            "sachets",
+            "dry powder",
+            "dry syrup",
+            "powder for suspension",
+            "powder for solution",
+        ])
+    ) {
+        return {
+            type: "powder",
+            icon: <ScienceRoundedIcon />,
+        };
+    }
+
+
+    return {
+        type: "other",
+        icon: <MedicationRoundedIcon />,
+    };
+
+};
 
 
 export default function CheckoutPage() {
@@ -1634,13 +1860,23 @@ export default function CheckoutPage() {
                                 }
                             >
 
-                                {cartItems.map(
-                                    (item) => (
+                                {cartItems.map((item) => {
+
+                                    const dosageMeta =
+                                        getDosageFormMeta(
+                                            item.dosageForm
+                                        );
+
+                                    const image =
+                                        item.image?.url ||
+                                        item.image ||
+                                        "";
+
+
+                                    return (
 
                                         <div
-                                            key={
-                                                item.id
-                                            }
+                                            key={item.id}
                                             className={
                                                 styles.item
                                             }
@@ -1648,24 +1884,52 @@ export default function CheckoutPage() {
 
                                             <div
                                                 className={
-                                                    styles.itemImage
+                                                    `${styles.itemImage} ${
+                                                        styles[
+                                                            `itemImage_${dosageMeta.type}`
+                                                        ] || ""
+                                                    }`
                                                 }
                                             >
-
-                                                {item.image ? (
+{/* 
+                                                {image ? (
 
                                                     <img
-                                                        src={
-                                                            item.image
+                                                        src={image}
+                                                        alt={
+                                                            item.name ||
+                                                            "Medicine"
                                                         }
-                                                        alt=""
                                                     />
 
-                                                ) : (
+                                                ) : ( */}
 
-                                                    <DescriptionOutlinedIcon />
+                                                    <span
+                                                        className={
+                                                            styles.itemDosagePlaceholder
+                                                        }
+                                                    >
 
-                                                )}
+                                                        <span
+                                                            className={
+                                                                styles.itemDosagePlaceholderIcon
+                                                            }
+                                                        >
+                                                            {
+                                                                dosageMeta.icon
+                                                            }
+                                                        </span>
+
+                                                        <small>
+                                                            {
+                                                                item.dosageForm ||
+                                                                "Medicine"
+                                                            }
+                                                        </small>
+
+                                                    </span>
+
+                                                {/* )} */}
 
                                             </div>
 
@@ -1682,11 +1946,70 @@ export default function CheckoutPage() {
                                                     }
                                                 </strong>
 
-                                                <span>
-                                                    {
-                                                        item.genericName
+
+                                                <div
+                                                    className={
+                                                        styles.itemVariant
                                                     }
-                                                </span>
+                                                >
+
+                                                    <span
+                                                        className={
+                                                            `${styles.itemDosageBadge} ${
+                                                                styles[
+                                                                    `itemDosage_${dosageMeta.type}`
+                                                                ] || ""
+                                                            }`
+                                                        }
+                                                    >
+
+                                                        <span
+                                                            className={
+                                                                styles.itemDosageIcon
+                                                            }
+                                                        >
+                                                            {
+                                                                dosageMeta.icon
+                                                            }
+                                                        </span>
+
+                                                        <span>
+                                                            {
+                                                                item.dosageForm ||
+                                                                "Medicine"
+                                                            }
+                                                        </span>
+
+                                                    </span>
+
+
+                                                    {item.strength && (
+
+                                                        <strong
+                                                            className={
+                                                                styles.itemStrength
+                                                            }
+                                                        >
+                                                            {
+                                                                item.strength
+                                                            }
+                                                        </strong>
+
+                                                    )}
+
+                                                </div>
+
+
+                                                {item.genericName && (
+
+                                                    <span>
+                                                        {
+                                                            item.genericName
+                                                        }
+                                                    </span>
+
+                                                )}
+
 
                                                 <small>
                                                     ×
@@ -1703,7 +2026,6 @@ export default function CheckoutPage() {
                                                     styles.itemPrice
                                                 }
                                             >
-
                                                 ৳
                                                 {
                                                     Number(
@@ -1713,13 +2035,13 @@ export default function CheckoutPage() {
                                                         item.quantity || 0
                                                     )
                                                 }
-
                                             </strong>
 
                                         </div>
 
-                                    )
-                                )}
+                                    );
+
+                                })}
 
                             </div>
 

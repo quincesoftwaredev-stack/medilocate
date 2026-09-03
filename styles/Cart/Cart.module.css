@@ -1268,3 +1268,774 @@
     }
 
 }
+
+/* =========================================================
+   UPDATED MEDICINE CART ITEM
+   DOSAGE-FIRST VISUAL SYSTEM
+========================================================= */
+
+.cartItem {
+    grid-template-columns:
+        88px minmax(0, 1fr) auto auto 30px;
+
+    gap: 14px;
+
+    padding: 16px 18px;
+}
+
+
+/* =========================================================
+   ITEM IMAGE / DOSAGE PLACEHOLDER
+========================================================= */
+
+.itemImage {
+    width: 88px;
+    height: 88px;
+
+    padding: 8px;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    border: 1px solid var(--ml-gray-100);
+    border-radius: 13px;
+
+    color: var(--ml-gray-600);
+
+    background: var(--ml-gray-50);
+}
+
+.itemImage img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: contain;
+}
+
+.itemPlaceholder {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    color: inherit;
+}
+
+.itemPlaceholderIcon {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.84);
+
+    box-shadow:
+        0 5px 14px
+        rgba(18, 48, 74, 0.07);
+}
+
+.itemPlaceholderIcon svg {
+    width: 23px;
+    height: 23px;
+}
+
+.itemPlaceholder small {
+    width: 100%;
+
+    overflow: hidden;
+
+    color: inherit;
+
+    font-size: 9px;
+    font-weight: var(--ml-weight-bold);
+
+    line-height: 1.15;
+
+    text-align: center;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   IMAGE DOSAGE COLORS
+========================================================= */
+
+.itemImage_tablet {
+    color: #1756a9;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #edf5ff
+        );
+}
+
+.itemImage_capsule {
+    color: #7048b6;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f5efff
+        );
+}
+
+.itemImage_liquid {
+    color: #08796c;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #e9faf7
+        );
+}
+
+.itemImage_suppository {
+    color: #a04468;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fff0f5
+        );
+}
+
+.itemImage_injection {
+    color: #b75026;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fff3ec
+        );
+}
+
+.itemImage_drops {
+    color: #147a9e;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #ecfaff
+        );
+}
+
+.itemImage_inhaler {
+    color: #23698d;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #edf8fd
+        );
+}
+
+.itemImage_topical {
+    color: #5e7048;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f3f8ec
+        );
+}
+
+.itemImage_powder {
+    color: #78622a;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fff9e9
+        );
+}
+
+.itemImage_other {
+    color: var(--ml-gray-600);
+
+    background: var(--ml-gray-100);
+}
+
+
+/* =========================================================
+   ITEM INFO
+========================================================= */
+
+.itemInfo {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-start;
+}
+
+.itemName {
+    max-width: 100%;
+
+    font-size: 17px;
+
+    line-height: 1.25;
+}
+
+
+/* =========================================================
+   DOSAGE + STRENGTH
+========================================================= */
+
+.itemVariant {
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 5px;
+
+    max-width: 100%;
+
+    margin-top: 6px;
+}
+
+.itemDosageBadge {
+    min-height: 27px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    max-width: 210px;
+
+    padding: 4px 8px;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    border-radius: 7px;
+
+    font-size: 12px;
+    font-weight: var(--ml-weight-bold);
+
+    line-height: 1.2;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.itemDosageIcon {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+}
+
+.itemDosageIcon svg {
+    width: 15px;
+    height: 15px;
+}
+
+.itemStrength {
+    min-height: 27px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    margin-top: 0;
+
+    padding: 4px 8px;
+
+    box-sizing: border-box;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: 7px;
+
+    color: var(--ml-navy);
+
+    background: var(--ml-gray-100);
+
+    font-size: 12px;
+    font-weight: var(--ml-weight-bold);
+
+    line-height: 1.2;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   DOSAGE BADGE COLORS
+========================================================= */
+
+.itemDosage_tablet {
+    color: #1756a9;
+
+    border: 1px solid #d4e7ff;
+
+    background: #edf5ff;
+}
+
+.itemDosage_capsule {
+    color: #7048b6;
+
+    border: 1px solid #e6d9ff;
+
+    background: #f5efff;
+}
+
+.itemDosage_liquid {
+    color: #08796c;
+
+    border: 1px solid #c9eee8;
+
+    background: #e9faf7;
+}
+
+.itemDosage_suppository {
+    color: #a04468;
+
+    border: 1px solid #f5d7e2;
+
+    background: #fff0f5;
+}
+
+.itemDosage_injection {
+    color: #b75026;
+
+    border: 1px solid #f8dbc9;
+
+    background: #fff3ec;
+}
+
+.itemDosage_drops {
+    color: #147a9e;
+
+    border: 1px solid #ccecf7;
+
+    background: #ecfaff;
+}
+
+.itemDosage_inhaler {
+    color: #23698d;
+
+    border: 1px solid #d2ebf6;
+
+    background: #edf8fd;
+}
+
+.itemDosage_topical {
+    color: #5e7048;
+
+    border: 1px solid #dde9cf;
+
+    background: #f3f8ec;
+}
+
+.itemDosage_powder {
+    color: #78622a;
+
+    border: 1px solid #efe3bc;
+
+    background: #fff9e9;
+}
+
+.itemDosage_other {
+    color: var(--ml-gray-600);
+
+    border: 1px solid var(--ml-gray-200);
+
+    background: var(--ml-gray-100);
+}
+
+
+/* =========================================================
+   GENERIC / PACK / RX
+========================================================= */
+
+.itemGeneric {
+    width: 100%;
+
+    margin-top: 6px;
+
+    overflow: hidden;
+
+    color: var(--ml-gray-600);
+
+    font-size: 12px;
+
+    line-height: 1.3;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.itemPack {
+    width: 100%;
+
+    margin-top: 3px;
+
+    overflow: hidden;
+
+    color: var(--ml-gray-500);
+
+    font-size: 10px;
+
+    line-height: 1.25;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.rxBadge {
+    margin-top: 6px;
+
+    padding: 4px 7px;
+
+    border-radius: 6px;
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   QUANTITY
+========================================================= */
+
+.quantity {
+    height: 38px;
+
+    border-radius: 9px;
+
+    background: var(--ml-white);
+}
+
+.quantity button {
+    width: 31px;
+}
+
+.quantity svg {
+    width: 16px;
+    height: 16px;
+}
+
+.quantity strong {
+    width: 27px;
+
+    font-size: 12px;
+    font-weight: var(--ml-weight-bold);
+}
+
+
+/* =========================================================
+   ITEM PRICE
+========================================================= */
+
+.itemPrice {
+    min-width: 82px;
+}
+
+.itemPrice strong {
+    color: var(--ml-navy);
+
+    font-size: 17px;
+    font-weight: var(--ml-weight-bold);
+}
+
+.itemPrice span {
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+.deleteButton {
+    width: 30px;
+    height: 30px;
+
+    border-radius: 8px;
+}
+
+
+/* =========================================================
+   TABLET OVERRIDES
+========================================================= */
+
+@media (max-width: 950px) {
+
+    .cartItem {
+        grid-template-columns:
+            76px minmax(0, 1fr) auto auto 28px;
+
+        gap: 10px;
+    }
+
+    .itemImage {
+        width: 76px;
+        height: 76px;
+    }
+
+    .itemPlaceholderIcon {
+        width: 35px;
+        height: 35px;
+    }
+
+    .itemPlaceholderIcon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE CART ITEM
+========================================================= */
+
+@media (max-width: 750px) {
+
+    .cartItem {
+        grid-template-columns:
+            72px minmax(0, 1fr) auto;
+
+        grid-template-rows:
+            auto auto;
+
+        align-items: start;
+
+        gap: 8px 10px;
+
+        padding: 12px;
+    }
+
+    .itemImage {
+        width: 72px;
+        height: 78px;
+
+        grid-row: 1 / 3;
+
+        padding: 6px;
+    }
+
+    .itemPlaceholderIcon {
+        width: 34px;
+        height: 34px;
+    }
+
+    .itemPlaceholderIcon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .itemPlaceholder small {
+        font-size: 8px;
+    }
+
+    .itemInfo {
+        grid-column: 2;
+
+        min-width: 0;
+    }
+
+    .itemName {
+        font-size: 15px;
+    }
+
+    .itemVariant {
+        gap: 4px;
+
+        margin-top: 5px;
+    }
+
+    .itemDosageBadge {
+        min-height: 24px;
+        max-width: 145px;
+
+        padding: 3px 6px;
+
+        font-size: 10px;
+    }
+
+    .itemDosageIcon svg {
+        width: 13px;
+        height: 13px;
+    }
+
+    .itemStrength {
+        min-height: 24px;
+
+        padding: 3px 6px;
+
+        font-size: 11px;
+    }
+
+    .itemGeneric {
+        margin-top: 4px;
+
+        font-size: 10px;
+    }
+
+    .itemPack {
+        font-size: 9px;
+    }
+
+    .rxBadge {
+        margin-top: 4px;
+
+        font-size: 8px;
+    }
+
+    .quantity {
+        grid-column: 2;
+
+        width: fit-content;
+        height: 32px;
+
+        align-self: end;
+    }
+
+    .quantity button {
+        width: 27px;
+    }
+
+    .quantity strong {
+        width: 23px;
+
+        font-size: 11px;
+    }
+
+    .itemPrice {
+        position: static;
+
+        grid-column: 3;
+        grid-row: 1;
+
+        min-width: 0;
+
+        align-self: start;
+
+        padding-top: 1px;
+    }
+
+    .itemPrice strong {
+        font-size: 15px;
+
+        white-space: nowrap;
+    }
+
+    .itemPrice span {
+        display: none;
+    }
+
+    .deleteButton {
+        position: static;
+
+        grid-column: 3;
+        grid-row: 2;
+
+        align-self: end;
+
+        justify-self: end;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE CART ITEM
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .cartItem {
+        grid-template-columns:
+            62px minmax(0, 1fr) auto;
+
+        gap: 7px 8px;
+
+        padding: 10px 8px;
+    }
+
+    .itemImage {
+        width: 62px;
+        height: 70px;
+
+        padding: 5px;
+    }
+
+    .itemPlaceholderIcon {
+        width: 30px;
+        height: 30px;
+    }
+
+    .itemPlaceholderIcon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .itemName {
+        font-size: 14px;
+    }
+
+    .itemDosageBadge {
+        max-width: 108px;
+
+        font-size: 9px;
+    }
+
+    .itemStrength {
+        font-size: 10px;
+    }
+
+    .itemGeneric {
+        font-size: 9px;
+    }
+
+    .itemPack {
+        display: none;
+    }
+
+    .itemPrice strong {
+        font-size: 14px;
+    }
+
+    .quantity button {
+        width: 25px;
+    }
+
+    .quantity strong {
+        width: 21px;
+    }
+
+}

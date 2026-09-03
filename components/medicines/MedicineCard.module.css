@@ -1,222 +1,635 @@
 /* =========================================================
-   MEDICINE CARD
+   CARD
 ========================================================= */
 
 .card {
     position: relative;
+
     display: flex;
     flex-direction: column;
+
     min-width: 0;
+
     overflow: hidden;
-    border: 1px solid var(--ml-gray-200);
-    border-radius: var(--ml-radius-md);
-    background: var(--ml-white);
-    box-shadow: var(--ml-shadow-sm);
+
+    border:
+        1px solid
+        var(--ml-gray-200);
+
+    border-radius:
+        16px;
+
+    background:
+        var(--ml-white);
+
+    box-shadow:
+        0 3px 14px
+        rgba(18, 48, 74, 0.06);
+
     transition:
         transform var(--ml-transition),
-        box-shadow var(--ml-transition);
+        box-shadow var(--ml-transition),
+        border-color var(--ml-transition);
 }
 
+
 .card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--ml-shadow-md);
+    transform:
+        translateY(-3px);
+
+    border-color:
+        rgba(15, 157, 138, 0.28);
+
+    box-shadow:
+        0 10px 28px
+        rgba(18, 48, 74, 0.1);
 }
 
 
 /* =========================================================
-   MEDICINE IMAGE
+   IMAGE SECTION
 ========================================================= */
 
-.image {
+.imageSection {
+    position: relative;
+
     width: 100%;
-    height: 185px;
+    height: 190px;
+
     display: flex;
+
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    box-sizing: border-box;
-    background: var(--ml-gray-50);
-    text-decoration: none;
+
     overflow: hidden;
+
+    padding: 18px;
+
+    box-sizing:
+        border-box;
+
+    background:
+        #f8fafb;
+
+    text-decoration: none;
 }
 
-.image img {
+
+.medicineImage {
     width: 100%;
     height: 100%;
+
     display: block;
+
     object-fit: contain;
 }
 
+
+/* =========================================================
+   PLACEHOLDER
+========================================================= */
+
 .placeholder {
-    position: relative;
     width: 100%;
     height: 100%;
+
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    overflow: hidden;
-    padding: 22px;
-    box-sizing: border-box;
-    border: 1px solid rgba(15, 157, 138, 0.16);
-    border-radius: 18px;
-    color: var(--ml-navy);
+
+    gap: 9px;
+
+    border-radius: 14px;
+
+    color:
+        var(--ml-navy);
+
     background:
-        radial-gradient(
-            circle at 85% 18%,
-            rgba(15, 157, 138, 0.14),
-            transparent 32%
-        ),
         linear-gradient(
             145deg,
-            var(--ml-white),
-            var(--ml-teal-light)
+            #ffffff,
+            #f4f8f8
         );
-    text-align: center;
 }
 
-.placeholder::before,
-.placeholder::after {
-    position: absolute;
-    content: "";
-    border-radius: 999px;
-    background: rgba(15, 157, 138, 0.08);
-    transform: rotate(-35deg);
-}
 
-.placeholder::before {
-    width: 72px;
-    height: 26px;
-    top: 13px;
-    right: -18px;
-}
+.placeholderIcon {
+    width: 52px;
+    height: 52px;
 
-.placeholder::after {
-    width: 54px;
-    height: 20px;
-    bottom: 12px;
-    left: -15px;
-}
+    display: flex;
 
-.placeholder strong {
-    position: relative;
-    z-index: 1;
-    display: -webkit-box;
-    max-width: 100%;
-    overflow: hidden;
-    padding: 10px 16px;
-    border: 1px solid rgba(255, 255, 255, 0.72);
-    border-radius: 14px;
-    color: var(--ml-navy);
-    background: rgba(255, 255, 255, 0.58);
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.85);
+
     box-shadow:
-        0 8px 24px rgba(15, 157, 138, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
-    font-size: clamp(16px, 1.5vw, 22px);
-    font-weight: var(--ml-weight-bold);
-    letter-spacing: -0.01em;
-    line-height: 1.25;
-    overflow-wrap: anywhere;
-    text-shadow: 0 1px 0 var(--ml-white);
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+        0 6px 20px
+        rgba(18, 48, 74, 0.08);
+}
+
+
+.placeholderIcon svg {
+    width: 29px;
+    height: 29px;
+}
+
+
+.placeholder span {
+    max-width: 90%;
+
+    overflow: hidden;
+
+    font-size: 13px;
+
+    font-weight:
+        var(--ml-weight-bold);
+
+    text-align: center;
+
+    text-overflow:
+        ellipsis;
+
+    white-space: nowrap;
 }
 
 
 /* =========================================================
-   PRESCRIPTION BADGE
+   PLACEHOLDER VARIANTS
+========================================================= */
+
+.placeholder_tablet {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #edf5ff
+        );
+}
+
+
+.placeholder_capsule {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f5efff
+        );
+}
+
+
+.placeholder_liquid {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #eafaf7
+        );
+}
+
+
+.placeholder_suppository {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fff0f5
+        );
+}
+
+
+.placeholder_injection {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fff3ec
+        );
+}
+
+
+.placeholder_drops {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #ecfaff
+        );
+}
+
+
+.placeholder_inhaler {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #edf8fd
+        );
+}
+
+
+.placeholder_topical {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f3f8ec
+        );
+}
+
+
+/* =========================================================
+   DOSAGE STRIP
+========================================================= */
+
+.dosageStrip {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    padding:
+        0 10px;
+
+    box-sizing:
+        border-box;
+
+    font-size: 12px;
+
+    font-weight:
+        var(--ml-weight-bold);
+
+    backdrop-filter:
+        blur(8px);
+}
+
+
+.dosageStrip svg {
+    width: 16px;
+    height: 16px;
+
+    flex-shrink: 0;
+}
+
+
+.dosageStrip span {
+    min-width: 0;
+
+    overflow: hidden;
+
+    text-overflow:
+        ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   DOSAGE COLORS
+========================================================= */
+
+.dosage_tablet {
+    color: #1756a9;
+
+    background:
+        rgba(237, 245, 255, 0.94);
+}
+
+
+.dosage_capsule {
+    color: #7048b6;
+
+    background:
+        rgba(245, 239, 255, 0.95);
+}
+
+
+.dosage_liquid {
+    color: #08796c;
+
+    background:
+        rgba(233, 250, 247, 0.95);
+}
+
+
+.dosage_suppository {
+    color: #a04468;
+
+    background:
+        rgba(255, 240, 245, 0.95);
+}
+
+
+.dosage_injection {
+    color: #b75026;
+
+    background:
+        rgba(255, 243, 236, 0.95);
+}
+
+
+.dosage_drops {
+    color: #147a9e;
+
+    background:
+        rgba(236, 250, 255, 0.95);
+}
+
+
+.dosage_inhaler {
+    color: #23698d;
+
+    background:
+        rgba(237, 248, 253, 0.95);
+}
+
+
+.dosage_topical {
+    color: #5e7048;
+
+    background:
+        rgba(243, 248, 236, 0.95);
+}
+
+
+.dosage_powder {
+    color: #78622a;
+
+    background:
+        rgba(255, 249, 233, 0.95);
+}
+
+
+.dosage_other {
+    color:
+        var(--ml-gray-600);
+
+    background:
+        rgba(244, 246, 247, 0.95);
+}
+
+
+/* =========================================================
+   PRESCRIPTION
 ========================================================= */
 
 .prescriptionBadge {
     position: absolute;
-    top: 10px;
-    left: 10px;
-    z-index: 2;
-    max-width: calc(100% - 20px);
-    padding: 5px 8px;
-    box-sizing: border-box;
+
+    top: 9px;
+    left: 9px;
+
+    z-index: 5;
+
+    min-width: 30px;
+    height: 26px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding:
+        0 7px;
+
     border-radius: 7px;
-    color: #8a6116;
-    background: #fff6dc;
-    font-size: var(--ml-font-xs);
-    font-weight: var(--ml-weight-semibold);
+
+    color: #9a6510;
+
+    background:
+        #fff3cc;
+
+    font-size: 11px;
+
+    font-weight:
+        var(--ml-weight-bold);
+}
+
+
+/* =========================================================
+   INFO
+========================================================= */
+
+.info {
+    display: flex;
+
+    flex-direction: column;
+
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 16px;
+}
+
+
+.mainInfo {
+    min-width: 0;
+}
+
+
+/* =========================================================
+   NAME
+========================================================= */
+
+.name {
+    display: -webkit-box;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    color:
+        var(--ml-navy);
+
+    font-size: 20px;
+
+    font-weight:
+        var(--ml-weight-bold);
+
+    line-height: 1.25;
+
+    text-decoration: none;
+
+    -webkit-box-orient:
+        vertical;
+
+    -webkit-line-clamp:
+        2;
+}
+
+
+.name:hover {
+    color:
+        var(--ml-teal);
+}
+
+
+/* =========================================================
+   STRENGTH
+========================================================= */
+
+.strength {
+    margin-top: 5px;
+
+    color:
+        var(--ml-navy);
+
+    font-size: 17px;
+
+    font-weight:
+        var(--ml-weight-bold);
+
     line-height: 1.3;
 }
 
 
 /* =========================================================
-   MEDICINE INFORMATION
+   MOBILE VARIANT
 ========================================================= */
 
-.info {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-width: 0;
-    padding: 15px;
-    box-sizing: border-box;
+.mobileVariant {
+    display: none;
 }
 
-.name {
-    display: block;
-    min-width: 0;
-    overflow: hidden;
-    color: var(--ml-navy);
-    font-size: var(--ml-font-lg);
-    font-weight: var(--ml-weight-bold);
-    line-height: var(--ml-line-snug);
-    text-decoration: none;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
 
-.name:hover {
-    color: var(--ml-teal);
-}
+/* =========================================================
+   GENERIC
+========================================================= */
 
 .generic {
     display: block;
+
     min-width: 0;
-    margin-top: 3px;
-    overflow: hidden;
-    color: var(--ml-teal);
-    font-size: var(--ml-font-sm);
-    line-height: var(--ml-line-normal);
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
 
-.details {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
     margin-top: 7px;
-}
 
-.details span {
-    max-width: 100%;
-    padding: 3px 6px;
     overflow: hidden;
-    border-radius: 6px;
-    color: var(--ml-gray-600);
-    background: var(--ml-gray-100);
-    font-size: var(--ml-font-xs);
-    line-height: 1.3;
-    text-overflow: ellipsis;
+
+    color:
+        var(--ml-teal-dark);
+
+    font-size: 13px;
+
+    font-weight:
+        var(--ml-weight-medium);
+
+    line-height: 1.35;
+
+    text-overflow:
+        ellipsis;
+
     white-space: nowrap;
 }
+
+
+/* =========================================================
+   PACK
+========================================================= */
+
+.pack {
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    min-width: 0;
+
+    margin-top: 9px;
+
+    font-size: 13px;
+}
+
+
+.pack span {
+    flex-shrink: 0;
+
+    color:
+        var(--ml-gray-500);
+}
+
+
+.pack strong {
+    min-width: 0;
+
+    overflow: hidden;
+
+    color:
+        var(--ml-gray-700);
+
+    font-weight:
+        var(--ml-weight-semibold);
+
+    text-overflow:
+        ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   MANUFACTURER
+========================================================= */
 
 .manufacturer {
     display: block;
+
     min-width: 0;
-    margin-top: 9px;
+
+    margin-top: 7px;
+
     overflow: hidden;
-    color: var(--ml-gray-500);
-    font-size: var(--ml-font-xs);
-    line-height: var(--ml-line-normal);
-    text-overflow: ellipsis;
+
+    color:
+        var(--ml-gray-500);
+
+    font-size: 12px;
+
+    line-height: 1.35;
+
+    text-overflow:
+        ellipsis;
+
     white-space: nowrap;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    min-width: 0;
+
+    margin-top: auto;
+
+    padding-top: 17px;
 }
 
 
@@ -224,21 +637,40 @@
    PRICE
 ========================================================= */
 
-.footer {
-    margin-top: auto;
-    padding-top: 15px;
+.priceWrapper {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
+
+    align-items: baseline;
+
+    gap: 2px;
+
     min-width: 0;
 }
 
+
+.currency {
+    color:
+        var(--ml-navy);
+
+    font-size: 15px;
+
+    font-weight:
+        var(--ml-weight-bold);
+}
+
+
 .price {
-    min-width: 0;
-    color: var(--ml-navy);
-    font-size: var(--ml-font-lg);
-    font-weight: var(--ml-weight-bold);
+    color:
+        var(--ml-navy);
+
+    font-size: 21px;
+
+    font-weight:
+        var(--ml-weight-bold);
+
+    letter-spacing:
+        -0.02em;
+
     white-space: nowrap;
 }
 
@@ -248,82 +680,136 @@
 ========================================================= */
 
 .addButton {
-    min-width: 0;
-    min-height: 36px;
+    height: 38px;
+
     display: flex;
+
     align-items: center;
     justify-content: center;
-    gap: 3px;
+
+    gap: 4px;
+
     flex-shrink: 0;
-    padding: 0 10px;
-    box-sizing: border-box;
-    border: 1px solid rgba(15, 157, 138, 0.25);
-    border-radius: 9px;
-    color: var(--ml-teal-dark);
-    background: var(--ml-teal-light);
+
+    padding:
+        0 13px;
+
+    border:
+        1px solid
+        rgba(15, 157, 138, 0.25);
+
+    border-radius: 10px;
+
+    color:
+        var(--ml-teal-dark);
+
+    background:
+        var(--ml-teal-light);
+
     font-family: inherit;
-    font-size: var(--ml-font-xs);
-    font-weight: var(--ml-weight-semibold);
-    white-space: nowrap;
+
+    font-size: 13px;
+
+    font-weight:
+        var(--ml-weight-bold);
+
     cursor: pointer;
-    transition: var(--ml-transition);
+
+    transition:
+        var(--ml-transition);
 }
+
 
 .addButton:hover {
-    color: var(--ml-white);
-    background: var(--ml-teal);
+    color:
+        var(--ml-white);
+
+    border-color:
+        var(--ml-teal);
+
+    background:
+        var(--ml-teal);
 }
 
+
 .addButton svg {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
 }
 
 
 /* =========================================================
-   QUANTITY CONTROL
+   QUANTITY
 ========================================================= */
 
 .quantity {
-    height: 36px;
+    height: 38px;
+
     display: flex;
+
     align-items: center;
-    flex-shrink: 0;
+
     overflow: hidden;
-    border: 1px solid var(--ml-gray-200);
-    border-radius: 9px;
-    background: var(--ml-white);
+
+    flex-shrink: 0;
+
+    border:
+        1px solid
+        var(--ml-gray-200);
+
+    border-radius: 10px;
+
+    background:
+        var(--ml-white);
 }
+
 
 .quantity button {
-    width: 31px;
+    width: 34px;
     height: 100%;
-    padding: 0;
+
     display: flex;
+
     align-items: center;
     justify-content: center;
+
+    padding: 0;
+
     border: none;
-    color: var(--ml-teal);
-    background: transparent;
+
+    color:
+        var(--ml-teal);
+
+    background:
+        transparent;
+
     cursor: pointer;
-    transition: var(--ml-transition);
 }
+
 
 .quantity button:hover {
-    background: var(--ml-teal-light);
+    background:
+        var(--ml-teal-light);
 }
+
 
 .quantity button svg {
-    width: 16px;
-    height: 16px;
+    width: 17px;
+    height: 17px;
 }
 
+
 .quantity strong {
-    width: 25px;
-    color: var(--ml-navy);
-    font-size: var(--ml-font-sm);
-    font-weight: var(--ml-weight-semibold);
+    width: 27px;
+
+    color:
+        var(--ml-navy);
+
+    font-size: 14px;
+
+    font-weight:
+        var(--ml-weight-bold);
+
     text-align: center;
 }
 
@@ -334,7 +820,7 @@
 
 @media (max-width: 900px) {
 
-    .image {
+    .imageSection {
         height: 175px;
     }
 
@@ -343,77 +829,330 @@
 
 /* =========================================================
    MOBILE
+   HORIZONTAL CARD
 ========================================================= */
 
-@media (max-width: 600px) {
+@media (max-width: 520px) {
 
-    .image {
-        height: 145px;
-        padding: 13px;
-    }
+    .card {
+        min-height: 145px;
 
-    .placeholder {
-        gap: 5px;
-        padding: 16px;
+        display: grid;
+
+        grid-template-columns:
+            112px minmax(0, 1fr);
+
         border-radius: 14px;
     }
 
-    .placeholder strong {
-        padding: 8px 11px;
+
+    .card:hover {
+        transform: none;
+    }
+
+
+    /* =====================================================
+       IMAGE
+    ===================================================== */
+
+    .imageSection {
+        width: 112px;
+        height: 100%;
+
+        min-height: 145px;
+
+        padding: 10px;
+
+        border-right:
+            1px solid
+            var(--ml-gray-100);
+    }
+
+
+    .medicineImage {
+        width: 100%;
+        height: 100%;
+
+        max-height: 105px;
+    }
+
+
+    /* =====================================================
+       PLACEHOLDER
+    ===================================================== */
+
+    .placeholder {
+        min-height: 105px;
+
+        gap: 6px;
+
         border-radius: 11px;
-        font-size: 16px;
-        -webkit-line-clamp: 3;
     }
 
-    .info {
-        padding: 12px;
+
+    .placeholderIcon {
+        width: 44px;
+        height: 44px;
     }
 
-    .name {
-        font-size: var(--ml-font-md);
+
+    .placeholderIcon svg {
+        width: 25px;
+        height: 25px;
     }
 
-    .generic {
-        font-size: var(--ml-font-xs);
+
+    .placeholder span {
+        display: none;
     }
 
-    .manufacturer {
-        margin-top: 7px;
-        font-size: 10px;
+
+    /* Hide desktop dosage strip */
+
+    .dosageStrip {
+        display: none;
     }
 
-    .footer {
-        align-items: flex-end;
-        padding-top: 12px;
-    }
 
-    .price {
-        font-size: var(--ml-font-md);
-    }
-
-    .addButton {
-        min-height: 34px;
-        padding: 0 8px;
-    }
-
-    .quantity {
-        height: 34px;
-    }
-
-    .quantity button {
-        width: 28px;
-    }
-
-    .quantity strong {
-        width: 22px;
-    }
+    /* =====================================================
+       PRESCRIPTION
+    ===================================================== */
 
     .prescriptionBadge {
         top: 7px;
         left: 7px;
-        max-width: calc(100% - 14px);
-        padding: 4px 6px;
-        font-size: 9px;
+
+        min-width: 27px;
+        height: 23px;
+
+        padding:
+            0 6px;
+
+        font-size: 10px;
+    }
+
+
+    /* =====================================================
+       INFO
+    ===================================================== */
+
+    .info {
+        min-width: 0;
+
+        padding:
+            11px 12px;
+
+        justify-content:
+            space-between;
+    }
+
+
+    /* =====================================================
+       NAME
+    ===================================================== */
+
+    .name {
+        font-size: 17px;
+
+        line-height: 1.2;
+
+        -webkit-line-clamp: 1;
+    }
+
+
+    /* =====================================================
+       MOBILE VARIANT
+    ===================================================== */
+
+    .mobileVariant {
+        display: flex;
+
+        align-items: center;
+
+        flex-wrap: wrap;
+
+        gap: 5px;
+
+        margin-top: 6px;
+    }
+
+
+    .mobileDosage {
+        max-width: 100%;
+
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 4px;
+
+        padding:
+            4px 7px;
+
+        border-radius: 7px;
+
+        font-size: 12px;
+
+        line-height: 1.2;
+    }
+
+
+    .mobileDosage svg {
+        width: 15px;
+        height: 15px;
+
+        flex-shrink: 0;
+    }
+
+
+    .mobileDosage strong {
+        min-width: 0;
+
+        overflow: hidden;
+
+        font-size: 12px;
+
+        font-weight:
+            var(--ml-weight-bold);
+
+        text-overflow:
+            ellipsis;
+
+        white-space: nowrap;
+    }
+
+
+    .mobileStrength {
+        color:
+            var(--ml-navy);
+
+        font-size: 13px;
+
+        font-weight:
+            var(--ml-weight-bold);
+
+        white-space: nowrap;
+    }
+
+
+    /* Hide desktop strength */
+
+    .strength {
+        display: none;
+    }
+
+
+    /* =====================================================
+       GENERIC
+    ===================================================== */
+
+    .generic {
+        margin-top: 6px;
+
+        font-size: 12px;
+
+        line-height: 1.3;
+    }
+
+
+    /* =====================================================
+       PACK
+    ===================================================== */
+
+    .pack {
+        margin-top: 5px;
+
+        gap: 4px;
+
+        font-size: 11px;
+    }
+
+
+    .pack strong {
+        font-size: 11px;
+    }
+
+
+    /* =====================================================
+       MANUFACTURER
+    ===================================================== */
+
+    .manufacturer {
+        margin-top: 4px;
+
+        font-size: 10px;
+    }
+
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+
+    .footer {
+        gap: 7px;
+
+        margin-top: 7px;
+
+        padding-top: 0;
+    }
+
+
+    /* =====================================================
+       PRICE
+    ===================================================== */
+
+    .currency {
+        font-size: 13px;
+    }
+
+
+    .price {
+        font-size: 18px;
+    }
+
+
+    /* =====================================================
+       ADD
+    ===================================================== */
+
+    .addButton {
+        height: 34px;
+
+        padding:
+            0 10px;
+
+        border-radius: 8px;
+
+        font-size: 12px;
+    }
+
+
+    .addButton svg {
+        width: 16px;
+        height: 16px;
+    }
+
+
+    /* =====================================================
+       QUANTITY
+    ===================================================== */
+
+    .quantity {
+        height: 34px;
+
+        border-radius: 8px;
+    }
+
+
+    .quantity button {
+        width: 29px;
+    }
+
+
+    .quantity strong {
+        width: 23px;
+
+        font-size: 13px;
     }
 
 }
@@ -425,43 +1164,114 @@
 
 @media (max-width: 380px) {
 
-    .image {
-        height: 125px;
+    .card {
+        grid-template-columns:
+            96px minmax(0, 1fr);
+
+        min-height: 135px;
     }
+
+
+    .imageSection {
+        width: 96px;
+
+        min-height: 135px;
+
+        padding: 8px;
+    }
+
+
+    .medicineImage {
+        max-height: 92px;
+    }
+
+
+    .placeholder {
+        min-height: 92px;
+    }
+
+
+    .placeholderIcon {
+        width: 39px;
+        height: 39px;
+    }
+
+
+    .placeholderIcon svg {
+        width: 22px;
+        height: 22px;
+    }
+
 
     .info {
-        padding: 10px;
+        padding:
+            10px;
     }
 
-    .details {
-        gap: 4px;
+
+    .name {
+        font-size: 16px;
     }
 
-    .details span {
-        padding: 3px 5px;
-        font-size: 10px;
+
+    .mobileDosage {
+        padding:
+            4px 6px;
     }
 
-    .manufacturer {
-        font-size: 10px;
+
+    .mobileDosage strong {
+        font-size: 11px;
     }
 
-    .footer {
-        gap: 4px;
-    }
 
-    .addButton {
-        padding: 0 6px;
-    }
-
-    .addButton svg {
+    .mobileDosage svg {
         width: 14px;
         height: 14px;
     }
 
-    .quantity button {
-        width: 26px;
+
+    .mobileStrength {
+        font-size: 12px;
     }
+
+
+    .generic {
+        font-size: 11px;
+    }
+
+
+    .pack,
+    .pack strong {
+        font-size: 10px;
+    }
+
+
+    .manufacturer {
+        font-size: 9px;
+    }
+
+
+    .price {
+        font-size: 17px;
+    }
+
+
+    .addButton {
+        padding:
+            0 8px;
+    }
+
+
+    .addButton span {
+        font-size: 11px;
+    }
+
+
+    .quantity button {
+        width: 27px;
+    }
+
 
     .quantity strong {
         width: 21px;

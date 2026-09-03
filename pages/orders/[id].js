@@ -18,9 +18,13 @@ import PaymentsOutlinedIcon from "@mui/icons-material/PaymentsOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import SupportAgentOutlinedIcon from "@mui/icons-material/SupportAgentOutlined";
+import LocalDrinkRoundedIcon from "@mui/icons-material/LocalDrinkRounded";
+import VaccinesRoundedIcon from "@mui/icons-material/VaccinesRounded";
+import OpacityRoundedIcon from "@mui/icons-material/OpacityRounded";
+import AirRoundedIcon from "@mui/icons-material/AirRounded";
+import SpaRoundedIcon from "@mui/icons-material/SpaRounded";
+import ScienceRoundedIcon from "@mui/icons-material/ScienceRounded";
 
-import Navbar from "@/components/home/Navbar";
-import Footer from "@/components/home/Footer";
 
 import styles from "@/styles/Orders/OrderTracking.module.css";
 
@@ -286,6 +290,416 @@ const getCurrentStatusMeta = (
 | GET SERVER SIDE PROPS
 |--------------------------------------------------------------------------
 */
+
+
+const TabletDosageIcon = (props) => (
+    <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        {...props}
+    >
+        <circle
+            cx="12"
+            cy="12"
+            r="7.2"
+            fill="currentColor"
+            opacity="0.18"
+        />
+
+        <circle
+            cx="12"
+            cy="12"
+            r="6.2"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+        />
+
+        <path
+            d="M8.6 15.4L15.4 8.6"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+        />
+    </svg>
+);
+
+
+const CapsuleDosageIcon = (props) => (
+    <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        {...props}
+    >
+        <g
+            transform="rotate(-45 12 12)"
+        >
+            <rect
+                x="7"
+                y="3.8"
+                width="10"
+                height="16.4"
+                rx="5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+            />
+
+            <path
+                d="M7 12H17"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+            />
+
+            <path
+                d="M8 8.8V8.3C8 6.4 9.5 4.8 11.4 4.8"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                opacity="0.65"
+            />
+        </g>
+    </svg>
+);
+
+
+const MedicineFallbackIcon = (props) => (
+    <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        {...props}
+    >
+        <rect
+            x="6"
+            y="7"
+            width="12"
+            height="13"
+            rx="3"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+        />
+
+        <path
+            d="M9 7V4H15V7"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+
+        <path
+            d="M9 13H15M12 10V16"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+        />
+    </svg>
+);
+
+
+const getDosageFormMeta = (dosageForm = "") => {
+
+    const value = String(dosageForm || "")
+        .normalize("NFKD")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+
+    const words =
+        value
+            .split(" ")
+            .filter(Boolean);
+
+
+    const hasAnyPhrase = (...phrases) =>
+        phrases.some((phrase) =>
+            value.includes(
+                String(phrase)
+                    .toLowerCase()
+                    .trim()
+            )
+        );
+
+
+    const hasWord = (...targets) =>
+        targets.some((target) =>
+            words.includes(
+                String(target)
+                    .toLowerCase()
+                    .trim()
+            )
+        );
+
+
+    /* =====================================================
+       INJECTION
+    ===================================================== */
+
+    if (
+        hasAnyPhrase(
+            "injection",
+            "injectable",
+            "ampoule",
+            "ampule",
+            "vial",
+            "infusion",
+            "syringe"
+        ) ||
+        hasWord("inj")
+    ) {
+        return {
+            type: "injection",
+            IconComponent: VaccinesRoundedIcon,
+        };
+    }
+
+
+    /* =====================================================
+       DROPS
+    ===================================================== */
+
+    if (
+        hasAnyPhrase(
+            "eye drop",
+            "ear drop",
+            "nasal drop",
+            "ophthalmic",
+            "otic",
+            "drops",
+            "drop"
+        )
+    ) {
+        return {
+            type: "drops",
+            IconComponent: OpacityRoundedIcon,
+        };
+    }
+
+
+    /* =====================================================
+       INHALER / RESPIRATORY
+    ===================================================== */
+
+    if (
+        hasAnyPhrase(
+            "inhaler",
+            "inhalation",
+            "respirator",
+            "respule",
+            "respules",
+            "nebule",
+            "nebules",
+            "nebulizer",
+            "nebuliser",
+            "rotacap",
+            "rotahaler",
+            "metered dose",
+            "spray"
+        ) ||
+        hasWord("mdi", "dpi")
+    ) {
+        return {
+            type: "inhaler",
+            IconComponent: AirRoundedIcon,
+        };
+    }
+
+
+    /* =====================================================
+       SUPPOSITORY
+    ===================================================== */
+
+    if (
+        hasAnyPhrase(
+            "suppository",
+            "suppositories",
+            "pessary",
+            "pessaries",
+            "rectal",
+            "vaginal"
+        )
+    ) {
+        return {
+            type: "suppository",
+            IconComponent: SpaRoundedIcon,
+        };
+    }
+
+
+    /* =====================================================
+       CAPSULE
+       Works for:
+       Capsule
+       Capsules
+       Cap
+       Caps
+       Cap.
+       Soft Gelatin Capsule
+       HPMC Capsule
+    ===================================================== */
+
+    if (
+        hasAnyPhrase(
+            "capsule",
+            "capsules",
+            "softgel",
+            "soft gel",
+            "soft gelatin"
+        ) ||
+        hasWord(
+            "cap",
+            "caps"
+        )
+    ) {
+        return {
+            type: "capsule",
+            IconComponent: CapsuleDosageIcon,
+        };
+    }
+
+
+    /* =====================================================
+       TABLET
+       Works for:
+       Tablet
+       Tablets
+       Tab
+       Tabs
+       Tab.
+       SR Tablet
+       CR Tablet
+       ER Tablet
+       Dispersible Tablet
+       Chewable Tablet
+    ===================================================== */
+
+    if (
+        hasAnyPhrase(
+            "tablet",
+            "tablets",
+            "caplet",
+            "caplets",
+            "pill",
+            "pills",
+            "lozenge",
+            "lozenges"
+        ) ||
+        hasWord(
+            "tab",
+            "tabs"
+        )
+    ) {
+        return {
+            type: "tablet",
+            IconComponent: TabletDosageIcon,
+        };
+    }
+
+
+    /* =====================================================
+       LIQUID
+    ===================================================== */
+
+    if (
+        hasAnyPhrase(
+            "syrup",
+            "suspension",
+            "solution",
+            "liquid",
+            "elixir",
+            "mixture",
+            "emulsion"
+        ) ||
+        hasWord(
+            "syp",
+            "susp",
+            "soln"
+        )
+    ) {
+        return {
+            type: "liquid",
+            IconComponent: LocalDrinkRoundedIcon,
+        };
+    }
+
+
+    /* =====================================================
+       TOPICAL
+    ===================================================== */
+
+    if (
+        hasAnyPhrase(
+            "cream",
+            "ointment",
+            "gel",
+            "lotion",
+            "paste",
+            "balm",
+            "liniment",
+            "paint",
+            "topical",
+            "jelly",
+            "shampoo",
+            "wash",
+            "cleanser",
+            "patch",
+            "transdermal"
+        )
+    ) {
+        return {
+            type: "topical",
+            IconComponent: SpaRoundedIcon,
+        };
+    }
+
+
+    /* =====================================================
+       POWDER
+    ===================================================== */
+
+    if (
+        hasAnyPhrase(
+            "powder",
+            "powders",
+            "granule",
+            "granules",
+            "sachet",
+            "sachets",
+            "dry powder",
+            "dry syrup",
+            "powder for suspension",
+            "powder for solution"
+        )
+    ) {
+        return {
+            type: "powder",
+            IconComponent: ScienceRoundedIcon,
+        };
+    }
+
+
+    /* =====================================================
+       FALLBACK
+    ===================================================== */
+
+    return {
+        type: "other",
+        IconComponent: MedicineFallbackIcon,
+    };
+
+};
+
 
 export async function getServerSideProps(
     context
@@ -628,7 +1042,6 @@ export default function OrderTrackingPage({
             </Head>
 
 
-            <Navbar />
 
 
             <main className={styles.page}>
@@ -1309,6 +1722,35 @@ export default function OrderTrackingPage({
                                                 "";
 
 
+                                            const dosageForm =
+                                                medicine.dosageForm ||
+                                                item.dosageForm ||
+                                                "";
+
+
+                                            const {
+                                                type: dosageType,
+                                                IconComponent: DosageIcon,
+                                            } =
+                                                getDosageFormMeta(
+                                                    dosageForm
+                                                );
+
+
+                                            const rawImage =
+                                                medicine.image?.url ||
+                                                medicine.image ||
+                                                item.image?.url ||
+                                                item.image ||
+                                                "";
+
+
+                                            const image =
+                                                typeof rawImage === "string"
+                                                    ? rawImage.trim()
+                                                    : "";
+
+
                                             const price =
                                                 Number(
                                                     item.price ??
@@ -1340,11 +1782,52 @@ export default function OrderTrackingPage({
 
                                                     <div
                                                         className={
-                                                            styles.itemIcon
+                                                            `${styles.itemIcon} ${
+                                                                styles[
+                                                                    `itemIcon_${dosageType}`
+                                                                ] || ""
+                                                            }`
                                                         }
                                                     >
 
-                                                        <DescriptionOutlinedIcon />
+                                                        <span
+                                                            className={
+                                                                styles.itemDosagePlaceholder
+                                                            }
+                                                        >
+
+                                                            <span
+                                                                className={
+                                                                    styles.itemDosagePlaceholderIcon
+                                                                }
+                                                            >
+                                                                <DosageIcon />
+                                                            </span>
+
+
+                                                            <small>
+                                                                {
+                                                                    dosageForm ||
+                                                                    "Medicine"
+                                                                }
+                                                            </small>
+
+                                                        </span>
+
+
+                                                        {image && (
+
+                                                            <img
+                                                                src={image}
+                                                                alt={
+                                                                    medicineName
+                                                                }
+                                                                onError={(event) => {
+                                                                    event.currentTarget.remove();
+                                                                }}
+                                                            />
+
+                                                        )}
 
                                                     </div>
 
@@ -1356,21 +1839,77 @@ export default function OrderTrackingPage({
                                                     >
 
                                                         <strong>
-                                                            {medicineName}
+                                                            {
+                                                                medicineName
+                                                            }
                                                         </strong>
 
-                                                        <span>
 
-                                                            {genericName}
+                                                        <div
+                                                            className={
+                                                                styles.itemVariant
+                                                            }
+                                                        >
 
-                                                            {genericName &&
-                                                                strength
-                                                                ? " • "
-                                                                : ""}
+                                                            <span
+                                                                className={
+                                                                    `${styles.itemDosageBadge} ${
+                                                                        styles[
+                                                                            `itemDosage_${dosageType}`
+                                                                        ] || ""
+                                                                    }`
+                                                                }
+                                                            >
 
-                                                            {strength}
+                                                                <span
+                                                                    className={
+                                                                        styles.itemDosageIcon
+                                                                    }
+                                                                >
+                                                                    <DosageIcon />
+                                                                </span>
 
-                                                        </span>
+
+                                                                <span>
+                                                                    {
+                                                                        dosageForm ||
+                                                                        "Medicine"
+                                                                    }
+                                                                </span>
+
+                                                            </span>
+
+
+                                                            {strength && (
+
+                                                                <strong
+                                                                    className={
+                                                                        styles.itemStrength
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        strength
+                                                                    }
+                                                                </strong>
+
+                                                            )}
+
+                                                        </div>
+
+
+                                                        {genericName && (
+
+                                                            <span
+                                                                className={
+                                                                    styles.itemGeneric
+                                                                }
+                                                            >
+                                                                {
+                                                                    genericName
+                                                                }
+                                                            </span>
+
+                                                        )}
 
                                                     </div>
 
@@ -1380,10 +1919,7 @@ export default function OrderTrackingPage({
                                                             styles.itemQuantity
                                                         }
                                                     >
-
-                                                        ×
-                                                        {quantity}
-
+                                                        ×{quantity}
                                                     </div>
 
 
@@ -1392,11 +1928,11 @@ export default function OrderTrackingPage({
                                                             styles.itemPrice
                                                         }
                                                     >
-
                                                         ৳
-                                                        {price *
-                                                            quantity}
-
+                                                        {
+                                                            price *
+                                                            quantity
+                                                        }
                                                     </strong>
 
                                                 </div>
@@ -1669,7 +2205,6 @@ export default function OrderTrackingPage({
             </main>
 
 
-            <Footer />
 
         </>
 

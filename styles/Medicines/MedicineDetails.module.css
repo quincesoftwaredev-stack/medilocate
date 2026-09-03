@@ -1216,4 +1216,2313 @@
         width: 17px;
     }
 
+}/* =========================================================
+   PAGE
+========================================================= */
+
+.page {
+    min-height: 100vh;
+
+    padding: 20px 0 70px;
+
+    background: var(--ml-gray-50);
+}
+
+
+.container {
+    width: min(
+        1120px,
+        calc(100% - 40px)
+    );
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   BREADCRUMB
+========================================================= */
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    margin-bottom: 22px;
+
+    overflow: hidden;
+
+    color: var(--ml-gray-500);
+
+    font-size: var(--ml-font-sm);
+
+    white-space: nowrap;
+}
+
+
+.breadcrumb a {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    flex-shrink: 0;
+
+    color: var(--ml-teal);
+
+    font-weight:
+        var(--ml-weight-semibold);
+
+    text-decoration: none;
+}
+
+
+.breadcrumb a:hover {
+    color: var(--ml-teal-dark);
+}
+
+
+.breadcrumb svg {
+    width: 18px;
+    height: 18px;
+}
+
+
+.breadcrumb > span:last-child {
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   PRODUCT
+========================================================= */
+
+.productSection {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 0.9fr)
+        minmax(0, 1.1fr);
+
+    gap: 42px;
+
+    padding: 28px;
+
+    border:
+        1px solid
+        var(--ml-gray-200);
+
+    border-radius:
+        var(--ml-radius-lg);
+
+    background:
+        var(--ml-white);
+
+    box-shadow:
+        0 5px 22px
+        rgba(18, 48, 74, 0.06);
+}
+
+
+/* =========================================================
+   PRODUCT VISUAL
+========================================================= */
+
+.productVisual {
+    position: relative;
+
+    min-width: 0;
+}
+
+
+.imageBox {
+    position: relative;
+
+    height: 430px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 42px 38px 60px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(18, 48, 74, 0.04);
+
+    border-radius:
+        var(--ml-radius-md);
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f7f9fa
+        );
+}
+
+
+.imageBox img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: contain;
+}
+
+
+/* =========================================================
+   DOSAGE-TINTED IMAGE BACKGROUNDS
+========================================================= */
+
+.imageBox_tablet {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 35%,
+            #f3f8ff
+        );
+}
+
+
+.imageBox_capsule {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 35%,
+            #f8f4ff
+        );
+}
+
+
+.imageBox_liquid {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 35%,
+            #eefbf8
+        );
+}
+
+
+.imageBox_suppository {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 35%,
+            #fff4f7
+        );
+}
+
+
+.imageBox_injection {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 35%,
+            #fff6f1
+        );
+}
+
+
+.imageBox_drops {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 35%,
+            #f0fbff
+        );
+}
+
+
+.imageBox_inhaler {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 35%,
+            #f2faff
+        );
+}
+
+
+.imageBox_topical {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 35%,
+            #f6faef
+        );
+}
+
+
+.imageBox_powder {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 35%,
+            #fffaf0
+        );
+}
+
+
+/* =========================================================
+   PLACEHOLDER
+========================================================= */
+
+.imagePlaceholder {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(255, 255, 255, 0.5);
+
+    text-align: center;
+}
+
+
+.placeholderIcon {
+    width: 90px;
+    height: 90px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(18, 48, 74, 0.06);
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.85);
+
+    box-shadow:
+        0 12px 32px
+        rgba(18, 48, 74, 0.08);
+}
+
+
+.placeholderIcon svg {
+    width: 46px;
+    height: 46px;
+}
+
+
+.imagePlaceholder strong {
+    max-width: 90%;
+
+    color: var(--ml-navy);
+
+    font-size: 18px;
+
+    font-weight:
+        var(--ml-weight-bold);
+
+    line-height: 1.3;
+}
+
+
+/* =========================================================
+   PLACEHOLDER COLORS
+========================================================= */
+
+.placeholder_tablet {
+    color: #1756a9;
+}
+
+
+.placeholder_capsule {
+    color: #7048b6;
+}
+
+
+.placeholder_liquid {
+    color: #08796c;
+}
+
+
+.placeholder_suppository {
+    color: #a04468;
+}
+
+
+.placeholder_injection {
+    color: #b75026;
+}
+
+
+.placeholder_drops {
+    color: #147a9e;
+}
+
+
+.placeholder_inhaler {
+    color: #23698d;
+}
+
+
+.placeholder_topical {
+    color: #5e7048;
+}
+
+
+.placeholder_powder {
+    color: #78622a;
+}
+
+
+/* =========================================================
+   DOSAGE STRIP
+========================================================= */
+
+.visualDosage {
+    position: absolute;
+
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
+
+    min-height: 40px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding:
+        7px 12px;
+
+    box-sizing:
+        border-box;
+
+    border-radius: 11px;
+
+    font-size: 14px;
+
+    font-weight:
+        var(--ml-weight-bold);
+
+    backdrop-filter:
+        blur(10px);
+}
+
+
+.visualDosage svg {
+    width: 19px;
+    height: 19px;
+
+    flex-shrink: 0;
+}
+
+
+.visualDosage span {
+    min-width: 0;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   DOSAGE COLORS
+========================================================= */
+
+.dosage_tablet {
+    color: #1756a9;
+
+    background:
+        rgba(237, 245, 255, 0.94);
+
+    border:
+        1px solid #d4e7ff;
+}
+
+
+.dosage_capsule {
+    color: #7048b6;
+
+    background:
+        rgba(245, 239, 255, 0.94);
+
+    border:
+        1px solid #e6d9ff;
+}
+
+
+.dosage_liquid {
+    color: #08796c;
+
+    background:
+        rgba(233, 250, 247, 0.94);
+
+    border:
+        1px solid #c9eee8;
+}
+
+
+.dosage_suppository {
+    color: #a04468;
+
+    background:
+        rgba(255, 240, 245, 0.94);
+
+    border:
+        1px solid #f5d7e2;
+}
+
+
+.dosage_injection {
+    color: #b75026;
+
+    background:
+        rgba(255, 243, 236, 0.94);
+
+    border:
+        1px solid #f8dbc9;
+}
+
+
+.dosage_drops {
+    color: #147a9e;
+
+    background:
+        rgba(236, 250, 255, 0.94);
+
+    border:
+        1px solid #ccecf7;
+}
+
+
+.dosage_inhaler {
+    color: #23698d;
+
+    background:
+        rgba(237, 248, 253, 0.94);
+
+    border:
+        1px solid #d2ebf6;
+}
+
+
+.dosage_topical {
+    color: #5e7048;
+
+    background:
+        rgba(243, 248, 236, 0.94);
+
+    border:
+        1px solid #dde9cf;
+}
+
+
+.dosage_powder {
+    color: #78622a;
+
+    background:
+        rgba(255, 249, 233, 0.94);
+
+    border:
+        1px solid #efe3bc;
+}
+
+
+.dosage_other {
+    color:
+        var(--ml-gray-600);
+
+    background:
+        rgba(245, 247, 248, 0.95);
+
+    border:
+        1px solid
+        var(--ml-gray-200);
+}
+
+
+/* =========================================================
+   CATEGORY
+========================================================= */
+
+.categoryTag {
+    position: absolute;
+
+    top: 14px;
+    left: 14px;
+
+    z-index: 2;
+
+    max-width:
+        calc(100% - 28px);
+
+    padding:
+        6px 10px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(15, 157, 138, 0.12);
+
+    border-radius: 8px;
+
+    color:
+        var(--ml-teal-dark);
+
+    background:
+        rgba(240, 251, 248, 0.96);
+
+    font-size: 11px;
+
+    font-weight:
+        var(--ml-weight-semibold);
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   PRODUCT INFORMATION
+========================================================= */
+
+.productInfo {
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.productHeader {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content:
+        space-between;
+
+    gap: 18px;
+}
+
+
+.titleArea {
+    min-width: 0;
+
+    flex: 1;
+}
+
+
+.genericName {
+    display: block;
+
+    margin-bottom: 7px;
+
+    overflow: hidden;
+
+    color: var(--ml-teal);
+
+    font-size: 15px;
+
+    font-weight:
+        var(--ml-weight-semibold);
+
+    line-height: 1.35;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.productHeader h1 {
+    margin: 0;
+
+    color: var(--ml-navy);
+
+    font-size: clamp(
+        30px,
+        3.1vw,
+        42px
+    );
+
+    font-weight:
+        var(--ml-weight-bold);
+
+    letter-spacing: -0.025em;
+
+    line-height: 1.08;
+}
+
+
+/* =========================================================
+   VARIANT
+========================================================= */
+
+.variantRow {
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 13px;
+}
+
+
+.dosageBadge {
+    max-width: 100%;
+
+    min-height: 35px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding:
+        6px 10px;
+
+    box-sizing:
+        border-box;
+
+    border-radius: 9px;
+
+    font-size: 14px;
+}
+
+
+.dosageBadge svg {
+    width: 18px;
+    height: 18px;
+
+    flex-shrink: 0;
+}
+
+
+.dosageBadge strong {
+    min-width: 0;
+
+    overflow: hidden;
+
+    font-size: 14px;
+
+    font-weight:
+        var(--ml-weight-bold);
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.strengthBadge {
+    min-height: 35px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding:
+        6px 10px;
+
+    box-sizing:
+        border-box;
+
+    border:
+        1px solid
+        var(--ml-gray-200);
+
+    border-radius: 9px;
+
+    color: var(--ml-navy);
+
+    background:
+        var(--ml-gray-100);
+
+    font-size: 15px;
+
+    font-weight:
+        var(--ml-weight-bold);
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   STOCK
+========================================================= */
+
+.inStock,
+.outOfStock {
+    flex-shrink: 0;
+
+    padding:
+        7px 10px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    font-weight:
+        var(--ml-weight-semibold);
+}
+
+
+.inStock {
+    color: #23734f;
+
+    background: #eaf8f1;
+}
+
+
+.outOfStock {
+    color: #a13c3c;
+
+    background: #fceeee;
+}
+
+
+/* =========================================================
+   QUICK INFO
+========================================================= */
+
+.quickInfo {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 0.8fr)
+        minmax(0, 1.2fr);
+
+    gap: 10px;
+
+    margin-top: 25px;
+}
+
+
+.quickInfo > div {
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+    padding: 12px 13px;
+
+    border:
+        1px solid
+        var(--ml-gray-200);
+
+    border-radius: 10px;
+
+    background:
+        var(--ml-gray-50);
+}
+
+
+.quickInfo span {
+    color:
+        var(--ml-gray-500);
+
+    font-size: 11px;
+}
+
+
+.quickInfo strong {
+    min-width: 0;
+
+    overflow: hidden;
+
+    color: var(--ml-navy);
+
+    font-size: 13px;
+
+    font-weight:
+        var(--ml-weight-semibold);
+
+    text-overflow:
+        ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   PRICE
+========================================================= */
+
+.priceSection {
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content:
+        space-between;
+
+    gap: 15px;
+
+    margin-top: 4px;
+
+    padding:
+        20px 0 18px;
+
+    border-bottom:
+        1px solid
+        var(--ml-gray-200);
+}
+
+
+.priceLabel {
+    display: block;
+
+    margin-bottom: 2px;
+
+    color:
+        var(--ml-gray-500);
+
+    font-size: 11px;
+}
+
+
+.price {
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 3px;
+
+    color: var(--ml-navy);
+}
+
+
+.price > span {
+    font-size: 20px;
+
+    font-weight:
+        var(--ml-weight-bold);
+}
+
+
+.price strong {
+    font-size: 32px;
+
+    font-weight:
+        var(--ml-weight-bold);
+
+    letter-spacing: -0.025em;
+}
+
+
+.pricePack {
+    max-width: 45%;
+
+    overflow: hidden;
+
+    color:
+        var(--ml-gray-500);
+
+    font-size: 12px;
+
+    text-align: right;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   PRESCRIPTION
+========================================================= */
+
+.prescriptionNotice {
+    display: flex;
+
+    gap: 11px;
+
+    margin-top: 16px;
+
+    padding: 13px;
+
+    border:
+        1px solid #f1dfae;
+
+    border-radius:
+        var(--ml-radius-sm);
+
+    background: #fffaf0;
+}
+
+
+.prescriptionNotice > div {
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 9px;
+
+    color: #a16d17;
+
+    background: #fff1ca;
+}
+
+
+.prescriptionNotice svg {
+    width: 19px;
+}
+
+
+.prescriptionNotice section {
+    min-width: 0;
+}
+
+
+.prescriptionNotice strong {
+    color: #76520f;
+
+    font-size: 13px;
+}
+
+
+.prescriptionNotice p {
+    margin:
+        3px 0 0;
+
+    color: #917541;
+
+    font-size: 11px;
+
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.description {
+    padding:
+        19px 0;
+}
+
+
+.description h2 {
+    margin:
+        0 0 7px;
+
+    color:
+        var(--ml-navy);
+
+    font-size: 17px;
+}
+
+
+.description p {
+    margin: 0;
+
+    color:
+        var(--ml-gray-600);
+
+    font-size: 13px;
+
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   ORDER AREA
+========================================================= */
+
+.orderArea {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: auto;
+
+    padding-top: 18px;
+}
+
+
+/* =========================================================
+   QUANTITY
+========================================================= */
+
+.quantity {
+    height: 52px;
+
+    display: flex;
+
+    align-items: center;
+
+    overflow: hidden;
+
+    flex-shrink: 0;
+
+    border:
+        1px solid
+        var(--ml-gray-200);
+
+    border-radius: 11px;
+
+    background:
+        var(--ml-white);
+}
+
+
+.quantity button {
+    width: 43px;
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: none;
+
+    color: var(--ml-teal);
+
+    background: transparent;
+
+    cursor: pointer;
+
+    transition:
+        var(--ml-transition);
+}
+
+
+.quantity button:hover:not(:disabled) {
+    background:
+        var(--ml-teal-light);
+}
+
+
+.quantity button:disabled {
+    color:
+        var(--ml-gray-300);
+
+    cursor: not-allowed;
+}
+
+
+.quantity svg {
+    width: 19px;
+    height: 19px;
+}
+
+
+.quantity strong {
+    width: 36px;
+
+    color: var(--ml-navy);
+
+    font-size: 16px;
+
+    font-weight:
+        var(--ml-weight-bold);
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   ADD TO CART
+========================================================= */
+
+.addToCart {
+    flex: 1;
+
+    min-width: 0;
+    min-height: 52px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding:
+        0 17px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    color:
+        var(--ml-white);
+
+    background:
+        var(--ml-teal);
+
+    box-shadow:
+        0 8px 20px
+        rgba(15, 157, 138, 0.18);
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+    transition:
+        var(--ml-transition);
+}
+
+
+.addToCart:hover:not(:disabled) {
+    background:
+        var(--ml-teal-dark);
+
+    transform:
+        translateY(-1px);
+}
+
+
+.addToCart:disabled {
+    opacity: 0.5;
+
+    cursor: not-allowed;
+
+    box-shadow: none;
+}
+
+
+.addToCart svg {
+    width: 21px;
+    height: 21px;
+
+    flex-shrink: 0;
+}
+
+
+.cartText {
+    font-size: 14px;
+
+    font-weight:
+        var(--ml-weight-semibold);
+}
+
+
+.addToCart strong {
+    margin-left: auto;
+
+    padding-left: 8px;
+
+    font-size: 14px;
+
+    font-weight:
+        var(--ml-weight-bold);
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   SERVICES
+========================================================= */
+
+.serviceGrid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 13px;
+
+    margin-top: 18px;
+}
+
+
+.serviceCard {
+    display: flex;
+
+    gap: 12px;
+
+    padding: 18px;
+
+    border:
+        1px solid
+        var(--ml-gray-200);
+
+    border-radius:
+        var(--ml-radius-md);
+
+    background:
+        var(--ml-white);
+}
+
+
+.serviceIcon {
+    width: 41px;
+    height: 41px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    color:
+        var(--ml-teal);
+
+    background:
+        var(--ml-teal-light);
+}
+
+
+.serviceIcon svg {
+    width: 21px;
+    height: 21px;
+}
+
+
+.serviceCard strong {
+    display: block;
+
+    color: var(--ml-navy);
+
+    font-size: 13px;
+}
+
+
+.serviceCard p {
+    margin:
+        4px 0 0;
+
+    color:
+        var(--ml-gray-500);
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+.serviceCard a {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 3px;
+
+    margin-top: 7px;
+
+    color: var(--ml-teal);
+
+    font-size: 11px;
+
+    font-weight:
+        var(--ml-weight-semibold);
+
+    text-decoration: none;
+}
+
+
+.serviceCard a svg {
+    width: 14px;
+}
+
+
+/* =========================================================
+   DETAILS
+========================================================= */
+
+.detailsSection {
+    margin-top: 45px;
+}
+
+
+.detailsHeader span,
+.usesSection > div:first-child > span {
+    color:
+        var(--ml-teal);
+
+    font-size: 11px;
+
+    font-weight:
+        var(--ml-weight-bold);
+
+    letter-spacing: 0.08em;
+}
+
+
+.detailsHeader h2,
+.usesSection h2 {
+    margin:
+        5px 0 18px;
+
+    color:
+        var(--ml-navy);
+
+    font-size: 25px;
+}
+
+
+.detailsGrid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        var(--ml-gray-200);
+
+    border-radius:
+        var(--ml-radius-md);
+
+    background:
+        var(--ml-white);
+}
+
+
+.detailsGrid > div {
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    padding: 18px;
+
+    border-right:
+        1px solid
+        var(--ml-gray-200);
+
+    border-bottom:
+        1px solid
+        var(--ml-gray-200);
+}
+
+
+.detailsGrid > div:nth-child(3n) {
+    border-right: none;
+}
+
+
+.detailsGrid > div:nth-last-child(-n + 3) {
+    border-bottom: none;
+}
+
+
+.detailsGrid span {
+    color:
+        var(--ml-gray-500);
+
+    font-size: 11px;
+}
+
+
+.detailsGrid strong {
+    min-width: 0;
+
+    color:
+        var(--ml-navy);
+
+    font-size: 13px;
+
+    line-height: 1.4;
+
+    overflow-wrap: anywhere;
+}
+
+
+.detailDosage {
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+}
+
+
+.detailDosage svg {
+    width: 16px;
+    height: 16px;
+
+    flex-shrink: 0;
+
+    color:
+        var(--ml-teal);
+}
+
+
+/* =========================================================
+   USES
+========================================================= */
+
+.usesSection {
+    margin-top: 40px;
+}
+
+
+.usesList {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 9px;
+}
+
+
+.useItem {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding:
+        9px 12px;
+
+    border-radius: 9px;
+
+    color:
+        var(--ml-gray-600);
+
+    background:
+        var(--ml-teal-light);
+
+    font-size: 13px;
+}
+
+
+.useItem svg {
+    width: 16px;
+
+    color: var(--ml-teal);
+}
+
+
+/* =========================================================
+   DISCLAIMER
+========================================================= */
+
+.disclaimer {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 35px;
+
+    padding: 15px;
+
+    border:
+        1px solid
+        var(--ml-gray-200);
+
+    border-radius:
+        var(--ml-radius-sm);
+
+    background:
+        var(--ml-gray-100);
+}
+
+
+.disclaimer svg {
+    width: 19px;
+
+    flex-shrink: 0;
+
+    color:
+        var(--ml-gray-500);
+}
+
+
+.disclaimer p {
+    margin: 0;
+
+    color:
+        var(--ml-gray-600);
+
+    font-size: 11px;
+
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   NOT FOUND
+========================================================= */
+
+.notFound {
+    min-height: 65vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    text-align: center;
+}
+
+
+.notFound > svg {
+    width: 42px;
+    height: 42px;
+
+    color:
+        var(--ml-gray-400);
+}
+
+
+.notFound h1 {
+    margin:
+        15px 0 5px;
+
+    color:
+        var(--ml-navy);
+
+    font-size: 25px;
+}
+
+
+.notFound p {
+    margin: 0;
+
+    color:
+        var(--ml-gray-500);
+
+    font-size: 13px;
+}
+
+
+.notFound a {
+    margin-top: 18px;
+
+    padding:
+        10px 15px;
+
+    border-radius: 9px;
+
+    color:
+        var(--ml-white);
+
+    background:
+        var(--ml-teal);
+
+    font-size: 13px;
+
+    font-weight:
+        var(--ml-weight-semibold);
+
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .productSection {
+        grid-template-columns:
+            minmax(0, 0.85fr)
+            minmax(0, 1.15fr);
+
+        gap: 25px;
+
+        padding: 22px;
+    }
+
+
+    .imageBox {
+        height: 360px;
+
+        padding:
+            30px 25px 55px;
+    }
+
+
+    .productHeader h1 {
+        font-size: 30px;
+    }
+
+
+    .quickInfo {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .serviceGrid {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+
+    .serviceCard:last-child {
+        grid-column:
+            1 / -1;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .container {
+        width:
+            calc(100% - 24px);
+    }
+
+
+    .page {
+        padding:
+            12px 0 40px;
+    }
+
+
+    .breadcrumb {
+        margin-bottom: 12px;
+
+        font-size: 11px;
+    }
+
+
+    /* =====================================================
+       PRODUCT CARD
+    ===================================================== */
+
+    .productSection {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 16px;
+
+        padding: 11px;
+
+        border-radius: 15px;
+    }
+
+
+    /* =====================================================
+       IMAGE
+    ===================================================== */
+
+    .imageBox {
+        height: 205px;
+
+        padding:
+            18px 18px 48px;
+
+        border-radius: 13px;
+    }
+
+
+    .imageBox img {
+        max-height: 145px;
+    }
+
+
+    .imagePlaceholder {
+        gap: 8px;
+
+        border-radius: 14px;
+    }
+
+
+    .placeholderIcon {
+        width: 62px;
+        height: 62px;
+    }
+
+
+    .placeholderIcon svg {
+        width: 33px;
+        height: 33px;
+    }
+
+
+    .imagePlaceholder strong {
+        font-size: 14px;
+    }
+
+
+    .visualDosage {
+        left: 9px;
+        right: 9px;
+        bottom: 9px;
+
+        min-height: 35px;
+
+        padding:
+            6px 9px;
+
+        border-radius: 9px;
+
+        font-size: 13px;
+    }
+
+
+    .visualDosage svg {
+        width: 17px;
+        height: 17px;
+    }
+
+
+    .categoryTag {
+        top: 9px;
+        left: 9px;
+
+        max-width:
+            calc(100% - 18px);
+
+        padding:
+            5px 8px;
+
+        font-size: 10px;
+    }
+
+
+    /* =====================================================
+       HEADER
+    ===================================================== */
+
+    .productHeader {
+        gap: 8px;
+    }
+
+
+    .genericName {
+        margin-bottom: 5px;
+
+        font-size: 13px;
+    }
+
+
+    .productHeader h1 {
+        font-size: 25px;
+
+        line-height: 1.12;
+    }
+
+
+    .variantRow {
+        gap: 6px;
+
+        margin-top: 10px;
+    }
+
+
+    .dosageBadge {
+        min-height: 33px;
+
+        padding:
+            6px 9px;
+    }
+
+
+    .dosageBadge strong {
+        font-size: 13px;
+    }
+
+
+    .dosageBadge svg {
+        width: 17px;
+        height: 17px;
+    }
+
+
+    .strengthBadge {
+        min-height: 33px;
+
+        padding:
+            6px 9px;
+
+        font-size: 14px;
+    }
+
+
+    .inStock,
+    .outOfStock {
+        padding:
+            5px 7px;
+
+        font-size: 10px;
+    }
+
+
+    /* =====================================================
+       QUICK INFO
+    ===================================================== */
+
+    .quickInfo {
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 7px;
+
+        margin-top: 17px;
+    }
+
+
+    .quickInfo > div {
+        padding:
+            10px;
+
+        border-radius: 9px;
+    }
+
+
+    .quickInfo span {
+        font-size: 10px;
+    }
+
+
+    .quickInfo strong {
+        font-size: 12px;
+    }
+
+
+    /* =====================================================
+       PRICE
+    ===================================================== */
+
+    .priceSection {
+        padding:
+            16px 0 14px;
+    }
+
+
+    .price > span {
+        font-size: 17px;
+    }
+
+
+    .price strong {
+        font-size: 27px;
+    }
+
+
+    .pricePack {
+        font-size: 10px;
+    }
+
+
+    /* =====================================================
+       DESCRIPTION
+    ===================================================== */
+
+    .description {
+        padding:
+            15px 0;
+    }
+
+
+    .description h2 {
+        font-size: 16px;
+    }
+
+
+    .description p {
+        font-size: 12px;
+
+        line-height: 1.6;
+    }
+
+
+    /* =====================================================
+       STICKY ORDER AREA
+    ===================================================== */
+
+    .orderArea {
+        position: sticky;
+
+        bottom: 9px;
+
+        z-index: 10;
+
+        gap: 7px;
+
+        margin-top: 5px;
+
+        padding: 6px;
+
+        border:
+            1px solid
+            var(--ml-gray-200);
+
+        border-radius: 13px;
+
+        background:
+            rgba(255, 255, 255, 0.97);
+
+        box-shadow:
+            0 8px 25px
+            rgba(18, 48, 74, 0.13);
+
+        backdrop-filter:
+            blur(10px);
+    }
+
+
+    .quantity {
+        height: 45px;
+
+        border-radius: 9px;
+    }
+
+
+    .quantity button {
+        width: 37px;
+    }
+
+
+    .quantity strong {
+        width: 29px;
+
+        font-size: 14px;
+    }
+
+
+    .addToCart {
+        min-height: 45px;
+
+        padding:
+            0 10px;
+
+        border-radius: 9px;
+    }
+
+
+    .addToCart svg {
+        width: 19px;
+        height: 19px;
+    }
+
+
+    .cartText {
+        font-size: 12px;
+    }
+
+
+    .addToCart strong {
+        padding-left: 3px;
+
+        font-size: 12px;
+    }
+
+
+    /* =====================================================
+       SERVICES
+    ===================================================== */
+
+    .serviceGrid {
+        grid-template-columns:
+            1fr;
+
+        gap: 8px;
+
+        margin-top: 12px;
+    }
+
+
+    .serviceCard:last-child {
+        grid-column: auto;
+    }
+
+
+    .serviceCard {
+        padding: 13px;
+    }
+
+
+    .serviceIcon {
+        width: 38px;
+        height: 38px;
+    }
+
+
+    /* =====================================================
+       DETAILS
+    ===================================================== */
+
+    .detailsSection {
+        margin-top: 32px;
+    }
+
+
+    .detailsHeader h2,
+    .usesSection h2 {
+        font-size: 21px;
+    }
+
+
+    .detailsGrid {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+
+    .detailsGrid > div {
+        padding: 13px;
+
+        border-right:
+            1px solid
+            var(--ml-gray-200);
+    }
+
+
+    .detailsGrid > div:nth-child(3n) {
+        border-right:
+            1px solid
+            var(--ml-gray-200);
+    }
+
+
+    .detailsGrid > div:nth-child(2n) {
+        border-right: none;
+    }
+
+
+    .detailsGrid > div:nth-last-child(-n + 3) {
+        border-bottom:
+            1px solid
+            var(--ml-gray-200);
+    }
+
+
+    .detailsGrid > div:nth-last-child(-n + 2) {
+        border-bottom: none;
+    }
+
+
+    .detailsGrid strong {
+        font-size: 12px;
+    }
+
+
+    .usesSection {
+        margin-top: 30px;
+    }
+
+
+    .useItem {
+        padding:
+            8px 10px;
+
+        font-size: 12px;
+    }
+
+
+    .disclaimer {
+        margin-top: 25px;
+
+        padding: 12px;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .container {
+        width:
+            calc(100% - 18px);
+    }
+
+
+    .productSection {
+        padding: 9px;
+    }
+
+
+    .imageBox {
+        height: 180px;
+
+        padding:
+            15px 15px 44px;
+    }
+
+
+    .imageBox img {
+        max-height: 125px;
+    }
+
+
+    .placeholderIcon {
+        width: 54px;
+        height: 54px;
+    }
+
+
+    .placeholderIcon svg {
+        width: 29px;
+        height: 29px;
+    }
+
+
+    .productHeader {
+        gap: 6px;
+    }
+
+
+    .productHeader h1 {
+        font-size: 22px;
+    }
+
+
+    .genericName {
+        font-size: 12px;
+    }
+
+
+    .dosageBadge {
+        padding:
+            5px 7px;
+    }
+
+
+    .dosageBadge strong {
+        font-size: 12px;
+    }
+
+
+    .strengthBadge {
+        font-size: 13px;
+    }
+
+
+    .quickInfo {
+        grid-template-columns: 1fr;
+    }
+
+
+    .price strong {
+        font-size: 25px;
+    }
+
+
+    .orderArea {
+        gap: 5px;
+
+        padding: 5px;
+    }
+
+
+    .quantity button {
+        width: 34px;
+    }
+
+
+    .quantity strong {
+        width: 25px;
+    }
+
+
+    .addToCart {
+        gap: 5px;
+
+        padding:
+            0 8px;
+    }
+
+
+    .addToCart svg {
+        width: 17px;
+        height: 17px;
+    }
+
+
+    .cartText {
+        font-size: 11px;
+    }
+
+
+    .addToCart strong {
+        font-size: 11px;
+    }
+
+
+    .detailsGrid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .detailsGrid > div,
+    .detailsGrid > div:nth-child(2n),
+    .detailsGrid > div:nth-child(3n) {
+        border-right: none;
+        border-bottom:
+            1px solid
+            var(--ml-gray-200);
+    }
+
+
+    .detailsGrid > div:last-child {
+        border-bottom: none;
+    }
+
 }
