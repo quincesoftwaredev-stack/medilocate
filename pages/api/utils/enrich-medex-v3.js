@@ -15,12 +15,18 @@ const BASE_URL =
     "https://medex.com.bd";
 
 
+/*
+|--------------------------------------------------------------------------
+| CONFIG
+|--------------------------------------------------------------------------
+*/
+
 const CONCURRENCY =
-    150;
+    50;
 
 
 const REQUEST_TIMEOUT =
-    25000;
+    20000;
 
 
 const MAX_RETRIES =
@@ -50,11 +56,14 @@ const COLOR = {
     yellow:
         "\x1b[33m",
 
-    cyan:
-        "\x1b[36m",
+    blue:
+        "\x1b[34m",
 
     magenta:
         "\x1b[35m",
+
+    cyan:
+        "\x1b[36m",
 
     gray:
         "\x1b[90m",
@@ -92,6 +101,18 @@ const magenta = (
     `${COLOR.magenta}${text}${COLOR.reset}`;
 
 
+const blue = (
+    text
+) =>
+    `${COLOR.blue}${text}${COLOR.reset}`;
+
+
+const gray = (
+    text
+) =>
+    `${COLOR.gray}${text}${COLOR.reset}`;
+
+
 const bold = (
     text
 ) =>
@@ -117,7 +138,11 @@ const cleanText = (
             " "
         )
         .replace(
-            /\s+/g,
+            /\r/g,
+            "\n"
+        )
+        .replace(
+            /[ \t]+/g,
             " "
         )
         .trim();
@@ -127,17 +152,21 @@ const cleanText = (
 
 /*
 |--------------------------------------------------------------------------
-| NORMALIZE HEADING
+| NORMALIZE LINE
 |--------------------------------------------------------------------------
 */
 
-const normalizeHeading = (
+const normalizeLine = (
     value
 ) => {
 
     return cleanText(
         value
     )
+        .replace(
+            /\s+/g,
+            " "
+        )
         .replace(
             /:$/,
             ""
@@ -151,13 +180,6 @@ const normalizeHeading = (
 /*
 |--------------------------------------------------------------------------
 | ABSOLUTE URL
-|--------------------------------------------------------------------------
-|
-| Reject:
-|
-| data:image...
-| blob:...
-| javascript:...
 |--------------------------------------------------------------------------
 */
 
@@ -185,6 +207,12 @@ const absoluteUrl = (
         stringValue
             .toLowerCase();
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | REJECT PLACEHOLDERS
+    |--------------------------------------------------------------------------
+    */
 
     if (
         lower.startsWith(
@@ -243,33 +271,14 @@ const absoluteUrl = (
 
 /*
 |--------------------------------------------------------------------------
-| IS REAL IMAGE URL
-|--------------------------------------------------------------------------
-|
-| IMPORTANT:
-|
-| No folder/path requirement.
-|
-| It only needs to be:
-|
-| http/https
-|
-| and pathname ends with:
-|
-| .png
-| .jpg
-| .jpeg
-| .webp
-| .gif
-|
-| SVG is allowed only when allowSvg = true.
+| VALID IMAGE EXTENSION
 |--------------------------------------------------------------------------
 */
 
-const isImageUrl = (
+const looksLikeImage = (
     value,
     allowSvg =
-        false
+        true
 ) => {
 
     if (
@@ -309,11 +318,11 @@ const isImageUrl = (
 
         const extensions = [
 
-            ".png",
-
             ".jpg",
 
             ".jpeg",
+
+            ".png",
 
             ".webp",
 
@@ -356,836 +365,6 @@ const isImageUrl = (
 
 /*
 |--------------------------------------------------------------------------
-| NORMALIZE IMAGE URL
-|--------------------------------------------------------------------------
-*/
-
-const normalizeImageUrl = (
-    value,
-    allowSvg =
-        false
-) => {
-
-    const url =
-        absoluteUrl(
-            value
-        );
-
-
-    if (
-        !url
-    ) {
-
-        return "";
-
-    }
-
-
-    if (
-        !isImageUrl(
-            url,
-            allowSvg
-        )
-    ) {
-
-        return "";
-
-    }
-
-
-    return url;
-
-};
-
-
-/*
-|--------------------------------------------------------------------------
-| GET ELEMENT URLS
-|--------------------------------------------------------------------------
-|
-| Lazy-loaded attributes are checked before src.
-|--------------------------------------------------------------------------
-*/
-
-const getElementUrls = (
-    $,
-    element,
-    allowSvg =
-        false
-) => {
-
-    const result =
-        [];
-
-
-    const attributes = [
-
-        "href",
-
-        "data-src",
-
-        "data-original",
-
-        "data-lazy-src",
-
-        "data-image",
-
-        "data-url",
-
-        "src",
-
-    ];
-
-
-    for (
-        const attribute of
-        attributes
-    ) {
-
-        const value =
-            $(element)
-                .attr(
-                    attribute
-                );
-
-
-        const url =
-            normalizeImageUrl(
-                value,
-                allowSvg
-            );
-
-
-        if (
-            url &&
-            !result.includes(
-                url
-            )
-        ) {
-
-            result.push(
-                url
-            );
-
-        }
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | SRCSET
-    |--------------------------------------------------------------------------
-    */
-
-    const srcset =
-        $(element)
-            .attr(
-                "srcset"
-            );
-
-
-    if (
-        srcset
-    ) {
-
-        const values =
-            srcset.split(
-                ","
-            );
-
-
-        for (
-            const value of
-            values
-        ) {
-
-            const candidate =
-                value
-                    .trim()
-                    .split(
-                        /\s+/
-                    )[0];
-
-
-            const url =
-                normalizeImageUrl(
-                    candidate,
-                    allowSvg
-                );
-
-
-            if (
-                url &&
-                !result.includes(
-                    url
-                )
-            ) {
-
-                result.push(
-                    url
-                );
-
-            }
-
-        }
-
-    }
-
-
-    return result;
-
-};
-
-
-/*
-|--------------------------------------------------------------------------
-| GET ALL IMAGE URLS
-|--------------------------------------------------------------------------
-|
-| Finds every URL on the page that actually ends
-| with an image extension.
-|--------------------------------------------------------------------------
-*/
-
-const getAllImageUrls = (
-    $,
-    allowSvg =
-        false
-) => {
-
-    const images =
-        [];
-
-
-    const add = (
-        value
-    ) => {
-
-        const url =
-            normalizeImageUrl(
-                value,
-                allowSvg
-            );
-
-
-        if (
-            !url
-        ) {
-
-            return;
-
-        }
-
-
-        if (
-            !images.includes(
-                url
-            )
-        ) {
-
-            images.push(
-                url
-            );
-
-        }
-
-    };
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | HTML ELEMENTS
-    |--------------------------------------------------------------------------
-    */
-
-    $(
-        "a, img, source, link"
-    )
-        .each(
-            (
-                index,
-                element
-            ) => {
-
-                const urls =
-                    getElementUrls(
-                        $,
-                        element,
-                        allowSvg
-                    );
-
-
-                for (
-                    const url of
-                    urls
-                ) {
-
-                    add(
-                        url
-                    );
-
-                }
-
-            }
-        );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | RAW HTML URL FALLBACK
-    |--------------------------------------------------------------------------
-    |
-    | Finds absolute URLs ending in image extensions.
-    |--------------------------------------------------------------------------
-    */
-
-    const html =
-        $.html();
-
-
-    const extensionPart =
-        allowSvg
-            ? "png|jpg|jpeg|webp|gif|svg"
-            : "png|jpg|jpeg|webp|gif";
-
-
-    const regex =
-        new RegExp(
-            `https?:\\\\/\\\\/[^"'<>\\\\s]+?\\\\.(?:${extensionPart})(?:\\\\?[^"'<>\\\\s]*)?`,
-            "gi"
-        );
-
-
-    let match;
-
-
-    while (
-        (
-            match =
-                regex.exec(
-                    html
-                )
-        ) !==
-        null
-    ) {
-
-        add(
-            match[0]
-        );
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | RELATIVE URL FALLBACK
-    |--------------------------------------------------------------------------
-    */
-
-    const relativeRegex =
-        new RegExp(
-            `(?:href|src|data-src|data-original|data-lazy-src)=["']([^"']+?\\\\.(?:${extensionPart})(?:\\\\?[^"']*)?)["']`,
-            "gi"
-        );
-
-
-    while (
-        (
-            match =
-                relativeRegex.exec(
-                    html
-                )
-        ) !==
-        null
-    ) {
-
-        add(
-            match[1]
-        );
-
-    }
-
-
-    return images;
-
-};
-
-
-/*
-|--------------------------------------------------------------------------
-| PACK IMAGE
-|--------------------------------------------------------------------------
-|
-| Priority:
-|
-| 1. Link whose text says Pack Image / Pack Images
-| 2. Image URL around a Pack Image element
-| 3. URL containing packaging
-|
-| The URL itself only has to end with an image extension.
-|--------------------------------------------------------------------------
-*/
-
-const getPackImages = (
-    $
-) => {
-
-    const result =
-        [];
-
-
-    const add = (
-        value
-    ) => {
-
-        const url =
-            normalizeImageUrl(
-                value
-            );
-
-
-        if (
-            !url
-        ) {
-
-            return;
-
-        }
-
-
-        if (
-            !result.includes(
-                url
-            )
-        ) {
-
-            result.push(
-                url
-            );
-
-        }
-
-    };
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | PRIORITY 1
-    |
-    | <a href="....webp">Pack Image</a>
-    |--------------------------------------------------------------------------
-    */
-
-    $("a[href]")
-        .each(
-            (
-                index,
-                element
-            ) => {
-
-                const text =
-                    cleanText(
-                        $(element)
-                            .text()
-                    )
-                        .toLowerCase();
-
-
-                if (
-                    text.includes(
-                        "pack image"
-                    )
-                ) {
-
-                    add(
-                        $(element)
-                            .attr(
-                                "href"
-                            )
-                    );
-
-                }
-
-            }
-        );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | PRIORITY 2
-    |
-    | Look around elements containing:
-    |
-    | Pack Image
-    | Pack Images
-    |--------------------------------------------------------------------------
-    */
-
-    $("*")
-        .each(
-            (
-                index,
-                element
-            ) => {
-
-                const ownText =
-                    cleanText(
-                        $(element)
-                            .clone()
-                            .children()
-                            .remove()
-                            .end()
-                            .text()
-                    )
-                        .toLowerCase();
-
-
-                if (
-                    !ownText.includes(
-                        "pack image"
-                    )
-                ) {
-
-                    return;
-
-                }
-
-
-                const containers = [
-
-                    $(element),
-
-                    $(element)
-                        .parent(),
-
-                    $(element)
-                        .next(),
-
-                    $(element)
-                        .parent()
-                        .next(),
-
-                ];
-
-
-                for (
-                    const container of
-                    containers
-                ) {
-
-                    container
-                        .find(
-                            "a, img, source"
-                        )
-                        .each(
-                            (
-                                innerIndex,
-                                child
-                            ) => {
-
-                                const urls =
-                                    getElementUrls(
-                                        $,
-                                        child
-                                    );
-
-
-                                for (
-                                    const url of
-                                    urls
-                                ) {
-
-                                    add(
-                                        url
-                                    );
-
-                                }
-
-                            }
-                        );
-
-                }
-
-            }
-        );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | PRIORITY 3
-    |
-    | Packaging URL
-    |--------------------------------------------------------------------------
-    */
-
-    const allImages =
-        getAllImageUrls(
-            $
-        );
-
-
-    for (
-        const image of
-        allImages
-    ) {
-
-        if (
-            image
-                .toLowerCase()
-                .includes(
-                    "packaging"
-                )
-        ) {
-
-            add(
-                image
-            );
-
-        }
-
-    }
-
-
-    return result;
-
-};
-
-
-/*
-|--------------------------------------------------------------------------
-| DOSAGE FORM IMAGE
-|--------------------------------------------------------------------------
-*/
-
-const getDosageFormImage = (
-    $
-) => {
-
-    const images =
-        getAllImageUrls(
-            $,
-            true
-        );
-
-
-    const image =
-        images.find(
-            (
-                url
-            ) => {
-
-                const lower =
-                    url.toLowerCase();
-
-
-                return (
-                    lower.includes(
-                        "dosage-form"
-                    ) ||
-                    lower.includes(
-                        "dosage_forms"
-                    ) ||
-                    lower.includes(
-                        "dosage-forms"
-                    )
-                );
-
-            }
-        );
-
-
-    return image ||
-        "";
-
-};
-
-
-/*
-|--------------------------------------------------------------------------
-| CHEMICAL STRUCTURE IMAGE
-|--------------------------------------------------------------------------
-|
-| SVG allowed.
-|--------------------------------------------------------------------------
-*/
-
-const getChemicalStructureImage = (
-    $
-) => {
-
-    const result =
-        [];
-
-
-    const add = (
-        value
-    ) => {
-
-        const url =
-            normalizeImageUrl(
-                value,
-                true
-            );
-
-
-        if (
-            !url
-        ) {
-
-            return;
-
-        }
-
-
-        if (
-            !result.includes(
-                url
-            )
-        ) {
-
-            result.push(
-                url
-            );
-
-        }
-
-    };
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | CONTEXT MATCH
-    |--------------------------------------------------------------------------
-    */
-
-    $("a[href], img, source")
-        .each(
-            (
-                index,
-                element
-            ) => {
-
-                const text =
-                    cleanText(
-                        $(element)
-                            .text()
-                    )
-                        .toLowerCase();
-
-
-                const alt =
-                    cleanText(
-                        $(element)
-                            .attr(
-                                "alt"
-                            )
-                    )
-                        .toLowerCase();
-
-
-                const title =
-                    cleanText(
-                        $(element)
-                            .attr(
-                                "title"
-                            )
-                    )
-                        .toLowerCase();
-
-
-                const parentText =
-                    cleanText(
-                        $(element)
-                            .parent()
-                            .text()
-                    )
-                        .toLowerCase();
-
-
-                const context =
-                    `${text} ${alt} ${title} ${parentText}`;
-
-
-                if (
-                    context.includes(
-                        "chemical structure"
-                    )
-                ) {
-
-                    const urls =
-                        getElementUrls(
-                            $,
-                            element,
-                            true
-                        );
-
-
-                    for (
-                        const url of
-                        urls
-                    ) {
-
-                        add(
-                            url
-                        );
-
-                    }
-
-                }
-
-            }
-        );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | URL NAME FALLBACK
-    |--------------------------------------------------------------------------
-    */
-
-    const allImages =
-        getAllImageUrls(
-            $,
-            true
-        );
-
-
-    for (
-        const url of
-        allImages
-    ) {
-
-        const lower =
-            url.toLowerCase();
-
-
-        if (
-            lower.includes(
-                "chemical"
-            ) ||
-            lower.includes(
-                "structure"
-            )
-        ) {
-
-            add(
-                url
-            );
-
-        }
-
-    }
-
-
-    return result[0] ||
-        "";
-
-};
-
-
-/*
-|--------------------------------------------------------------------------
 | BODY LINES
 |--------------------------------------------------------------------------
 */
@@ -1212,7 +391,11 @@ const getBodyLines = (
                 )
         )
         .filter(
-            Boolean
+            (
+                item
+            ) =>
+                item.length >
+                0
         );
 
 };
@@ -1220,11 +403,11 @@ const getBodyLines = (
 
 /*
 |--------------------------------------------------------------------------
-| KNOWN SECTIONS
+| SECTION HEADINGS
 |--------------------------------------------------------------------------
 */
 
-const KNOWN_SECTIONS = [
+const SECTION_HEADINGS = [
 
     "Indications",
 
@@ -1252,11 +435,19 @@ const KNOWN_SECTIONS = [
 
     "Pregnancy & Lactation",
 
+    "Pregnancy and Lactation",
+
     "Precautions & Warnings",
+
+    "Precautions",
+
+    "Warnings",
 
     "Use in Special Populations",
 
     "Overdose Effects",
+
+    "Overdose",
 
     "Therapeutic Class",
 
@@ -1270,170 +461,56 @@ const KNOWN_SECTIONS = [
 
     "Common Questions",
 
+    "Frequently Asked Questions",
+
+    "FAQ",
+
     "Also Available As",
 
-]
-    .map(
-        normalizeHeading
+];
+
+
+const normalizedSectionHeadings =
+    SECTION_HEADINGS.map(
+        (
+            item
+        ) =>
+            normalizeLine(
+                item
+            )
     );
 
 
 /*
 |--------------------------------------------------------------------------
-| SECTION TEXT
+| GET SECTION TEXT
 |--------------------------------------------------------------------------
 */
 
 const getSectionText = (
     $,
-    possibleTitles
+    titles
 ) => {
 
-    const titles =
+    const searchTitles =
         (
             Array.isArray(
-                possibleTitles
+                titles
             )
-                ? possibleTitles
+                ? titles
                 : [
-                    possibleTitles,
+                    titles,
                 ]
         )
             .map(
-                normalizeHeading
+                (
+                    item
+                ) =>
+                    normalizeLine(
+                        item
+                    )
             );
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | TRY HEADINGS FIRST
-    |--------------------------------------------------------------------------
-    */
-
-    let result =
-        "";
-
-
-    $(
-        "h1, h2, h3, h4, h5, h6"
-    )
-        .each(
-            (
-                index,
-                element
-            ) => {
-
-                if (
-                    result
-                ) {
-
-                    return false;
-
-                }
-
-
-                const heading =
-                    normalizeHeading(
-                        $(element)
-                            .text()
-                    );
-
-
-                if (
-                    !titles.includes(
-                        heading
-                    )
-                ) {
-
-                    return;
-
-                }
-
-
-                const pieces =
-                    [];
-
-
-                let current =
-                    $(element)
-                        .next();
-
-
-                let guard =
-                    0;
-
-
-                while (
-                    current.length &&
-                    guard <
-                    80
-                ) {
-
-                    if (
-                        current.is(
-                            "h1, h2, h3, h4, h5, h6"
-                        )
-                    ) {
-
-                        break;
-
-                    }
-
-
-                    const text =
-                        cleanText(
-                            current.text()
-                        );
-
-
-                    if (
-                        text &&
-                        !pieces.includes(
-                            text
-                        )
-                    ) {
-
-                        pieces.push(
-                            text
-                        );
-
-                    }
-
-
-                    current =
-                        current.next();
-
-
-                    guard++;
-
-                }
-
-
-                result =
-                    cleanText(
-                        pieces.join(
-                            " "
-                        )
-                    );
-
-            }
-        );
-
-
-    if (
-        result
-    ) {
-
-        return result;
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | BODY LINE FALLBACK
-    |--------------------------------------------------------------------------
-    */
 
     const lines =
         getBodyLines(
@@ -1452,15 +529,15 @@ const getSectionText = (
         i++
     ) {
 
-        const line =
-            normalizeHeading(
+        const current =
+            normalizeLine(
                 lines[i]
             );
 
 
         if (
-            titles.includes(
-                line
+            searchTitles.includes(
+                current
             )
         ) {
 
@@ -1484,7 +561,7 @@ const getSectionText = (
     }
 
 
-    const pieces =
+    const result =
         [];
 
 
@@ -1497,14 +574,18 @@ const getSectionText = (
         i++
     ) {
 
+        const line =
+            lines[i];
+
+
         const normalized =
-            normalizeHeading(
-                lines[i]
+            normalizeLine(
+                line
             );
 
 
         if (
-            KNOWN_SECTIONS.includes(
+            normalizedSectionHeadings.includes(
                 normalized
             )
         ) {
@@ -1515,9 +596,12 @@ const getSectionText = (
 
 
         if (
-            normalized.startsWith(
-                "common questions about"
-            )
+            normalized ===
+                "disclaimer" ||
+            normalized ===
+                "share" ||
+            normalized ===
+                "related brands"
         ) {
 
             break;
@@ -1525,22 +609,14 @@ const getSectionText = (
         }
 
 
-        if (
-            !pieces.includes(
-                lines[i]
-            )
-        ) {
-
-            pieces.push(
-                lines[i]
-            );
-
-        }
+        result.push(
+            line
+        );
 
 
         if (
-            pieces.length >=
-            80
+            result.length >
+            100
         ) {
 
             break;
@@ -1551,10 +627,814 @@ const getSectionText = (
 
 
     return cleanText(
-        pieces.join(
+        result.join(
             " "
         )
     );
+
+};
+
+
+/*
+|--------------------------------------------------------------------------
+| PARSE MONEY
+|--------------------------------------------------------------------------
+*/
+
+const parseMoney = (
+    value
+) => {
+
+    if (
+        value ===
+            null ||
+        value ===
+            undefined ||
+        value ===
+            ""
+    ) {
+
+        return 0;
+
+    }
+
+
+    const number =
+        Number(
+            String(
+                value
+            )
+                .replace(
+                    /৳/g,
+                    ""
+                )
+                .replace(
+                    /,/g,
+                    ""
+                )
+                .replace(
+                    /BDT/gi,
+                    ""
+                )
+                .replace(
+                    /Tk\.?/gi,
+                    ""
+                )
+                .trim()
+        );
+
+
+    if (
+        !Number.isFinite(
+            number
+        ) ||
+        number <=
+            0
+    ) {
+
+        return 0;
+
+    }
+
+
+    return Number(
+        number.toFixed(
+            2
+        )
+    );
+
+};
+
+
+/*
+|--------------------------------------------------------------------------
+| STRIP PRICE
+|--------------------------------------------------------------------------
+|
+| Examples:
+|
+| Strip Price: ৳ 12.00
+|
+| Strip Price : ৳ 110.00
+|
+| Strip Price ৳ 1,250.00
+|
+| Strip Price: Tk. 500.00
+|
+| Strip Price: BDT 500.00
+|--------------------------------------------------------------------------
+*/
+
+const getStripPriceInformation = (
+    $
+) => {
+
+    const stripPrices =
+        [];
+
+
+    const addPrice = (
+        value
+    ) => {
+
+        const price =
+            parseMoney(
+                value
+            );
+
+
+        if (
+            !price
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            !stripPrices.includes(
+                price
+            )
+        ) {
+
+            stripPrices.push(
+                price
+            );
+
+        }
+
+    };
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | BODY TEXT
+    |--------------------------------------------------------------------------
+    */
+
+    const bodyText =
+        $("body")
+            .text()
+            .replace(
+                /\u00a0/g,
+                " "
+            )
+            .replace(
+                /\r/g,
+                " "
+            )
+            .replace(
+                /\n/g,
+                " "
+            )
+            .replace(
+                /\s+/g,
+                " "
+            )
+            .trim();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | MAIN REGEX
+    |--------------------------------------------------------------------------
+    */
+
+    const regex =
+        /Strip\s*Price\s*:?\s*(?:৳|BDT|Tk\.?)?\s*([\d,]+(?:\.\d+)?)/gi;
+
+
+    let match;
+
+
+    while (
+        (
+            match =
+                regex.exec(
+                    bodyText
+                )
+        ) !==
+        null
+    ) {
+
+        addPrice(
+            match[1]
+        );
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DOM FALLBACK
+    |--------------------------------------------------------------------------
+    |
+    | Handles markup like:
+    |
+    | <span>Strip Price:</span>
+    | <span>৳ 120.00</span>
+    |--------------------------------------------------------------------------
+    */
+
+    $("body *")
+        .each(
+            (
+                index,
+                element
+            ) => {
+
+                const ownText =
+                    cleanText(
+                        $(element)
+                            .clone()
+                            .children()
+                            .remove()
+                            .end()
+                            .text()
+                    );
+
+
+                if (
+                    !ownText
+                ) {
+
+                    return;
+
+                }
+
+
+                if (
+                    !/strip\s*price/i.test(
+                        ownText
+                    )
+                ) {
+
+                    return;
+
+                }
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | OWN TEXT
+                |--------------------------------------------------------------------------
+                */
+
+                const ownMatch =
+                    ownText.match(
+                        /Strip\s*Price\s*:?\s*(?:৳|BDT|Tk\.?)?\s*([\d,]+(?:\.\d+)?)/i
+                    );
+
+
+                if (
+                    ownMatch
+                ) {
+
+                    addPrice(
+                        ownMatch[1]
+                    );
+
+                }
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | NEXT ELEMENT
+                |--------------------------------------------------------------------------
+                */
+
+                const nextText =
+                    cleanText(
+                        $(element)
+                            .next()
+                            .text()
+                    );
+
+
+                if (
+                    nextText
+                ) {
+
+                    const nextPrice =
+                        nextText.match(
+                            /(?:৳|BDT|Tk\.?)?\s*([\d,]+(?:\.\d+)?)/i
+                        );
+
+
+                    if (
+                        nextPrice
+                    ) {
+
+                        addPrice(
+                            nextPrice[1]
+                        );
+
+                    }
+
+                }
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | PARENT TEXT
+                |--------------------------------------------------------------------------
+                */
+
+                const parentText =
+                    cleanText(
+                        $(element)
+                            .parent()
+                            .text()
+                    );
+
+
+                if (
+                    parentText
+                ) {
+
+                    const parentRegex =
+                        /Strip\s*Price\s*:?\s*(?:৳|BDT|Tk\.?)?\s*([\d,]+(?:\.\d+)?)/gi;
+
+
+                    let parentMatch;
+
+
+                    while (
+                        (
+                            parentMatch =
+                                parentRegex.exec(
+                                    parentText
+                                )
+                        ) !==
+                        null
+                    ) {
+
+                        addPrice(
+                            parentMatch[1]
+                        );
+
+                    }
+
+                }
+
+            }
+        );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | RAW HTML FALLBACK
+    |--------------------------------------------------------------------------
+    */
+
+    const html =
+        $.html()
+            .replace(
+                /&nbsp;/gi,
+                " "
+            )
+            .replace(
+                /&#2547;/gi,
+                "৳"
+            )
+            .replace(
+                /&\#x9F3;/gi,
+                "৳"
+            );
+
+
+    const rawRegex =
+        /Strip(?:\s|<[^>]+>)*Price(?:\s|<[^>]+>)*:?(?:\s|<[^>]+>)*(?:৳|BDT|Tk\.?)?(?:\s|<[^>]+>)*([\d,]+(?:\.\d+)?)/gi;
+
+
+    while (
+        (
+            match =
+                rawRegex.exec(
+                    html
+                )
+        ) !==
+        null
+    ) {
+
+        addPrice(
+            match[1]
+        );
+
+    }
+
+
+    return {
+
+        stripPrice:
+
+            stripPrices[0] ||
+            0,
+
+        stripPrices,
+
+    };
+
+};
+
+
+/*
+|--------------------------------------------------------------------------
+| EXISTING STRIP PRICES
+|--------------------------------------------------------------------------
+*/
+
+const getExistingStripPrices = (
+    medicine
+) => {
+
+    const prices =
+        [];
+
+
+    const addPrice = (
+        value
+    ) => {
+
+        const price =
+            parseMoney(
+                value
+            );
+
+
+        if (
+            !price
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            !prices.includes(
+                price
+            )
+        ) {
+
+            prices.push(
+                price
+            );
+
+        }
+
+    };
+
+
+    addPrice(
+        medicine.stripPrice
+    );
+
+
+    if (
+        Array.isArray(
+            medicine.stripPrices
+        )
+    ) {
+
+        for (
+            const price of
+            medicine.stripPrices
+        ) {
+
+            addPrice(
+                price
+            );
+
+        }
+
+    }
+
+
+    return prices;
+
+};
+
+
+/*
+|--------------------------------------------------------------------------
+| PACK IMAGES
+|--------------------------------------------------------------------------
+*/
+
+const getPackImages = (
+    $
+) => {
+
+    const images =
+        [];
+
+
+    const addImage = (
+        value
+    ) => {
+
+        if (
+            !value
+        ) {
+
+            return;
+
+        }
+
+
+        const url =
+            absoluteUrl(
+                value
+            );
+
+
+        if (
+            !url
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            !looksLikeImage(
+                url,
+                false
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            !images.includes(
+                url
+            )
+        ) {
+
+            images.push(
+                url
+            );
+
+        }
+
+    };
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | IMG
+    |--------------------------------------------------------------------------
+    */
+
+    $("img")
+        .each(
+            (
+                index,
+                element
+            ) => {
+
+                /*
+                 * Lazy URL first.
+                 */
+
+                addImage(
+                    $(element)
+                        .attr(
+                            "data-src"
+                        )
+                );
+
+
+                addImage(
+                    $(element)
+                        .attr(
+                            "data-original"
+                        )
+                );
+
+
+                addImage(
+                    $(element)
+                        .attr(
+                            "data-lazy-src"
+                        )
+                );
+
+
+                addImage(
+                    $(element)
+                        .attr(
+                            "src"
+                        )
+                );
+
+            }
+        );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PACK IMAGE ANCHOR
+    |--------------------------------------------------------------------------
+    */
+
+    $("a[href]")
+        .each(
+            (
+                index,
+                element
+            ) => {
+
+                const text =
+                    cleanText(
+                        $(element)
+                            .text()
+                    )
+                        .toLowerCase();
+
+
+                const href =
+                    $(element)
+                        .attr(
+                            "href"
+                        );
+
+
+                if (
+                    text.includes(
+                        "pack image"
+                    )
+                ) {
+
+                    addImage(
+                        href
+                    );
+
+                }
+
+            }
+        );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PREFER PACKAGING IMAGES
+    |--------------------------------------------------------------------------
+    */
+
+    const packagingImages =
+        images.filter(
+            (
+                image
+            ) =>
+                image
+                    .toLowerCase()
+                    .includes(
+                        "packaging"
+                    )
+        );
+
+
+    if (
+        packagingImages.length
+    ) {
+
+        return packagingImages;
+
+    }
+
+
+    return images;
+
+};
+
+
+/*
+|--------------------------------------------------------------------------
+| DOSAGE FORM IMAGE
+|--------------------------------------------------------------------------
+*/
+
+const getDosageFormImage = (
+    $
+) => {
+
+    const candidates =
+        [];
+
+
+    const addCandidate = (
+        value
+    ) => {
+
+        const url =
+            absoluteUrl(
+                value
+            );
+
+
+        if (
+            !url
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            !looksLikeImage(
+                url
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        const lower =
+            url.toLowerCase();
+
+
+        if (
+            lower.includes(
+                "dosage-form"
+            ) ||
+            lower.includes(
+                "dosage-forms"
+            )
+        ) {
+
+            if (
+                !candidates.includes(
+                    url
+                )
+            ) {
+
+                candidates.push(
+                    url
+                );
+
+            }
+
+        }
+
+    };
+
+
+    $("img")
+        .each(
+            (
+                index,
+                element
+            ) => {
+
+                addCandidate(
+                    $(element)
+                        .attr(
+                            "data-src"
+                        )
+                );
+
+
+                addCandidate(
+                    $(element)
+                        .attr(
+                            "src"
+                        )
+                );
+
+            }
+        );
+
+
+    $("a[href]")
+        .each(
+            (
+                index,
+                element
+            ) => {
+
+                addCandidate(
+                    $(element)
+                        .attr(
+                            "href"
+                        )
+                );
+
+            }
+        );
+
+
+    return candidates[0] ||
+        "";
 
 };
 
@@ -1567,16 +1447,16 @@ const getSectionText = (
 
 const getAvailableAs = (
     $,
-    sourceUrl
+    currentUrl
 ) => {
 
     const result =
         [];
 
 
-    const currentUrl =
+    const cleanCurrentUrl =
         String(
-            sourceUrl ||
+            currentUrl ||
             ""
         )
             .split(
@@ -1591,14 +1471,7 @@ const getAvailableAs = (
                 element
             ) => {
 
-                const name =
-                    cleanText(
-                        $(element)
-                            .text()
-                    );
-
-
-                const url =
+                const href =
                     absoluteUrl(
                         $(element)
                             .attr(
@@ -1607,9 +1480,16 @@ const getAvailableAs = (
                     );
 
 
+                const name =
+                    cleanText(
+                        $(element)
+                            .text()
+                    );
+
+
                 if (
-                    !name ||
-                    !url
+                    !href ||
+                    !name
                 ) {
 
                     return;
@@ -1617,12 +1497,16 @@ const getAvailableAs = (
                 }
 
 
-                if (
-                    url
+                const cleanHref =
+                    href
                         .split(
                             "?"
-                        )[0] ===
-                    currentUrl
+                        )[0];
+
+
+                if (
+                    cleanHref ===
+                    cleanCurrentUrl
                 ) {
 
                     return;
@@ -1631,35 +1515,42 @@ const getAvailableAs = (
 
 
                 const looksLikeVariant =
+
+                    /\d/.test(
+                        name
+                    ) &&
+
                     (
-                        /\d/.test(
+                        /\bmg\b/i.test(
                             name
-                        ) &&
-                        (
-                            /\bmg\b/i.test(
-                                name
-                            ) ||
-                            /\bmcg\b/i.test(
-                                name
-                            ) ||
-                            /\bml\b/i.test(
-                                name
-                            ) ||
-                            /\bgm\b/i.test(
-                                name
-                            ) ||
-                            /\btablet\b/i.test(
-                                name
-                            ) ||
-                            /\bcapsule\b/i.test(
-                                name
-                            ) ||
-                            /\bsyrup\b/i.test(
-                                name
-                            ) ||
-                            /\binjection\b/i.test(
-                                name
-                            )
+                        ) ||
+
+                        /\bmcg\b/i.test(
+                            name
+                        ) ||
+
+                        /\bml\b/i.test(
+                            name
+                        ) ||
+
+                        /\bgm\b/i.test(
+                            name
+                        ) ||
+
+                        /\btablet\b/i.test(
+                            name
+                        ) ||
+
+                        /\bcapsule\b/i.test(
+                            name
+                        ) ||
+
+                        /\bsyrup\b/i.test(
+                            name
+                        ) ||
+
+                        /\binjection\b/i.test(
+                            name
                         )
                     );
 
@@ -1679,7 +1570,7 @@ const getAvailableAs = (
                             item
                         ) =>
                             item.url ===
-                            url
+                            href
                     )
                 ) {
 
@@ -1687,7 +1578,8 @@ const getAvailableAs = (
 
                         name,
 
-                        url,
+                        url:
+                            href,
 
                     });
 
@@ -1715,7 +1607,7 @@ const getMolecularFormula = (
     $
 ) => {
 
-    const text =
+    const body =
         cleanText(
             $("body")
                 .text()
@@ -1723,15 +1615,202 @@ const getMolecularFormula = (
 
 
     const match =
-        text.match(
+        body.match(
             /Molecular\s*Formula\s*:?\s*(?:\|\s*)?([A-Za-z0-9_{}\[\]()+\-]+)/i
         );
 
 
+    if (
+        !match
+    ) {
+
+        return "";
+
+    }
+
+
     return cleanText(
-        match?.[1] ||
-        ""
+        match[1]
     );
+
+};
+
+
+/*
+|--------------------------------------------------------------------------
+| CHEMICAL IMAGE
+|--------------------------------------------------------------------------
+*/
+
+const getChemicalImage = (
+    $
+) => {
+
+    const candidates =
+        [];
+
+
+    const addCandidate = (
+        value,
+        context =
+            ""
+    ) => {
+
+        const url =
+            absoluteUrl(
+                value
+            );
+
+
+        if (
+            !url
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            !looksLikeImage(
+                url,
+                true
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        const lowerUrl =
+            url.toLowerCase();
+
+
+        const lowerContext =
+            String(
+                context
+            )
+                .toLowerCase();
+
+
+        const chemical =
+
+            lowerUrl.includes(
+                "chemical"
+            ) ||
+
+            lowerUrl.includes(
+                "structure"
+            ) ||
+
+            lowerContext.includes(
+                "chemical structure"
+            );
+
+
+        if (
+            chemical &&
+            !candidates.includes(
+                url
+            )
+        ) {
+
+            candidates.push(
+                url
+            );
+
+        }
+
+    };
+
+
+    $("a[href]")
+        .each(
+            (
+                index,
+                element
+            ) => {
+
+                const text =
+                    cleanText(
+                        $(element)
+                            .text()
+                    );
+
+
+                const context =
+                    cleanText(
+                        $(element)
+                            .parent()
+                            .text()
+                    );
+
+
+                addCandidate(
+                    $(element)
+                        .attr(
+                            "href"
+                        ),
+                    `${text} ${context}`
+                );
+
+            }
+        );
+
+
+    $("img")
+        .each(
+            (
+                index,
+                element
+            ) => {
+
+                const alt =
+                    cleanText(
+                        $(element)
+                            .attr(
+                                "alt"
+                            )
+                    );
+
+
+                const title =
+                    cleanText(
+                        $(element)
+                            .attr(
+                                "title"
+                            )
+                    );
+
+
+                const context =
+                    `${alt} ${title}`;
+
+
+                addCandidate(
+                    $(element)
+                        .attr(
+                            "data-src"
+                        ),
+                    context
+                );
+
+
+                addCandidate(
+                    $(element)
+                        .attr(
+                            "src"
+                        ),
+                    context
+                );
+
+            }
+        );
+
+
+    return candidates[0] ||
+        "";
 
 };
 
@@ -1786,27 +1865,29 @@ const fetchPage = async (
                 ?.status;
 
 
-        const retryable =
-            (
-                !status ||
-                status ===
-                    408 ||
-                status ===
-                    429 ||
-                status >=
-                    500
-            );
+        const shouldRetry =
+
+            !status ||
+
+            status ===
+                408 ||
+
+            status ===
+                429 ||
+
+            status >=
+                500;
 
 
         if (
-            retryable &&
+            shouldRetry &&
             retry <
             MAX_RETRIES
         ) {
 
             console.log(
                 yellow(
-                    `↻ Retry ${retry + 1}/${MAX_RETRIES}`
+                    `   ↻ Retry ${retry + 1}/${MAX_RETRIES} → ${url}`
                 )
             );
 
@@ -1829,220 +1910,7 @@ const fetchPage = async (
 
 /*
 |--------------------------------------------------------------------------
-| CLEAN EXISTING PACK IMAGE
-|--------------------------------------------------------------------------
-|
-| Only preserve an old value if it is genuinely
-| an HTTP image URL with an extension.
-|--------------------------------------------------------------------------
-*/
-
-const getOldImageUrl = (
-    medicine
-) => {
-
-    const values = [
-
-        medicine.imageUrl,
-
-        medicine.image,
-
-    ];
-
-
-    for (
-        const value of
-        values
-    ) {
-
-        const url =
-            normalizeImageUrl(
-                value
-            );
-
-
-        if (
-            url
-        ) {
-
-            return url;
-
-        }
-
-    }
-
-
-    return "";
-
-};
-
-
-/*
-|--------------------------------------------------------------------------
-| CLEAN OLD IMAGE ARRAY
-|--------------------------------------------------------------------------
-*/
-
-const getOldImageUrls = (
-    medicine
-) => {
-
-    const values = [
-
-        ...(
-            Array.isArray(
-                medicine.imageUrls
-            )
-                ? medicine.imageUrls
-                : []
-        ),
-
-        ...(
-            Array.isArray(
-                medicine.images
-            )
-                ? medicine.images
-                : []
-        ),
-
-    ];
-
-
-    const result =
-        [];
-
-
-    for (
-        const value of
-        values
-    ) {
-
-        const url =
-            normalizeImageUrl(
-                value
-            );
-
-
-        if (
-            url &&
-            !result.includes(
-                url
-            )
-        ) {
-
-            result.push(
-                url
-            );
-
-        }
-
-    }
-
-
-    return result;
-
-};
-
-
-/*
-|--------------------------------------------------------------------------
-| CLEAN OLD DOSAGE IMAGE
-|--------------------------------------------------------------------------
-*/
-
-const getOldDosageImage = (
-    medicine
-) => {
-
-    const values = [
-
-        medicine.dosageFormImageUrl,
-
-        medicine.dosageFormImage,
-
-    ];
-
-
-    for (
-        const value of
-        values
-    ) {
-
-        const url =
-            normalizeImageUrl(
-                value,
-                true
-            );
-
-
-        if (
-            url
-        ) {
-
-            return url;
-
-        }
-
-    }
-
-
-    return "";
-
-};
-
-
-/*
-|--------------------------------------------------------------------------
-| CLEAN OLD CHEMICAL IMAGE
-|--------------------------------------------------------------------------
-*/
-
-const getOldChemicalImage = (
-    medicine
-) => {
-
-    const values = [
-
-        medicine?.chemical
-            ?.structureImageUrl,
-
-        medicine?.chemical
-            ?.structureImage,
-
-    ];
-
-
-    for (
-        const value of
-        values
-    ) {
-
-        const url =
-            normalizeImageUrl(
-                value,
-                true
-            );
-
-
-        if (
-            url
-        ) {
-
-            return url;
-
-        }
-
-    }
-
-
-    return "";
-
-};
-
-
-/*
-|--------------------------------------------------------------------------
-| ENRICH MEDICINE
+| ENRICH ONE MEDICINE
 |--------------------------------------------------------------------------
 */
 
@@ -2057,7 +1925,9 @@ const enrichMedicine = async (
 
 
     const sourceUrl =
+
         medicine.sourceUrl ||
+
         (
             medicine.brandId &&
             medicine.slug
@@ -2074,7 +1944,7 @@ const enrichMedicine = async (
 
         console.log(
             red(
-                `[${index + 1}/${total}] ✗ Missing URL`
+                `[${index + 1}/${total}] ✗ Missing sourceUrl`
             )
         );
 
@@ -2116,78 +1986,65 @@ const enrichMedicine = async (
 
         /*
         |--------------------------------------------------------------------------
+        | STRIP PRICE
+        |--------------------------------------------------------------------------
+        */
+
+        const newStripInfo =
+            getStripPriceInformation(
+                $
+            );
+
+
+        const oldStripPrices =
+            getExistingStripPrices(
+                medicine
+            );
+
+
+        const finalStripPrices =
+
+            newStripInfo
+                .stripPrices
+                .length
+
+                ? newStripInfo
+                    .stripPrices
+
+                : oldStripPrices;
+
+
+        const finalStripPrice =
+
+            newStripInfo
+                .stripPrice ||
+
+            oldStripPrices[0] ||
+
+            0;
+
+
+        /*
+        |--------------------------------------------------------------------------
         | IMAGES
         |--------------------------------------------------------------------------
         */
 
-        const newPackImages =
+        const images =
             getPackImages(
                 $
             );
 
 
-        const oldImages =
-            getOldImageUrls(
-                medicine
-            );
-
-
-        const allPackImages =
-            [
-                ...new Set(
-                    [
-                        ...newPackImages,
-                        ...oldImages,
-                    ]
-                ),
-            ]
-                .filter(
-                    (
-                        value
-                    ) =>
-                        isImageUrl(
-                            value
-                        )
-                );
-
-
-        const imageUrl =
-            allPackImages[0] ||
-            getOldImageUrl(
-                medicine
-            ) ||
-            "";
-
-
-        const dosageFormImageUrl =
-
+        const dosageFormImage =
             getDosageFormImage(
                 $
-            ) ||
-
-            getOldDosageImage(
-                medicine
-            ) ||
-
-            "";
-
-
-        const chemicalStructureImageUrl =
-
-            getChemicalStructureImage(
-                $
-            ) ||
-
-            getOldChemicalImage(
-                medicine
-            ) ||
-
-            "";
+            );
 
 
         /*
         |--------------------------------------------------------------------------
-        | TEXT INFORMATION
+        | SECTIONS
         |--------------------------------------------------------------------------
         */
 
@@ -2216,6 +2073,12 @@ const enrichMedicine = async (
             );
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | OTHER
+        |--------------------------------------------------------------------------
+        */
+
         const availableAs =
             getAvailableAs(
                 $,
@@ -2229,13 +2092,13 @@ const enrichMedicine = async (
             );
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | TIME
-        |--------------------------------------------------------------------------
-        */
+        const chemicalImage =
+            getChemicalImage(
+                $
+            );
 
-        const seconds =
+
+        const duration =
             (
                 (
                     Date.now() -
@@ -2250,7 +2113,7 @@ const enrichMedicine = async (
 
         /*
         |--------------------------------------------------------------------------
-        | LIVE CONSOLE
+        | COLORFUL CONSOLE
         |--------------------------------------------------------------------------
         */
 
@@ -2260,34 +2123,68 @@ const enrichMedicine = async (
             )} ${bold(
                 medicine.brandName ||
                 medicine.slug
-            )} ${COLOR.gray}${seconds}s${COLOR.reset}`
+            )} ${gray(
+                `${duration}s`
+            )}`
         );
 
 
+        if (
+            newStripInfo
+                .stripPrices
+                .length
+        ) {
+
+            console.log(
+                `   ${green("💰 Strip Price FOUND")} ${newStripInfo.stripPrices
+                    .map(
+                        (
+                            price
+                        ) =>
+                            `৳ ${price.toFixed(
+                                2
+                            )}`
+                    )
+                    .join(
+                        ", "
+                    )}`
+            );
+
+        } else if (
+            finalStripPrice
+        ) {
+
+            console.log(
+                `   ${yellow("💰 Strip Price OLD")} ৳ ${finalStripPrice.toFixed(
+                    2
+                )}`
+            );
+
+        } else {
+
+            console.log(
+                `   ${red("💰 Strip Price NOT AVAILABLE")}`
+            );
+
+        }
+
+
         console.log(
-            `   ${magenta("IMAGE")} ${
-                imageUrl
+            `   ${magenta("Images")} ${
+                images.length
                     ? green(
-                        "FOUND"
-                    )
-                    : red(
-                        "MISSING"
-                    )
-            } | ${magenta("DOSAGE")} ${
-                dosageFormImageUrl
-                    ? green(
-                        "FOUND"
+                        images.length
                     )
                     : yellow(
-                        "MISSING"
+                        "0"
                     )
-            } | ${magenta("CHEMICAL")} ${
-                chemicalStructureImageUrl
+            } | ${blue("Composition")} ${
+                composition
                     ? green(
-                        "FOUND"
+                        "YES"
                     )
                     : yellow(
-                        "MISSING"
+                        "NO"
                     )
             }`
         );
@@ -2295,28 +2192,7 @@ const enrichMedicine = async (
 
         /*
         |--------------------------------------------------------------------------
-        | OPTIONAL IMAGE URL LOG
-        |--------------------------------------------------------------------------
-        */
-
-        if (
-            imageUrl
-        ) {
-
-            console.log(
-                `${COLOR.gray}   ${imageUrl}${COLOR.reset}`
-            );
-
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
         | RETURN
-        |--------------------------------------------------------------------------
-        |
-        | Existing price / packages / manufacturer etc.
-        | stay untouched.
         |--------------------------------------------------------------------------
         */
 
@@ -2327,42 +2203,85 @@ const enrichMedicine = async (
 
             /*
             |--------------------------------------------------------------------------
-            | IMAGE
+            | STRIP PRICE
             |--------------------------------------------------------------------------
             */
 
-            imageUrl,
+            stripPrice:
+                finalStripPrice,
 
-            imageUrls:
-                allPackImages,
+
+            stripPrices:
+                finalStripPrices,
 
 
             /*
-             * Keep old names too.
-             */
+            |--------------------------------------------------------------------------
+            | IMAGES
+            |--------------------------------------------------------------------------
+            */
 
             image:
-                imageUrl,
+
+                images[0] ||
+
+                medicine.image ||
+
+                "",
+
 
             images:
-                allPackImages,
+
+                images.length
+
+                    ? images
+
+                    : (
+                        Array.isArray(
+                            medicine.images
+                        )
+
+                            ? medicine.images
+
+                            : []
+                    ),
+
+
+            dosageFormImage:
+
+                dosageFormImage ||
+
+                medicine.dosageFormImage ||
+
+                "",
 
 
             /*
             |--------------------------------------------------------------------------
-            | DOSAGE IMAGE
+            | AVAILABLE AS
             |--------------------------------------------------------------------------
             */
 
-            dosageFormImageUrl,
+            availableAs:
 
-            dosageFormImage:
-                dosageFormImageUrl,
+                availableAs.length
+
+                    ? availableAs
+
+                    : (
+                        Array.isArray(
+                            medicine.availableAs
+                        )
+
+                            ? medicine.availableAs
+
+                            : []
+                    ),
 
 
             /*
             |--------------------------------------------------------------------------
-            | TEXT
+            | REFERENCE DATA
             |--------------------------------------------------------------------------
             */
 
@@ -2393,21 +2312,6 @@ const enrichMedicine = async (
                 "",
 
 
-            availableAs:
-
-                availableAs.length
-
-                    ? availableAs
-
-                    : (
-                        Array.isArray(
-                            medicine.availableAs
-                        )
-                            ? medicine.availableAs
-                            : []
-                    ),
-
-
             /*
             |--------------------------------------------------------------------------
             | CHEMICAL
@@ -2432,26 +2336,34 @@ const enrichMedicine = async (
                     "",
 
 
-                structureImageUrl:
-                    chemicalStructureImageUrl,
-
-
                 structureImage:
-                    chemicalStructureImageUrl,
+
+                    chemicalImage ||
+
+                    medicine?.chemical
+                        ?.structureImage ||
+
+                    "",
 
             },
 
 
+            /*
+            |--------------------------------------------------------------------------
+            | META
+            |--------------------------------------------------------------------------
+            */
+
             sourceUrl,
-
-
-            enrichmentSuccess:
-                true,
 
 
             enrichedAt:
                 new Date()
                     .toISOString(),
+
+
+            enrichmentSuccess:
+                true,
 
         };
 
@@ -2468,43 +2380,29 @@ const enrichMedicine = async (
         console.error(
             `${red("✗")} ${cyan(
                 `[${index + 1}/${total}]`
-            )} ${
-                medicine.brandName ||
-                medicine.slug
-            } ${red(
-                status
-                    ? `HTTP ${status}`
-                    : error.message
-            )}`
+            )} ${medicine.brandName || medicine.slug}`
+        );
+
+
+        console.error(
+            red(
+                `   ${
+                    status
+                        ? `HTTP ${status}`
+                        : error.message
+                }`
+            )
         );
 
 
         /*
         |--------------------------------------------------------------------------
-        | SANITIZE EVEN ON FAILURE
+        | PRESERVE EXISTING STRIP PRICE ON FAILURE
         |--------------------------------------------------------------------------
         */
 
-        const imageUrl =
-            getOldImageUrl(
-                medicine
-            );
-
-
-        const imageUrls =
-            getOldImageUrls(
-                medicine
-            );
-
-
-        const dosageFormImageUrl =
-            getOldDosageImage(
-                medicine
-            );
-
-
-        const chemicalImage =
-            getOldChemicalImage(
+        const oldStripPrices =
+            getExistingStripPrices(
                 medicine
             );
 
@@ -2514,41 +2412,23 @@ const enrichMedicine = async (
             ...medicine,
 
 
-            imageUrl,
+            stripPrice:
 
-            image:
-                imageUrl,
+                oldStripPrices[0] ||
 
-
-            imageUrls,
-
-            images:
-                imageUrls,
+                0,
 
 
-            dosageFormImageUrl,
-
-            dosageFormImage:
-                dosageFormImageUrl,
-
-
-            chemical: {
-
-                ...(
-                    medicine.chemical ||
-                    {}
-                ),
-
-                structureImageUrl:
-                    chemicalImage,
-
-                structureImage:
-                    chemicalImage,
-
-            },
+            stripPrices:
+                oldStripPrices,
 
 
             sourceUrl,
+
+
+            enrichedAt:
+                new Date()
+                    .toISOString(),
 
 
             enrichmentSuccess:
@@ -2558,210 +2438,14 @@ const enrichMedicine = async (
             enrichmentError:
 
                 status
+
                     ? `HTTP ${status}`
+
                     : error.message,
-
-
-            enrichedAt:
-                new Date()
-                    .toISOString(),
 
         };
 
     }
-
-};
-
-
-/*
-|--------------------------------------------------------------------------
-| STATISTICS
-|--------------------------------------------------------------------------
-*/
-
-const getStatistics = (
-    results
-) => {
-
-    const total =
-        results.length;
-
-
-    const count = (
-        checker
-    ) => {
-
-        const found =
-            results.filter(
-                checker
-            )
-                .length;
-
-
-        return {
-
-            found,
-
-            missing:
-                total -
-                found,
-
-            percentage:
-
-                total
-
-                    ? Number(
-                        (
-                            (
-                                found /
-                                total
-                            ) *
-                            100
-                        )
-                            .toFixed(
-                                2
-                            )
-                    )
-
-                    : 0,
-
-        };
-
-    };
-
-
-    const hasText = (
-        value
-    ) => {
-
-        return (
-            typeof value ===
-                "string" &&
-            value.trim() !==
-                ""
-        );
-
-    };
-
-
-    return {
-
-        total,
-
-
-        image:
-            count(
-                (
-                    item
-                ) =>
-                    isImageUrl(
-                        item.imageUrl
-                    )
-            ),
-
-
-        realPackImage:
-            count(
-                (
-                    item
-                ) =>
-                    Array.isArray(
-                        item.imageUrls
-                    ) &&
-                    item.imageUrls.some(
-                        (
-                            image
-                        ) =>
-                            isImageUrl(
-                                image
-                            )
-                    )
-            ),
-
-
-        dosageFormImage:
-            count(
-                (
-                    item
-                ) =>
-                    isImageUrl(
-                        item.dosageFormImageUrl,
-                        true
-                    )
-            ),
-
-
-        composition:
-            count(
-                (
-                    item
-                ) =>
-                    hasText(
-                        item.composition
-                    )
-            ),
-
-
-        therapeuticClass:
-            count(
-                (
-                    item
-                ) =>
-                    hasText(
-                        item.therapeuticClass
-                    )
-            ),
-
-
-        storageConditions:
-            count(
-                (
-                    item
-                ) =>
-                    hasText(
-                        item.storageConditions
-                    )
-            ),
-
-
-        availableAs:
-            count(
-                (
-                    item
-                ) =>
-                    Array.isArray(
-                        item.availableAs
-                    ) &&
-                    item.availableAs.length >
-                        0
-            ),
-
-
-        molecularFormula:
-            count(
-                (
-                    item
-                ) =>
-                    hasText(
-                        item?.chemical
-                            ?.molecularFormula
-                    )
-            ),
-
-
-        chemicalStructureImage:
-            count(
-                (
-                    item
-                ) =>
-                    isImageUrl(
-                        item?.chemical
-                            ?.structureImageUrl,
-                        true
-                    )
-            ),
-
-    };
 
 };
 
@@ -2786,7 +2470,7 @@ handler.get(
 
             /*
             |--------------------------------------------------------------------------
-            | FILE PATHS
+            | FILES
             |--------------------------------------------------------------------------
             */
 
@@ -2796,7 +2480,7 @@ handler.get(
                     "pages",
                     "api",
                     "utils",
-                    "medex-output2.json"
+                    "medex-output.json"
                 );
 
 
@@ -2806,7 +2490,7 @@ handler.get(
                     "pages",
                     "api",
                     "utils",
-                    "output3.json"
+                    "medex-output3.json"
                 );
 
 
@@ -2816,13 +2500,13 @@ handler.get(
                     "pages",
                     "api",
                     "utils",
-                    "output3-failed.json"
+                    "medex-enrichment-failed.json"
                 );
 
 
             /*
             |--------------------------------------------------------------------------
-            | INPUT
+            | CHECK INPUT
             |--------------------------------------------------------------------------
             */
 
@@ -2842,12 +2526,18 @@ handler.get(
                             false,
 
                         message:
-                            "medex-output2.json not found",
+                            "medex-output.json not found",
 
                     });
 
             }
 
+
+            /*
+            |--------------------------------------------------------------------------
+            | LOAD
+            |--------------------------------------------------------------------------
+            */
 
             const medicines =
                 JSON.parse(
@@ -2865,7 +2555,7 @@ handler.get(
             ) {
 
                 throw new Error(
-                    "medex-output2.json must contain an array"
+                    "medex-output.json must contain an array"
                 );
 
             }
@@ -2897,6 +2587,42 @@ handler.get(
                 0;
 
 
+            let stripPriceFound =
+                0;
+
+
+            let multipleStripPricesFound =
+                0;
+
+
+            let packImagesFound =
+                0;
+
+
+            let dosageImagesFound =
+                0;
+
+
+            let compositionFound =
+                0;
+
+
+            let therapeuticFound =
+                0;
+
+
+            let storageFound =
+                0;
+
+
+            let molecularFound =
+                0;
+
+
+            let chemicalImagesFound =
+                0;
+
+
             const totalBatches =
                 Math.ceil(
                     medicines.length /
@@ -2925,7 +2651,7 @@ handler.get(
             console.log(
                 magenta(
                     bold(
-                        "            MEDEX OUTPUT 3 SCRAPER"
+                        "              MEDEX ENRICHMENT STARTED"
                     )
                 )
             );
@@ -2939,7 +2665,19 @@ handler.get(
 
 
             console.log(
-                `${cyan("Total Medicines:")} ${bold(
+                `${cyan("Input:")} medex-output.json`
+            );
+
+
+            console.log(
+                `${cyan("Output:")} ${green(
+                    "medex-output2.json"
+                )}`
+            );
+
+
+            console.log(
+                `${cyan("Total:")} ${bold(
                     medicines.length
                 )}`
             );
@@ -2953,20 +2691,8 @@ handler.get(
 
 
             console.log(
-                `${cyan("Total Batches:")} ${bold(
+                `${cyan("Batches:")} ${bold(
                     totalBatches
-                )}`
-            );
-
-
-            console.log(
-                `${cyan("Input:")} medex-output2.json`
-            );
-
-
-            console.log(
-                `${cyan("Output:")} ${green(
-                    "output3.json"
                 )}`
             );
 
@@ -2980,7 +2706,7 @@ handler.get(
 
             /*
             |--------------------------------------------------------------------------
-            | BATCH LOOP
+            | PROMISE.ALL BATCHES
             |--------------------------------------------------------------------------
             */
 
@@ -3016,23 +2742,19 @@ handler.get(
                 console.log(
                     `${magenta("▶ BATCH")} ${bold(
                         `${batchNumber}/${totalBatches}`
-                    )} ${COLOR.gray}${
-                        start +
-                        1
-                    }-${Math.min(
-                        start +
-                        batch.length,
-                        medicines.length
-                    )}${COLOR.reset}`
+                    )} ${gray(
+                        `${start + 1}-${Math.min(
+                            start +
+                            batch.length,
+                            medicines.length
+                        )}`
+                    )}`
                 );
 
 
                 /*
                 |--------------------------------------------------------------------------
                 | PROMISE.ALL
-                |--------------------------------------------------------------------------
-                |
-                | 50 simultaneous requests.
                 |--------------------------------------------------------------------------
                 */
 
@@ -3062,7 +2784,7 @@ handler.get(
 
                 /*
                 |--------------------------------------------------------------------------
-                | COLLECT
+                | PROCESS RESULTS
                 |--------------------------------------------------------------------------
                 */
 
@@ -3093,6 +2815,111 @@ handler.get(
                         failures.push(
                             item
                         );
+
+                    }
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | STRIP PRICE STATS
+                    |--------------------------------------------------------------------------
+                    */
+
+                    if (
+                        Number(
+                            item.stripPrice
+                        ) >
+                        0
+                    ) {
+
+                        stripPriceFound++;
+
+                    }
+
+
+                    if (
+                        Array.isArray(
+                            item.stripPrices
+                        ) &&
+                        item.stripPrices.length >
+                        1
+                    ) {
+
+                        multipleStripPricesFound++;
+
+                    }
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | OTHER STATS
+                    |--------------------------------------------------------------------------
+                    */
+
+                    if (
+                        Array.isArray(
+                            item.images
+                        ) &&
+                        item.images.length
+                    ) {
+
+                        packImagesFound++;
+
+                    }
+
+
+                    if (
+                        item.dosageFormImage
+                    ) {
+
+                        dosageImagesFound++;
+
+                    }
+
+
+                    if (
+                        item.composition
+                    ) {
+
+                        compositionFound++;
+
+                    }
+
+
+                    if (
+                        item.therapeuticClass
+                    ) {
+
+                        therapeuticFound++;
+
+                    }
+
+
+                    if (
+                        item.storageConditions
+                    ) {
+
+                        storageFound++;
+
+                    }
+
+
+                    if (
+                        item?.chemical
+                            ?.molecularFormula
+                    ) {
+
+                        molecularFound++;
+
+                    }
+
+
+                    if (
+                        item?.chemical
+                            ?.structureImage
+                    ) {
+
+                        chemicalImagesFound++;
 
                     }
 
@@ -3129,15 +2956,9 @@ handler.get(
 
                 /*
                 |--------------------------------------------------------------------------
-                | STATISTICS
+                | PROGRESS
                 |--------------------------------------------------------------------------
                 */
-
-                const statistics =
-                    getStatistics(
-                        results
-                    );
-
 
                 const percentage =
                     (
@@ -3152,7 +2973,7 @@ handler.get(
                         );
 
 
-                const elapsed =
+                const elapsedSeconds =
                     (
                         Date.now() -
                         startedAt
@@ -3162,7 +2983,7 @@ handler.get(
 
                 const average =
                     completed
-                        ? elapsed /
+                        ? elapsedSeconds /
                             completed
                         : 0;
 
@@ -3184,12 +3005,6 @@ handler.get(
                             1
                         );
 
-
-                /*
-                |--------------------------------------------------------------------------
-                | COLORFUL PROGRESS
-                |--------------------------------------------------------------------------
-                */
 
                 console.log(
                     ""
@@ -3213,51 +3028,64 @@ handler.get(
 
 
                 console.log(
-                    `${green("✓ Success")} ${successful}   ${red(
+                    `${green("✓ Successful")} ${successful}    ${red(
                         "✗ Failed"
                     )} ${failed}`
                 );
 
 
                 console.log(
-                    `${magenta("🖼 Images")} ${green(
-                        statistics.image.found
-                    )}/${completed} (${statistics.image.percentage}%)`
+                    ""
                 );
 
 
                 console.log(
-                    `${magenta("◉ Dosage Images")} ${statistics.dosageFormImage.found}/${completed}`
+                    `${green("💰 Strip Price")} ${stripPriceFound}/${completed}`
                 );
 
 
                 console.log(
-                    `${cyan("Composition")} ${statistics.composition.found}/${completed}`
+                    `${magenta("💰 Multiple Strip Prices")} ${multipleStripPricesFound}`
                 );
 
 
                 console.log(
-                    `${cyan("Therapeutic Class")} ${statistics.therapeuticClass.found}/${completed}`
+                    `${blue("🖼 Pack Images")} ${packImagesFound}`
                 );
 
 
                 console.log(
-                    `${cyan("Storage")} ${statistics.storageConditions.found}/${completed}`
+                    `${blue("◉ Dosage Images")} ${dosageImagesFound}`
                 );
 
 
                 console.log(
-                    `${cyan("Available As")} ${statistics.availableAs.found}/${completed}`
+                    `${cyan("Composition")} ${compositionFound}`
                 );
 
 
                 console.log(
-                    `${yellow("Molecular Formula")} ${statistics.molecularFormula.found}/${completed}`
+                    `${cyan("Therapeutic Class")} ${therapeuticFound}`
                 );
 
 
                 console.log(
-                    `${yellow("Chemical Image")} ${statistics.chemicalStructureImage.found}/${completed}`
+                    `${cyan("Storage")} ${storageFound}`
+                );
+
+
+                console.log(
+                    `${yellow("Molecular Formula")} ${molecularFound}`
+                );
+
+
+                console.log(
+                    `${yellow("Chemical Image")} ${chemicalImagesFound}`
+                );
+
+
+                console.log(
+                    ""
                 );
 
 
@@ -3267,7 +3095,7 @@ handler.get(
 
 
                 console.log(
-                    `${green("Saved")} output3.json`
+                    `${green("Saved")} medex-output2.json`
                 );
 
 
@@ -3282,17 +3110,39 @@ handler.get(
 
             /*
             |--------------------------------------------------------------------------
-            | FINAL
+            | FINAL SAVE
             |--------------------------------------------------------------------------
             */
 
-            const statistics =
-                getStatistics(
-                    results
-                );
+            fs.writeFileSync(
+                outputPath,
+                JSON.stringify(
+                    results,
+                    null,
+                    2
+                ),
+                "utf8"
+            );
 
 
-            const duration =
+            fs.writeFileSync(
+                failedPath,
+                JSON.stringify(
+                    failures,
+                    null,
+                    2
+                ),
+                "utf8"
+            );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | COMPLETE
+            |--------------------------------------------------------------------------
+            */
+
+            const totalSeconds =
                 (
                     (
                         Date.now() -
@@ -3305,15 +3155,23 @@ handler.get(
                     );
 
 
-            fs.writeFileSync(
-                outputPath,
-                JSON.stringify(
-                    results,
-                    null,
-                    2
-                ),
-                "utf8"
-            );
+            const stripPercentage =
+                results.length
+
+                    ? Number(
+                        (
+                            (
+                                stripPriceFound /
+                                results.length
+                            ) *
+                            100
+                        )
+                            .toFixed(
+                                2
+                            )
+                    )
+
+                    : 0;
 
 
             console.log(
@@ -3331,7 +3189,7 @@ handler.get(
             console.log(
                 green(
                     bold(
-                        "                 OUTPUT 3 COMPLETE"
+                        "             MEDEX ENRICHMENT COMPLETE"
                     )
                 )
             );
@@ -3345,61 +3203,17 @@ handler.get(
 
 
             console.log(
-                `Total: ${results.length}`
+                `${bold("Total:")} ${results.length}`
             );
 
 
             console.log(
-                green(
-                    `Successful: ${successful}`
-                )
+                `${green("Successful:")} ${successful}`
             );
 
 
             console.log(
-                red(
-                    `Failed: ${failed}`
-                )
-            );
-
-
-            console.log(
-                ""
-            );
-
-
-            console.log(
-                `${magenta("Images:")} ${statistics.image.found}/${results.length} (${statistics.image.percentage}%)`
-            );
-
-
-            console.log(
-                `${magenta("Dosage Images:")} ${statistics.dosageFormImage.found}/${results.length} (${statistics.dosageFormImage.percentage}%)`
-            );
-
-
-            console.log(
-                `${cyan("Composition:")} ${statistics.composition.found}/${results.length} (${statistics.composition.percentage}%)`
-            );
-
-
-            console.log(
-                `${cyan("Therapeutic Class:")} ${statistics.therapeuticClass.found}/${results.length} (${statistics.therapeuticClass.percentage}%)`
-            );
-
-
-            console.log(
-                `${cyan("Storage:")} ${statistics.storageConditions.found}/${results.length} (${statistics.storageConditions.percentage}%)`
-            );
-
-
-            console.log(
-                `${yellow("Molecular Formula:")} ${statistics.molecularFormula.found}/${results.length} (${statistics.molecularFormula.percentage}%)`
-            );
-
-
-            console.log(
-                `${yellow("Chemical Image:")} ${statistics.chemicalStructureImage.found}/${results.length} (${statistics.chemicalStructureImage.percentage}%)`
+                `${red("Failed:")} ${failed}`
             );
 
 
@@ -3409,12 +3223,62 @@ handler.get(
 
 
             console.log(
-                `${green("Duration:")} ${duration}s`
+                `${green("💰 Strip Price:")} ${stripPriceFound}/${results.length} (${stripPercentage}%)`
             );
 
 
             console.log(
-                `${green("Output:")} output3.json`
+                `${magenta("Multiple Strip Prices:")} ${multipleStripPricesFound}`
+            );
+
+
+            console.log(
+                `${blue("Pack Images:")} ${packImagesFound}`
+            );
+
+
+            console.log(
+                `${blue("Dosage Images:")} ${dosageImagesFound}`
+            );
+
+
+            console.log(
+                `${cyan("Composition:")} ${compositionFound}`
+            );
+
+
+            console.log(
+                `${cyan("Therapeutic Class:")} ${therapeuticFound}`
+            );
+
+
+            console.log(
+                `${cyan("Storage:")} ${storageFound}`
+            );
+
+
+            console.log(
+                `${yellow("Molecular Formula:")} ${molecularFound}`
+            );
+
+
+            console.log(
+                `${yellow("Chemical Images:")} ${chemicalImagesFound}`
+            );
+
+
+            console.log(
+                ""
+            );
+
+
+            console.log(
+                `${green("Duration:")} ${totalSeconds}s`
+            );
+
+
+            console.log(
+                `${green("Output:")} medex-output2.json`
             );
 
 
@@ -3440,31 +3304,149 @@ handler.get(
                     success:
                         true,
 
+
                     total:
                         results.length,
 
+
                     successful,
 
+
                     failed,
+
 
                     concurrency:
                         CONCURRENCY,
 
+
                     totalBatches,
 
-                    statistics,
+
+                    statistics: {
+
+                        stripPrice: {
+
+                            found:
+                                stripPriceFound,
+
+                            missing:
+                                results.length -
+                                stripPriceFound,
+
+                            percentage:
+                                stripPercentage,
+
+                        },
+
+
+                        multipleStripPrices: {
+
+                            found:
+                                multipleStripPricesFound,
+
+                        },
+
+
+                        image: {
+
+                            found:
+                                packImagesFound,
+
+                            missing:
+                                results.length -
+                                packImagesFound,
+
+                        },
+
+
+                        dosageFormImage: {
+
+                            found:
+                                dosageImagesFound,
+
+                            missing:
+                                results.length -
+                                dosageImagesFound,
+
+                        },
+
+
+                        composition: {
+
+                            found:
+                                compositionFound,
+
+                            missing:
+                                results.length -
+                                compositionFound,
+
+                        },
+
+
+                        therapeuticClass: {
+
+                            found:
+                                therapeuticFound,
+
+                            missing:
+                                results.length -
+                                therapeuticFound,
+
+                        },
+
+
+                        storageConditions: {
+
+                            found:
+                                storageFound,
+
+                            missing:
+                                results.length -
+                                storageFound,
+
+                        },
+
+
+                        molecularFormula: {
+
+                            found:
+                                molecularFound,
+
+                            missing:
+                                results.length -
+                                molecularFound,
+
+                        },
+
+
+                        chemicalStructureImage: {
+
+                            found:
+                                chemicalImagesFound,
+
+                            missing:
+                                results.length -
+                                chemicalImagesFound,
+
+                        },
+
+                    },
+
 
                     duration:
-                        `${duration}s`,
+                        `${totalSeconds}s`,
+
 
                     input:
-                        "medex-output2.json",
+                        "medex-output.json",
+
 
                     output:
-                        "output3.json",
+                        "medex-output2.json",
+
 
                     failedOutput:
-                        "output3-failed.json",
+                        "medex-enrichment-failed.json",
 
                 });
 
@@ -3472,6 +3454,11 @@ handler.get(
         } catch (
             error
         ) {
+
+            console.error(
+                ""
+            );
+
 
             console.error(
                 red(
@@ -3483,14 +3470,9 @@ handler.get(
             console.error(
                 red(
                     bold(
-                        "OUTPUT 3 FATAL ERROR"
+                        "MEDEX ENRICHMENT FATAL ERROR"
                     )
                 )
-            );
-
-
-            console.error(
-                error
             );
 
 
@@ -3498,6 +3480,11 @@ handler.get(
                 red(
                     "════════════════════════════════════════════════════════════"
                 )
+            );
+
+
+            console.error(
+                error
             );
 
 

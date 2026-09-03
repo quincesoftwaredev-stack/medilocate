@@ -100,6 +100,11 @@ const MedicineSchema = new mongoose.Schema(
             min: 0,
         },
 
+        priceUnit: {
+            type: String,
+            required: true,
+            min: 0,
+        },
 
         /*
         |--------------------------------------------------------------------------

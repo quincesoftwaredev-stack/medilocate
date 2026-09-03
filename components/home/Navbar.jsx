@@ -319,6 +319,7 @@ export default function Navbar() {
                         </div>
 
 
+                       
                         <div className={styles.searchResults}>
 
                             {medicines
@@ -354,11 +355,17 @@ export default function Navbar() {
                                             medicine.strength || ""
                                         ).toLowerCase();
 
+                                    const packSize =
+                                        String(
+                                            medicine.packSize || ""
+                                        ).toLowerCase();
+
                                     return (
                                         name.includes(search) ||
                                         generic.includes(search) ||
                                         dosageForm.includes(search) ||
-                                        strength.includes(search)
+                                        strength.includes(search) ||
+                                        packSize.includes(search)
                                     );
 
                                 })
@@ -692,6 +699,21 @@ export default function Navbar() {
 
                                                         )}
 
+
+                                                        {medicine.packSize && (
+
+                                                            <span
+                                                                className={
+                                                                    styles.searchResultPack
+                                                                }
+                                                            >
+                                                                {
+                                                                    medicine.packSize
+                                                                }
+                                                            </span>
+
+                                                        )}
+
                                                     </span>
 
 
@@ -707,23 +729,6 @@ export default function Navbar() {
                                                             "Medicine"
                                                         }
                                                     </small>
-
-
-                                                    {/* PACK */}
-
-                                                    {medicine.packSize && (
-
-                                                        <span
-                                                            className={
-                                                                styles.searchResultPack
-                                                            }
-                                                        >
-                                                            {
-                                                                medicine.packSize
-                                                            }
-                                                        </span>
-
-                                                    )}
 
 
                                                     {/* PRICE */}

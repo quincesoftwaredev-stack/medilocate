@@ -425,9 +425,9 @@ export default function MedicineCard({
                             }
                         >
 
-                            <span>
+                            {/* <span>
                                 Pack
-                            </span>
+                            </span> */}
 
                             <strong>
                                 {

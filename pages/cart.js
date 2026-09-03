@@ -660,10 +660,9 @@ export default function CartPage() {
                                                     <Link
                                                         href={`/medicines/${item.id}`}
                                                         className={
-                                                            `${styles.itemImage} ${
-                                                                styles[
-                                                                    `itemImage_${dosageType}`
-                                                                ]
+                                                            `${styles.itemImage} ${styles[
+                                                            `itemImage_${dosageType}`
+                                                            ]
                                                             }`
                                                         }
                                                     >
@@ -681,30 +680,30 @@ export default function CartPage() {
 
                                                         ) : ( */}
 
+                                                        <span
+                                                            className={
+                                                                styles.itemPlaceholder
+                                                            }
+                                                        >
+
                                                             <span
                                                                 className={
-                                                                    styles.itemPlaceholder
+                                                                    styles.itemPlaceholderIcon
                                                                 }
                                                             >
-
-                                                                <span
-                                                                    className={
-                                                                        styles.itemPlaceholderIcon
-                                                                    }
-                                                                >
-                                                                    {
-                                                                        dosageMeta.icon
-                                                                    }
-                                                                </span>
-
-                                                                <small>
-                                                                    {
-                                                                        item.dosageForm ||
-                                                                        "Medicine"
-                                                                    }
-                                                                </small>
-
+                                                                {
+                                                                    dosageMeta.icon
+                                                                }
                                                             </span>
+
+                                                            <small>
+                                                                {
+                                                                    item.dosageForm ||
+                                                                    "Medicine"
+                                                                }
+                                                            </small>
+
+                                                        </span>
 
                                                         {/* )} */}
 
@@ -743,10 +742,9 @@ export default function CartPage() {
 
                                                                 <span
                                                                     className={
-                                                                        `${styles.itemDosageBadge} ${
-                                                                            styles[
-                                                                                `itemDosage_${dosageType}`
-                                                                            ]
+                                                                        `${styles.itemDosageBadge} ${styles[
+                                                                        `itemDosage_${dosageType}`
+                                                                        ]
                                                                         }`
                                                                     }
                                                                 >
@@ -786,9 +784,22 @@ export default function CartPage() {
 
                                                             )}
 
+
                                                         </div>
 
+                                                        {item.packSize && (
 
+                                                            <span
+                                                                className={
+                                                                    styles.itemGeneric
+                                                                }
+                                                            >
+                                                                {
+                                                                    item.packSize
+                                                                }
+                                                            </span>
+
+                                                        )}
                                                         {item.genericName && (
 
                                                             <span
@@ -804,19 +815,6 @@ export default function CartPage() {
                                                         )}
 
 
-                                                        {item.packSize && (
-
-                                                            <span
-                                                                className={
-                                                                    styles.itemPack
-                                                                }
-                                                            >
-                                                                {
-                                                                    item.packSize
-                                                                }
-                                                            </span>
-
-                                                        )}
 
 
                                                         {item.prescriptionRequired && (
