@@ -1681,7 +1681,7 @@
     }
 
     .searchResultPack {
-        display: none;
+        /* display: none; */
     }
 
     .searchResultPrice {
