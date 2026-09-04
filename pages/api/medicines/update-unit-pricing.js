@@ -2,7 +2,7 @@ import nextConnect from "next-connect";
 import fs from "fs";
 import path from "path";
 
-import db from "@/utils/db";
+import db from "@/database/connection/db";
 import Medicine from "@/models/Medicine";
 
 
