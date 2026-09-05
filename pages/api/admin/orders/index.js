@@ -1,5 +1,6 @@
 import db from "@/database/connection";
 import Order from "@/database/model/Orders";
+import "@/database/model/Medicine";
 import nextConnect from "next-connect";
 
 
