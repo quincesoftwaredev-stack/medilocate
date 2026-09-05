@@ -32,183 +32,11 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import styles from "@/styles/Admin/Doctors/DoctorDetails.module.css";
 
 
-/*
-|--------------------------------------------------------------------------
-| TEMPORARY DATA
-|--------------------------------------------------------------------------
-*/
-
-const doctors = {
-    "1": {
-        id: "1",
-        doctorCode: "ML-D-10021",
-
-        name: "Dr. Ahsan Rahman",
-        specialty: "Medicine Specialist",
-
-        degree: "MBBS, FCPS",
-        university: "Rajshahi Medical University",
-
-        hospital: "Rangpur Medical College Hospital",
-
-        phone: "01712345678",
-        email: "ahsan.rahman@example.com",
-
-        location: "Rangpur Sadar",
-
-        experience: "12 years",
-
-        consultationFee: 500,
-
-        status: "active",
-        verification: "verified",
-
-        joinedAt: "20 Aug 2026",
-
-        available: true,
-
-        onsiteConsultation: true,
-
-        consultationDuration: 30,
-
-        about:
-            "Experienced medicine specialist with a focus on general adult medicine, chronic disease management and primary healthcare.",
-
-        credentials: [
-            {
-                id: "c1",
-                title: "MBBS Certificate",
-                type: "Academic",
-                status: "verified",
-            },
-            {
-                id: "c2",
-                title: "FCPS Certificate",
-                type: "Professional",
-                status: "verified",
-            },
-            {
-                id: "c3",
-                title: "Medical Registration",
-                type: "BMDC",
-                status: "verified",
-            },
-        ],
-
-        schedule: [
-            {
-                day: "Saturday",
-                available: true,
-                start: "5:00 PM",
-                end: "8:00 PM",
-            },
-            {
-                day: "Sunday",
-                available: true,
-                start: "5:00 PM",
-                end: "8:00 PM",
-            },
-            {
-                day: "Monday",
-                available: false,
-                start: "",
-                end: "",
-            },
-            {
-                day: "Tuesday",
-                available: true,
-                start: "5:00 PM",
-                end: "8:00 PM",
-            },
-            {
-                day: "Wednesday",
-                available: true,
-                start: "5:00 PM",
-                end: "8:00 PM",
-            },
-            {
-                day: "Thursday",
-                available: false,
-                start: "",
-                end: "",
-            },
-            {
-                day: "Friday",
-                available: true,
-                start: "10:00 AM",
-                end: "1:00 PM",
-            },
-        ],
-    },
-
-    "2": {
-        id: "2",
-        doctorCode: "ML-D-10020",
-
-        name: "Dr. Nusrat Karim",
-        specialty: "Gynecology",
-
-        degree: "MBBS, FCPS",
-        university: "Dhaka Medical College",
-
-        hospital: "Prime Medical College",
-
-        phone: "01812345678",
-        email: "nusrat.karim@example.com",
-
-        location: "Dhap, Rangpur",
-
-        experience: "9 years",
-
-        consultationFee: 600,
-
-        status: "active",
-        verification: "verified",
-
-        joinedAt: "18 Aug 2026",
-
-        available: true,
-
-        onsiteConsultation: true,
-
-        consultationDuration: 30,
-
-        about:
-            "Gynecology specialist providing women's health, reproductive health and general gynecology consultations.",
-
-        credentials: [
-            {
-                id: "c1",
-                title: "MBBS Certificate",
-                type: "Academic",
-                status: "verified",
-            },
-            {
-                id: "c2",
-                title: "FCPS Certificate",
-                type: "Professional",
-                status: "verified",
-            },
-            {
-                id: "c3",
-                title: "Medical Registration",
-                type: "BMDC",
-                status: "verified",
-            },
-        ],
-
-        schedule: [],
-    },
-};
-
-
-export default function DoctorDetailsPage() {
+export default function DoctorDetailsPage({ doctor }) {
 
     const router = useRouter();
 
-    const { id } = router.query;
 
-    const doctor = doctors[id];
 
 
     /*
@@ -2080,4 +1908,48 @@ export default function DoctorDetailsPage() {
 
         </>
     );
+}
+
+export async function getServerSideProps({ params }) {
+    if (!/^[a-f\d]{24}$/i.test(params?.id || "")) {
+        return { notFound: true };
+    }
+
+    const db = (await import("@/database/connection")).default;
+    const Doctor = (await import("@/database/model/Doctor")).default;
+    await import("@/database/model/User");
+
+    await db.connect();
+    const record = await Doctor.findById(params.id)
+        .populate("user", "fullName firstName lastName phone phoneNumber email")
+        .lean();
+
+    if (!record) return { notFound: true };
+
+    const user = record.user || {};
+    const doctor = {
+        id: String(record._id),
+        doctorCode: record.doctorCode || record.bmdcNumber || String(record._id),
+        name: user.fullName || [user.firstName, user.lastName].filter(Boolean).join(" ") || "Unknown Doctor",
+        specialty: record.speciality || "Not specified",
+        degree: record.education || "",
+        university: record.university || "",
+        hospital: record.workingIn || "",
+        phone: user.phone || user.phoneNumber || "",
+        email: user.email || "",
+        location: typeof record.location === "string" ? record.location : "",
+        experience: record.totalExperience != null ? record.totalExperience + " years" : "",
+        consultationFee: record.consultationFee ?? 0,
+        status: record.status || "inactive",
+        verification: record.verificationStatus || "pending",
+        joinedAt: record.createdAt ? new Date(record.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Dhaka" }) : "",
+        available: record.available ?? false,
+        onsiteConsultation: record.onsiteConsultation ?? false,
+        consultationDuration: record.consultationDuration ?? 30,
+        about: record.about || "",
+        credentials: Array.isArray(record.credentials) ? record.credentials : [],
+        schedule: Array.isArray(record.schedule) ? record.schedule : [],
+    };
+
+    return { props: { doctor: JSON.parse(JSON.stringify(doctor)) } };
 }

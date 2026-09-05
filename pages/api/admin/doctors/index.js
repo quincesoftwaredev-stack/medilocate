@@ -1,5 +1,7 @@
 import db from "@/database/connection";
 import Doctor from "@/database/model/Doctor";
+import User from "@/database/model/User";
+import "@/database/model/Department";
 import nextConnect from "next-connect";
 
 const handler = nextConnect();
@@ -100,14 +102,7 @@ handler.get(async (req, res) => {
 
         if (search?.trim()) {
 
-            const User =
-                (
-                    await import(
-                        "@/database/model/User"
-                    )
-                ).default;
-
-            const value =
+const value =
                 search.trim();
 
             const users =

@@ -20,7 +20,6 @@ import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlin
 
 
 import styles from "@/styles/Admin/Doctors/Doctors.module.css";
-import BASE_URL from "@/config";
 
 
 const verificationOptions = [
@@ -1350,18 +1349,13 @@ export async function getServerSideProps(
 
 
         const protocol =
-            req.headers[
-                "x-forwarded-proto"
-            ] ||
-            "http";
-
-
-        const host =
-            req.headers.host;
-
+            String(req.headers["x-forwarded-proto"] ||
+                (req.socket.encrypted ? "https" : "http"))
+                .split(",")[0].trim();
+        const baseUrl = `${protocol}://${req.headers.host}`;
 
         const apiUrl =
-            `${BASE_URL}/api/admin/doctors?${params.toString()}`;
+            `${baseUrl}/api/admin/doctors?${params.toString()}`;
 
 
         const response =

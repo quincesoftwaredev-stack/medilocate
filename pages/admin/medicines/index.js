@@ -2112,10 +2112,11 @@ export async function getServerSideProps(
 
     try {
 
-        const baseUrl =
-            process.env.NEXT_PUBLIC_BASE_URL ||
-            process.env.BASE_URL ||
-            `http://localhost:${process.env.PORT || 3000}`;
+        const protocol =
+            String(req.headers["x-forwarded-proto"] ||
+                (req.socket.encrypted ? "https" : "http"))
+                .split(",")[0].trim();
+        const baseUrl = `${protocol}://${req.headers.host}`;
 
 
         const response =
