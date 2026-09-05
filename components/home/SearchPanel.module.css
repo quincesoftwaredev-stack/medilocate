@@ -1,0 +1,1245 @@
+/* =========================================================
+   MEDICINE SEARCH PANEL
+========================================================= */
+
+.searchPanel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1100;
+
+    width: 100%;
+    max-width: 100vw;
+    height: calc(100vh - 72px);
+
+    padding: 20px clamp(16px, 5vw, 72px) 40px;
+    box-sizing: border-box;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    border: 0;
+    border-radius: 0;
+
+    background: var(--ml-gray-100);
+}
+
+
+/* =========================================================
+   SEARCH HEADER
+========================================================= */
+
+.searchPanelHeader {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+
+    width: calc(100% - 24px);
+    max-width: 1180px;
+    min-height: 60px;
+
+    margin: 0 auto;
+    padding: 7px 7px 7px 18px;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+
+    box-sizing: border-box;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: 16px;
+
+    background: var(--ml-white);
+
+    box-shadow: var(--ml-shadow-md);
+
+    transition: var(--ml-transition);
+}
+
+.searchPanelHeader:focus-within {
+    border-color: var(--ml-teal);
+
+    box-shadow:
+        0 14px 35px
+        rgba(15, 157, 138, 0.14);
+}
+
+
+/* =========================================================
+   SEARCH INPUT
+========================================================= */
+
+.searchInputWrap {
+    min-width: 0;
+    min-height: 46px;
+
+    display: grid;
+    grid-template-columns: 22px minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+
+    padding: 0;
+
+    border: 0;
+    border-radius: 0;
+
+    color: var(--ml-teal);
+
+    background: transparent;
+}
+
+.searchInputWrap:focus-within {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+}
+
+.searchInputWrap svg {
+    width: 22px;
+    height: 22px;
+
+    flex-shrink: 0;
+
+    color: var(--ml-teal);
+
+    font-size: 22px;
+}
+
+.searchInputWrap input {
+    width: 100%;
+    min-width: 0;
+
+    padding: 0 !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+
+    outline: none;
+
+    color: var(--ml-navy);
+
+    background: transparent;
+
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: var(--ml-weight-medium);
+}
+
+.searchInputWrap input::placeholder {
+    color: var(--ml-gray-500);
+    font-weight: var(--ml-weight-normal);
+}
+
+
+/* =========================================================
+   SEARCH CLOSE BUTTON
+========================================================= */
+
+.searchPanelHeader > button {
+    width: 46px;
+    height: 46px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 0;
+    border-radius: 11px;
+
+    color: var(--ml-white);
+
+    background: var(--ml-teal);
+
+    cursor: pointer;
+
+    transition: var(--ml-transition);
+}
+
+.searchPanelHeader > button:hover {
+    color: var(--ml-white);
+
+    background: var(--ml-teal-dark);
+
+    transform: translateY(-1px);
+}
+
+.searchPanelHeader > button svg {
+    width: 21px;
+    height: 21px;
+}
+
+
+/* =========================================================
+   SEARCH RESULTS
+========================================================= */
+
+.searchResults {
+    width: calc(100% - 24px);
+    max-width: 1180px;
+    min-width: 0;
+
+    margin: 18px auto 0;
+
+    display: grid;
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(300px, 1fr)
+        );
+
+    gap: 12px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   SEARCH RESULT CARD
+========================================================= */
+
+.searchResult {
+    width: 100%;
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 10px;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: 14px;
+
+    background: var(--ml-white);
+
+    box-shadow: var(--ml-shadow-sm);
+
+    transition:
+        transform var(--ml-transition),
+        border-color var(--ml-transition),
+        box-shadow var(--ml-transition);
+}
+
+.searchResult:hover {
+    transform: translateY(-2px);
+
+    border-color:
+        rgba(15, 157, 138, 0.4);
+
+    box-shadow: var(--ml-shadow-md);
+}
+
+
+/* =========================================================
+   SEARCH RESULT LINK
+========================================================= */
+
+.searchResultLink {
+    flex: 1 1 auto;
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    padding: 0;
+
+    color: inherit;
+
+    text-decoration: none;
+}
+
+.searchResultLink:hover {
+    color: inherit;
+    background: transparent;
+}
+
+
+/* =========================================================
+   SEARCH RESULT IMAGE
+========================================================= */
+
+.searchResultImage {
+    position: relative;
+
+    width: 76px;
+    height: 76px;
+
+    flex-shrink: 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    padding: 7px;
+
+    box-sizing: border-box;
+
+    border: 1px solid var(--ml-gray-100);
+    border-radius: 12px;
+
+    color: var(--ml-gray-600);
+
+    background: var(--ml-gray-50);
+}
+
+.searchResultImage img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: contain;
+
+    border-radius: 7px;
+}
+
+
+/* =========================================================
+   NO IMAGE PLACEHOLDER
+========================================================= */
+
+.searchResultPlaceholder {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    color: inherit;
+
+    background: transparent;
+}
+
+.searchResultPlaceholderIcon {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.85);
+
+    box-shadow:
+        0 5px 15px
+        rgba(18, 48, 74, 0.07);
+}
+
+.searchResultPlaceholderIcon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.searchResultPlaceholderText {
+    width: 100%;
+
+    display: block;
+
+    overflow: hidden;
+
+    color: inherit;
+
+    font-size: 9px;
+    font-weight: var(--ml-weight-bold);
+
+    line-height: 1.15;
+
+    text-align: center;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   IMAGE DOSAGE COLORS
+========================================================= */
+
+.searchResultImage_tablet {
+    color: #1756a9;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #edf5ff
+        );
+}
+
+.searchResultImage_capsule {
+    color: #7048b6;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f5efff
+        );
+}
+
+.searchResultImage_liquid {
+    color: #08796c;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #e9faf7
+        );
+}
+
+.searchResultImage_suppository {
+    color: #a04468;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fff0f5
+        );
+}
+
+.searchResultImage_injection {
+    color: #b75026;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fff3ec
+        );
+}
+
+.searchResultImage_drops {
+    color: #147a9e;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #ecfaff
+        );
+}
+
+.searchResultImage_inhaler {
+    color: #23698d;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #edf8fd
+        );
+}
+
+.searchResultImage_topical {
+    color: #5e7048;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f3f8ec
+        );
+}
+
+.searchResultImage_powder {
+    color: #78622a;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fff9e9
+        );
+}
+
+.searchResultImage_other {
+    color: var(--ml-gray-600);
+
+    background: var(--ml-gray-100);
+}
+
+
+/* =========================================================
+   SEARCH RESULT INFO
+========================================================= */
+
+.searchResultInfo {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+
+/* =========================================================
+   MEDICINE NAME
+========================================================= */
+
+.searchResultName {
+    width: 100%;
+
+    overflow: hidden;
+
+    color: var(--ml-navy);
+
+    font-size: 17px;
+    font-weight: var(--ml-weight-bold);
+
+    line-height: 1.25;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   DOSAGE + STRENGTH ROW
+========================================================= */
+
+.searchResultVariant {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 5px;
+
+    margin-top: 6px;
+}
+
+
+/* =========================================================
+   DOSAGE BADGE
+========================================================= */
+
+.searchDosageBadge {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    min-height: 27px;
+    max-width: 185px;
+
+    padding: 4px 8px;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    border-radius: 7px;
+
+    font-size: 12px;
+    font-weight: var(--ml-weight-bold);
+
+    line-height: 1.25;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.searchDosageIcon {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+}
+
+.searchDosageIcon svg {
+    width: 15px;
+    height: 15px;
+}
+
+
+/* =========================================================
+   DOSAGE BADGE COLORS
+========================================================= */
+
+.searchDosage_tablet {
+    color: #1756a9;
+
+    border: 1px solid #d4e7ff;
+
+    background: #edf5ff;
+}
+
+.searchDosage_capsule {
+    color: #7048b6;
+
+    border: 1px solid #e6d9ff;
+
+    background: #f5efff;
+}
+
+.searchDosage_liquid {
+    color: #08796c;
+
+    border: 1px solid #c9eee8;
+
+    background: #e9faf7;
+}
+
+.searchDosage_suppository {
+    color: #a04468;
+
+    border: 1px solid #f5d7e2;
+
+    background: #fff0f5;
+}
+
+.searchDosage_injection {
+    color: #b75026;
+
+    border: 1px solid #f8dbc9;
+
+    background: #fff3ec;
+}
+
+.searchDosage_drops {
+    color: #147a9e;
+
+    border: 1px solid #ccecf7;
+
+    background: #ecfaff;
+}
+
+.searchDosage_inhaler {
+    color: #23698d;
+
+    border: 1px solid #d2ebf6;
+
+    background: #edf8fd;
+}
+
+.searchDosage_topical {
+    color: #5e7048;
+
+    border: 1px solid #dde9cf;
+
+    background: #f3f8ec;
+}
+
+.searchDosage_powder {
+    color: #78622a;
+
+    border: 1px solid #efe3bc;
+
+    background: #fff9e9;
+}
+
+.searchDosage_other {
+    color: var(--ml-gray-600);
+
+    border: 1px solid var(--ml-gray-200);
+
+    background: var(--ml-gray-100);
+}
+
+
+/* =========================================================
+   STRENGTH
+========================================================= */
+
+.searchStrength {
+    min-height: 27px;
+
+    display: inline-flex;
+    align-items: center;
+
+    padding: 4px 8px;
+
+    box-sizing: border-box;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: 7px;
+
+    color: var(--ml-navy);
+
+    background: var(--ml-gray-100);
+
+    font-size: 13px;
+    font-weight: var(--ml-weight-bold);
+
+    line-height: 1.25;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   GENERIC NAME
+========================================================= */
+
+.searchResultGeneric {
+    width: 100%;
+
+    margin-top: 6px;
+
+    overflow: hidden;
+
+    color: var(--ml-gray-600);
+
+    font-size: 12px;
+    font-weight: var(--ml-weight-medium);
+
+    line-height: 1.35;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   PACK SIZE
+========================================================= */
+
+.searchResultPack {
+    width: 100%;
+
+    margin-top: 3px;
+
+    overflow: hidden;
+
+    color: var(--ml-gray-500);
+
+    font-size: 11px;
+
+    line-height: 1.3;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   PRICE
+========================================================= */
+
+.searchResultPrice {
+    display: block;
+
+    margin-top: 6px;
+
+    color: var(--ml-navy);
+
+    font-size: 17px;
+    font-weight: var(--ml-weight-bold);
+
+    line-height: 1.2;
+}
+
+
+/* =========================================================
+   ADD TO CART BUTTON
+========================================================= */
+
+.searchAddButton {
+    min-width: 78px;
+    height: 38px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    flex-shrink: 0;
+
+    padding: 0 11px;
+
+    border: 1px solid
+        rgba(15, 157, 138, 0.25);
+
+    border-radius: 9px;
+
+    color: var(--ml-teal-dark);
+
+    background: var(--ml-teal-light);
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: var(--ml-weight-bold);
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+        color var(--ml-transition),
+        background var(--ml-transition),
+        border-color var(--ml-transition),
+        transform var(--ml-transition);
+}
+
+.searchAddButton:hover {
+    color: var(--ml-white);
+
+    border-color: var(--ml-teal);
+
+    background: var(--ml-teal);
+
+    transform: translateY(-1px);
+}
+
+.searchAddButton svg {
+    width: 17px;
+    height: 17px;
+
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   QUANTITY CONTROLS
+========================================================= */
+
+.quantityControls {
+    height: 38px;
+
+    display: inline-flex;
+    align-items: center;
+
+    flex-shrink: 0;
+
+    overflow: hidden;
+
+    border: 1px solid var(--ml-gray-200);
+    border-radius: 9px;
+
+    background: var(--ml-white);
+}
+
+.quantityControls button {
+    width: 31px;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 0;
+
+    color: var(--ml-teal);
+
+    background: transparent;
+
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: var(--ml-weight-semibold);
+
+    cursor: pointer;
+
+    transition:
+        color var(--ml-transition),
+        background var(--ml-transition);
+}
+
+.quantityControls button:hover {
+    color: var(--ml-teal-dark);
+
+    background: var(--ml-teal-light);
+}
+
+.quantityControls b {
+    width: 26px;
+
+    flex-shrink: 0;
+
+    color: var(--ml-navy);
+
+    font-size: 13px;
+    font-weight: var(--ml-weight-bold);
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   MOBILE SEARCH
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .searchPanel {
+        top: 100%;
+
+        height: calc(100vh - 64px);
+
+        padding: 0 0 30px;
+
+        background: var(--ml-white);
+    }
+
+    .searchPanelHeader {
+        width: calc(100% - 24px);
+        min-height: 54px;
+
+        margin: 12px auto;
+        padding: 6px 6px 6px 13px;
+
+        grid-template-columns:
+            minmax(0, 1fr)
+            42px;
+
+        gap: 8px;
+
+        border: 1px solid var(--ml-gray-200);
+        border-radius: 13px;
+
+        background: var(--ml-white);
+
+        box-shadow: var(--ml-shadow-md);
+    }
+
+    .searchInputWrap {
+        min-height: 42px;
+
+        grid-template-columns:
+            20px minmax(0, 1fr);
+
+        gap: 8px;
+    }
+
+    .searchInputWrap svg {
+        width: 20px;
+        height: 20px;
+
+        font-size: 20px;
+    }
+
+    .searchInputWrap input {
+        font-size: 14px;
+    }
+
+    .searchPanelHeader > button {
+        width: 42px;
+        height: 42px;
+
+        border-radius: 10px;
+
+        align-self: center;
+    }
+
+    .searchResults {
+        width: 100%;
+
+        grid-template-columns: 1fr;
+
+        gap: 0;
+
+        margin-top: 0;
+        padding: 0;
+
+        background: var(--ml-white);
+    }
+
+    .searchResult {
+        gap: 7px;
+
+        padding: 11px 12px;
+
+        border: 0;
+        border-bottom:
+            1px solid
+            var(--ml-gray-200);
+
+        border-radius: 0;
+
+        box-shadow: none;
+    }
+
+    .searchResult:hover {
+        transform: none;
+
+        border-color:
+            var(--ml-gray-200);
+
+        box-shadow: none;
+
+        background:
+            var(--ml-gray-50);
+    }
+
+    .searchResultLink {
+        gap: 9px;
+    }
+
+    .searchResultImage {
+        width: 68px;
+        height: 72px;
+
+        padding: 6px;
+
+        border-radius: 10px;
+    }
+
+    .searchResultPlaceholder {
+        gap: 4px;
+    }
+
+    .searchResultPlaceholderIcon {
+        width: 34px;
+        height: 34px;
+    }
+
+    .searchResultPlaceholderIcon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .searchResultPlaceholderText {
+        font-size: 8px;
+    }
+
+    .searchResultName {
+        font-size: 16px;
+    }
+
+    .searchResultVariant {
+        gap: 4px;
+
+        margin-top: 5px;
+    }
+
+    .searchDosageBadge {
+        min-height: 25px;
+        max-width: 145px;
+
+        padding: 4px 6px;
+
+        font-size: 11px;
+    }
+
+    .searchDosageIcon svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .searchStrength {
+        min-height: 25px;
+
+        padding: 4px 6px;
+
+        font-size: 12px;
+    }
+
+    .searchResultGeneric {
+        margin-top: 4px;
+
+        font-size: 11px;
+    }
+
+    .searchResultPack {
+        margin-top: 2px;
+
+        font-size: 10px;
+    }
+
+    .searchResultPrice {
+        margin-top: 5px;
+
+        font-size: 16px;
+    }
+
+    .searchAddButton {
+        min-width: 68px;
+        height: 34px;
+
+        gap: 4px;
+
+        padding: 0 8px;
+
+        border-radius: 8px;
+
+        font-size: 11px;
+    }
+
+    .searchAddButton svg {
+        width: 15px;
+        height: 15px;
+    }
+
+    .quantityControls {
+        height: 34px;
+
+        border-radius: 8px;
+    }
+
+    .quantityControls button {
+        width: 27px;
+
+        font-size: 17px;
+    }
+
+    .quantityControls b {
+        width: 22px;
+
+        font-size: 11px;
+    }
+}
+
+
+/* =========================================================
+   SMALL PHONE SEARCH
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .searchPanel {
+        height:
+            calc(100vh - 60px);
+    }
+
+    .searchPanelHeader {
+        width:
+            calc(100% - 16px);
+
+        margin: 8px auto;
+
+        padding:
+            5px 5px 5px 10px;
+
+        grid-template-columns:
+            minmax(0, 1fr)
+            40px;
+    }
+
+    .searchInputWrap {
+        grid-template-columns:
+            19px minmax(0, 1fr);
+
+        gap: 7px;
+    }
+
+    .searchInputWrap svg {
+        width: 19px;
+        height: 19px;
+    }
+
+    .searchInputWrap input {
+        font-size: 13px;
+    }
+
+    .searchPanelHeader > button {
+        width: 40px;
+        height: 40px;
+    }
+
+    .searchResult {
+        padding:
+            9px 8px;
+    }
+
+    .searchResultLink {
+        gap: 7px;
+    }
+
+    .searchResultImage {
+        width: 60px;
+        height: 66px;
+
+        padding: 5px;
+    }
+
+    .searchResultPlaceholderIcon {
+        width: 30px;
+        height: 30px;
+    }
+
+    .searchResultPlaceholderIcon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .searchResultPlaceholderText {
+        font-size: 7px;
+    }
+
+    .searchResultName {
+        font-size: 15px;
+    }
+
+    .searchDosageBadge {
+        max-width: 112px;
+
+        font-size: 10px;
+    }
+
+    .searchStrength {
+        font-size: 11px;
+    }
+
+    .searchResultGeneric {
+        font-size: 10px;
+    }
+
+    .searchResultPack {
+        /* display: none; */
+    }
+
+    .searchResultPrice {
+        font-size: 15px;
+    }
+
+    .searchAddButton {
+        min-width: 58px;
+        height: 32px;
+
+        padding: 0 6px;
+
+        font-size: 10px;
+    }
+
+    .searchAddButton svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .quantityControls {
+        height: 32px;
+    }
+
+    .quantityControls button {
+        width: 25px;
+
+        font-size: 16px;
+    }
+
+    .quantityControls b {
+        width: 19px;
+
+        font-size: 10px;
+    }
+}
