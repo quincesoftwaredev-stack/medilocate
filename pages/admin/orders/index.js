@@ -239,10 +239,16 @@ export async function getServerSideProps(context) {
         |--------------------------------------------------------------------------
         */
 
+        const protocol =
+            String(req.headers["x-forwarded-proto"] ||
+                (req.socket?.encrypted ? "https" : "http"))
+                .split(",")[0].trim();
+        const baseUrl = `${protocol}://${req.headers.host}`;
+
         const response =
             await axios.get(
 
-                `${BASE_URL}/api/admin/orders`,
+                `${baseUrl}/api/admin/orders`,
 
                 {
 
