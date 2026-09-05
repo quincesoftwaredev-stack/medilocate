@@ -3407,6 +3407,8 @@ export async function getServerSideProps(
             ).default;
 
 
+        await import("@/database/model/User");
+
         await db.connect();
 
 

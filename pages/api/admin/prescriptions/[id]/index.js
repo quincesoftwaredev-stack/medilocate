@@ -2,6 +2,7 @@ import db from "@/database/connection";
 import Prescription from "@/database/model/Prescription";
 import Order from "@/database/model/Orders";
 import Medicine from "@/database/model/Medicine";
+import "@/database/model/User";
 import nextConnect from "next-connect";
 
 const handler = nextConnect();
