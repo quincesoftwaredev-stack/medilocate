@@ -1,3 +1,4 @@
+import Pagination from "@/components/Utility/Pagination";
 import Head from "next/head";
 import { useState } from "react";
 import Link from "next/link";
@@ -1299,6 +1300,10 @@ export default function PrescriptionRequestsPage(
 
                         )}
 
+                        {pagination.pages > 1 && (
+                            <Pagination totalPages={pagination.pages} currentPage={pagination.page} />
+                        )}
+
                     </section>
 
                 </div>
@@ -1347,7 +1352,7 @@ export async function getServerSideProps(context) {
             params.set("date", date);
         }
 
-        params.set("page", "1");
+        params.set("page", String(Math.max(1, parseInt(query.page, 10) || 1)));
         params.set("limit", "50");
 
 

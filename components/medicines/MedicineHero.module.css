@@ -751,3 +751,17 @@
     }
 
 }
+
+@media (max-width: 700px) {
+    .hero.searching {
+        position: sticky;
+        top: 65px;
+        z-index: 100;
+    }
+}
+
+@media (max-width: 420px) {
+    .hero.searching {
+        top: 61px;
+    }
+}

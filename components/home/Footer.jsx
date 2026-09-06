@@ -183,6 +183,11 @@ export default function Footer() {
                             Support
                         </h3>
 
+                        <a href="/downloads/medilocate.apk" download="MediLocate.apk">
+                            Download Android App
+                            <ArrowForwardIcon />
+                        </a>
+
                         {supportLinks.map((link) => (
 
                             <Link

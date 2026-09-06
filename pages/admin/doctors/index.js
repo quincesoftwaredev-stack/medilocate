@@ -1,3 +1,4 @@
+import Pagination from "@/components/Utility/Pagination";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -1263,6 +1264,10 @@ export default function DoctorsPage({
 
                         )}
 
+                        {pagination.pages > 1 && (
+                            <Pagination totalPages={pagination.pages} currentPage={pagination.page} />
+                        )}
+
                     </section>
 
                 </div>
@@ -1336,10 +1341,7 @@ export async function getServerSideProps(
         }
 
 
-        params.set(
-            "page",
-            "1"
-        );
+        params.set("page", String(Math.max(1, parseInt(query.page, 10) || 1)));
 
 
         params.set(

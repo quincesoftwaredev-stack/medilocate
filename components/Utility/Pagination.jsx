@@ -4,14 +4,13 @@ import styles from '../../styles/Utility/Pagination.module.css'
 import Pagination from '@mui/material/Pagination'
 import Stack from '@mui/material/Stack'
 
-const Pages = ({ totalPages, currentPage }) => {
+const Pages = ({ totalPages, currentPage, count = totalPages, page = currentPage, onChange, ...props }) => {
   const router = useRouter()
   const updateRoute = data => {
     const queryParams = { ...router.query, ...data }
     router.push({
       pathname: router.pathname,
-      query: queryParams,
-      shallow: false
+      query: queryParams
     })
   }
 
@@ -19,10 +18,10 @@ const Pages = ({ totalPages, currentPage }) => {
     <div className={styles.flex}>
       <Stack spacing={2}>
         <Pagination
-          count={parseInt(totalPages)}
+          count={Math.max(1, parseInt(count, 10) || 1)}
           shape='rounded'
-          page={parseInt(currentPage || router.query.page)}
-          onChange={(event, newPage) => updateRoute({ page: newPage })}
+          page={Math.max(1, parseInt(page ?? router.query.page, 10) || 1)}
+          onChange={onChange || ((event, newPage) => updateRoute({ page: newPage }))}
           sx={{
             '& .MuiPaginationItem-root': {
               color: 'var(--ml-navy)',
@@ -46,6 +45,7 @@ const Pages = ({ totalPages, currentPage }) => {
               color: 'var(--ml-teal-dark)'
             }
           }}
+          {...props}
         />
       </Stack>
     </div>

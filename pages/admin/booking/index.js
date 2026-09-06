@@ -1,3 +1,4 @@
+import Pagination from "@/components/Utility/Pagination";
 import { useEffect, useMemo, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -115,11 +116,9 @@ export default function AdminAppointmentsPage({ initialBookings = [], totalPages
         {!bookings.length && <div className={styles.empty}><EventAvailableOutlinedIcon /><strong>No appointments found</strong><span>Try changing the current filters.</span></div>}
       </section>
 
-      <nav className={styles.pagination} aria-label="Appointments pagination">
-        <button type="button" className={styles.pageDirection} disabled={currentPage <= 1} onClick={() => router.push({ pathname: "/admin/booking", query: { ...router.query, page: currentPage - 1 } })}>Previous</button>
-        {Array.from({ length: Math.max(totalPages, 1) }, (_, index) => index + 1).map((page) => <button type="button" className={page === currentPage ? styles.current : ""} key={page} aria-current={page === currentPage ? "page" : undefined} onClick={() => router.push({ pathname: "/admin/booking", query: { ...router.query, page } })}>{page}</button>)}
-        <button type="button" className={styles.pageDirection} disabled={currentPage >= Math.max(totalPages, 1)} onClick={() => router.push({ pathname: "/admin/booking", query: { ...router.query, page: currentPage + 1 } })}>Next</button>
-      </nav>
+      <div className={styles.pagination}>
+        <Pagination totalPages={totalPages} currentPage={currentPage} aria-label="Appointments pagination" />
+      </div>
     </main>
 
     {selected && <div className={styles.overlay} onMouseDown={(e) => e.target === e.currentTarget && setSelected(null)}><aside className={styles.drawer}>

@@ -210,7 +210,7 @@ const buildInitialOrderItems = (
         Array.isArray(
             existingOrderItems
         ) &&
-        existingOrderItems.length
+            existingOrderItems.length
 
             ? existingOrderItems
 
@@ -242,7 +242,7 @@ const buildInitialOrderItems = (
 
                 const medicineObject =
                     medicineValue &&
-                    typeof medicineValue ===
+                        typeof medicineValue ===
                         "object"
 
                         ? medicineValue
@@ -419,10 +419,10 @@ export default function PrescriptionReviewPage({
         ) ||
 
         prescription?.status ===
-            "order_created" ||
+        "order_created" ||
 
         prescription?.status ===
-            "completed";
+        "completed";
 
 
     const isRejected =
@@ -625,7 +625,7 @@ export default function PrescriptionReviewPage({
     const currentFile =
         prescription
             ?.files
-            ?.[currentPage];
+        ?.[currentPage];
 
 
     /*
@@ -669,21 +669,9 @@ export default function PrescriptionReviewPage({
                                     ?.toLowerCase()
                                     .includes(
                                         query
-                                    ) ||
-
-                                medicine
-                                    .genericName
-                                    ?.toLowerCase()
-                                    .includes(
-                                        query
-                                    ) ||
-
-                                medicine
-                                    .strength
-                                    ?.toLowerCase()
-                                    .includes(
-                                        query
                                     )
+
+
 
                             );
 
@@ -799,9 +787,9 @@ export default function PrescriptionReviewPage({
                             String(
                                 item.id
                             ) ===
-                            String(
-                                medicine._id
-                            )
+                                String(
+                                    medicine._id
+                                )
 
                                 ? {
 
@@ -908,7 +896,7 @@ export default function PrescriptionReviewPage({
                     ) =>
 
                         item.id ===
-                        id
+                            id
 
                             ? {
 
@@ -961,7 +949,7 @@ export default function PrescriptionReviewPage({
                         ) =>
 
                             item.id ===
-                            id
+                                id
 
                                 ? {
 
@@ -1204,7 +1192,7 @@ export default function PrescriptionReviewPage({
                             ?.data
                             ?.message ||
 
-                        orderAlreadyCreated
+                            orderAlreadyCreated
 
                             ? "Failed to update order."
 
@@ -1229,12 +1217,11 @@ export default function PrescriptionReviewPage({
 
                                 ? "Order updated successfully."
 
-                                : `Order created successfully. Tracking: ${
-                                    response
-                                        ?.data
-                                        ?.order
-                                        ?.trackingNumber ||
-                                    "N/A"
+                                : `Order created successfully. Tracking: ${response
+                                    ?.data
+                                    ?.order
+                                    ?.trackingNumber ||
+                                "N/A"
                                 }`,
 
                         option: {
@@ -1264,7 +1251,7 @@ export default function PrescriptionReviewPage({
 
 
             } catch (
-                error
+            error
             ) {
 
                 console.error(
@@ -1458,7 +1445,7 @@ export default function PrescriptionReviewPage({
 
 
             } catch (
-                error
+            error
             ) {
 
                 console.error(
@@ -1892,7 +1879,7 @@ export default function PrescriptionReviewPage({
                                             prescription
                                                 .files
                                                 ?.length ===
-                                            1
+                                                1
                                                 ? "page"
                                                 : "pages"
                                         }
@@ -1918,7 +1905,7 @@ export default function PrescriptionReviewPage({
                                                     Math.max(
                                                         50,
                                                         zoom -
-                                                            10
+                                                        10
                                                     )
                                                 )
                                         }
@@ -1943,7 +1930,7 @@ export default function PrescriptionReviewPage({
                                                     Math.min(
                                                         180,
                                                         zoom +
-                                                            10
+                                                        10
                                                     )
                                                 )
                                         }
@@ -2084,7 +2071,7 @@ export default function PrescriptionReviewPage({
                                                 }
                                                 className={
                                                     index ===
-                                                    currentPage
+                                                        currentPage
 
                                                         ? styles.thumbnailActive
 
@@ -2099,10 +2086,9 @@ export default function PrescriptionReviewPage({
                                                             src={
                                                                 file.url
                                                             }
-                                                            alt={`Page ${
-                                                                index +
+                                                            alt={`Page ${index +
                                                                 1
-                                                            }`}
+                                                                }`}
                                                         />
 
                                                     ) : (
@@ -2467,7 +2453,7 @@ export default function PrescriptionReviewPage({
 
                                             {
                                                 filteredCatalog.length >
-                                                0 ? (
+                                                    0 ? (
 
                                                     filteredCatalog.map(
                                                         (
@@ -2572,7 +2558,7 @@ export default function PrescriptionReviewPage({
 
                                     {
                                         orderItems.length ===
-                                        0 ? (
+                                            0 ? (
 
                                             <div
                                                 className={
@@ -3629,7 +3615,7 @@ export async function getServerSideProps(
 
 
     } catch (
-        error
+    error
     ) {
 
         console.error(

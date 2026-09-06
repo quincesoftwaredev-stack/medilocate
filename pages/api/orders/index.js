@@ -1,3 +1,6 @@
+import BASE_URL from "@/config";
+import Message from "@/services/message-service";
+import { whatsapp } from "@/utility/const";
 import db from "@/database/connection";
 import Medicine from "@/database/model/Medicine";
 import Order from "@/database/model/Orders";
@@ -757,6 +760,11 @@ handler.post(async (req, res) => {
         | RESPONSE
         |--------------------------------------------------------------------------
         */
+
+        await new Message().sendMessage({
+            number: whatsapp,
+            message: `new order created - url:${BASE_URL}/admin/orders/${order._id}`,
+        });
 
         return res.status(201).json({
 

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import axios from "axios";
 
-import Pagination from "@mui/material/Pagination";
+import Pagination from "@/components/Utility/Pagination";
 
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
