@@ -13,7 +13,8 @@ import AdminBottomNav from "@/components/Admin/AdminBottomNav";
 
 import { containsAdmin } from "@/utility/helper";
 import { setCategories } from "@/redux/categorySlice";
-import { setPixel } from "@/redux/pixelSlice";
+import { setPixel, handleContact } from "@/redux/pixelSlice";
+import { activatePixel, pausePixel } from "@/utility/pixel";
 import { PIXEL_ID } from "@/config";
 
 const Layout = ({ children }) => {
@@ -29,56 +30,30 @@ const Layout = ({ children }) => {
 
 
   useEffect(() => {
-    let ReactPixel;
-
-    const initializePixel = async () => {
-      try {
-        if (!PIXEL_ID) {
-          console.warn("Facebook Pixel ID is missing.");
-          return;
-        }
-
-        const pixelModule = await import("react-facebook-pixel");
-        ReactPixel = pixelModule.default;
-
-        ReactPixel.init(
-          PIXEL_ID,
-          {},
-          {
-            autoConfig: false,
-            debug: false,
-          }
-        );
-
-        dispatch(setPixel(ReactPixel));
-        ReactPixel.pageView();
-
-      } catch (error) {
-        console.error(
-          "Facebook Pixel initialization failed:",
-          error
-        );
-      }
+    let active = true;
+    let navigation = 0;
+    const handleStart = () => {
+      navigation += 1;
+      pausePixel();
+      dispatch(setPixel(null));
     };
-
-    initializePixel();
-
-    const handleRouteChange = () => {
-      ReactPixel?.pageView();
+    const handleComplete = async (url) => {
+      const current = ++navigation;
+      const ready = await activatePixel(url, PIXEL_ID);
+      if (active && current === navigation) dispatch(setPixel(ready));
     };
-
-    router.events.on(
-      "routeChangeComplete",
-      handleRouteChange
-    );
-
+    const handleError = () => handleComplete(window.location.href);
+    handleComplete(window.location.href);
+    router.events.on("routeChangeStart", handleStart);
+    router.events.on("routeChangeComplete", handleComplete);
+    router.events.on("routeChangeError", handleError);
     return () => {
-      router.events.off(
-        "routeChangeComplete",
-        handleRouteChange
-      );
+      active = false;
+      pausePixel();
+      router.events.off("routeChangeStart", handleStart);
+      router.events.off("routeChangeComplete", handleComplete);
+      router.events.off("routeChangeError", handleError);
     };
-
   }, [router.events, dispatch]);
 
   useEffect(() => {
@@ -94,7 +69,15 @@ const Layout = ({ children }) => {
 
   return (
     <GoogleMapsProvider>/
-      <div>
+      <div onClickCapture={(event) => {
+        const link = event.target.closest?.("a[href]");
+        if (!link) return;
+        const url = new URL(link.href, window.location.origin);
+        if (["tel:", "mailto:", "whatsapp:"].includes(url.protocol) ||
+            ["wa.me", "api.whatsapp.com", "web.whatsapp.com"].includes(url.hostname)) {
+          dispatch(handleContact());
+        }
+      }}>
         {loading && <Loading />}
 
         <Navbar />

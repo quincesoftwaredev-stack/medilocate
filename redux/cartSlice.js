@@ -1,3 +1,4 @@
+import { trackPixelEvent } from "@/utility/pixel";
 import { createSlice } from "@reduxjs/toolkit";
 
 
@@ -179,6 +180,10 @@ const cartSlice = createSlice({
 
 
             saveCart(state);
+            trackPixelEvent("AddToCart", {
+                value: Number(medicine.price) * (Number(medicine.quantity) || 1),
+                num_items: Number(medicine.quantity) || 1,
+            });
 
         },
 

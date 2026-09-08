@@ -1,3 +1,4 @@
+import { handleSearch } from "@/redux/pixelSlice";
 import PageSeo from "@/components/SEO/PageSeo";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -501,6 +502,13 @@ export default function MedicinesPage({
     | SEARCH
     |--------------------------------------------------------------------------
     */
+
+    const pixelReady = useSelector((state) => state.pixel.pixel);
+    useEffect(() => {
+        if (!pixelReady || !search.trim()) return;
+        const timer = setTimeout(() => dispatch(handleSearch()), 600);
+        return () => clearTimeout(timer);
+    }, [search, pixelReady, dispatch]);
 
     const handleSearchChange = (
         event

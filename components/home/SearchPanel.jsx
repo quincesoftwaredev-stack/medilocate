@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+import { handleSearch } from "@/redux/pixelSlice";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -124,6 +126,13 @@ export default function SearchPanel({ isOpen, onClose }) {
         if (!isOpen || medicines.length) return;
         fetch("/data/medicines-catalog.json").then((response) => response.json()).then(setMedicines).catch(() => { });
     }, [isOpen, medicines.length]);
+
+    const pixelReady = useSelector((state) => state.pixel.pixel);
+    useEffect(() => {
+        if (!isOpen || !pixelReady || !searchText.trim()) return;
+        const timer = setTimeout(() => dispatch(handleSearch()), 600);
+        return () => clearTimeout(timer);
+    }, [isOpen, searchText, pixelReady, dispatch]);
 
     if (!isOpen) return null;
 

@@ -6,7 +6,7 @@ if (process.env.NODE_ENV !== 'production') {
   MONGODB_URI = process.env.MONGODB_URI
   GMAIL = process.env.GMAIL_USER_DEV
   PASSWORD = process.env.GMAIL_PASS_DEV
-  PIXEL_ID = '1040750500772753'
+  PIXEL_ID = '1104666211997295'
 } else {
   BASE_URL = 'https://medilocate.health'
   // BASE_URL = 'https://ecomerce-phi-gold.vercel.app'
@@ -16,7 +16,7 @@ if (process.env.NODE_ENV !== 'production') {
 
   GMAIL = process.env.GMAIL_USER
   PASSWORD = process.env.GMAIL_PASS
-  PIXEL_ID = '1040750500772753'
+  PIXEL_ID = '1104666211997295'
 }
 
 const APP_SECRET = process.env.APP_SECRET

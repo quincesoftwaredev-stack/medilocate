@@ -1,7 +1,9 @@
+import { useSelector } from "react-redux";
+import { handleViewProduct } from "@/redux/pixelSlice";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import ArrowBackRoundedIcon
     from "@mui/icons-material/ArrowBackRounded";
@@ -238,6 +240,14 @@ export default function MedicineDetailsPage({
     /* =====================================================
        FALLBACK MEDICINE LOAD
     ===================================================== */
+
+    const pixelReady = useSelector((state) => state.pixel.pixel);
+    const viewedMedicine = useRef(null);
+    useEffect(() => {
+        if (!pixelReady || !medicine?._id || viewedMedicine.current === medicine._id) return;
+        dispatch(handleViewProduct({ price: medicine.price }));
+        viewedMedicine.current = medicine._id;
+    }, [pixelReady, medicine?._id, medicine?.price, dispatch]);
 
     useEffect(() => {
 

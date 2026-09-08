@@ -1,6 +1,7 @@
+import { handleInitiateCheckout, handleAddPaymentInfo, handlePurchase } from "@/redux/pixelSlice";
 import Head from "next/head";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -545,6 +546,15 @@ export default function CheckoutPage() {
     |--------------------------------------------------------------------------
     */
 
+    const pixelReady = useSelector((state) => state.pixel.pixel);
+    const checkoutTracked = useRef(false);
+    const paymentTracked = useRef(false);
+    useEffect(() => {
+        if (!pixelReady || !totalItems || checkoutTracked.current) return;
+        dispatch(handleInitiateCheckout({ value: subtotal, num_items: totalItems }));
+        checkoutTracked.current = true;
+    }, [pixelReady, subtotal, totalItems, dispatch]);
+
     const handleSavedAddressSelect = () => {
 
         if (!savedAddress) {
@@ -845,6 +855,11 @@ export default function CheckoutPage() {
             |--------------------------------------------------------------------------
             */
 
+            if (pixelReady && !paymentTracked.current) {
+                dispatch(handleAddPaymentInfo({ value: total, num_items: totalItems }));
+                paymentTracked.current = true;
+            }
+
             const response =
                 await axios.post(
                     "/api/orders",
@@ -876,6 +891,8 @@ export default function CheckoutPage() {
             | CLEAR CART
             |--------------------------------------------------------------------------
             */
+
+            dispatch(handlePurchase({ id: order.id || order._id, total: order.total, num_items: totalItems }));
 
             dispatch(
                 clearCart()
