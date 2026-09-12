@@ -12,7 +12,7 @@ export default function TopNavbar() {
       <strong>{config.discountPercentage}% off</strong>{" "}
       {config.discountMinOrderAmount > 0
         ? "medicine orders from ৳" + config.discountMinOrderAmount
-        : "medicines on all orders"}
+        : "on all orders"}
       {config.maxDiscountAmount != null && " — save up to ৳" + config.maxDiscountAmount}
     </aside>
   );
