@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import Navbar from "@/components/home/Navbar";
+import TopNavbar from "@/components/home/TopNavbar";
 import Footer from "@/components/home/Footer";
 import Loading from "@/components/Utility/Loading";
 import GoogleMapsProvider from "@/components/Utility/GoogleMapsProvider";
@@ -68,7 +69,7 @@ const Layout = ({ children }) => {
   const isAdminPage = containsAdmin(router.asPath);
 
   return (
-    <GoogleMapsProvider>/
+    <GoogleMapsProvider>
       <div onClickCapture={(event) => {
         const link = event.target.closest?.("a[href]");
         if (!link) return;
@@ -80,6 +81,7 @@ const Layout = ({ children }) => {
       }}>
         {loading && <Loading />}
 
+        {!isAdminPage && <TopNavbar />}
         <Navbar />
 
         {children}

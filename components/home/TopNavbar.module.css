@@ -1,0 +1,18 @@
+.banner {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 10px 16px;
+  background: var(--ml-navy);
+  color: var(--ml-white);
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.5;
+
+}
+
+@media (max-width: 570px) {
+  .banner {
+    font-size: 13px;
+  }
+}

@@ -18,8 +18,7 @@ import PendingOutlinedIcon from "@mui/icons-material/PendingOutlined";
 import MedicalServicesOutlinedIcon from "@mui/icons-material/MedicalServicesOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 
-import Navbar from "@/components/home/Navbar";
-import Footer from "@/components/home/Footer";
+
 
 import styles from "@/styles/Profile/Profile.module.css";
 
@@ -157,7 +156,6 @@ export default function ProfilePage() {
             </Head>
 
 
-            <Navbar />
 
 
             <main className={styles.page}>
@@ -1006,7 +1004,6 @@ export default function ProfilePage() {
             </main>
 
 
-            <Footer />
 
         </>
     );
