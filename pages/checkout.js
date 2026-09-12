@@ -1,3 +1,5 @@
+import { PRICING_CONFIG } from "@/config";
+import { calculatePricing } from "@/utility/pricing";
 import { handleInitiateCheckout, handleAddPaymentInfo, handlePurchase } from "@/redux/pixelSlice";
 import Head from "next/head";
 import Link from "next/link";
@@ -380,7 +382,7 @@ export default function CheckoutPage() {
 
 
     const [city, setCity] =
-        useState("Rangpur");
+        useState(PRICING_CONFIG.serviceCity);
 
 
     const [paymentMethod, setPaymentMethod] =
@@ -460,7 +462,7 @@ export default function CheckoutPage() {
 
                     setCity(
                         parsedAddress.city ||
-                        "Rangpur"
+                        PRICING_CONFIG.serviceCity
                     );
 
                 }
@@ -491,7 +493,7 @@ export default function CheckoutPage() {
     |--------------------------------------------------------------------------
     */
 
-    const subtotal =
+    const medicineSubtotal =
         cartItems.reduce(
             (
                 total,
@@ -508,15 +510,8 @@ export default function CheckoutPage() {
         );
 
 
-    const deliveryFee =
-        subtotal >= 500
-            ? 0
-            : 50;
-
-
-    const total =
-        subtotal +
-        deliveryFee;
+    const { subtotal, deliveryFee, discountAmount, total, amountUntilFreeDelivery } =
+        calculatePricing(medicineSubtotal);
 
 
     const totalItems =
@@ -587,7 +582,7 @@ export default function CheckoutPage() {
 
         setCity(
             savedAddress.city ||
-            "Rangpur"
+            PRICING_CONFIG.serviceCity
         );
 
     };
@@ -622,7 +617,7 @@ export default function CheckoutPage() {
 
 
         setCity(
-            "Rangpur"
+            PRICING_CONFIG.serviceCity
         );
 
     };
@@ -2086,6 +2081,13 @@ export default function CheckoutPage() {
                                 </div>
 
 
+                                {discountAmount > 0 && (
+                                    <div>
+                                        <span>Discount</span>
+                                        <strong>−৳{discountAmount.toFixed(2)}</strong>
+                                    </div>
+                                )}
+
                                 <div>
 
                                     <span>
@@ -2108,8 +2110,7 @@ export default function CheckoutPage() {
                             </div>
 
 
-                            {deliveryFee > 0 &&
-                                subtotal < 500 && (
+                            {PRICING_CONFIG.freeDeliveryEnabled && deliveryFee > 0 && amountUntilFreeDelivery > 0 && (
 
                                     <div
                                         className={
@@ -2118,7 +2119,7 @@ export default function CheckoutPage() {
                                     >
 
                                         Add ৳
-                                        {500 - subtotal}
+                                        {amountUntilFreeDelivery}
                                         {" "}
                                         more to get free delivery.
 
@@ -2168,7 +2169,7 @@ export default function CheckoutPage() {
                                 <div>
 
                                     <strong>
-                                        Fast local delivery
+                                        Target delivery: {PRICING_CONFIG.targetDeliveryTimeMinutes} minutes in {PRICING_CONFIG.serviceCity}
                                     </strong>
 
                                     <span>

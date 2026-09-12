@@ -1004,11 +1004,14 @@ export default function OrderTrackingPage({
         );
 
 
+    const discountAmount = Number(order.discountAmount ?? 0);
+
     const total =
         Number(
             order.total ??
             subtotal +
-            deliveryFee
+            deliveryFee -
+            discountAmount
         );
 
 
@@ -2012,6 +2015,13 @@ export default function OrderTrackingPage({
 
                                     </div>
 
+
+                                    {discountAmount > 0 && (
+                                        <div>
+                                            <span>Discount</span>
+                                            <strong>−৳{discountAmount.toFixed(2)}</strong>
+                                        </div>
+                                    )}
 
                                     <div>
 

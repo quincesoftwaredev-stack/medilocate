@@ -23,3 +23,17 @@ const APP_SECRET = process.env.APP_SECRET
 const NEXT_PUBLIC_GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 export default BASE_URL
 export { APP_SECRET, MONGODB_URI, GMAIL, PASSWORD, PIXEL_ID, NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }
+
+export const PRICING_CONFIG = {
+  discountEnabled: true,
+  discountType: "percentage",
+  discountPercentage: 10,
+  discountMinOrderAmount: 0,
+  maxDiscountAmount: null,
+  discountAppliesToDeliveryCharge: false,
+  deliveryCharge: 29,
+  freeDeliveryEnabled: true,
+  freeDeliveryMinOrderAmount: 499,
+  targetDeliveryTimeMinutes: 30,
+  serviceCity: "Rangpur",
+};

@@ -1,3 +1,5 @@
+import { PRICING_CONFIG } from "@/config";
+import { calculatePricing } from "@/utility/pricing";
 import Head from "next/head";
 import Link from "next/link";
 
@@ -356,7 +358,7 @@ export default function CartPage() {
         );
 
 
-    const subtotal =
+    const medicineSubtotal =
         items.reduce(
             (total, item) =>
                 total +
@@ -377,15 +379,8 @@ export default function CartPage() {
      *
      */
 
-    const deliveryCharge =
-        subtotal > 500
-            ? 0
-            : 50;
-
-
-    const total =
-        subtotal +
-        deliveryCharge;
+    const { subtotal, deliveryFee: deliveryCharge, discountAmount, total, amountUntilFreeDelivery } =
+        calculatePricing(medicineSubtotal);
 
 
     /*
@@ -1054,7 +1049,7 @@ export default function CartPage() {
                                     <LocalShippingOutlinedIcon />
 
                                     <span>
-                                        Fast local delivery
+                                        Target delivery: {PRICING_CONFIG.targetDeliveryTimeMinutes} minutes in {PRICING_CONFIG.serviceCity}
                                     </span>
 
                                 </div>
@@ -1109,6 +1104,13 @@ export default function CartPage() {
                                 </div>
 
 
+                                {discountAmount > 0 && (
+                                    <div>
+                                        <span>Discount</span>
+                                        <strong>−৳{discountAmount.toFixed(2)}</strong>
+                                    </div>
+                                )}
+
                                 <div>
 
                                     <span>
@@ -1128,7 +1130,7 @@ export default function CartPage() {
                             </div>
 
 
-                            {deliveryCharge > 0 && (
+                            {PRICING_CONFIG.freeDeliveryEnabled && deliveryCharge > 0 && amountUntilFreeDelivery > 0 && (
 
                                 <div
                                     className={
@@ -1137,7 +1139,7 @@ export default function CartPage() {
                                 >
 
                                     Add ৳
-                                    {500 - subtotal}
+                                    {amountUntilFreeDelivery}
                                     {" "}
                                     more to get free
                                     delivery.

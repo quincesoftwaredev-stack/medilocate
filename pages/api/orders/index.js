@@ -1,3 +1,4 @@
+import { calculatePricing } from "@/utility/pricing";
 import BASE_URL from "@/config";
 import Message from "@/services/message-service";
 import { whatsapp } from "@/utility/const";
@@ -575,21 +576,9 @@ handler.post(async (req, res) => {
         |--------------------------------------------------------------------------
         */
 
-        const deliveryFee =
-            subtotal >= 500
-                ? 0
-                : 50;
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | TOTAL
-        |--------------------------------------------------------------------------
-        */
-
-        const total =
-            subtotal +
-            deliveryFee;
+        const pricing = calculatePricing(subtotal);
+        subtotal = pricing.subtotal;
+        const { deliveryFee, discountAmount, total } = pricing;
 
 
         /*
@@ -738,6 +727,8 @@ handler.post(async (req, res) => {
 
                 deliveryFee,
 
+                discountAmount,
+
                 total,
 
 
@@ -799,6 +790,9 @@ handler.post(async (req, res) => {
 
                 deliveryFee:
                     order.deliveryFee,
+
+                discountAmount:
+                    order.discountAmount,
 
                 total:
                     order.total,

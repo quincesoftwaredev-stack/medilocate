@@ -6,29 +6,53 @@ const from = process.env.FROM
 
 class Message {
     async sendMessage(data) {
-        const { number, message } = data
-        if (!number || !message) {
+        const { number, message } = data;
 
-            return "Missing Number Or Message"
+        if (!number || !message) {
+            return "Missing Number Or Message";
         }
+
+        // Don't send SMS in development/test
+        if (process.env.NODE_ENV !== "production") {
+            console.log("SMS skipped in development:", {
+                number,
+                message,
+            });
+
+            return {
+                success: true,
+                skipped: true,
+                message: "SMS skipped in development mode.",
+            };
+        }
+
         try {
             const apiUrl = "http://bulksmsbd.net/api/smsapi";
+
             const payload = {
-                api_key: "uO3NSjUcD0xmKkPwu4Rx",
-                senderid: "8809617626452",
+                api_key: process.env.BULK_SMS_API_KEY,
+                senderid: process.env.BULK_SMS_SENDER_ID,
                 number,
                 message,
             };
-            const { data } = await axios.post(apiUrl, payload, {
+
+            const { data: responseData } = await axios.post(apiUrl, payload, {
                 headers: {
                     "Content-Type": "application/json",
                 },
                 timeout: 10000,
             });
-            console.log(data)
-            return (data)
+
+            console.log("SMS response:", responseData);
+
+            return responseData;
         } catch (error) {
-            return { error: "SMS delivery failed." }
+            console.error("SMS delivery failed:", error.message);
+
+            return {
+                success: false,
+                error: "SMS delivery failed.",
+            };
         }
     }
 }
