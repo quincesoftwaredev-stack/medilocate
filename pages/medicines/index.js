@@ -51,6 +51,9 @@ const API_PATH = "/api/medicines";
 
 const ITEMS_PER_PAGE = 20;
 
+// Reuse the catalog download across client-side visits and Strict Mode effects.
+let catalogPromise;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -102,23 +105,29 @@ export default function MedicinesPage({
         useState([]);
 
     useEffect(() => {
-        fetch('/data/medicines-catalog.json')
-            .then((response) => response.ok ? response.json() : [])
-            .then((data) => {
-                if (Array.isArray(data)) {
-                    setCatalogMedicines(data);
-                    setMedicines(data.slice(0, ITEMS_PER_PAGE));
-                    setPagination({
-                        page: 1,
-                        limit: ITEMS_PER_PAGE,
-                        total: data.length,
-                        pages: Math.ceil(data.length / ITEMS_PER_PAGE),
-                    });
-                }
-            })
-            .catch(() => {
-                // Database API remains the fallback until the catalog is exported.
-            });
+        let active = true;
+        if (!catalogPromise) {
+            catalogPromise = fetch('/data/medicines-catalog.json')
+                .then((response) => {
+                    if (!response.ok) throw new Error('Catalog unavailable');
+                    return response.json();
+                })
+                .then((data) => {
+                    if (!Array.isArray(data)) throw new Error('Invalid catalog');
+                    return data;
+                })
+                .catch((error) => {
+                    catalogPromise = null;
+                    throw error;
+                });
+        }
+        catalogPromise.then((data) => {
+            if (!active) return;
+            setCatalogMedicines(data);
+        }).catch(() => {
+            // Keep the initial medicines visible if the full catalog fails.
+        });
+        return () => { active = false; };
     }, []);
 
 
@@ -1024,7 +1033,33 @@ export default function MedicinesPage({
 
 /*
 |--------------------------------------------------------------------------
-| GET SERVER SIDE PROPS
+| INITIAL CATALOG PAGE
 |--------------------------------------------------------------------------
 */
 
+export async function getStaticProps() {
+    const { readFile } = await import('fs/promises');
+    const { join } = await import('path');
+    const catalog = JSON.parse(await readFile(
+        join(process.cwd(), 'public', 'data', 'medicines-catalog.json'),
+        'utf8'
+    ));
+    const categories = catalog.map((medicine) => {
+        const category = medicine.category;
+        return typeof category === 'object' && category !== null
+            ? category.name || category.title || ''
+            : String(category || '');
+    });
+    return {
+        props: {
+            initialMedicines: catalog.slice(0, ITEMS_PER_PAGE),
+            initialPagination: {
+                page: 1,
+                limit: ITEMS_PER_PAGE,
+                total: catalog.length,
+                pages: Math.ceil(catalog.length / ITEMS_PER_PAGE),
+            },
+            initialCategories: [...new Set(categories.map((value) => value.trim()).filter(Boolean))],
+        },
+    };
+}
