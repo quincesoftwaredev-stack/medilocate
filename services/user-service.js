@@ -101,9 +101,13 @@ class UserService {
             role: existingUser.role
           })
           return FormateData({
-            id: existingUser._id,
+            id: String(existingUser._id),
+            _id: String(existingUser._id),
             token,
-            role: existingUser.role
+            role: existingUser.role,
+            fullName: existingUser.fullName,
+            email: existingUser.email,
+            phone: existingUser.phone
           })
         } else {
           return FormateData({ error: "Password Didn't Match !" })

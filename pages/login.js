@@ -128,8 +128,14 @@ const Login = () => {
 
                     } else {
 
+                        const profileId = data.id || data._id;
+
+                        if (!profileId) {
+                            throw new Error("Login succeeded but the user ID was missing.");
+                        }
+
                         router.push(
-                            `/profile/${data.id}`
+                            `/profile/${profileId}`
                         );
 
                     }
