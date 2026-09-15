@@ -19,6 +19,8 @@ import { setCategories } from "@/redux/categorySlice";
 import { setPixel, handleContact } from "@/redux/pixelSlice";
 import { activatePixel, pausePixel } from "@/utility/pixel";
 import { PIXEL_ID } from "@/config";
+import { login } from "@/redux/userSlice";
+import Cookies from "js-cookie";
 
 const Layout = ({ children }) => {
   const router = useRouter();
@@ -33,8 +35,18 @@ const Layout = ({ children }) => {
   const userInfo = hydrated ? storedUserInfo : null;
 
   useEffect(() => {
+    if (!storedUserInfo) {
+      const saved = Cookies.get("userInfo");
+      if (saved) {
+        try {
+          dispatch(login(JSON.parse(saved)));
+        } catch {
+          Cookies.remove("userInfo", { path: "/" });
+        }
+      }
+    }
     setHydrated(true);
-  }, []);
+  }, [dispatch, storedUserInfo]);
 
   useEffect(() => {
     let active = true;

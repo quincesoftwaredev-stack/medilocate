@@ -5,6 +5,7 @@ import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
+import Cookies from "js-cookie";
 
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
@@ -81,6 +82,13 @@ const Login = () => {
 
 
             if (!data.error) {
+
+                Cookies.set("userInfo", JSON.stringify(data), {
+                    expires: 30,
+                    path: "/",
+                    sameSite: "lax",
+                    secure: window.location.protocol === "https:",
+                });
 
                 dispatch(
                     login(data)

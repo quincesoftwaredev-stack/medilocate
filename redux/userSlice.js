@@ -19,11 +19,16 @@ export const userSlice = createSlice({
 
   reducers: {
     login: (state, action) => {
-      Cookies.set("userInfo", JSON.stringify(action.payload));
+      Cookies.set("userInfo", JSON.stringify(action.payload), {
+        expires: 30,
+        path: "/",
+        sameSite: "lax",
+        secure: typeof window !== "undefined" && window.location.protocol === "https:",
+      });
       state.userInfo = action.payload;
     },
     logout: (state) => {
-      Cookies.remove("userInfo");
+      Cookies.remove("userInfo", { path: "/" });
       state.userInfo = null;
     },
     setLocation: (state, action) => {
