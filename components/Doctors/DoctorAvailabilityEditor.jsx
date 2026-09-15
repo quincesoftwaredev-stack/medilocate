@@ -22,15 +22,8 @@ const DAYS = [
 const MODES = [
   { key: "chamber", slotValue: "chamber", label: "Chamber", description: "In-person consultation", Icon: BusinessOutlinedIcon },
   { key: "online", slotValue: "online", label: "Online", description: "Video consultation", Icon: VideoCallOutlinedIcon },
-  { key: "homeVisit", slotValue: "home-visit", label: "Home visit", description: "Visit the patient at home", Icon: HomeOutlinedIcon },
+  { key: "home", slotValue: "home", label: "Home visit", description: "Visit the patient at home", Icon: HomeOutlinedIcon },
 ];
-const emptyChamber = () => ({
-  name: "",
-  address: "",
-  city: "",
-  phone: "",
-  isActive: true,
-});
 const emptyLeave = () => ({
   startDate: "",
   endDate: "",
@@ -60,12 +53,14 @@ export function createAvailabilityForm(doctor = {}) {
         ...day,
         slots: (day.slots || []).map((slot) => ({
           ...slot,
+          consultationMode: slot.consultationMode === "home-visit" ? "home" : slot.consultationMode,
           calculationMethod: slot.calculationMethod || "duration",
           maxPatientsPerWindow: Number(slot.maxPatientsPerWindow || slot.maxPatientsPerSlot || 1),
           bufferMinutes: Number(slot.bufferMinutes || 0),
         })),
       }))
     : [];
+  const { homeVisit: legacyHome, ...savedModes } = doctor.consultationModes || {};
   return {
     chambers: Array.isArray(doctor.chambers) ? doctor.chambers : [],
     weeklyAvailability: DAYS.map(
@@ -82,10 +77,12 @@ export function createAvailabilityForm(doctor = {}) {
           endDate: period.endDate ? String(period.endDate).slice(0, 10) : "",
         }))
       : [],
-    consultationModes: doctor.consultationModes || {
+    consultationModes: {
       chamber: { enabled: true, fee: doctor.consultationFee || 0 },
       online: { enabled: false, fee: 0 },
-      homeVisit: { enabled: false, fee: 0 },
+      home: { enabled: false, fee: 0 },
+      ...savedModes,
+      home: savedModes.home?.enabled ? savedModes.home : legacyHome?.enabled ? legacyHome : savedModes.home || legacyHome || { enabled: false, fee: 0 },
     },
     bookingSettings: doctor.bookingSettings || {
       advanceBookingDays: 30,
@@ -102,11 +99,6 @@ export default function DoctorAvailabilityEditor({ value, onChange }) {
   const selectedMode =
     MODES.find((mode) => mode.key === activeMode) || MODES[0];
   const update = (key, nextValue) => onChange({ ...value, [key]: nextValue });
-  const updateChamber = (index, key, nextValue) => {
-    const chambers = [...value.chambers];
-    chambers[index] = { ...chambers[index], [key]: nextValue };
-    update("chambers", chambers);
-  };
   const updateDay = (index, changes) => {
     const days = [...value.weeklyAvailability];
     days[index] = { ...days[index], ...changes };
@@ -128,6 +120,7 @@ export default function DoctorAvailabilityEditor({ value, onChange }) {
         {
           ...defaultDay(dayIndex).slots[0],
           consultationMode: selectedMode.slotValue,
+          chamberId: selectedMode.slotValue === "chamber" ? value.chambers.find((item) => item.isActive !== false)?._id || null : null,
         },
       ],
     });
@@ -151,90 +144,9 @@ export default function DoctorAvailabilityEditor({ value, onChange }) {
         </div>
         <div>
           <h2>Practice & availability</h2>
-          <p>Manage chambers, weekly slots, leave dates and booking rules.</p>
+          <p>Manage consultation modes, weekly slots, leave dates and booking rules.</p>
         </div>
       </header>
-
-      <div className={styles.block}>
-        <div className={styles.blockTitle}>
-          <div>
-            <h3>Chambers</h3>
-            <p>Add the places where patients can visit.</p>
-          </div>
-          <button
-            type="button"
-            onClick={() =>
-              update("chambers", [...value.chambers, emptyChamber()])
-            }
-          >
-            <AddRoundedIcon /> Add chamber
-          </button>
-        </div>
-        {value.chambers.length === 0 && (
-          <p className={styles.empty}>No chamber added yet.</p>
-        )}
-        <div className={styles.cardGrid}>
-          {value.chambers.map((chamber, index) => (
-            <article className={styles.card} key={chamber._id || index}>
-              <button
-                className={styles.remove}
-                type="button"
-                aria-label="Remove chamber"
-                onClick={() =>
-                  update(
-                    "chambers",
-                    value.chambers.filter(
-                      (_, itemIndex) => itemIndex !== index,
-                    ),
-                  )
-                }
-              >
-                <DeleteOutlineRoundedIcon />
-              </button>
-              <label>
-                Chamber name
-                <input
-                  value={chamber.name || ""}
-                  onChange={(event) =>
-                    updateChamber(index, "name", event.target.value)
-                  }
-                  placeholder="Hospital or chamber name"
-                />
-              </label>
-              <label>
-                Address
-                <input
-                  value={chamber.address || ""}
-                  onChange={(event) =>
-                    updateChamber(index, "address", event.target.value)
-                  }
-                  placeholder="Full address"
-                />
-              </label>
-              <div className={styles.twoColumns}>
-                <label>
-                  City
-                  <input
-                    value={chamber.city || ""}
-                    onChange={(event) =>
-                      updateChamber(index, "city", event.target.value)
-                    }
-                  />
-                </label>
-                <label>
-                  Phone
-                  <input
-                    value={chamber.phone || ""}
-                    onChange={(event) =>
-                      updateChamber(index, "phone", event.target.value)
-                    }
-                  />
-                </label>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
 
       <div className={styles.block}>
         <div className={styles.blockTitle}>
@@ -405,6 +317,13 @@ export default function DoctorAvailabilityEditor({ value, onChange }) {
                         }
                       />
                     </label>
+                    {selectedMode.slotValue === "chamber" && <label>
+                      Chamber
+                      <select value={slot.chamberId || ""} onChange={(event) => updateSlot(index, slotIndex, "chamberId", event.target.value || null)}>
+                        <option value="">Select a chamber</option>
+                        {value.chambers.filter((item) => item.isActive !== false).map((item) => <option key={item._id} value={item._id}>{item.name || "New chamber"}</option>)}
+                      </select>
+                    </label>}
                     <label>
                       Calculate by
                       <select

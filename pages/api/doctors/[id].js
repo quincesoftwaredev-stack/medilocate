@@ -592,8 +592,9 @@ handler.patch(isAuth, async (req, res) => {
 
         if (doctorData.consultationModes && typeof doctorData.consultationModes === "object") {
             doctor.consultationModes = doctorData.consultationModes;
+            if (doctorData.consultationModes.home) doctor.consultationModes.homeVisit = { enabled: false, fee: 0 };
             doctor.availableForOnline = Boolean(doctorData.consultationModes.online?.enabled);
-            doctor.availableForHomeVisit = Boolean(doctorData.consultationModes.homeVisit?.enabled);
+            doctor.availableForHomeVisit = Boolean((doctorData.consultationModes.home || doctorData.consultationModes.homeVisit)?.enabled);
         }
 
         if (doctorData.bookingSettings && typeof doctorData.bookingSettings === "object") {

@@ -28,17 +28,17 @@ const Navigator = () => {
             alt=''
           />
         </div>
-        <div className={styles.name}>Sohanur Rahman</div>
-        <div className={styles.joined}>Joined Mar Thu 2024</div>
+        <div className={styles.name}>{userInfo?.fullName || "My account"}</div>
+        <div className={styles.joined}>MediLocate account</div>
       </div>
       <div className={styles.navigators}>
-        <div className={styles.item} onClick={() => router.push('/admin')}>
+        {userInfo?.role === "admin" && <div className={styles.item} onClick={() => router.push('/admin')}>
           <div className={styles.icon}>
             <AdminPanelSettingsIcon />
           </div>
           <div className={styles.title}>Admin Panel</div>
-        </div>
-        <div className={styles.item} onClick={() => router.push(userId ? `/user/${userId}/dashboard` : '/login')}>
+        </div>}
+        <div className={styles.item} onClick={() => router.push(userId ? `/profile/${userId}` : '/login')}>
           <div className={styles.icon}>
             <DashboardIcon />
           </div>
@@ -52,7 +52,7 @@ const Navigator = () => {
         </div>
         <div
           className={styles.item}
-          onClick={() => router.push(userId ? `/user/${userId}/orders` : '/login')}
+          onClick={() => router.push(userId ? '/orders' : '/login')}
         >
           <div className={styles.icon}>
             <AssignmentTurnedInIcon />

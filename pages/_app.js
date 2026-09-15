@@ -1,7 +1,9 @@
 import '@/styles/globals.css'
+import '@livekit/components-styles'
 import NextNProgress from 'nextjs-progressbar'
 import Layout from '@/components/Layout'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { Provider } from 'react-redux'
 import { store } from '@/redux/store'
 import BASE_URL from '@/config'
@@ -11,6 +13,19 @@ import { seoData } from '@/utility/const'
 import Script from 'next/script'
 
 export default function App({ Component, pageProps }) {
+  const router = useRouter()
+  const isPrivateCarePath = path => /^\/(consultation|doctor|doctors|user|admin)(\/|$)/.test(path)
+  const privateCarePage = isPrivateCarePath(router.pathname)
+  useEffect(() => {
+    const protect = url => {
+      if (!isPrivateCarePath(url.split('?')[0])) return
+      window['ga-disable-G-V1J9SKGV3W'] = true
+      window.clarity?.('consent', false)
+    }
+    protect(router.asPath)
+    router.events.on('routeChangeStart', protect)
+    return () => router.events.off('routeChangeStart', protect)
+  }, [router.events, router.asPath])
   return (
     <>
       <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png" />
@@ -33,18 +48,18 @@ export default function App({ Component, pageProps }) {
 
 
       <DefaultSeo {...seoData} />
-      <Script
+      {!privateCarePage && <Script
         async
         src='https://www.googletagmanager.com/gtag/js?id=G-V1J9SKGV3W'
-      ></Script>
-      <Script id='clarity-script' strategy='afterInteractive'>
+      ></Script>}
+      {!privateCarePage && <Script id='clarity-script' strategy='afterInteractive'>
         {`    (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
         t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "nkik2r1lg7");`}
-      </Script>
-      <script
+      </Script>}
+      {!privateCarePage && <script
         dangerouslySetInnerHTML={{
           __html: `
                 window.dataLayer = window.dataLayer || [];
@@ -53,7 +68,7 @@ export default function App({ Component, pageProps }) {
                 gtag('config', 'G-V1J9SKGV3W');
               `
         }}
-      />
+      />}
 
       <Provider store={store}>
         <SnackbarProvider>

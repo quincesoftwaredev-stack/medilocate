@@ -4,6 +4,7 @@ import { isAuth } from "@/utility";
 import db from "@/database/connection";
 import Booking from "@/database/model/Booking";
 import BookingPayment from "@/database/model/BookingPayment";
+import { sendPaymentStatusSms } from "@/services/consultation-payment-message";
 
 const handler = nextConnect();
 
@@ -44,6 +45,15 @@ handler.post(isAuth, async (req, res) => {
     booking.paymentHoldExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
     booking.statusTimeline.push({ status: booking.status, changedBy: req.user._id });
     await booking.save();
+    try {
+      const delivery = await sendPaymentStatusSms(booking, "submitted");
+      if (!delivery?.skipped && (String(delivery?.response_code) === "202" || delivery?.success === true)) {
+        booking.paymentSubmissionSmsSentAt = new Date();
+        await booking.save();
+      }
+    } catch (error) {
+      console.error("Payment submission SMS failed", { bookingId: String(booking._id), reason: error.message });
+    }
     return res.status(201).json({ booking, payment });
   } catch (error) {
     if (error?.code === 11000) return res.status(409).json({ error: "This transaction ID has already been submitted." });

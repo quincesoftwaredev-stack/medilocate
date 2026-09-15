@@ -7,8 +7,6 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
-import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
-import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import MedicalServicesOutlinedIcon from "@mui/icons-material/MedicalServicesOutlined";
@@ -24,7 +22,6 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 
 
 import DoctorProfileImageUpload from "@/components/Doctors/DoctorProfileImageUpload";
-import DoctorAvailabilityEditor, { createAvailabilityForm } from "@/components/Doctors/DoctorAvailabilityEditor";
 
 import {
     showSnackBar,
@@ -185,8 +182,6 @@ export default function DoctorProfileEditPage({
 
         });
 
-    const [availability, setAvailability] =
-        useState(() => createAvailabilityForm(doctorData));
 
 
     /*
@@ -211,8 +206,6 @@ export default function DoctorProfileEditPage({
     const [saving, setSaving] =
         useState(false);
 
-    const [step, setStep] =
-        useState(1);
 
 
     /*
@@ -227,13 +220,6 @@ export default function DoctorProfileEditPage({
 
         event.preventDefault();
 
-        // Step navigation must never persist draft changes. Browsers can
-        // submit a form from nested controls or the Enter key, so only the
-        // final review step is allowed to reach the update request.
-        if (step !== 3) {
-            setStep((current) => Math.min(current + 1, 3));
-            return;
-        }
 
 
         if (
@@ -374,22 +360,10 @@ export default function DoctorProfileEditPage({
                     about:
                         doctor.about.trim(),
 
-                    chambers:
-                        availability.chambers,
 
-                    weeklyAvailability:
-                        availability.weeklyAvailability,
 
-                    unavailablePeriods:
-                        availability.unavailablePeriods.filter(
-                            (period) => period.startDate && period.endDate
-                        ),
 
-                    consultationModes:
-                        availability.consultationModes,
 
-                    bookingSettings:
-                        availability.bookingSettings,
 
                 },
 
@@ -584,20 +558,13 @@ export default function DoctorProfileEditPage({
                             className={
                                 styles.saveTopButton
                             }
-                            onClick={() => step < 3
-                                ? setStep((current) => current + 1)
-                                : document.getElementById("doctor-profile-form")?.requestSubmit()
-                            }
+                            onClick={() => document.getElementById("doctor-profile-form")?.requestSubmit()}
                             disabled={saving}
                         >
 
                             <SaveOutlinedIcon />
 
-                            {saving
-                                ? "Saving..."
-                                : step < 3
-                                    ? "Continue"
-                                    : "Save Changes"}
+                            {saving ? "Saving..." : "Save Changes"}
 
                         </button>
 
@@ -611,25 +578,6 @@ export default function DoctorProfileEditPage({
                         }
                         className={styles.form}
                     >
-
-                        <nav className={styles.stepper} aria-label="Profile update progress">
-                            {["Profile", "Availability", "Review"].map((label, index) => {
-                                const number = index + 1;
-                                const active = step >= number;
-                                return (
-                                    <div className={styles.stepGroup} key={label}>
-                                        <button type="button" className={`${styles.stepItem} ${active ? styles.stepActive : ""}`} onClick={() => number < step && setStep(number)}>
-                                            <span className={styles.stepNumber}>{step > number ? <CheckCircleRoundedIcon /> : number}</span>
-                                            <span>{label}</span>
-                                        </button>
-                                        {number < 3 && <span className={`${styles.stepLine} ${step > number ? styles.lineActive : ""}`} />}
-                                    </div>
-                                );
-                            })}
-                        </nav>
-
-                        {step === 1 && (
-                        <>
 
 
                         {/* =================================================
@@ -1031,38 +979,6 @@ export default function DoctorProfileEditPage({
                         </section>
 
 
-                        </>
-                        )}
-
-                        {step === 2 && (
-                        <DoctorAvailabilityEditor
-                            value={availability}
-                            onChange={setAvailability}
-                        />
-                        )}
-
-                        {step === 3 && (
-                        <section className={styles.reviewCard}>
-                            <div className={styles.reviewIntro}>
-                                <div className={styles.sectionIcon}><CheckCircleRoundedIcon /></div>
-                                <div>
-                                    <span>FINAL REVIEW</span>
-                                    <h2>Ready to update your profile?</h2>
-                                    <p>Check this summary, then use Save Changes to publish everything together.</p>
-                                </div>
-                            </div>
-                            <div className={styles.reviewIdentity}>
-                                <strong>{user.fullName}</strong>
-                                <span>{doctor.speciality || "Speciality not added"}</span>
-                            </div>
-                            <div className={styles.reviewGrid}>
-                                <div><strong>{availability.chambers.length}</strong><span>Chambers</span></div>
-                                <div><strong>{Object.values(availability.consultationModes).filter((mode) => mode?.enabled).length}</strong><span>Consultation modes</span></div>
-                                <div><strong>{availability.weeklyAvailability.reduce((count, day) => count + (day.slots?.length || 0), 0)}</strong><span>Weekly slots</span></div>
-                                <div><strong>{availability.unavailablePeriods.length}</strong><span>Leave periods</span></div>
-                            </div>
-                        </section>
-                        )}
 
                         {/* =================================================
                             VERIFICATION NOTICE
@@ -1108,36 +1024,16 @@ export default function DoctorProfileEditPage({
                             }
                         >
 
-                            {step === 1 ? (
-                                <Link href={`/doctors/${doctorData._id}`} className={styles.cancelButton}>Cancel</Link>
-                            ) : (
-                                <button type="button" className={styles.cancelButton} onClick={() => setStep((current) => current - 1)}>
-                                    <ArrowBackRoundedIcon /> Back
-                                </button>
-                            )}
+                            <Link href={`/doctors/${doctorData._id}`} className={styles.cancelButton}>Cancel</Link>
 
-
-                            {step < 3 ? (
-                                <button
-                                    key="continue-step"
-                                    type="button"
-                                    className={styles.saveButton}
-                                    onClick={() => setStep((current) => current + 1)}
-                                >
-                                    <ArrowForwardRoundedIcon />
-                                    Continue
-                                </button>
-                            ) : (
-                                <button
-                                    key="save-profile"
-                                    type="submit"
-                                    className={styles.saveButton}
-                                    disabled={saving}
-                                >
-                                    <SaveOutlinedIcon />
-                                    {saving ? "Saving..." : "Save Changes"}
-                                </button>
-                            )}
+                            <button
+                                type="submit"
+                                className={styles.saveButton}
+                                disabled={saving}
+                            >
+                                <SaveOutlinedIcon />
+                                {saving ? "Saving..." : "Save Changes"}
+                            </button>
 
                         </div>
 

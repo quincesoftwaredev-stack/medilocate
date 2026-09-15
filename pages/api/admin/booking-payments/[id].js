@@ -4,6 +4,7 @@ import { isAdmin, isAuth } from "@/utility";
 import db from "@/database/connection";
 import Booking from "@/database/model/Booking";
 import BookingPayment from "@/database/model/BookingPayment";
+import { sendPaymentStatusSms } from "@/services/consultation-payment-message";
 
 const handler = nextConnect();
 handler.use(isAuth, isAdmin);
@@ -32,12 +33,24 @@ handler.patch(async (req, res) => {
       payment.rejectionReason = String(req.body.reason || "Payment could not be verified.").trim().slice(0, 500);
       booking.paymentStatus = "rejected";
       booking.status = "cancelled";
+      booking.slotKey = undefined;
       booking.paymentHoldExpiresAt = null;
       booking.cancellation = { reason: payment.rejectionReason, cancelledBy: req.user._id, cancelledAt: new Date(), refundRequired: false };
     }
     booking.statusTimeline.push({ status: booking.status, changedBy: req.user._id, note: payment.rejectionReason || "Payment verified by admin." });
     await payment.save();
     await booking.save();
+    if (action === "verify" && !booking.paymentVerifiedSmsSentAt) {
+      try {
+        const delivery = await sendPaymentStatusSms(booking, "verified");
+        if (!delivery?.skipped && (String(delivery?.response_code) === "202" || delivery?.success === true)) {
+          booking.paymentVerifiedSmsSentAt = new Date();
+          await booking.save();
+        }
+      } catch (error) {
+        console.error("Payment verification SMS failed", { bookingId: String(booking._id), reason: error.message });
+      }
+    }
     return res.status(200).json({ booking, payment });
   } catch (error) {
     console.error("Payment verification error", error);

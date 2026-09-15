@@ -216,3 +216,28 @@
     width: 100%;
   }
 }
+
+.modeItem {
+  appearance: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: var(--ml-transition);
+}
+.modeItem:hover {
+  border-color: var(--ml-teal);
+  background: var(--ml-teal-light);
+}
+.activeMode,
+.activeMode:hover {
+  border-color: var(--ml-teal);
+  background: var(--ml-teal);
+}
+.activeMode span,
+.activeMode strong {
+  color: var(--ml-white);
+}
+.modeItem:focus-visible {
+  outline: 3px solid var(--ml-teal-light);
+  outline-offset: 2px;
+}

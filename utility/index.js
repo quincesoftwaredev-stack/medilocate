@@ -12,8 +12,6 @@ const GeneratePassword = async (password, salt) => {
 }
 
 const ValidatePassword = async (enteredPassword, savedPassword, salt) => {
-  console.log({ salt, enteredPassword, savedPassword })
-  console.log(await GeneratePassword(enteredPassword, salt))
   return (await GeneratePassword(enteredPassword, salt)) == savedPassword
 }
 
@@ -29,12 +27,10 @@ const GenerateSignature = async payload => {
 const ValidateSignature = async req => {
   try {
     const { authorization: signature } = req.headers
-    console.log({ signature })
     const payload = await jwt.verify(signature.split(' ')[1], APP_SECRET)
     req.user = payload
     return true
   } catch (error) {
-    console.log(error)
     return false
   }
 }

@@ -37,3 +37,9 @@ export const PRICING_CONFIG = {
   targetDeliveryTimeMinutes: 30,
   serviceCity: "Rangpur",
 };
+
+export const consultationConfig = {
+  managerPhone: '01977629936',
+  reminderBeforeMinutes: { online: 5, chamber: 5, home: 5 },
+  joinBeforeMinutes: { online: 10 },
+};

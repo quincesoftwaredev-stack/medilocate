@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +11,8 @@ import Loading from "@/components/Utility/Loading";
 import GoogleMapsProvider from "@/components/Utility/GoogleMapsProvider";
 import WhatsAppButton from "@/components/Utility/WhatsAppButton";
 import AdminBottomNav from "@/components/Admin/AdminBottomNav";
+import DoctorBottomNav from "@/components/Doctors/DoctorBottomNav";
+import UserBottomNav from "@/components/User/UserBottomNav";
 
 import { containsAdmin } from "@/utility/helper";
 import { setCategories } from "@/redux/categorySlice";
@@ -26,9 +28,13 @@ const Layout = ({ children }) => {
   const loading = useSelector(state => state.state.loading);
   const notistack = useSelector(state => state.notistack.notistack);
   const fetchAgain = useSelector(state => state.category.fetchAgain);
-  const userInfo = useSelector(state => state.user.userInfo);
+  const storedUserInfo = useSelector(state => state.user.userInfo);
+  const [hydrated, setHydrated] = useState(false);
+  const userInfo = hydrated ? storedUserInfo : null;
 
-
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -67,9 +73,9 @@ const Layout = ({ children }) => {
   }, [notistack, enqueueSnackbar]);
 
   const isAdminPage = containsAdmin(router.asPath);
+  const isCarePage = /^\/(consultation|doctor)(\/|$)/.test(router.pathname);
 
-  return (
-    <GoogleMapsProvider>
+  const content = (
       <div onClickCapture={(event) => {
         const link = event.target.closest?.("a[href]");
         if (!link) return;
@@ -88,16 +94,21 @@ const Layout = ({ children }) => {
 
         {!isAdminPage && <Footer />}
 
-        {!isAdminPage && (
+        {!isAdminPage && !isCarePage && (
           <WhatsAppButton includeLocation={true} />
         )}
 
-        {userInfo?.role === "admin" && (
+        {userInfo?.role === "admin" ? (
           <AdminBottomNav />
+        ) : userInfo?.role === "doctor" ? (
+          <DoctorBottomNav userInfo={userInfo} />
+        ) : (
+          <UserBottomNav userInfo={userInfo} />
         )}
       </div>
-    </GoogleMapsProvider>
   );
+  const skipMaps = isCarePage || /^\/admin\/booking(\/|$)/.test(router.pathname) || /^\/user\/\[id\]\/dashboard$/.test(router.pathname);
+  return skipMaps ? content : <GoogleMapsProvider>{content}</GoogleMapsProvider>;
 };
 
 export default Layout;

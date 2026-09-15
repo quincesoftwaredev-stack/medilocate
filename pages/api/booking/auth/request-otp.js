@@ -13,9 +13,14 @@ handler.post(async (req, res) => {
   try {
     const phone = normalizeBangladeshPhone(req.body.phone);
     if (!phone) return res.status(400).json({ error: "Enter a valid Bangladesh mobile number." });
+    if (!APP_SECRET) return res.status(503).json({ error: "Booking verification is not configured." });
     await db.connect();
 
     const requestedIp = String(req.headers["x-forwarded-for"] || req.socket?.remoteAddress || "").split(",")[0].trim();
+    const lastChallenge = await OtpChallenge.findOne({ phone, purpose: "booking-login" }).sort({ createdAt: -1 }).select("createdAt");
+    if (lastChallenge && Date.now() - lastChallenge.createdAt.getTime() < 60000) {
+      return res.status(429).json({ error: "Please wait one minute before requesting another OTP." });
+    }
     const since = new Date(Date.now() - 10 * 60 * 1000);
     const recentCount = await OtpChallenge.countDocuments({
       createdAt: { $gte: since },
@@ -36,11 +41,12 @@ handler.post(async (req, res) => {
 
     const delivery = await new Message().sendMessage({
       number: phone,
+      sendInDevelopment: true,
       message: `Your MediLocate booking verification code is ${code}. It expires in 5 minutes. Never share this code.`,
     });
-    if (delivery?.error) {
+    if (delivery?.skipped || (String(delivery?.response_code) !== "202" && delivery?.success !== true)) {
       await OtpChallenge.deleteOne({ _id: challenge._id });
-      return res.status(503).json({ error: "OTP delivery is temporarily unavailable." });
+      return res.status(503).json({ error: delivery?.error || "OTP delivery is temporarily unavailable." });
     }
     return res.status(200).json({ challengeId: challenge._id, expiresInSeconds: 300 });
   } catch (error) {

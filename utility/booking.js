@@ -5,6 +5,8 @@ const ACTIVE_BOOKING_STATUSES = [
   "confirmed",
   "reschedule-requested",
   "rescheduled",
+  "waiting",
+  "ongoing",
 ];
 
 const pad = (value) => String(value).padStart(2, "0");
@@ -62,6 +64,26 @@ export const getDhakaDateKey = (value) => new Intl.DateTimeFormat("en-CA", {
   day: "2-digit",
 }).format(new Date(value));
 
+export const getDoctorModeConfig = (doctor, mode) => {
+  const type = mode === "home-visit" ? "home" : mode;
+  if (type !== "home") return doctor.consultationModes?.[type];
+  const current = doctor.consultationModes?.home;
+  const legacy = doctor.consultationModes?.homeVisit;
+  return current?.enabled ? current : legacy?.enabled ? legacy : current || legacy;
+};
+
+export const getConsultationTime = (booking) => {
+  if (booking.scheduledAt) return new Date(booking.scheduledAt);
+  if (!booking.appointmentDate || !booking.startTime) return null;
+  return new Date(`${getDhakaDateKey(booking.appointmentDate)}T${booking.startTime}:00+06:00`);
+};
+
+export const getConsultationEndTime = (booking) => {
+  if (booking.slotEnd) return new Date(booking.slotEnd);
+  if (!booking.appointmentDate || !booking.endTime) return null;
+  return new Date(`${getDhakaDateKey(booking.appointmentDate)}T${booking.endTime}:00+06:00`);
+};
+
 export const getDhakaDayOfWeek = (value) => {
   const label = new Intl.DateTimeFormat("en-US", { timeZone: "Asia/Dhaka", weekday: "short" }).format(new Date(value));
   return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(label);
@@ -78,8 +100,8 @@ export const isUnavailableDate = (doctor, value) => {
 export const makeSlotKey = ({ doctorProfileId, dateKey, mode, slotId, startTime, serial }) => [
   doctorProfileId,
   dateKey,
-  mode,
-  slotId || "window",
+  mode === "chamber" ? "chamber" : "consultation",
+  mode === "chamber" ? (slotId || "window") : "time",
   mode === "chamber" ? `serial-${serial}` : startTime,
 ].join(":");
 
@@ -96,8 +118,8 @@ export const normalizeWeeklyAvailability = (days = []) => {
     const dayOfWeek = Number(day.dayOfWeek);
     if (!Number.isInteger(dayOfWeek) || dayOfWeek < 0 || dayOfWeek > 6) throw new Error("Invalid weekday in availability.");
     const slots = (Array.isArray(day.slots) ? day.slots : []).map((slot) => {
-      const consultationMode = ["chamber", "online", "home-visit"].includes(slot.consultationMode)
-        ? slot.consultationMode
+      const consultationMode = ["chamber", "online", "home", "home-visit"].includes(slot.consultationMode)
+        ? (slot.consultationMode === "home-visit" ? "home" : slot.consultationMode)
         : "chamber";
       const normalized = {
         ...slot,
@@ -113,16 +135,26 @@ export const normalizeWeeklyAvailability = (days = []) => {
       return normalized;
     });
 
-    for (const consultationMode of ["chamber", "online", "home-visit"]) {
+    for (const consultationMode of ["chamber", "online", "home"]) {
       const ordered = slots
         .filter((slot) => slot.consultationMode === consultationMode)
         .map((slot) => ({ slot, start: timeToMinutes(slot.startTime), end: timeToMinutes(slot.endTime) }))
         .sort((a, b) => a.start - b.start);
       for (let index = 1; index < ordered.length; index += 1) {
         if (ordered[index].start < ordered[index - 1].end) {
-          const modeLabel = consultationMode === "home-visit" ? "Home visit" : consultationMode.charAt(0).toUpperCase() + consultationMode.slice(1);
+          const modeLabel = consultationMode === "home" ? "Home visit" : consultationMode.charAt(0).toUpperCase() + consultationMode.slice(1);
           throw new Error(`${["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][dayOfWeek]} has overlapping ${modeLabel} availability ranges.`);
         }
+      }
+    }
+    const all = slots.map((slot) => ({ slot, start: timeToMinutes(slot.startTime), end: timeToMinutes(slot.endTime) })).sort((a, b) => a.start - b.start);
+    for (let index = 1; index < all.length; index += 1) {
+      if (all[index].start < all[index - 1].end) {
+        const dayLabel = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][dayOfWeek];
+        const modeLabel = (mode) => mode === "home" ? "Home visit" : mode.charAt(0).toUpperCase() + mode.slice(1);
+        const first = all[index - 1].slot;
+        const second = all[index].slot;
+        throw new Error(`${dayLabel}: overlapping times — ${modeLabel(first.consultationMode)} ${first.startTime}–${first.endTime} and ${modeLabel(second.consultationMode)} ${second.startTime}–${second.endTime}. Please change one of these time ranges.`);
       }
     }
     return { dayOfWeek, isAvailable: slots.length > 0, slots };

@@ -263,6 +263,7 @@ const normalizeDoctor = (
 export default function DoctorProfilePage({
     doctor,
     canEdit = false,
+    isDoctorOwner = false,
 }) {
 
     /*
@@ -509,6 +510,7 @@ export default function DoctorProfilePage({
                                     {doctor.specialty}
                                 </div>
 
+                                {isDoctorOwner && <Link href="/doctor" className={styles.updateProfileButton}>Doctor dashboard</Link>}
                                 {canEdit && (
                                     <Link
                                         href={`/doctors/${doctor.id}/edit`}
@@ -1368,6 +1370,7 @@ export async function getServerSideProps(
         const viewerId = String(viewer?._id || viewer?.id || "");
         const doctorUserId = String(user?._id || "");
         const canEdit = viewer?.role === "admin" || (viewerId && viewerId === doctorUserId);
+        const isDoctorOwner = viewer?.role === "doctor" && viewerId && viewerId === doctorUserId;
 
 
         /*
@@ -1585,6 +1588,7 @@ export async function getServerSideProps(
                     ),
 
                 canEdit: Boolean(canEdit),
+                isDoctorOwner: Boolean(isDoctorOwner),
 
             },
 

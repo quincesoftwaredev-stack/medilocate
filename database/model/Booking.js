@@ -10,6 +10,9 @@ export const BOOKING_STATUSES = [
   "completed",
   "cancelled",
   "no-show",
+  "waiting",
+  "ongoing",
+  "rejected",
 ];
 
 export const BOOKING_PAYMENT_STATUSES = [
@@ -42,6 +45,7 @@ const rescheduleProposalSchema = new mongoose.Schema({
   requestedAt: { type: Date, default: Date.now },
   reason: { type: String, trim: true, maxlength: 500, default: "" },
   appointmentDate: { type: Date, required: true },
+  availabilitySlotId: { type: mongoose.Schema.Types.ObjectId, default: null },
   startTime: { type: String, trim: true, required: true },
   endTime: { type: String, trim: true, required: true },
   sessionStartTime: { type: String, trim: true, default: "" },
@@ -68,7 +72,12 @@ const bookingSchema = new mongoose.Schema({
   sessionEndTime: { type: String, trim: true, default: "" },
   timezone: { type: String, trim: true, default: "Asia/Dhaka" },
   serial: { type: Number, min: 1, default: null },
-  consultationMode: { type: String, enum: ["chamber", "online", "home-visit"], required: true },
+  consultationMode: { type: String, enum: ["chamber", "online", "home", "home-visit"], required: true },
+  consultationType: { type: String, enum: ["online", "chamber", "home"], required: true, default: function consultationTypeDefault() { return this.consultationMode === "home-visit" ? "home" : this.consultationMode; } },
+  scheduledAt: { type: Date, default: null, index: true },
+  slotStart: { type: Date, default: null },
+  slotEnd: { type: Date, default: null },
+  duration: { type: Number, min: 1, default: null },
 
   consultationFee: { type: Number, required: true, min: 0 },
   platformFeePercent: { type: Number, min: 0, max: 100, default: 0 },
@@ -88,6 +97,28 @@ const bookingSchema = new mongoose.Schema({
   doctorNotes: { type: String, trim: true, maxlength: 3000, default: "" },
   homeVisitAddress: { type: addressSchema, default: undefined },
   meetingLink: { type: String, trim: true, maxlength: 1000, default: "" },
+  roomName: { type: String, trim: true, default: "" },
+  doctorJoinedAt: { type: Date, default: null },
+  patientJoinedAt: { type: Date, default: null },
+  doctorLeftAt: { type: Date, default: null },
+  patientLeftAt: { type: Date, default: null },
+  startedAt: { type: Date, default: null },
+  endedAt: { type: Date, default: null },
+  smsReminderSent: {
+    patient: { type: Boolean, default: false },
+    doctor: { type: Boolean, default: false },
+    manager: { type: Boolean, default: false },
+  },
+  smsReminderSentAt: { type: Date, default: null },
+  paymentSubmissionSmsSentAt: { type: Date, default: null },
+  paymentVerifiedSmsSentAt: { type: Date, default: null },
+  qstashReminderMessageId: { type: String, trim: true, default: "" },
+  qstashReminderScheduledFor: { type: Date, default: null },
+  smsReminderSending: {
+    patient: { type: Date, default: null },
+    doctor: { type: Date, default: null },
+    manager: { type: Date, default: null },
+  },
 
   activeRescheduleRequest: { type: rescheduleProposalSchema, default: null },
   rescheduleHistory: { type: [rescheduleProposalSchema], default: [] },
@@ -118,13 +149,20 @@ bookingSchema.index({ doctorProfile: 1, appointmentDate: 1, chamberId: 1, serial
 bookingSchema.index({ patient: 1, createdAt: -1 });
 
 bookingSchema.pre("validate", function validateBooking(next) {
+  if (this.appointmentDate && this.startTime && this.endTime) {
+    const day = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Dhaka", year: "numeric", month: "2-digit", day: "2-digit" }).format(this.appointmentDate);
+    const start = new Date(`${day}T${this.startTime}:00+06:00`);
+    const end = new Date(`${day}T${this.endTime}:00+06:00`);
+    this.scheduledAt = start; this.slotStart = start; this.slotEnd = end;
+    this.duration = Math.round((end - start) / 60000);
+  }
   if (this.startTime && this.endTime && this.startTime >= this.endTime) {
     return next(new Error("Appointment end time must be after start time."));
   }
   if (this.consultationMode === "chamber" && !this.serial) {
     return next(new Error("A chamber booking requires a serial number."));
   }
-  if (this.consultationMode === "home-visit" && !this.homeVisitAddress?.address) {
+  if (["home", "home-visit"].includes(this.consultationMode) && !this.homeVisitAddress?.address) {
     return next(new Error("A home visit booking requires an address."));
   }
   return next();

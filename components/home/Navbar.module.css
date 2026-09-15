@@ -101,7 +101,8 @@
 }
 
 .loginButton,
-.ctaButton {
+.ctaButton,
+.accountButton {
     white-space: nowrap;
     flex-shrink: 0;
 }
@@ -144,6 +145,29 @@
 }
 
 .ctaButton:hover {
+    background: var(--ml-teal-dark);
+}
+
+.accountButton {
+    min-height: 40px;
+    padding: 0 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border-radius: var(--ml-radius-sm);
+    background: var(--ml-teal);
+    color: var(--ml-white);
+    text-decoration: none;
+    font-size: var(--ml-font-sm);
+    font-weight: var(--ml-weight-semibold);
+}
+
+.accountButton svg {
+    font-size: 20px;
+}
+
+.accountButton:hover {
     background: var(--ml-teal-dark);
 }
 

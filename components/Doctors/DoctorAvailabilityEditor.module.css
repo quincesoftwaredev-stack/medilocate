@@ -251,7 +251,6 @@
   border-radius: 50%;
   color: var(--ml-teal-dark);
   display: flex;
-  font-size: var(--ml-font-xs);
   font-weight: var(--ml-weight-bold);
   height: 28px;
   justify-content: center;
@@ -274,7 +273,6 @@
 }
 .ruleGrid > label > small {
   color: var(--ml-gray-500);
-  font-size: var(--ml-font-xs);
   font-weight: var(--ml-weight-regular);
 }
 .ruleInput {
@@ -297,7 +295,6 @@
 }
 .ruleInput span {
   color: var(--ml-gray-500);
-  font-size: var(--ml-font-xs);
   white-space: nowrap;
 }
 .autoConfirm {
@@ -318,7 +315,6 @@
 }
 .autoConfirm > div small {
   color: var(--ml-gray-500);
-  font-size: var(--ml-font-xs);
   margin-top: 2px;
 }
 .removeInline {
@@ -366,7 +362,6 @@
 }
 .modeIdentity small {
   color: var(--ml-gray-500);
-  font-size: var(--ml-font-xs);
   margin-top: 2px;
 }
 .modeIcon {
@@ -420,7 +415,6 @@
 }
 .modeSwitch em {
   color: var(--ml-gray-500);
-  font-size: var(--ml-font-xs);
   font-style: normal;
   font-weight: var(--ml-weight-medium);
 }
@@ -517,7 +511,6 @@
   background: var(--ml-gray-100);
   border-radius: 999px;
   color: var(--ml-gray-500);
-  font-size: var(--ml-font-xs);
   padding: 3px 7px;
 }
 .dayActive .dayHeader span {
@@ -571,7 +564,6 @@
   border-top-style: dashed;
 }
 .slotFields label {
-  font-size: var(--ml-font-xs);
   font-weight: var(--ml-weight-semibold);
 }
 .slotFields input,
@@ -637,4 +629,30 @@
   .modeSwitch em {
     display: none;
   }
+}
+
+.editor, .editor * { box-sizing: border-box; }
+.editor { width: 100%; max-width: 100%; overflow-x: clip; }
+.cardGrid > *, .modeGrid > *, .days > *, .dayHeader > *, .slotFields > *, .leave > *, .ruleGrid > * { min-width: 0; max-width: 100%; }
+.slotFields input, .slotFields select, .leave input, .ruleGrid input { min-width: 0; max-width: 100%; }
+.dayHeader, .dayActions { max-width: 100%; }
+@media (max-width: 480px) {
+  .slotFields { grid-template-columns: 1fr; }
+  .dayHeader { align-items: flex-start; flex-wrap: wrap; }
+  .dayActions { width: 100%; flex-wrap: wrap; }
+  .dayActions button { flex: 1 1 110px; justify-content: center; white-space: normal; }
+}
+/* Compact schedule editor actions. */
+.blockTitle button, .modeTabs button, .dayHeader button, .remove, .removeInline {
+  min-height: 32px;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+.remove, .removeInline { padding: 6px; }
+@media (max-width: 800px) {
+  .blockTitle button { width: auto; align-self: flex-start; }
+}
+@media (max-width: 480px) {
+  .dayActions { width: auto; }
+  .dayActions button { flex: 0 1 auto; min-width: 0; }
 }

@@ -7,6 +7,7 @@ import Medicine from "@/database/model/Medicine";
 import Order from "@/database/model/Orders";
 import nextConnect from "next-connect";
 import crypto from "crypto";
+import { ValidateSignature } from "@/utility";
 
 
 const handler =
@@ -75,6 +76,9 @@ handler.post(async (req, res) => {
         await db.connect();
 
         connected = true;
+
+        // Keep guest checkout working while associating authenticated orders.
+        await ValidateSignature(req);
 
 
         /*
@@ -631,7 +635,7 @@ handler.post(async (req, res) => {
                 */
 
                 user:
-                    null,
+                    req.user?._id || null,
 
 
                 /*

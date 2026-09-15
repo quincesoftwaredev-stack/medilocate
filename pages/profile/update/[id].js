@@ -1,454 +1,71 @@
-import React, { useEffect, useState } from 'react'
-import styles from '../../../styles/Admin/ProductCreate.module.css'
-import Upload from '@/components/Utility/Upload'
-import axios from 'axios'
-import BASE_URL from '@/config'
-import { useRouter } from 'next/router'
-import { useDispatch, useSelector } from 'react-redux'
-import Image from 'next/image'
-import { finishLoading, startLoading } from '@/redux/stateSlice'
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
-import CheckBoxIcon from '@mui/icons-material/CheckBox'
-import { showSnackBar } from '@/redux/notistackSlice'
-import { buttonC, themeBg } from '@/utility/const'
-import { parse } from 'cookie'
-import MapPicker from '@/components/Utility/MapPicker'
-import TextEditor from '@/components/Utility/TextEditor'
-import ToggleLocation from '@/components/Utility/ToggleLocation'
+import { useEffect, useState } from "react";
+import Head from "next/head";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { startLoading, finishLoading } from "@/redux/stateSlice";
+import { showSnackBar } from "@/redux/notistackSlice";
+import styles from "@/styles/User/Consultations.module.css";
 
-// Order Craetion Form
-const Update = ({ profile: data }) => {
-    const [profile, setProfile] = useState(data)
-    const [error, setError] = useState('')
-    const [isClient, setIsClient] = useState(false)
-    const dispatch = useDispatch()
-    const location = useSelector(state => state.user.location)
-    const router = useRouter()
-    const [selectedLocation, setSelectedLocation] = useState({
-        lat: data.location?.coordinates && data.location?.coordinates[0],
-        lng: data.location?.coordinates && data.location?.coordinates[1]
-    })
-    const [newProfile, setNewProfile] = useState(false)
-    const [description, setDescription] = useState(profile.experienceDetails)
-    const [categories, setCateogries] = useState([])
-    const [loading, setLoading] = useState(false)
-    useEffect(() => {
-        location?.lat ? setSelectedLocation(
-            {
-                lat: location.lat,
-                lng: location.lng
-            }
-        ) : setSelectedLocation({
-            lat: data.location?.coordinates && data.location?.coordinates[0],
-            lng: data.location?.coordinates && data.location?.coordinates[1]
-        })
-    }, [])
+export default function UpdateProfile() {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const storedUserInfo = useSelector((state) => state.user?.userInfo);
+  const [hydrated, setHydrated] = useState(false);
+  const userInfo = hydrated ? storedUserInfo : null;
+  const [form, setForm] = useState({ fullName: "", phone: "", email: "", gender: "", image: "" });
+  const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
+  const ownId = String(userInfo?._id || userInfo?.id || "");
 
-    useEffect(() => {
-        setIsClient(true)
-        // fetchCategories()
-        setProfile(data)
-    }, [router.query])
-    const userInfo = useSelector(state => state.user.userInfo)
-    const headers = { Authorization: `Bearer ${userInfo?.token}` }
+  useEffect(() => setHydrated(true), []);
+  useEffect(() => {
+    if (!router.isReady || !ownId || String(router.query.id) !== ownId || !userInfo?.token) return;
+    axios.get(`/api/user/${ownId}`, { headers: { Authorization: `Bearer ${userInfo.token}` } })
+      .then(({ data }) => setForm({
+        fullName: data.fullName || "", phone: data.phone || "",
+        email: data.email || "", gender: data.gender || "", image: data.image || "",
+      }))
+      .catch((requestError) => setError(requestError.response?.data?.error || "Profile could not be loaded."));
+  }, [router.isReady, router.query.id, ownId, userInfo?.token]);
 
-    const saveProfile = async () => {
-        if (!profile.name) {
-            dispatch(
-                showSnackBar({
-                    message: 'Please fill all the necessaary field',
-                    option: {
-                        variant: 'error'
-                    }
-                })
-            )
-            return
-        }
-        try {
-            dispatch(startLoading())
-            const { data } = await axios.post(
-                '/api/profile',
-                {
-                    ...profile
-                },
-                {
-                    headers
-                }
-            )
-            if (data.error) {
-                dispatch(
-                    showSnackBar({
-                        message: data.error,
-                        option: {
-                            variant: 'error'
-                        }
-                    })
-                )
-                dispatch(finishLoading())
-                return
-            }
-            setProfile({
-                name: '',
-                image: ''
-            })
-            dispatch(finishLoading())
-            dispatch(
-                showSnackBar({
-                    message: 'New Profile Created ',
-                    option: {
-                        variant: 'success'
-                    }
-                })
-            )
-        } catch (error) {
-            console.log(error)
-            dispatch(finishLoading())
-            dispatch(
-                showSnackBar({
-                    message: 'Error While Creating Profile !',
-                    option: {
-                        variant: 'error'
-                    }
-                })
-            )
-        }
+  const save = async (event) => {
+    event.preventDefault();
+    if (!form.fullName.trim()) { setError("Full name is required."); return; }
+    setSaving(true);
+    dispatch(startLoading());
+    try {
+      await axios.put(`/api/user/${ownId}`, form, { headers: { Authorization: `Bearer ${userInfo.token}` } });
+      dispatch(showSnackBar({ message: "Profile updated.", option: { variant: "success" } }));
+      router.push(`/profile/${ownId}`);
+    } catch (requestError) {
+      const message = requestError.response?.data?.error || "Profile could not be updated.";
+      setError(message);
+      dispatch(showSnackBar({ message, option: { variant: "error" } }));
+    } finally {
+      setSaving(false);
+      dispatch(finishLoading());
     }
+  };
 
-    const updateProfile = async () => {
-        if (!(selectedLocation.lat || selectedLocation.lng)) {
-            dispatch(
-                showSnackBar({
-                    message: 'Please Set Your Location',
-                    option: {
-                        variant: 'error'
-                    }
-                })
-            )
-            return
-        }
+  if (!hydrated || !userInfo?.token || (router.isReady && String(router.query.id) !== ownId)) {
+    return <main className={styles.gate}>Sign in to edit your profile. <Link href="/login">Sign in</Link></main>;
+  }
 
-        if (!profile.firstName || !profile.lastName) {
-            setError('Pleas fill all the necessaary field')
-            dispatch(
-                showSnackBar({
-                    message: 'Please fill all the necessaary field',
-                    option: {
-                        variant: 'error'
-                    }
-                })
-            )
-            return
-        }
-        try {
-            dispatch(startLoading())
-            const { data } = await axios.put(
-                `/api/user/${router.query.id}`,
-                {
-                    ...profile,
-                    location:
-                        { coordinates: [selectedLocation?.lat, selectedLocation?.lng] },
-                    experienceDetails: description
-
-                },
-                { headers }
-            )
-            setProfile(data)
-            dispatch(finishLoading())
-            dispatch(
-                showSnackBar({
-                    message: 'Profile Updated',
-                    option: {
-                        variant: 'default'
-                    }
-                })
-            )
-            router.push(`/profile/${router.query.id}`)
-        } catch (error) {
-            console.log(error)
-            dispatch(finishLoading())
-            dispatch(
-                showSnackBar({
-                    message: 'Error While Updating Profile !',
-                    option: {
-                        variant: 'error'
-                    }
-                })
-            )
-            setError('Error While Updating Profile !')
-        }
-    }
-
-    const fetchCategories = async () => {
-        try {
-            setLoading(true)
-            const { data } = await axios.get("/api/category")
-            setLoading(false)
-            setCateogries(data.categories)
-        } catch (error) {
-            setLoading(false)
-            console.log(error)
-
-        }
-    }
-    return (
-        <div className={styles.wrapper}>
-            <h2>{router.query.id ? 'Update' : 'Add'} Profile</h2>
-            <form className={styles.forms}>
-                <div className={styles.left}>
-                    <div className={styles.field}>
-                        <label>First Name</label>
-                        <input
-                            type="text"
-                            placeholder="Enter Profile Name"
-                            value={profile?.firstName}
-                            onChange={e => setProfile({ ...profile, firstName: e.target.value })}
-                        />
-                    </div>
-
-                    <div className={styles.field}>
-                        <label>Last Name</label>
-                        <input
-                            type="text"
-                            placeholder="Enter Last Name"
-                            value={profile?.lastName}
-                            onChange={e => setProfile({ ...profile, lastName: e.target.value })}
-                        />
-                    </div>
-
-                    <div className={styles.field}>
-                        <label>Full Name</label>
-                        <input
-                            type="text"
-                            placeholder="Enter Full Name"
-                            value={profile?.fullName}
-                            onChange={e => setProfile({ ...profile, fullName: e.target.value })}
-                        />
-                    </div>
-
-                    {/* <div className={styles.field}>
-                        <label>Phone Number</label>
-                        <input
-                            type="text"
-                            placeholder="Enter Phone Number"
-                            value={profile?.phone}
-                            onChange={e => setProfile({ ...profile, phone: e.target.value })}
-                        />
-                    </div> */}
-                    {profile.role == "doctor" && (<>     <div className={styles.field}>
-                        <label>Education Name</label>
-                        <input
-                            type="text"
-                            placeholder="Enter Your Education/Degrees"
-                            value={profile?.education}
-                            onChange={e => setProfile({ ...profile, education: e.target.value })}
-                        />
-                    </div>
-
-                        <div className={styles.field}>
-                            <label>Speciality</label>
-                            <input
-                                type="text"
-                                placeholder="Enter Your Speciality"
-                                value={profile?.speciality}
-                                onChange={e => setProfile({ ...profile, speciality: e.target.value })}
-                            />
-                        </div>
-
-                        {/* <div className={styles.field}>
-                            <label>Select Category</label>
-                            <div className={styles.options}>
-                                {categories.map((c, i) => (
-                                    <span className={styles.option} onClick={() => setProfile({ ...profile, speciality: c.name })}>{c.name}</span>
-                                ))}
-                            </div> */}
-
-
-
-
-                        <div className={styles.field}>
-                            <label>Total Experience (Years)</label>
-                            <input
-                                type="number"
-                                placeholder="Enter Total Experience"
-                                value={profile?.totalExperience}
-                                onChange={e => setProfile({ ...profile, totalExperience: e.target.value })}
-                            />
-                        </div>
-
-                        <div className={styles.field}>
-                            <label>BMDC Number</label>
-                            <input
-                                type="text"
-                                placeholder="Enter BMDC Number"
-                                value={profile?.bmdcNumber}
-                                onChange={e => setProfile({ ...profile, bmdcNumber: e.target.value })}
-                            />
-                        </div>
-
-                        <div className={styles.field}>
-                            <label>Working Institution</label>
-                            <input
-                                type="text"
-                                placeholder="Enter Current Workplace"
-                                value={profile?.workingIn}
-                                onChange={e => setProfile({ ...profile, workingIn: e.target.value })}
-                            />
-                        </div>
-
-                        <div className={styles.field}>
-                            <label>Consultation Fee (BDT)</label>
-                            <input
-                                type="number"
-                                placeholder="Enter Consultation Fee"
-                                value={profile?.consultationFee}
-                                onChange={e => setProfile({ ...profile, consultationFee: e.target.value })}
-                            />
-                        </div>
-                        <div className={styles.field}>
-                            <label>Follow Up Fee (BDT)</label>
-                            <input
-                                type="number"
-                                placeholder="Enter Follow Up Fee"
-                                value={profile?.followUpFee}
-                                onChange={e => setProfile({ ...profile, followUpFee: e.target.value })}
-                            />
-                        </div>
-                        {/* <div className={styles.field}>
-                            <label>Experiance Details</label>
-                            <textarea
-                                type="text"
-                                placeholder="Share Experince Details"
-                                value={profile?.experienceDetails}
-                                onChange={e => setProfile({ ...profile, experienceDetails: e.target.value })}
-                            />
-                        </div> */}
-
-
-                        <div className={styles.field}>
-                            <label>Average Consultation Time (Minutes)</label>
-                            <input
-                                type="number"
-                                placeholder="Enter Avg Consultation Time"
-                                value={profile?.avgConsultationTime}
-                                onChange={e => setProfile({ ...profile, avgConsultationTime: e.target.value })}
-                            />
-                        </div>
-
-                    </>)}
-
-                    <div className={styles.field}>
-                        <label>Profile Icon</label>
-                        <Upload
-                            handle={files => {
-                                setProfile(prev => ({ ...prev, image: files.url }))
-                            }}
-                        />
-                    </div>
-                    <div className={styles.images}>
-                        {profile?.image ? (
-                            <div className={styles.image__container}>
-                                <Image src={profile.image} alt='' width={180} height={180} unoptimized />
-                            </div>
-                        ) : (
-                            <div
-                                className={styles.image__container}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    textAlign: 'center'
-                                }}
-                            >
-                                No Photo Uploaded
-                            </div>
-                        )}
-                    </div>
-                    {/* <div className={styles.field}>
-                        {location?.lat}
-                        <div className={styles.toggleLocation}>
-                            <ToggleLocation text={"Find Your Location"} style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                gap: "10px",
-                                border: "1px solid grey",
-                                padding: "5px 10px",
-                            }} />
-                        </div>
-
-                    </div> */}
-                    <div className={styles.field}>
-                        {/* <label>Your Location ({selectedLocation?.lat} , {selectedLocation?.lng})</label> */}
-                        {isClient && <MapPicker selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} />}
-                    </div>
-                    {isClient && profile.role == "doctor" && <div className={styles.field}>
-                        <label>Write Your Experiance Details</label>
-                        <TextEditor
-                            setDescription={setDescription}
-                            description={description}
-                        />
-                    </div>}
-
-
-                </div>
-                {/* <div className={styles.right}></div> */}
-            </form >
-            {error && <p style={{ color: 'red', margin: '10px' }}>{error}</p>}
-            <button
-                onClick={() => (router.query.id ? updateProfile() : saveProfile())}
-            >
-                Save Profile
-            </button>
-        </div >
-    )
-}
-
-export default Update
-
-export async function getServerSideProps(context) {
-
-    const { id } = context.query
-    const { locale, req } = context
-    const cookies = parse(req.headers.cookie || '')
-
-    const userInfo = cookies['userInfo']
-        ? JSON.parse(cookies['userInfo'])
-        : null
-
-    if (!userInfo || !userInfo.token) {
-        throw new Error('User is not authenticated')
-    }
-
-    const headers = { Authorization: `Bearer ${userInfo.token}` }
-
-    const fetchProfile = async () => {
-        const { data } = await axios.get(`${BASE_URL}/api/user/${id}`, {
-            headers
-        })
-        return data
-    }
-
-
-    // const categories = await fetchCategories()
-
-    if (id) {
-        const profile = await fetchProfile()
-        return {
-            props: {
-                profile
-                // categories
-            }
-        }
-    }
-
-    return {
-        props: {
-            profile: {
-                name: '',
-                image: '',
-                children: []
-            }
-            // categories: categories
-        }
-    }
+  return <>
+    <Head><title>Edit profile | MediLocate</title><meta name="robots" content="noindex,nofollow" /></Head>
+    <main className={styles.main}>
+      <h1>Edit profile</h1>
+      {error && <p role="alert" className={styles.error}>{error}</p>}
+      <form className={styles.profileForm} onSubmit={save}>
+        <label>Full name<input value={form.fullName} onChange={(event) => setForm({ ...form, fullName: event.target.value })} required /></label>
+        <label>Phone<input value={form.phone} readOnly aria-describedby="phone-help" /><small id="phone-help">Your login phone number cannot be changed here.</small></label>
+        <label>Email<input type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} /></label>
+        <label>Gender<select value={form.gender} onChange={(event) => setForm({ ...form, gender: event.target.value })}><option value="">Select</option><option value="Male">Male</option><option value="Female">Female</option></select></label>
+        <label>Photo URL<input type="url" value={form.image} onChange={(event) => setForm({ ...form, image: event.target.value })} /></label>
+        <div className={styles.actions}><Link href={`/profile/${ownId}`}>Cancel</Link><button type="submit" disabled={saving}>{saving ? "Saving..." : "Save profile"}</button></div>
+      </form>
+    </main>
+  </>;
 }

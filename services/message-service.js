@@ -6,19 +6,14 @@ const from = process.env.FROM
 
 class Message {
     async sendMessage(data) {
-        const { number, message } = data;
+        const { number, message, sendInDevelopment = false } = data;
 
         if (!number || !message) {
             return "Missing Number Or Message";
         }
 
         // Don't send SMS in development/test
-        if (process.env.NODE_ENV !== "production") {
-            console.log("SMS skipped in development:", {
-                number,
-                message,
-            });
-
+        if (process.env.NODE_ENV !== "production" && !sendInDevelopment) {
             return {
                 success: true,
                 skipped: true,
@@ -26,8 +21,12 @@ class Message {
             };
         }
 
+        if (!process.env.BULK_SMS_API_KEY || !process.env.BULK_SMS_SENDER_ID) {
+            return { success: false, error: "SMS provider is not configured." };
+        }
+
         try {
-            const apiUrl = "http://bulksmsbd.net/api/smsapi";
+            const apiUrl = "https://bulksmsbd.net/api/smsapi";
 
             const payload = {
                 api_key: process.env.BULK_SMS_API_KEY,
@@ -42,8 +41,6 @@ class Message {
                 },
                 timeout: 10000,
             });
-
-            console.log("SMS response:", responseData);
 
             return responseData;
         } catch (error) {

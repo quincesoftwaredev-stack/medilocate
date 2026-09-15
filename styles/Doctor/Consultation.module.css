@@ -1,0 +1,44 @@
+.page { max-width: 1200px; min-height: 75vh; margin: 0 auto; padding: 24px 16px; color: var(--ml-navy); background: var(--ml-gray-50); }
+.prejoin { max-width: 760px; margin: 28px auto; padding: 24px; border: 1px solid var(--ml-gray-200); border-radius: var(--ml-radius-md); background: var(--ml-white); }
+.prejoin h1 { margin: 0 0 12px; }
+.prejoin :global(.lk-prejoin) { margin-top: 18px; }
+.notice, .banner { padding: 10px 14px; border-radius: 10px; background: #fff3d7; color: #61410a; }
+.error { padding: 10px 14px; border-radius: 10px; background: #fff0f0; color: #a32626; }
+.call { position: fixed; inset: 0; z-index: 2000; background: #0b1829; color: #fff; overflow: hidden; height: 100dvh; display: flex; flex-direction: column; }
+.callHeader { padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.callHeader > div { display: flex; gap: 18px; }
+.quality { color: #95ebbe; }
+.banner { margin: 0 14px 8px; }
+.callBody { display: flex; flex: 1; min-height: 0; }
+.videoArea { flex: 1; position: relative; min-height: 0; background: #14243a; }
+.remote { width: 100%; height: 100%; display: grid; place-items: center; overflow: hidden; }
+.remote video { width: 100%; height: 100%; object-fit: contain; }
+.local { width: min(28%, 240px); aspect-ratio: 16 / 9; position: absolute; right: 18px; bottom: 18px; background: #293f58; border: 2px solid #fff; border-radius: 12px; overflow: hidden; display: grid; place-items: center; }
+.local video { width: 100%; height: 100%; object-fit: cover; }
+.chat { width: 0; overflow: hidden; transition: width .2s; display: flex; flex-direction: column; background: var(--ml-white); color: var(--ml-navy); }
+.chatOpen { width: min(33%, 350px); padding: 14px; box-sizing: border-box; }
+.chatHeader { display: flex; justify-content: space-between; align-items: center; }
+.chatHeader button { border: 0; background: none; color: var(--ml-teal-dark); cursor: pointer; }
+.chat small { color: #667; margin: 10px 0; }
+.messages { flex: 1; overflow-y: auto; }
+.messages > div { max-width: 85%; border-radius: 12px; margin: 9px 0; padding: 9px; background: var(--ml-gray-100); }
+.messages > .ownMessage { margin-left: auto; background: var(--ml-teal-light); }
+.messages p { margin: 5px 0; overflow-wrap: anywhere; }
+.messages time { color: #69798a; font-size: 11px; }
+.chat form { display: flex; gap: 6px; margin-top: 10px; }
+.chat input { min-width: 0; flex: 1; padding: 10px; border: 1px solid var(--ml-gray-300); border-radius: 8px; }
+.chat form button { border: 0; border-radius: 8px; background: var(--ml-teal); color: #fff; padding: 0 12px; }
+.devices { background: #20334b; padding: 10px 16px; display: flex; flex-wrap: wrap; gap: 20px; }
+.devices label { min-width: 160px; }
+.controls { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 14px; background: #0f2035; }
+.controls button { min-width: 80px; min-height: 44px; border: 1px solid #70869e; border-radius: 10px; background: #243a55; color: #fff; cursor: pointer; }
+.confirmOverlay { position: absolute; inset: 0; z-index: 2020; display: grid; place-items: center; padding: 16px; background: rgba(5, 17, 29, .72); }
+.confirmDialog { width: min(100%, 400px); padding: 24px; border-radius: var(--ml-radius-md); background: var(--ml-white); color: var(--ml-navy); box-shadow: var(--ml-shadow-lg); }
+.confirmDialog h2 { margin: 0 0 10px; }
+.confirmDialog p { margin: 0 0 20px; }
+.confirmDialog > div { display: flex; justify-content: flex-end; gap: 8px; }
+.confirmDialog button { min-height: 44px; padding: 10px 14px; border-radius: var(--ml-radius-sm); background: var(--ml-gray-100); color: var(--ml-navy); }
+.confirmDialog .end { background: #b83d45; color: var(--ml-white); }
+.controls .end { background: #b83d45; border-color: #b83d45; }
+.unread { display: inline-block; border-radius: 50%; background: #e83e56; padding: 2px 6px; font-size: 12px; }
+@media (max-width: 700px) { .page { padding: 8px 8px 84px; } .call { border-radius: 0; min-height: 100dvh; } .callBody { min-height: 0; } .chat { position: fixed; inset: 0 0 64px; width: 100%; z-index: 2010; padding: 18px; transform: translateY(100%); transition: transform .2s; } .chatOpen { transform: translateY(0); } .local { width: 36%; right: 8px; bottom: 8px; } .controls { gap: 6px; } .controls button { min-width: 63px; } }

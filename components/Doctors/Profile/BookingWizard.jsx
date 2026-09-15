@@ -6,10 +6,14 @@ import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import styles from "./BookingWizard.module.css";
 import { login } from "@/redux/userSlice";
+import { getDoctorModeConfig } from "@/utility/booking";
 
-const modeLabels = { chamber: "Chamber", online: "Online", "home-visit": "Home visit" };
-const modeKey = { chamber: "chamber", online: "online", "home-visit": "homeVisit" };
-const today = () => new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+const modeLabels = { chamber: "Chamber", online: "Online", home: "Home visit" };
+const today = () => {
+  const parts = new Intl.DateTimeFormat("en-US", { timeZone: "Asia/Dhaka", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date());
+  const value = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
+  return `${value.year}-${value.month}-${value.day}`;
+};
 const formatTime = (value = "") => {
   const [hourValue, minuteValue = "00"] = String(value).split(":");
   const hour = Number(hourValue);
@@ -26,7 +30,7 @@ export default function BookingWizard({ doctor }) {
   const scheduledModes = useMemo(() => new Set(
       (doctor.weeklyAvailability || [])
         .filter((day) => day.isAvailable !== false)
-        .flatMap((day) => (day.slots || []).map((slot) => slot.consultationMode || "chamber"))
+        .flatMap((day) => (day.slots || []).map((slot) => slot.consultationMode === "home-visit" ? "home" : slot.consultationMode || "chamber"))
     ), [doctor.weeklyAvailability]);
   const modes = useMemo(() => Object.keys(modeLabels).filter((item) => scheduledModes.has(item)), [scheduledModes]);
   const [open, setOpen] = useState(false);
@@ -41,6 +45,8 @@ export default function BookingWizard({ doctor }) {
   const [patient, setPatient] = useState({ fullName: hasPatientSession ? userInfo?.fullName || "" : "", phone: hasPatientSession ? userInfo?.phone || "" : "", symptoms: "", address: "" });
   const [challengeId, setChallengeId] = useState("");
   const [otp, setOtp] = useState("");
+  const [resendAt, setResendAt] = useState(0);
+  const [clock, setClock] = useState(Date.now());
   const [token, setToken] = useState(hasPatientSession ? userInfo.token : "");
   const [booking, setBooking] = useState(null);
   const [instructions, setInstructions] = useState(null);
@@ -51,6 +57,23 @@ export default function BookingWizard({ doctor }) {
   }, [router.isReady, router.query.book]);
 
   useEffect(() => { setToken(userInfo?.role === "patient" ? userInfo?.token || "" : ""); }, [userInfo]);
+  useEffect(() => {
+    if (!open || step !== 3) return;
+    const timer = setInterval(() => setClock(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, [open, step]);
+  const dateOptions = useMemo(() => {
+    const start = today();
+    const count = Math.min(60, Math.max(1, Number(doctor.bookingSettings?.advanceBookingDays || 30)));
+    return Array.from({ length: count }, (_, index) => {
+      const day = new Date(`${start}T12:00:00Z`);
+      day.setUTCDate(day.getUTCDate() + index);
+      return { value: day.toISOString().slice(0, 10), day: index === 0 ? "Today" : new Intl.DateTimeFormat("en-US", { weekday: "short", timeZone: "UTC" }).format(day),
+        number: new Intl.DateTimeFormat("en-US", { day: "numeric", timeZone: "UTC" }).format(day),
+        month: new Intl.DateTimeFormat("en-US", { month: "short", timeZone: "UTC" }).format(day) };
+    });
+  }, [doctor.bookingSettings?.advanceBookingDays]);
+  const resendSeconds = Math.max(0, Math.ceil((resendAt - clock) / 1000));
   useEffect(() => {
     if (!open || !mode || !date) return;
     let active = true;
@@ -80,12 +103,13 @@ export default function BookingWizard({ doctor }) {
   };
 
   const requestOtp = async () => {
+    if (challengeId && Date.now() < resendAt) return;
     if (!patient.fullName.trim()) return setError("Enter the patient name.");
-    if (mode === "home-visit" && !patient.address.trim()) return setError("Enter the home visit address.");
+    if (mode === "home" && !patient.address.trim()) return setError("Enter the home visit address.");
     setLoading(true); setError("");
     try {
       const { data } = await axios.post("/api/booking/auth/request-otp", { phone: patient.phone });
-      setChallengeId(data.challengeId); setStep(3);
+      setChallengeId(data.challengeId); setOtp(""); setResendAt(Date.now() + 60000); setClock(Date.now()); setStep(3);
     } catch (requestError) { setError(requestError.response?.data?.error || "OTP could not be sent."); }
     finally { setLoading(false); }
   };
@@ -101,7 +125,7 @@ export default function BookingWizard({ doctor }) {
 
   const continueFromDetails = () => {
     if (!patient.fullName.trim()) return setError("Enter the patient name.");
-    if (mode === "home-visit" && !patient.address.trim()) return setError("Enter the home visit address.");
+    if (mode === "home" && !patient.address.trim()) return setError("Enter the home visit address.");
     setError(""); setStep(token ? 4 : 2);
   };
 
@@ -109,11 +133,11 @@ export default function BookingWizard({ doctor }) {
     setLoading(true); setError("");
     try {
       const { data } = await axios.post("/api/booking", {
-        doctorProfileId: doctor.id, date, consultationMode: mode,
+        doctorProfileId: doctor.id, date, consultationType: mode,
         availabilitySlotId: selected.window.slotId,
         startTime: selected.subSlot?.startTime,
         patientName: patient.fullName, symptoms: patient.symptoms,
-        homeVisitAddress: mode === "home-visit" ? { address: patient.address } : undefined,
+        homeVisitAddress: mode === "home" ? { address: patient.address } : undefined,
       }, { headers: { Authorization: `Bearer ${token}` } });
       setBooking(data);
       const response = await axios.get("/api/booking/payment-instructions");
@@ -144,9 +168,15 @@ export default function BookingWizard({ doctor }) {
           {step === 1 && <div className={styles.body}>
             <div className={styles.modeGrid}>{Object.keys(modeLabels).map((item) => {
               const available = scheduledModes.has(item);
-              return <button type="button" key={item} disabled={!available} className={`${mode === item ? styles.active : ""} ${!available ? styles.unavailable : ""}`} onClick={() => changeMode(item)}><strong>{modeLabels[item]}</strong><small>{available ? (doctor.consultationModes?.[modeKey[item]]?.fee != null ? `৳${doctor.consultationModes[modeKey[item]].fee}` : doctor.fee) : "Not available"}</small></button>;
+              return <button type="button" key={item} disabled={!available} className={`${mode === item ? styles.active : ""} ${!available ? styles.unavailable : ""}`} onClick={() => changeMode(item)}><strong>{modeLabels[item]}</strong><small>{available ? (getDoctorModeConfig(doctor, item)?.fee != null ? `৳${getDoctorModeConfig(doctor, item).fee}` : doctor.fee) : "Not available"}</small></button>;
             })}</div>
-            <label>Date<input type="date" min={today()} value={date} onChange={(event) => setDate(event.target.value)} /></label>
+            <div className={styles.datePicker}><strong>Choose a date</strong><div className={styles.dateList} aria-label="Available consultation dates">
+              {dateOptions.map((item) => <button type="button" key={item.value} aria-pressed={date === item.value}
+                className={date === item.value ? styles.selected : ""} onClick={() => setDate(item.value)}>
+                <small>{item.day}</small><strong>{item.number}</strong><small>{item.month}</small>
+              </button>)}
+            </div></div>
+            {availability?.windows?.length > 0 && <p className={styles.muted}>Doctor session: {availability.windows.map((window) => `${formatTime(window.startTime)}–${formatTime(window.endTime)}`).join(", ")}</p>}
             {loading ? <p className={styles.muted}>Loading available times…</p> : <div className={styles.windows}>
               {availability?.windows?.map((window) => mode === "chamber"
                 ? <button type="button" key={window.slotId} disabled={!window.remaining} className={selected?.window.slotId === window.slotId ? styles.selected : ""} onClick={() => chooseWindow(window)}>{formatTime(window.startTime)}–{formatTime(window.endTime)}<small>{window.remaining ? `Serial ${window.nextSerial} · arrive around ${formatTime(window.estimatedStartTime)}` : "Full"}</small></button>
@@ -157,17 +187,19 @@ export default function BookingWizard({ doctor }) {
           </div>}
 
           {step === 2 && <div className={styles.body}><div className={styles.summary}><strong>{modeLabels[mode]} · {date}</strong><span>{selectionLabel}</span></div>
-            <div className={styles.fields}><label>Patient name<input value={patient.fullName} onChange={(e) => setPatient({ ...patient, fullName: e.target.value })} /></label><label>Mobile number<input inputMode="tel" disabled={Boolean(token)} value={patient.phone} onChange={(e) => setPatient({ ...patient, phone: e.target.value })} placeholder="01XXXXXXXXX" /></label><label>Symptoms or reason<textarea rows="3" value={patient.symptoms} onChange={(e) => setPatient({ ...patient, symptoms: e.target.value })} /></label>{mode === "home-visit" && <label>Visit address<textarea rows="3" value={patient.address} onChange={(e) => setPatient({ ...patient, address: e.target.value })} /></label>}</div>
+            <div className={styles.fields}><label>Patient name<input value={patient.fullName} onChange={(e) => setPatient({ ...patient, fullName: e.target.value })} /></label><label>Mobile number<input inputMode="tel" disabled={Boolean(token)} value={patient.phone} onChange={(e) => setPatient({ ...patient, phone: e.target.value })} placeholder="01XXXXXXXXX" /></label><label>Symptoms or reason<textarea rows="3" value={patient.symptoms} onChange={(e) => setPatient({ ...patient, symptoms: e.target.value })} /></label>{mode === "home" && <label>Visit address<textarea rows="3" value={patient.address} onChange={(e) => setPatient({ ...patient, address: e.target.value })} /></label>}</div>
             <div className={styles.actions}><button type="button" onClick={() => setStep(1)}>Back</button><button type="button" className={styles.primary} disabled={loading} onClick={token ? continueFromDetails : requestOtp}>{token ? "Review booking" : "Send OTP"}</button></div>
           </div>}
 
-          {step === 3 && <div className={styles.body}><p className={styles.muted}>Enter the six-digit code sent to {patient.phone}.</p><label>Verification code<input inputMode="numeric" maxLength="6" value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))} /></label><div className={styles.actions}><button type="button" onClick={() => setStep(2)}>Back</button><button type="button" className={styles.primary} disabled={otp.length !== 6 || loading} onClick={verifyOtp}>Verify & continue</button></div></div>}
+          {step === 3 && <div className={styles.body}><p className={styles.muted}>Enter the six-digit code sent to {patient.phone}.</p><label>Verification code<input inputMode="numeric" maxLength="6" value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))} /></label><button type="button" className={styles.resendOtp} disabled={loading || resendSeconds > 0} onClick={requestOtp}>
+            {resendSeconds > 0 ? `Resend OTP in ${resendSeconds}s` : "Resend OTP"}
+          </button><div className={styles.actions}><button type="button" onClick={() => setStep(2)}>Back</button><button type="button" className={styles.primary} disabled={otp.length !== 6 || loading} onClick={verifyOtp}>Verify & continue</button></div></div>}
 
           {step === 4 && <div className={styles.body}><div className={styles.review}><div><span>Doctor</span><strong>{doctor.name}</strong></div><div><span>Mode</span><strong>{modeLabels[mode]}</strong></div><div><span>Date & time</span><strong>{date} · {selectionLabel}</strong></div><div><span>Fee</span><strong>৳{availability?.fee || 0}</strong></div></div><p className={styles.muted}>The selected slot will be held for 15 minutes while you complete payment.</p><div className={styles.actions}><button type="button" onClick={() => setStep(2)}>Back</button><button type="button" className={styles.primary} disabled={loading} onClick={createBooking}>Confirm & pay</button></div></div>}
 
           {step === 5 && <div className={styles.body}><div className={styles.payment}><span>Send the exact amount</span><strong>৳{booking.consultationFee}</strong><p>{instructions?.provider}: {instructions?.merchantNumber}</p>{instructions?.qrCodeUrl && <img src={instructions.qrCodeUrl} alt="bKash payment QR" />}</div><div className={styles.fields}><label>Transaction ID<input value={payment.transactionId} onChange={(e) => setPayment({ ...payment, transactionId: e.target.value.toUpperCase() })} /></label><label>Sender number’s last 4 digits (optional)<input inputMode="numeric" maxLength="4" value={payment.senderPhoneLast4} onChange={(e) => setPayment({ ...payment, senderPhoneLast4: e.target.value.replace(/\D/g, "") })} /></label></div><div className={styles.actions}><button type="button" className={styles.primary} disabled={payment.transactionId.length < 6 || loading} onClick={submitPayment}>Submit for verification</button></div></div>}
 
-          {step === 6 && <div className={styles.success}><strong>Payment verification pending</strong><p>Your slot is reserved. MediLocate will verify the transaction and update the booking status.</p><button type="button" className={styles.primary} onClick={() => setOpen(false)}>Done</button></div>}
+          {step === 6 && <div className={styles.success}><strong>Payment verification pending</strong><p>Your slot is reserved. MediLocate will verify the transaction and update the booking status.</p><button type="button" className={styles.primary} onClick={() => { setOpen(false); router.push(`/profile/${userInfo?._id || userInfo?.id || booking.patient}`); }}>View my consultations</button></div>}
         </section>
       </div>}
     </>

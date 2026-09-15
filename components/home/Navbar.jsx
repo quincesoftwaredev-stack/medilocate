@@ -24,8 +24,27 @@ import styles from "./Navbar.module.css";
 export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [searchOpen, setSearchOpen] = useState(false);
-    const cartItems = useSelector((state) => state.cart?.items || []);
-    const userInfo = useSelector((state) => state.user?.userInfo);
+    const [hydrated, setHydrated] = useState(false);
+    const storedCartItems = useSelector((state) => state.cart?.items || []);
+    const cartItems = hydrated ? storedCartItems : [];
+    const storedUserInfo = useSelector((state) => state.user?.userInfo);
+    const userInfo = hydrated ? storedUserInfo : null;
+    const userId = userInfo?._id || userInfo?.id;
+    const dashboardHref = userInfo?.role === "admin"
+        ? "/admin"
+        : userInfo?.role === "doctor"
+            ? "/doctor"
+            : userId
+                ? `/profile/${userId}`
+                : "/profile";
+    const displayName = userInfo?.fullName
+        || userInfo?.name
+        || [userInfo?.firstName, userInfo?.lastName].filter(Boolean).join(" ")
+        || "Your account";
+    const userContact = userInfo?.email || userInfo?.phone || userInfo?.phoneNumber;
+    const userRole = userInfo?.role
+        ? `${userInfo.role.charAt(0).toUpperCase()}${userInfo.role.slice(1)}`
+        : "Member";
 
 
     const closeMenu = () => {
@@ -33,6 +52,10 @@ export default function Navbar() {
     };
 
 
+
+    useEffect(() => {
+        setHydrated(true);
+    }, []);
 
     useEffect(() => {
         if (menuOpen) {
@@ -120,24 +143,18 @@ export default function Navbar() {
 
                         <div className={styles.navActions}>
 
-                            <Link
-                                href="/login"
-                                className={styles.loginButton}
-                            >
-                                Login
-                            </Link>
-
-
-                            <Link
-                                href="/register"
-                                className={styles.ctaButton}
-                            >
-                                <span>
-                                    Get Started
-                                </span>
-
-                                <ArrowForwardRoundedIcon />
-                            </Link>
+                            {userInfo ? (
+                                <Link href={dashboardHref} className={styles.accountButton}>
+                                    <AccountCircleOutlinedIcon />
+                                    <span>Dashboard</span>
+                                </Link>
+                            ) : (<>
+                                <Link href="/login" className={styles.loginButton}>Login</Link>
+                                <Link href="/register" className={styles.ctaButton}>
+                                    <span>Get Started</span>
+                                    <ArrowForwardRoundedIcon />
+                                </Link>
+                            </>)}
 
                         </div>
 
@@ -209,9 +226,13 @@ export default function Navbar() {
                     </div>
 
                     {userInfo && (
-                        <Link href={`/profile/${userInfo.id}`} className={styles.menuUser} onClick={closeMenu}>
+                        <Link href={dashboardHref} className={styles.menuUser} onClick={closeMenu}>
                             <AccountCircleOutlinedIcon />
-                            <span><strong>{userInfo.name || userInfo.fullName || "Your account"}</strong><small>{userInfo.email || userInfo.phone || userInfo.role || "View profile"}</small></span>
+                            <span>
+                                <strong>{displayName}</strong>
+                                {userContact && <small>{userContact}</small>}
+                                <small>{userRole}</small>
+                            </span>
                         </Link>
                     )}
 
@@ -283,7 +304,7 @@ export default function Navbar() {
                     <div className={styles.menuBottom}>
 
                         {userInfo ? (
-                            <Link href={`/profile/${userInfo.id}`} className={styles.menuCta} onClick={closeMenu}>View Profile</Link>
+                            <Link href={dashboardHref} className={styles.menuCta} onClick={closeMenu}>Open Dashboard</Link>
                         ) : (<>
                             <Link href="/login" className={styles.menuLogin} onClick={closeMenu}><LoginOutlinedIcon /><span>Login</span></Link>
                             <Link href="/register" className={styles.menuCta} onClick={closeMenu}>Get Started</Link>

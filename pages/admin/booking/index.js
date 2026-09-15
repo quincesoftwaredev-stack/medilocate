@@ -13,10 +13,10 @@ import PaymentsOutlinedIcon from "@mui/icons-material/PaymentsOutlined";
 import styles from "@/styles/Admin/Bookings.module.css";
 import BASE_URL from "@/config";
 
-const STATUS_OPTIONS = ["all", "awaiting-payment", "payment-verification-pending", "pending", "confirmed", "reschedule-requested", "rescheduled", "completed", "cancelled", "no-show"];
+const STATUS_OPTIONS = ["all", "awaiting-payment", "payment-verification-pending", "pending", "confirmed", "reschedule-requested", "rescheduled", "completed", "cancelled", "no-show", "rejected"];
 const PAYMENT_OPTIONS = ["all", "unpaid", "verification-pending", "paid", "rejected", "refund-pending", "refunded"];
-const MODE_OPTIONS = ["all", "chamber", "online", "home-visit"];
-const FINAL_STATUSES = ["completed", "cancelled", "no-show"];
+const MODE_OPTIONS = ["all", "chamber", "online", "home"];
+const FINAL_STATUSES = ["completed", "cancelled", "no-show", "rejected"];
 
 const label = (value = "") => value.split("-").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
 const formatDate = (value) => value ? new Intl.DateTimeFormat("en-BD", { day: "2-digit", month: "short", year: "numeric", timeZone: "Asia/Dhaka" }).format(new Date(value)) : "—";
@@ -39,6 +39,8 @@ export default function AdminAppointmentsPage({ initialBookings = [], totalPages
 
   const filters = useMemo(() => ({
     query: String(router.query.query || ""),
+    doctorQuery: String(router.query.doctorQuery || ""),
+    patientQuery: String(router.query.patientQuery || ""),
     status: String(router.query.status || "all"),
     paymentStatus: String(router.query.paymentStatus || "all"),
     mode: String(router.query.mode || "all"),
@@ -94,6 +96,8 @@ export default function AdminAppointmentsPage({ initialBookings = [], totalPages
         <div className={styles.filterGrid}>
           <label><span>Status</span><select value={filters.status} onChange={(e) => updateQuery({ status: e.target.value })}>{STATUS_OPTIONS.map((item) => <option value={item} key={item}>{label(item)}</option>)}</select></label>
           <label><span>Payment</span><select value={filters.paymentStatus} onChange={(e) => updateQuery({ paymentStatus: e.target.value })}>{PAYMENT_OPTIONS.map((item) => <option value={item} key={item}>{label(item)}</option>)}</select></label>
+          <label><span>Doctor</span><input defaultValue={filters.doctorQuery} placeholder="Doctor name" onKeyDown={(e) => e.key === "Enter" && updateQuery({ doctorQuery: e.currentTarget.value })} onBlur={(e) => updateQuery({ doctorQuery: e.currentTarget.value })} /></label>
+          <label><span>Patient</span><input defaultValue={filters.patientQuery} placeholder="Patient name" onKeyDown={(e) => e.key === "Enter" && updateQuery({ patientQuery: e.currentTarget.value })} onBlur={(e) => updateQuery({ patientQuery: e.currentTarget.value })} /></label>
           <label><span>Mode</span><select value={filters.mode} onChange={(e) => updateQuery({ mode: e.target.value })}>{MODE_OPTIONS.map((item) => <option value={item} key={item}>{label(item)}</option>)}</select></label>
           <label><span>Date</span><input type="date" value={filters.date} onChange={(e) => updateQuery({ date: e.target.value })} /></label>
           <button className={styles.clear} type="button" onClick={() => router.push("/admin/booking")}><TuneOutlinedIcon /> Clear</button>
@@ -130,6 +134,7 @@ export default function AdminAppointmentsPage({ initialBookings = [], totalPages
         <div><span>Appointment</span><strong>{formatDate(selected.appointmentDate)}</strong><small>{selected.consultationMode === "chamber" ? `Serial ${selected.serial}, estimated ${selected.startTime}` : `${selected.startTime}–${selected.endTime}`}</small></div>
         <div><span>Mode & fee</span><strong>{label(selected.consultationMode)}</strong><small>৳{Number(selected.consultationFee || 0).toLocaleString("en-BD")}</small></div>
       </div>
+      {selected.consultationType === "chamber" && selected.chamberId && <section className={styles.block}><span>Chamber</span><p>{(() => { const chamber = selected.doctorProfile?.chambers?.find((item) => String(item._id) === String(selected.chamberId)); return chamber ? `${chamber.name}, ${chamber.address}` : "Details unavailable"; })()}</p></section>}
       {selected.homeVisitAddress?.address && <section className={styles.block}><span>Home visit address</span><p>{selected.homeVisitAddress.address}</p></section>}
       {(selected.symptoms || selected.patientNotes) && <section className={styles.block}><span>Patient notes</span><p>{selected.symptoms || selected.patientNotes}</p></section>}
       <section className={styles.paymentBlock}><div className={styles.blockTitle}><PaymentsOutlinedIcon /><div><span>Manual payment</span><strong>{label(selected.paymentStatus)}</strong></div></div>
@@ -137,7 +142,7 @@ export default function AdminAppointmentsPage({ initialBookings = [], totalPages
         {selected.payment?.status === "verification-pending" && <div className={styles.paymentActions}><button type="button" disabled={Boolean(busy)} onClick={() => paymentAction("verify")}>Verify payment</button><button type="button" className={styles.dangerOutline} disabled={Boolean(busy)} onClick={() => paymentAction("reject")}>Reject</button></div>}
         {rejecting && <div className={styles.rejectBox}><textarea placeholder="Reason for rejection" value={rejectReason} onChange={(e) => setRejectReason(e.target.value)} /><div><button type="button" onClick={() => setRejecting(false)}>Back</button><button type="button" disabled={!rejectReason.trim() || Boolean(busy)} onClick={() => paymentAction("reject")}>Confirm rejection</button></div></div>}
       </section>
-      {!FINAL_STATUSES.includes(selected.status) && <section className={styles.statusActions}><span>Appointment actions</span><div>{selected.paymentStatus === "paid" && !["confirmed", "rescheduled"].includes(selected.status) && <button type="button" disabled={Boolean(busy)} onClick={() => bookingAction("confirm")}>Confirm appointment</button>}{["confirmed", "rescheduled"].includes(selected.status) && <button type="button" disabled={Boolean(busy)} onClick={() => bookingAction("complete")}>Mark completed</button>}{["confirmed", "rescheduled"].includes(selected.status) && <button type="button" disabled={Boolean(busy)} onClick={() => bookingAction("no-show")}>Mark no-show</button>}<button type="button" className={styles.dangerOutline} disabled={Boolean(busy)} onClick={() => bookingAction("cancel")}>Cancel booking</button></div></section>}
+      {!FINAL_STATUSES.includes(selected.status) && <section className={styles.statusActions}><span>Appointment actions</span><div>{selected.paymentStatus === "paid" && !["confirmed", "rescheduled", "waiting", "ongoing"].includes(selected.status) && <button type="button" disabled={Boolean(busy)} onClick={() => bookingAction("confirm")}>Confirm appointment</button>}{["confirmed", "rescheduled", "waiting", "ongoing"].includes(selected.status) && <button type="button" disabled={Boolean(busy)} onClick={() => bookingAction("complete")}>Mark completed</button>}{["confirmed", "rescheduled", "waiting", "ongoing"].includes(selected.status) && <button type="button" disabled={Boolean(busy)} onClick={() => bookingAction("no-show")}>Mark no-show</button>}<button type="button" className={styles.dangerOutline} disabled={Boolean(busy)} onClick={() => bookingAction("cancel")}>Cancel booking</button></div></section>}
     </aside></div>}
   </>;
 }
@@ -147,7 +152,7 @@ export async function getServerSideProps(context) {
     const cookies = parse(context.req.headers.cookie || "");
     const userInfo = cookies.userInfo ? JSON.parse(cookies.userInfo) : null;
     if (!userInfo?.token || userInfo.role !== "admin") return { redirect: { destination: "/login", permanent: false } };
-    const params = { page: context.query.page || 1, query: context.query.query || "", status: context.query.status || "all", paymentStatus: context.query.paymentStatus || "all", mode: context.query.mode || "all", date: context.query.date || "" };
+    const params = { page: context.query.page || 1, query: context.query.query || "", doctorQuery: context.query.doctorQuery || "", patientQuery: context.query.patientQuery || "", status: context.query.status || "all", paymentStatus: context.query.paymentStatus || "all", mode: context.query.mode || "all", date: context.query.date || "" };
     const { data } = await axios.get(`${BASE_URL}/api/booking`, { params, headers: { Authorization: `Bearer ${userInfo.token}` } });
     return { props: { initialBookings: JSON.parse(JSON.stringify(data.bookings || [])), totalPages: data.totalPages || 0, count: data.count || 0, currentPage: data.page || 1 } };
   } catch (error) {

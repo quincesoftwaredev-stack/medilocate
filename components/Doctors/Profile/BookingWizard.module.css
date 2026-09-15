@@ -366,3 +366,13 @@
     grid-template-columns: 1fr;
   }
 }
+
+.datePicker { margin-top: 12px; color: var(--ml-navy); }
+.datePicker > strong { font-size: var(--ml-font-sm); }
+.dateList { display: flex; gap: 8px; margin-top: 8px; padding: 2px 2px 10px; overflow-x: auto; scroll-snap-type: x proximity; }
+.dateList button { flex: 0 0 72px; min-height: 82px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 2px; scroll-snap-align: start; border: 1px solid var(--ml-gray-200); border-radius: var(--ml-radius-sm); background: var(--ml-white); color: var(--ml-navy); cursor: pointer; }
+.dateList button strong { font-size: var(--ml-font-xl); }
+.dateList button small { font-size: var(--ml-font-xs); color: var(--ml-gray-600); }
+.dateList .selected { border-color: var(--ml-teal); background: var(--ml-teal-light); color: var(--ml-teal-dark); }
+.resendOtp { margin-top: 14px; padding: 8px 0; border: 0; background: transparent; color: var(--ml-teal-dark); font: inherit; font-size: var(--ml-font-sm); font-weight: var(--ml-weight-semibold); cursor: pointer; }
+.resendOtp:disabled { color: var(--ml-gray-500); cursor: not-allowed; }

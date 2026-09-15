@@ -3,11 +3,12 @@ import mongoose from "mongoose";
 import db from "@/database/connection";
 import Doctor from "@/database/model/Doctor";
 import Booking from "@/database/model/Booking";
-import { generateSubSlots, getDhakaDayOfWeek, getWindowPlan, isUnavailableDate, minutesToTime } from "@/utility/booking";
+import { getDoctorModeConfig, generateSubSlots, getDhakaDayOfWeek, getWindowPlan, isUnavailableDate, minutesToTime } from "@/utility/booking";
 
 const handler = nextConnect();
-const MODE_KEYS = { chamber: "chamber", online: "online", "home-visit": "homeVisit" };
-const NON_HOLD_ACTIVE_STATUSES = ["payment-verification-pending", "pending", "confirmed", "reschedule-requested", "rescheduled"];
+const MODE_KEYS = { chamber: "chamber", online: "online", home: "home", "home-visit": "home" };
+const canonicalMode = (value) => value === "home-visit" ? "home" : value;
+const NON_HOLD_ACTIVE_STATUSES = ["payment-verification-pending", "pending", "confirmed", "reschedule-requested", "rescheduled", "waiting", "ongoing"];
 
 handler.get(async (req, res) => {
   try {
@@ -18,9 +19,9 @@ handler.get(async (req, res) => {
     await db.connect();
     const doctor = await Doctor.findById(doctorProfileId).lean();
     if (!doctor || doctor.status !== "active") return res.status(404).json({ error: "Doctor is unavailable." });
-    const modeConfig = doctor.consultationModes?.[MODE_KEYS[mode]];
+    const modeConfig = getDoctorModeConfig(doctor, mode);
     const hasScheduledMode = (doctor.weeklyAvailability || []).some((day) =>
-      day.isAvailable && (day.slots || []).some((slot) => slot.consultationMode === mode)
+      day.isAvailable && (day.slots || []).some((slot) => canonicalMode(slot.consultationMode) === canonicalMode(mode))
     );
     if (!modeConfig?.enabled && !hasScheduledMode) return res.status(400).json({ error: "This consultation mode is not enabled." });
 
@@ -32,31 +33,34 @@ handler.get(async (req, res) => {
     const maxDate = new Date(Date.now() + Number(doctor.bookingSettings?.advanceBookingDays || 30) * 86400000);
     if (appointmentDate > maxDate) return res.status(400).json({ error: "This date is outside the advance booking window." });
     if (isUnavailableDate(doctor, appointmentDate)) {
-      return res.status(200).json({ date, mode, fee: Number(modeConfig.fee || 0), windows: [], unavailable: true });
+      return res.status(200).json({ date, mode, fee: Number(modeConfig?.fee || 0), windows: [], unavailable: true });
     }
 
     const day = (doctor.weeklyAvailability || []).find((item) => Number(item.dayOfWeek) === getDhakaDayOfWeek(appointmentDate));
-    const windows = day?.isAvailable === false ? [] : (day?.slots || []).filter((slot) => slot.consultationMode === mode);
+    const windows = day?.isAvailable === false ? [] : (day?.slots || []).filter((slot) => canonicalMode(slot.consultationMode) === canonicalMode(mode)
+      && (canonicalMode(mode) !== "chamber" || doctor.chambers?.some((chamber) => chamber.isActive !== false && (String(chamber._id) === String(slot.chamberId) || (!slot.chamberId && doctor.chambers.filter((item) => item.isActive !== false).length === 1)))));
     const existing = await Booking.find({
       doctorProfile: doctor._id,
       appointmentDate: { $gte: appointmentDate, $lt: new Date(appointmentDate.getTime() + 86400000) },
-      consultationMode: mode,
       $or: [
         { status: { $in: NON_HOLD_ACTIVE_STATUSES } },
         { status: "awaiting-payment", paymentHoldExpiresAt: { $gt: new Date() } },
       ],
-    }).select("availabilitySlotId startTime serial status").lean();
+    }).select("availabilitySlotId startTime endTime consultationMode serial status").lean();
 
     const availability = windows.map((slot) => {
       const plan = getWindowPlan(slot);
       if (!plan.valid) return null;
       const slotId = String(slot._id);
-      const bookedForWindow = existing.filter((booking) => String(booking.availabilitySlotId || "") === slotId);
+      const bookedForWindow = existing.filter((booking) => String(booking.availabilitySlotId || "") === slotId && canonicalMode(booking.consultationMode) === canonicalMode(mode));
       if (mode === "chamber") {
         const used = bookedForWindow.length;
         const nextSerial = used + 1;
         const estimatedStart = plan.start + (nextSerial - 1) * (plan.durationMinutes + plan.bufferMinutes);
-        return { slotId, startTime: slot.startTime, endTime: slot.endTime, capacity: plan.capacity, remaining: Math.max(0, plan.capacity - used), nextSerial, estimatedStartTime: minutesToTime(estimatedStart), estimatedEndTime: minutesToTime(estimatedStart + plan.durationMinutes), averageMinutes: plan.durationMinutes, bufferMinutes: plan.bufferMinutes };
+        const estimatedEnd = minutesToTime(estimatedStart + plan.durationMinutes);
+        const otherConflict = existing.some((booking) => canonicalMode(booking.consultationMode) !== "chamber" && booking.startTime < estimatedEnd && booking.endTime > minutesToTime(estimatedStart));
+        const tooSoon = new Date(`${date}T${minutesToTime(estimatedStart)}:00+06:00`).getTime() < Date.now() + Number(doctor.bookingSettings?.minimumNoticeMinutes || 0) * 60000;
+        return { slotId, startTime: slot.startTime, endTime: slot.endTime, capacity: plan.capacity, remaining: otherConflict || tooSoon ? 0 : Math.max(0, plan.capacity - used), nextSerial, estimatedStartTime: minutesToTime(estimatedStart), estimatedEndTime: estimatedEnd, averageMinutes: plan.durationMinutes, bufferMinutes: plan.bufferMinutes };
       }
       const bookedTimes = new Set(bookedForWindow.map((booking) => booking.startTime));
       const minimumStart = Date.now() + Number(doctor.bookingSettings?.minimumNoticeMinutes || 0) * 60000;
@@ -65,12 +69,12 @@ handler.get(async (req, res) => {
         remaining: Math.max(0, plan.capacity - bookedForWindow.length), averageMinutes: plan.durationMinutes, bufferMinutes: plan.bufferMinutes,
         subSlots: generateSubSlots(slot).map((subSlot) => {
           const startsAt = new Date(`${date}T${subSlot.startTime}:00+06:00`).getTime();
-          return { ...subSlot, available: !bookedTimes.has(subSlot.startTime) && startsAt >= minimumStart };
+          return { ...subSlot, available: !bookedTimes.has(subSlot.startTime) && !existing.some((booking) => booking.startTime < subSlot.endTime && booking.endTime > subSlot.startTime) && startsAt >= minimumStart };
         }),
       };
     }).filter(Boolean);
 
-    return res.status(200).json({ date, mode, fee: Number(modeConfig.fee || 0), windows: availability, unavailable: false });
+    return res.status(200).json({ date, mode, fee: Number(modeConfig?.fee || 0), windows: availability, unavailable: false });
   } catch (error) {
     console.error("Availability error", error);
     return res.status(500).json({ error: "Failed to load availability." });

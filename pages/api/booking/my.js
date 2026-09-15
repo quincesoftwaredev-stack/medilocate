@@ -14,6 +14,7 @@ handler.get(isAuth, async (req, res) => {
       .populate("patient", "fullName phone image")
       .populate("doctor", "fullName phone speciality workingIn image")
       .populate("payment")
+      .populate("doctorProfile", "chambers")
       .sort({ appointmentDate: 1, startTime: 1 });
     return res.status(200).json({ bookings });
   } catch (error) {

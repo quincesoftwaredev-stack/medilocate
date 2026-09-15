@@ -8,7 +8,7 @@ const timeSlotSchema = new mongoose.Schema({
     maxPatientsPerWindow: { type: Number, min: 1, default: 1 },
     bufferMinutes: { type: Number, min: 0, max: 120, default: 0 },
     maxPatientsPerSlot: { type: Number, min: 1, default: 1 },
-    consultationMode: { type: String, enum: ["chamber", "online", "home-visit"], default: "chamber" },
+    consultationMode: { type: String, enum: ["chamber", "online", "home", "home-visit"], default: "chamber" },
     chamberId: { type: mongoose.Schema.Types.ObjectId, default: null },
 }, { _id: true });
 
@@ -105,7 +105,8 @@ const doctorSchema = new mongoose.Schema(
         consultationModes: {
             chamber: { enabled: { type: Boolean, default: true }, fee: { type: Number, min: 0, default: 0 } },
             online: { enabled: { type: Boolean, default: false }, fee: { type: Number, min: 0, default: 0 } },
-            homeVisit: { enabled: { type: Boolean, default: false }, fee: { type: Number, min: 0, default: 0 } },
+            home: { enabled: { type: Boolean, default: false }, fee: { type: Number, min: 0, default: 0 } },
+            homeVisit: { enabled: { type: Boolean, default: false }, fee: { type: Number, min: 0, default: 0 } }, // Legacy profiles
         },
 
         consultationFee: {

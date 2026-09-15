@@ -858,7 +858,8 @@ export default function CheckoutPage() {
             const response =
                 await axios.post(
                     "/api/orders",
-                    orderData
+                    orderData,
+                    userInfo?.token ? { headers: { Authorization: `Bearer ${userInfo.token}` } } : undefined
                 );
 
 
@@ -1191,7 +1192,7 @@ export default function CheckoutPage() {
 
 
                                     <Link
-                                        href={accountId ? `/user/${accountId}/address` : "/login?redirectTo=/checkout"}
+                                        href={accountId ? `/profile/${accountId}` : "/login?redirectTo=/checkout"}
                                         className={
                                             styles.manageLink
                                         }
