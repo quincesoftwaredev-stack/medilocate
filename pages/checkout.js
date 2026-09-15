@@ -546,7 +546,7 @@ export default function CheckoutPage() {
     const paymentTracked = useRef(false);
     useEffect(() => {
         if (!pixelReady || !totalItems || checkoutTracked.current) return;
-        dispatch(handleInitiateCheckout({ value: subtotal, num_items: totalItems }));
+        dispatch(handleInitiateCheckout({ total: subtotal }));
         checkoutTracked.current = true;
     }, [pixelReady, subtotal, totalItems, dispatch]);
 

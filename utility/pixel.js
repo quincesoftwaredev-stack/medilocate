@@ -67,10 +67,14 @@ export function trackPixelEvent(event, data = {}, key = null) {
     if (eventKey && (sent.has(eventKey) || (event === 'Purchase' && sessionStorage.getItem(eventKey)))) return;
   } catch { /* Storage may be disabled. */ }
   const payload = {};
-  if (Number.isFinite(data.value) && data.value >= 0) { payload.value = data.value; payload.currency = 'BDT'; }
-  if (Number.isFinite(data.num_items) && data.num_items >= 0) payload.num_items = data.num_items;
+  // Enforce the same privacy boundary for callers that bypass Redux.
+  if (['ViewContent', 'InitiateCheckout', 'Purchase'].includes(event) && Number.isFinite(data?.value) && data.value >= 0) {
+    payload.value = data.value; payload.currency = 'BDT';
+  }
   try {
-    pixel.track(event, payload);
+    // The SDK's track method drops event options; fbq forwards the deduplication ID.
+    if (key) pixel.fbq('track', event, payload, { eventID: String(key) });
+    else pixel.track(event, payload);
     if (eventKey) {
       sent.add(eventKey);
       if (event === 'Purchase') { try { sessionStorage.setItem(eventKey, '1'); } catch {} }

@@ -180,10 +180,7 @@ const cartSlice = createSlice({
 
 
             saveCart(state);
-            trackPixelEvent("AddToCart", {
-                value: Number(medicine.price) * (Number(medicine.quantity) || 1),
-                num_items: Number(medicine.quantity) || 1,
-            });
+            trackPixelEvent("AddToCart");
 
         },
 
