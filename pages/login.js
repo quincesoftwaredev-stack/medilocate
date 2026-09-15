@@ -5,7 +5,6 @@ import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import Cookies from "js-cookie";
 
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
@@ -81,81 +80,47 @@ const Login = () => {
                 );
 
 
-            if (!data.error) {
+            const loginData = data?.user || data?.data || data;
 
-                Cookies.set("userInfo", JSON.stringify(data), {
-                    expires: 30,
-                    path: "/",
-                    sameSite: "lax",
-                    secure: window.location.protocol === "https:",
-                });
-
-                dispatch(
-                    login(data)
-                );
-
-
-                dispatch(
-                    showSnackBar({
-                        message:
-                            "Successfully logged in.",
-                        option: {
-                            variant:
-                                "success",
-                        },
-                    })
-                );
-
-
-                if (
-                    data.role === "admin"
-                ) {
-
-                    router.push(
-                        "/admin"
-                    );
-
-                } else {
-
-                    if (
-                        router.query
-                            .redirectTo
-                    ) {
-
-                        router.push(
-                            router.query.redirectTo
-                        );
-
-                    } else {
-
-                        const profileId = data.id || data._id;
-
-                        if (!profileId) {
-                            throw new Error("Login succeeded but the user ID was missing.");
-                        }
-
-                        router.push(
-                            `/profile/${profileId}`
-                        );
-
-                    }
-
-                }
-
-            } else {
-
-                dispatch(
-                    showSnackBar({
-                        message:
-                            data.error,
-                        option: {
-                            variant:
-                                "error",
-                        },
-                    })
-                );
-
+            if (loginData?.error || !loginData?.token) {
+                dispatch(showSnackBar({
+                    message: loginData?.error || "Login response was invalid.",
+                    option: { variant: "error" },
+                }));
+                return;
             }
+
+            dispatch(login(loginData));
+            dispatch(showSnackBar({
+                message: "Successfully logged in.",
+                option: { variant: "success" },
+            }));
+
+            if (router.query.redirectTo) {
+                await router.push(String(router.query.redirectTo));
+                return;
+            }
+
+            if (loginData.role === "admin") {
+                await router.push("/admin");
+                return;
+            }
+
+            if (loginData.role === "doctor") {
+                await router.push("/doctor");
+                return;
+            }
+
+            const profileId = loginData.id || loginData._id;
+            if (!profileId) {
+                dispatch(showSnackBar({
+                    message: "Your account ID could not be loaded. Please try again.",
+                    option: { variant: "error" },
+                }));
+                return;
+            }
+
+            await router.push(`/profile/${profileId}`);
 
         } catch (error) {
 
