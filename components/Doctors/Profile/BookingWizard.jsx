@@ -41,7 +41,7 @@ export default function BookingWizard({ doctor }) {
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const hasPatientSession = userInfo?.role === "patient" && Boolean(userInfo?.token);
+  const hasPatientSession = Boolean(userInfo?.token) && !["admin", "doctor"].includes(userInfo?.role);
   const [patient, setPatient] = useState({ fullName: hasPatientSession ? userInfo?.fullName || "" : "", phone: hasPatientSession ? userInfo?.phone || "" : "", symptoms: "", address: "" });
   const [challengeId, setChallengeId] = useState("");
   const [otp, setOtp] = useState("");
@@ -56,7 +56,7 @@ export default function BookingWizard({ doctor }) {
     if (router.isReady && router.query.book === "1") setOpen(true);
   }, [router.isReady, router.query.book]);
 
-  useEffect(() => { setToken(userInfo?.role === "patient" ? userInfo?.token || "" : ""); }, [userInfo]);
+  useEffect(() => { setToken(userInfo?.token && !["admin", "doctor"].includes(userInfo?.role) ? userInfo.token : ""); }, [userInfo]);
   useEffect(() => {
     if (!open || step !== 3) return;
     const timer = setInterval(() => setClock(Date.now()), 1000);

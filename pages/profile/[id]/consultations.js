@@ -47,7 +47,7 @@ export default function ConsultationsPage() {
 
   useEffect(() => { setHydrated(true); }, []);
   useEffect(() => {
-    if (!userInfo?.token || userInfo?.role !== "patient") return;
+    if (!userInfo?.token || ["admin", "doctor"].includes(userInfo?.role)) return;
     axios.get("/api/booking/my", { headers: { Authorization: `Bearer ${userInfo.token}` } })
       .then(({ data }) => setBookings(data.bookings || []))
       .catch((requestError) => setError(requestError.response?.data?.error || "Your consultations could not be loaded."));
@@ -56,7 +56,7 @@ export default function ConsultationsPage() {
   const upcoming = useMemo(() => bookings.filter((item) => !terminal.includes(item.status) && startsAt(item) >= new Date()), [bookings]);
   const past = useMemo(() => bookings.filter((item) => !upcoming.includes(item)), [bookings, upcoming]);
 
-  if (!hydrated || userInfo?.role !== "patient" || !userInfo?.token || (router.isReady && String(router.query.id) !== ownId)) {
+  if (!hydrated || ["admin", "doctor"].includes(userInfo?.role) || !userInfo?.token || (router.isReady && String(router.query.id) !== ownId)) {
     return <main className={styles.gate}>Sign in to view your consultations. <Link href="/login">Sign in</Link></main>;
   }
 

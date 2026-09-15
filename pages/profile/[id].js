@@ -42,7 +42,7 @@ export default function ProfilePage() {
 
   useEffect(() => { setHydrated(true); }, []);
   useEffect(() => {
-    if (!userInfo?.token || userInfo?.role !== "patient") return;
+    if (!userInfo?.token || ["admin", "doctor"].includes(userInfo?.role)) return;
     setHasAddress(Boolean(localStorage.getItem("medilocate_saved_address")));
     const headers = { Authorization: `Bearer ${userInfo.token}` };
     Promise.all([axios.get(`/api/user/${userInfo._id || userInfo.id}`, { headers }), axios.get("/api/booking/my", { headers })])
@@ -59,7 +59,7 @@ export default function ProfilePage() {
     return { total: bookings.length, upcoming, completed };
   }, [bookings]);
 
-  if (!hydrated || userInfo?.role !== "patient" || !userInfo?.token || (router.isReady && String(router.query.id) !== ownId)) {
+  if (!hydrated || ["admin", "doctor"].includes(userInfo?.role) || !userInfo?.token || (router.isReady && String(router.query.id) !== ownId)) {
     return <main className={styles.page}><div className={styles.container}>Sign in to view your profile. <Link href="/login">Sign in</Link></div></main>;
   }
 

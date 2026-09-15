@@ -102,9 +102,9 @@ const Layout = ({ children }) => {
           <AdminBottomNav />
         ) : userInfo?.role === "doctor" ? (
           <DoctorBottomNav userInfo={userInfo} />
-        ) : (
+        ) : userInfo ? (
           <UserBottomNav userInfo={userInfo} />
-        )}
+        ) : null}
       </div>
   );
   const skipMaps = isCarePage || /^\/admin\/booking(\/|$)/.test(router.pathname) || /^\/user\/\[id\]\/dashboard$/.test(router.pathname);
