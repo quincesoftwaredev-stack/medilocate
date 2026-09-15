@@ -42,6 +42,11 @@ export default function ProfilePage() {
 
   useEffect(() => { setHydrated(true); }, []);
   useEffect(() => {
+    if (hydrated && userInfo?.token && router.isReady && ownId && String(router.query.id) !== ownId) {
+      router.replace(`/profile/${ownId}`);
+    }
+  }, [hydrated, ownId, router, router.isReady, router.query.id, userInfo?.token]);
+  useEffect(() => {
     if (!userInfo?.token || ["admin", "doctor"].includes(userInfo?.role)) return;
     setHasAddress(Boolean(localStorage.getItem("medilocate_saved_address")));
     const headers = { Authorization: `Bearer ${userInfo.token}` };
@@ -59,8 +64,12 @@ export default function ProfilePage() {
     return { total: bookings.length, upcoming, completed };
   }, [bookings]);
 
-  if (!hydrated || ["admin", "doctor"].includes(userInfo?.role) || !userInfo?.token || (router.isReady && String(router.query.id) !== ownId)) {
+  if (!hydrated) return <main className={styles.page}><div className={styles.container}>Loading profile...</div></main>;
+  if (["admin", "doctor"].includes(userInfo?.role) || !userInfo?.token) {
     return <main className={styles.page}><div className={styles.container}>Sign in to view your profile. <Link href="/login">Sign in</Link></div></main>;
+  }
+  if (router.isReady && String(router.query.id) !== ownId) {
+    return <main className={styles.page}><div className={styles.container}>Loading profile...</div></main>;
   }
 
   const name = profile?.fullName || userInfo.fullName || "MediLocate user";
