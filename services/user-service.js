@@ -1,4 +1,5 @@
 import UserRepository from '@/database/repository/user-repository'
+import bcrypt from 'bcryptjs'
 
 import {
   GenerateSalt,
@@ -89,11 +90,12 @@ class UserService {
         return FormateData({ error: 'User Not Found With This Email or Phone Number !' })
       }
       if (existingUser) {
-        const validPassword = await ValidatePassword(
-          password.toString(),
-          existingUser.password,
-          existingUser.salt
-        )
+        if (!existingUser.password) {
+          return FormateData({ error: 'This account uses phone verification. Set a password before signing in here.' })
+        }
+        const validPassword = existingUser.salt
+          ? await ValidatePassword(password.toString(), existingUser.password, existingUser.salt)
+          : await bcrypt.compare(password.toString(), existingUser.password)
         if (validPassword) {
           const token = await GenerateSignature({
             email: existingUser.email,
@@ -116,7 +118,8 @@ class UserService {
 
       return FormateData({ error: 'User Not Found' })
     } catch (error) {
-      console.log(error)
+      console.error('Sign in failed:', error.message)
+      return FormateData({ error: 'Login is temporarily unavailable.' })
     }
   }
 
