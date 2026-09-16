@@ -91,7 +91,7 @@ class UserService {
       }
       if (existingUser) {
         if (!existingUser.password) {
-          return FormateData({ error: 'This account uses phone verification. Set a password before signing in here.' })
+          return FormateData({ error: 'Set a password to continue.', code: 'PASSWORD_SETUP_REQUIRED' })
         }
         const validPassword = existingUser.salt
           ? await ValidatePassword(password.toString(), existingUser.password, existingUser.salt)

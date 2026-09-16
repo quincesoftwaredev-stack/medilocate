@@ -1,7 +1,8 @@
 import db from '@/database/connection'
 import User from '@/database/model/User'
 import UserService from '@/services/user-service'
-import { GeneratePassword, GenerateSignature } from '@/utility'
+import { GenerateSignature } from '@/utility'
+import bcrypt from 'bcryptjs'
 import nextConnect from 'next-connect'
 
 const handler = nextConnect()
@@ -35,7 +36,8 @@ handler.post(async (req, res) => {
     // Clear verification code and expiration time
     user.verificationCode = undefined
     user.expirationTime = undefined
-    user.password = await GeneratePassword(newPassword, user.salt)
+    user.password = await bcrypt.hash(String(newPassword), 10)
+    user.salt = undefined
 
     // Save the updated user document
     await user.save()

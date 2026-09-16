@@ -82,6 +82,15 @@ const Login = () => {
 
             const loginData = data?.user || data?.data || data;
 
+            if (loginData?.code === "PASSWORD_SETUP_REQUIRED") {
+                dispatch(showSnackBar({
+                    message: "Create a password for this phone-verified account.",
+                    option: { variant: "default" },
+                }));
+                await router.push(`/verify/existance?account=${encodeURIComponent(user.email.trim())}`);
+                return;
+            }
+
             if (loginData?.error || !loginData?.token) {
                 dispatch(showSnackBar({
                     message: loginData?.error || "Login response was invalid.",

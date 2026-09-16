@@ -35,6 +35,12 @@ const ResetPassword = () => {
     const dispatch =
         useDispatch();
 
+    React.useEffect(() => {
+        if (router.isReady && router.query.account) {
+            setEmail(String(router.query.account));
+        }
+    }, [router.isReady, router.query.account]);
+
 
     const SendCode = async (event) => {
 

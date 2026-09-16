@@ -41,7 +41,8 @@ handler.post(async (req, res) => {
     // send notification with Password Reset Code
     messageService.sendMessage({
       message: `Your Verification Code for Medilocate is ${verificationCode}. This code will expire in 5 minutes.`,
-      number: user.phone
+      number: user.phone,
+      sendInDevelopment: true
     })
     mailService.sendMail({
       code: verificationCode,
