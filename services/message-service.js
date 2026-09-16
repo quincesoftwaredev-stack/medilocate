@@ -12,7 +12,7 @@ class Message {
             return "Missing Number Or Message";
         }
 
-        // Don't send SMS in development/test
+        // Don't send SMS in development
         if (process.env.NODE_ENV !== "production" && !sendInDevelopment) {
             return {
                 success: true,
