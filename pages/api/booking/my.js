@@ -2,6 +2,9 @@ import nextConnect from "next-connect";
 import { isAuth } from "@/utility";
 import db from "@/database/connection";
 import Booking from "@/database/model/Booking";
+import "@/database/model/User";
+import "@/database/model/Doctor";
+import "@/database/model/BookingPayment";
 
 const handler = nextConnect();
 

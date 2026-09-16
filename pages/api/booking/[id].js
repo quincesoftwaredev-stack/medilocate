@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import { isAuth } from "@/utility";
 import db from "@/database/connection";
 import Booking from "@/database/model/Booking";
+import "@/database/model/User";
+import "@/database/model/BookingPayment";
 import { consultationConfig } from "@/config";
 import { getConsultationTime } from "@/utility/booking";
 import { cancelConsultationReminder, scheduleConsultationReminder } from "@/services/qstash-consultation-reminder";
