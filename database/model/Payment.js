@@ -87,6 +87,10 @@ const paymentSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
+paymentSchema.index({ orderId: 1 })
+paymentSchema.index({ paymentStatus: 1, createdAt: -1 })
+paymentSchema.index({ createdAt: -1 })
+
 const Payment =
   mongoose.models.Payment || mongoose.model('Payment', paymentSchema)
 

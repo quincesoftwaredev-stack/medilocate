@@ -22,33 +22,24 @@ handler.get(async (req, res) => {
     // const totalPages = Math.ceil(totalCount / PAGE_SIZE)
 
     // Retrieve products with pagination and sorting
-    const categories = await Category.find({ parent: null })
-    const tree = await Promise.all(
-      categories.map(async item => {
-        const { _id, name, image } = item
-        const c = await Category.find({ parent: _id })
-
-        const subtree = await Promise.all(
-          c.map(async item => {
-            const { _id, name, image } = item
-            const sc = await Category.find({ parent: _id })
-            return {
-              name: name,
-              _id: _id,
-              image: image,
-              children: sc
-            }
-          })
-        )
-
-        return {
-          name: name,
-          _id: _id,
-          image: image,
-          children: subtree
-        }
-      })
-    )
+    const categories = await Category.find({}).lean()
+    const byParent = new Map()
+    categories.forEach(item => {
+      const key = item.parent ? String(item.parent) : 'root'
+      if (!byParent.has(key)) byParent.set(key, [])
+      byParent.get(key).push(item)
+    })
+    const tree = (byParent.get('root') || []).map(({ _id, name, image }) => ({
+      name,
+      _id,
+      image,
+      children: (byParent.get(String(_id)) || []).map(({ _id: childId, name: childName, image: childImage }) => ({
+        name: childName,
+        _id: childId,
+        image: childImage,
+        children: byParent.get(String(childId)) || []
+      }))
+    }))
 
     await db.disconnect()
     res.json(tree)

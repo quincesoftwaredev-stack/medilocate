@@ -43,6 +43,10 @@ const categorySchema = new mongoose.Schema(
   { timestamps: true }
 )
 
+categorySchema.index({ parent: 1 })
+categorySchema.index({ isFeatured: 1, isShown: 1 })
+categorySchema.index({ createdAt: -1 })
+
 // Create Model
 const Category =
   mongoose.models.Category || mongoose.model('Category', categorySchema)

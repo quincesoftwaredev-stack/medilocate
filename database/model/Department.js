@@ -33,6 +33,9 @@ const departmentSchema = new mongoose.Schema(
     { timestamps: true }
 )
 
+departmentSchema.index({ isFeatured: 1, isShown: 1 })
+departmentSchema.index({ createdAt: -1 })
+
 // Create Model
 const Department =
     mongoose.models.Department || mongoose.model('Department', departmentSchema)

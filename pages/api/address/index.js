@@ -50,16 +50,13 @@ handler.get(async (req, res) => {
 
     // console.log(addressFilter)
 
-    const totalCount = await Address.countDocuments(filter)
+    const [totalCount, addresses] = await Promise.all([
+      Address.countDocuments(filter),
+      Address.find(filter).sort({ createdAt: -1 }).skip(skip).limit(PAGE_SIZE).lean()
+    ])
 
     // Calculate total pages
     const totalPages = Math.ceil(totalCount / PAGE_SIZE)
-
-    // Perform the query with population and filtering
-    const addresses = await Address.find(filter)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(PAGE_SIZE)
 
     // console.log({ addresses, totalPages, totalCount })
     await db.disconnect()

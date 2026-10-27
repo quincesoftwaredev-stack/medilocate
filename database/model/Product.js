@@ -118,6 +118,10 @@ const productSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
+productSchema.index({ featured: 1, createdAt: -1 })
+productSchema.index({ categories: 1, createdAt: -1 })
+productSchema.index({ sold: -1 })
+productSchema.index({ createdAt: -1 })
 
 
 

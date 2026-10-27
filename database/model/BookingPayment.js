@@ -25,4 +25,8 @@ const bookingPaymentSchema = new mongoose.Schema({
   refundReference: { type: String, trim: true, default: "" },
 }, { timestamps: true, optimisticConcurrency: true });
 
+bookingPaymentSchema.index({ status: 1, createdAt: -1 });
+bookingPaymentSchema.index({ doctor: 1, status: 1, createdAt: -1 });
+bookingPaymentSchema.index({ patient: 1, createdAt: -1 });
+
 export default mongoose.models.BookingPayment || mongoose.model("BookingPayment", bookingPaymentSchema);

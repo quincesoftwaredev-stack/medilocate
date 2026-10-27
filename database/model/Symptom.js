@@ -33,6 +33,9 @@ const symptomSchema = new mongoose.Schema(
     { timestamps: true }
 )
 
+symptomSchema.index({ isFeatured: 1, isShown: 1 })
+symptomSchema.index({ createdAt: -1 })
+
 // Create Model
 const Symptom =
     mongoose.models.Symptom || mongoose.model('Symptom', symptomSchema)

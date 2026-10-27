@@ -83,21 +83,17 @@ handler.get(async (req, res) => {
     await db.connect()
 
     // Query the database with the constructed filter object
-    const count = await Product.countDocuments(filter)
+    const [count, productsResult] = await Promise.all([
+      Product.countDocuments(filter),
+      Product.find(filter, { metaTitle: 0, images: 0, description: 0 })
+        .lean()
+        .populate({ path: 'categories', select: 'name' })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(parseInt(limit))
+    ])
     const totalPages = Math.ceil(count / limit)
-    let products = await Product.find(filter, {
-      metaTitle: 0,
-      images: 0,
-      description: 0
-    })
-      .lean()
-      .populate({
-        path: 'categories',
-        select: 'name'
-      })
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(parseInt(limit))
+    let products = productsResult
 
     // if (blur) {
     //   products = await Promise.all(

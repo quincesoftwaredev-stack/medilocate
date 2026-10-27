@@ -147,6 +147,9 @@ bookingSchema.virtual("dateOfConsultation").get(function getLegacyConsultationDa
 bookingSchema.index({ doctor: 1, appointmentDate: 1, consultationMode: 1, startTime: 1, status: 1 });
 bookingSchema.index({ doctorProfile: 1, appointmentDate: 1, chamberId: 1, serial: 1 });
 bookingSchema.index({ patient: 1, createdAt: -1 });
+bookingSchema.index({ patient: 1, appointmentDate: 1, startTime: 1 });
+bookingSchema.index({ doctor: 1, appointmentDate: 1, startTime: 1 });
+bookingSchema.index({ scheduledAt: 1, status: 1, paymentStatus: 1 });
 
 bookingSchema.pre("validate", function validateBooking(next) {
   if (this.appointmentDate && this.startTime && this.endTime) {

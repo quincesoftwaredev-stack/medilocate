@@ -112,6 +112,10 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
+userSchema.index({ role: 1, isVerified: 1 })
+userSchema.index({ verificationCode: 1 }, { sparse: true })
+userSchema.index({ email: 1 }, { sparse: true })
+userSchema.index({ createdAt: -1 })
 
 
 const User = mongoose.models.User || mongoose.model('User', userSchema)

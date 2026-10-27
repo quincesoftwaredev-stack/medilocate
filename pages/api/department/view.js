@@ -22,33 +22,8 @@ handler.get(async (req, res) => {
     // const totalPages = Math.ceil(totalCount / PAGE_SIZE)
 
     // Retrieve products with pagination and sorting
-    const departments = await Department.find({ parent: null })
-    const tree = await Promise.all(
-      departments.map(async item => {
-        const { _id, name, image } = item
-        const c = await Department.find({ parent: _id })
-
-        const subtree = await Promise.all(
-          c.map(async item => {
-            const { _id, name, image } = item
-            const sc = await Department.find({ parent: _id })
-            return {
-              name: name,
-              _id: _id,
-              image: image,
-              children: sc
-            }
-          })
-        )
-
-        return {
-          name: name,
-          _id: _id,
-          image: image,
-          children: subtree
-        }
-      })
-    )
+    const departments = await Department.find({}).select('_id name image').lean()
+    const tree = departments.map(({ _id, name, image }) => ({ name, _id, image, children: [] }))
 
     // await db.disconnect()
     res.json(tree)

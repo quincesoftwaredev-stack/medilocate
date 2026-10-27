@@ -31,16 +31,13 @@ handler.get(async (req, res) => {
 
     // console.log(addressFilter)
 
-    const totalCount = await Payment.countDocuments(filter)
+    const [totalCount, payments] = await Promise.all([
+      Payment.countDocuments(filter),
+      Payment.find(filter).sort({ createdAt: -1 }).skip(skip).limit(PAGE_SIZE).lean()
+    ])
 
     // Calculate total pages
     const totalPages = Math.ceil(totalCount / PAGE_SIZE)
-
-    // Perform the query with population and filtering
-    const payments = await Payment.find(filter)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(PAGE_SIZE)
 
     // console.log({ payments, totalPages, totalCount })
     await db.disconnect()

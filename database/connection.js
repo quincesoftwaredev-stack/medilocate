@@ -1,47 +1,38 @@
 import mongoose from 'mongoose'
 import { MONGODB_URI } from '@/config'
-const connection = {}
+
+// Reuse one connection promise across hot reloads and warm serverless invocations.
+const globalCache = globalThis.__MEDILOCATE_MONGOOSE__ || {
+  connection: null,
+  promise: null
+}
+
+globalThis.__MEDILOCATE_MONGOOSE__ = globalCache
 
 async function connect () {
-  const readyState = mongoose.connection.readyState
-
-  if (connection.isConnected && readyState === 1) {
-    console.log('already connected')
-    return
+  if (globalCache.connection && mongoose.connection.readyState === 1) {
+    return globalCache.connection
   }
 
-  connection.isConnected = false
-
-  if (readyState === 1) {
-    connection.isConnected = true
-    console.log('use previous connection')
-    return
+  if (!globalCache.promise || mongoose.connection.readyState === 0 || mongoose.connection.readyState === 3) {
+    globalCache.promise = mongoose.connect(MONGODB_URI, {
+      maxPoolSize: 10,
+      minPoolSize: 1,
+      maxIdleTimeMS: 60000,
+      serverSelectionTimeoutMS: 5000
+    }).catch((error) => {
+      globalCache.promise = null
+      throw error
+    })
   }
 
-  if (readyState === 2) {
-    await mongoose.connection.asPromise()
-    connection.isConnected = mongoose.connection.readyState === 1
-    return
-  }
-
-  if (readyState === 3) {
-    await mongoose.disconnect()
-  }
-
-  const db = await mongoose.connect(MONGODB_URI, {})
-  console.log('new connection')
-  connection.isConnected = db.connections[0].readyState
+  globalCache.connection = await globalCache.promise
+  return globalCache.connection
 }
 
 async function disconnect () {
-  if (connection.isConnected) {
-    if (process.env.NODE_ENV === 'production') {
-      await mongoose.disconnect()
-      connection.isConnected = false
-    } else {
-      console.log('not disconnected')
-    }
-  }
+  // API routes intentionally keep the pool open for the next warm invocation.
+  return Promise.resolve()
 }
 
 function convertDocToObj (doc) {

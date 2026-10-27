@@ -132,16 +132,16 @@ handler.get(async (req, res) => {
     await db.connect()
 
     // Query the database with the constructed filter object
-    const count = await User.countDocuments(filter)
+    const [count, usersResult] = await Promise.all([
+      User.countDocuments(filter),
+      User.find(filter, { password: 0 })
+        .lean()
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(parseInt(limit))
+    ])
     const totalPages = Math.ceil(count / limit)
-    let users = await User.find(filter, {
-      password: 0,
-
-    })
-      .lean()
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(parseInt(limit))
+    let users = usersResult
 
     // if (blur) {
     //   products = await Promise.all(

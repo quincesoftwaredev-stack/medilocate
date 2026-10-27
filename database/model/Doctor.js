@@ -198,6 +198,10 @@ const doctorSchema = new mongoose.Schema(
     }
 );
 
+doctorSchema.index({ status: 1, verificationStatus: 1, createdAt: -1 });
+doctorSchema.index({ departments: 1, status: 1 });
+doctorSchema.index({ speciality: 1, status: 1 });
+
 export default mongoose.models.Doctor ||
     mongoose.model(
         "Doctor",

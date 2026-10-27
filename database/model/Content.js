@@ -30,6 +30,9 @@ const contentSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
+contentSchema.index({ position: 1, isShown: 1 })
+contentSchema.index({ updatedAt: -1 })
+
 // Create Model
 const Content =
   mongoose.models.Content || mongoose.model('Content', contentSchema)

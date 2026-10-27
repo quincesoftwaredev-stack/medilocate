@@ -259,6 +259,9 @@ MedicineSchema.index({
     status: 1,
 });
 
+MedicineSchema.index({ status: 1, name: 1 });
+MedicineSchema.index({ status: 1, stock: 1 });
+
 
 /*
 |--------------------------------------------------------------------------

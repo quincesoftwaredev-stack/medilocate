@@ -421,6 +421,11 @@ const orderSchema = new mongoose.Schema(
 
 );
 
+orderSchema.index({ user: 1, createdAt: -1 });
+orderSchema.index({ "delivery.phone": 1, createdAt: -1 });
+orderSchema.index({ status: 1, createdAt: -1 });
+orderSchema.index({ paymentStatus: 1, createdAt: -1 });
+orderSchema.index({ prescription: 1 });
 
 export default mongoose.models.Order ||
     mongoose.model(

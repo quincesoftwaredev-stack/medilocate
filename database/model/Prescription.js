@@ -233,6 +233,11 @@ const prescriptionSchema =
         }
     );
 
+prescriptionSchema.index({ user: 1, createdAt: -1 });
+prescriptionSchema.index({ "patient.phone": 1, createdAt: -1 });
+prescriptionSchema.index({ status: 1, createdAt: -1 });
+prescriptionSchema.index({ order: 1 }, { sparse: true });
+
 export default mongoose.models.Prescription ||
     mongoose.model(
         "Prescription",

@@ -18,20 +18,18 @@ handler.get(async (req, res) => {
     // Calculate the skip value based on the page number and page size
     const skip = (page - 1) * PAGE_SIZE
     // Retrieve total count of products
-    const totalCount = await Product.countDocuments()
+    const [totalCount, products] = await Promise.all([
+      Product.countDocuments(),
+      Product.find()
+        .populate({ path: 'categories', select: 'name' })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(PAGE_SIZE)
+        .lean()
+    ])
 
     // Calculate total pages
     const totalPages = Math.ceil(totalCount / PAGE_SIZE)
-
-    // Retrieve products with pagination and sorting
-    const products = await Product.find()
-      .populate({
-        path: 'categories',
-        select: 'name'
-      })
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(PAGE_SIZE)
     await db.disconnect()
     res.json({ page, products, totalPages })
   } catch (error) {
