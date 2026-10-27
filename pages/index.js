@@ -12,6 +12,8 @@ import PrescriptionSection from "@/components/home/PrescriptionSection";
 
 import WhyMedilocate from "@/components/home/WhyMedilocate";
 
+import AppDownload from "@/components/home/AppDownload";
+
 import FinalCTA from "@/components/home/FinalCTA";
 
 const featuredMedicines = [
@@ -88,6 +90,8 @@ export default function Home() {
         <PrescriptionSection />
 
         <WhyMedilocate />
+
+        <AppDownload />
 
         <FinalCTA />
       </main>
