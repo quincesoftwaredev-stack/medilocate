@@ -112,6 +112,13 @@
     font-weight: var(--ml-weight-bold);
 }
 
+.appRelease {
+    margin: -6px 0 14px;
+    color: rgba(255, 255, 255, 0.48);
+    font-size: var(--ml-font-xs, 12px);
+    line-height: 1.5;
+}
+
 .column a {
     min-width: 0;
     display: inline-flex;

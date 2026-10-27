@@ -7,6 +7,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import Logo from "@/components/Utility/Logo";
 import { support_mail, whatsapp } from "@/utility/const";
+import { mobileAppRelease } from "@/config/mobile-app-release";
 
 import styles from "./Footer.module.css";
 
@@ -183,10 +184,16 @@ export default function Footer() {
                             Support
                         </h3>
 
-                        <a href="/downloads/medilocate.apk" download="MediLocate.apk">
+                        <a href={mobileAppRelease.downloadUrl} download="MediLocate.apk">
                             Download Android App
                             <ArrowForwardIcon />
                         </a>
+
+                        <p className={styles.appRelease}>
+                            Latest version {mobileAppRelease.version} · Updated {mobileAppRelease.updatedAt}
+                            <br />
+                            {mobileAppRelease.releaseNotes}
+                        </p>
 
                         {supportLinks.map((link) => (
 
