@@ -119,7 +119,7 @@ const Layout = ({ children }) => {
         ) : null}
       </div>
   );
-  const skipMaps = isCarePage || /^\/admin\/booking(\/|$)/.test(router.pathname) || /^\/user\/\[id\]\/dashboard$/.test(router.pathname);
+  const skipMaps = isCarePage || ["/privacy-policy", "/delete-account"].includes(router.pathname) || /^\/admin\/booking(\/|$)/.test(router.pathname) || /^\/user\/\[id\]\/dashboard$/.test(router.pathname);
   return skipMaps ? content : <GoogleMapsProvider>{content}</GoogleMapsProvider>;
 };
 
