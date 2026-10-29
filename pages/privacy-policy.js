@@ -13,7 +13,7 @@ const privacy = () => {
           <h2>Privacy Policy</h2>
          
         </div>
-        {privacyPolicy.slice(0, privacyPolicy.length - 2).map((item, index) => (
+        {privacyPolicy.slice(0, privacyPolicy.length - 1).map((item, index) => (
           <div className={styles.item} key={index}>
             <h3>
               {' '}

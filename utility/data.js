@@ -205,25 +205,25 @@ const privacyPolicy = [
     section: 1,
     title: 'Introduction',
     content:
-      'mediLocate.health is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and protect your personal information when you use our platform to connect with doctors for home visits.'
+      'MediLocate is committed to protecting your privacy. This policy covers our website and mobile app, including medicine orders, prescriptions, doctor appointments, and consultations.'
   },
   {
     section: 2,
     title: 'Information We Collect',
     content:
-      'We collect personal information such as your name, phone number, email, location, and basic health-related details required to connect you with doctors. We may also collect device and usage data to improve our services.'
+      'Depending on the service you use, we collect account and contact details, delivery address, medicine orders, appointment and consultation details, and prescription photos or notes you choose to submit. We may also collect device and usage data to operate and improve the service.'
   },
   {
     section: 3,
     title: 'How We Use Your Information',
     content:
-      'Your data is used to connect you with doctors, facilitate appointment scheduling, enable communication, process payments, and improve user experience. We may also send notifications related to your bookings.'
+      'We use this information to manage accounts, fulfill medicine and prescription requests, arrange consultations and appointments, process payments, provide support, and send service notifications.'
   },
   {
     section: 4,
     title: 'Sharing of Information',
     content:
-      'Your information may be shared with doctors to facilitate consultations and home visits. We do not sell your personal data. Data may also be shared with trusted service providers such as payment processors or when required by law.'
+      'We share information needed to provide the service with relevant doctors and order or prescription staff. Prescription photos selected in the mobile app are uploaded to Cloudinary for image hosting. Other service providers may process payments, messaging, or video calls when you use those features. We do not sell your personal data. We may disclose information when required by law.'
   },
   {
     section: 5,
@@ -247,13 +247,13 @@ const privacyPolicy = [
     section: 8,
     title: 'User Rights',
     content:
-      'You have the right to access, update, or request deletion of your personal data. You may also opt out of non-essential communications.'
+      'You may request access to, correction of, or deletion of your account and associated personal data. Request account deletion from the mobile app Account screen or at https://medilocate.health/delete-account. We verify account ownership before acting on a request. You may also opt out of non-essential communications.'
   },
   {
     section: 9,
     title: 'Data Retention',
     content:
-      'We retain your information only as long as necessary to provide services and comply with legal obligations. Afterward, data is securely deleted or anonymized.'
+      'We retain information as needed to provide services and meet legal or regulatory obligations. After a verified deletion request, we delete associated personal data unless a specific record must be retained for such an obligation; retained records are handled only for that purpose.'
   },
   {
     section: 10,
@@ -271,7 +271,7 @@ const privacyPolicy = [
     section: 12,
     title: 'Contact Us',
     content:
-      'If you have any questions about this Privacy Policy, contact us at privacy@medilocate.health.'
+      'For privacy questions or account deletion requests, contact support@medilocate.com.'
   }
 ];
 
